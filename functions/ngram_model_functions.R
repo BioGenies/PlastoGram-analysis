@@ -23,11 +23,11 @@ calc_imp_ngrams <- function(ngram_matrix, target, cutoff = 0.001) {
 
 train_rf <- function(ngram_matrix, target, imp_ngrams) {
   ranger_train_data <- data.frame(ngram_matrix[, imp_ngrams],
-                                  tar = target)
+                                  tar = as.factor(target))
   
   ranger(dependent.variable.name = "tar", data =  ranger_train_data, 
          write.forest = TRUE, probability = TRUE, num.trees = 500, 
-         verbose = FALSE, classification = TRUE)
+         verbose = FALSE)
 }
 
 
@@ -52,8 +52,8 @@ do_cv <- function(ngram_matrix, target_df, target_col, n_fold, cutoff) {
       filter(fold == ith_fold) %>% 
       select(seq_name, fold, target_col) %>% 
       setNames(c("seq_name", "fold", "target")) %>% 
-      mutate(prob = predict(trained_model, test_dat)[["predictions"]][, 1],
-             pred = ifelse(prob > 0.5, 1, 0))
+      mutate(prob = predict(trained_model, test_dat)[["predictions"]][, "TRUE"],
+             pred = ifelse(prob > 0.5, TRUE, FALSE))
   }) %>% bind_rows()
 } 
 

@@ -80,7 +80,7 @@ list(
   ),
   tar_target(
     Plastid_Nuclear_CV_res_stats, 
-    get_cv_res_summary(Plastid_Nuclear_CV, "1")
+    get_cv_res_summary(Plastid_Nuclear_CV, "TRUE")
   ),
   tar_target(
     Plastid_Nuclear_CV_2, 
@@ -88,6 +88,22 @@ list(
   ),
   tar_target(
     Plastid_Nuclear_CV_2_res_stats, 
-    get_cv_res_summary(Plastid_Nuclear_CV_2, "1")
+    get_cv_res_summary(Plastid_Nuclear_CV_2, "TRUE")
+  ),
+  tar_target(
+    Stroma_CV,
+    do_cv(ngram_matrix, target_df, "S_target", 5, 0.001)
+  ),
+  tar_target(
+    Stroma_CV_res_stats,
+    get_cv_res_summary(Stroma_CV, "TRUE")
+  ),
+  tar_target(
+    Stroma_CV_2,
+    do_cv(ngram_matrix, target_df, "S_target", 5, 0.00001)
+  ),
+  tar_target(
+    Stroma_CV_2_res_stats,
+    get_cv_res_summary(Stroma_CV_2, "TRUE")
   )
 )
