@@ -5,6 +5,7 @@ library(seqR)
 library(cvTools)
 library(ranger)
 library(readxl)
+library(measures)
 
 data_path <- "~/Dropbox/Projekty/BioNgramProjects/PlastoGram/"
 
@@ -15,48 +16,57 @@ source("./functions/create_target_df.R")
 list(
   tar_target(
     N_OM_seqs,
-    filter_with_cdhit(read_fasta(paste0(data_path, "Sequences/N_OM.fa")), 
-                      threshold = 0.9)
+    filter_with_cdhit(
+      filter_nonstandard_aa(read_fasta(paste0(data_path, "Sequences/N_OM.fa")), 
+                            threshold = 0.9))
   ),
   tar_target(
     N_IM_seqs,
-    filter_with_cdhit(read_fasta(paste0(data_path, "Sequences/N_IM.fa")), 
-                      threshold = 0.9)
+    filter_with_cdhit(
+      filter_nonstandard_aa(read_fasta(paste0(data_path, "Sequences/N_IM.fa")), 
+                            threshold = 0.9))
   ),
   tar_target(
     P_IM_seqs,
-    filter_with_cdhit(read_fasta(paste0(data_path, "Sequences/P_IM.fa")), 
-                      threshold = 0.9)
+    filter_with_cdhit(
+      filter_nonstandard_aa(read_fasta(paste0(data_path, "Sequences/P_IM.fa")), 
+                            threshold = 0.9))
   ),
   tar_target(
     N_S_seqs, 
-    filter_with_cdhit(read_fasta(paste0(data_path, "Sequences/N_S.fa")), 
-                      threshold = 0.9)
+    filter_with_cdhit(
+      filter_nonstandard_aa(read_fasta(paste0(data_path, "Sequences/N_S.fa")), 
+                            threshold = 0.9))
   ),
   tar_target(
     P_S_seqs, 
-    filter_with_cdhit(read_fasta(paste0(data_path, "Sequences/P_S.fa")),
-                      threshold = 0.9)
+    filter_with_cdhit(
+      filter_nonstandard_aa(read_fasta(paste0(data_path, "Sequences/P_S.fa")),
+                            threshold = 0.9))
   ),
   tar_target(
     N_TM_seqs, 
-    filter_with_cdhit(read_fasta(paste0(data_path, "Sequences/N_TM.fa")),
-                      threshold = 0.9)
+    filter_with_cdhit(
+      filter_nonstandard_aa(read_fasta(paste0(data_path, "Sequences/N_TM.fa")),
+                            threshold = 0.9))
   ),
   tar_target(
     P_TM_seqs, 
-    filter_with_cdhit(read_fasta(paste0(data_path, "Sequences/P_TM.fa")),
-                      threshold = 0.9)
+    filter_with_cdhit(
+      filter_nonstandard_aa(read_fasta(paste0(data_path, "Sequences/P_TM.fa")),
+                            threshold = 0.9))
   ),
   tar_target(
     N_TL_SEC_seqs, 
-    filter_with_cdhit(read_fasta(paste0(data_path, "Sequences/N_TL_SEC.fa")),
-                      threshold = 0.9)
+    filter_with_cdhit(
+      filter_nonstandard_aa(read_fasta(paste0(data_path, "Sequences/N_TL_SEC.fa")),
+                            threshold = 0.9))
   ),
   tar_target(
     N_TL_TAT_seqs, 
-    filter_with_cdhit(read_fasta(paste0(data_path, "Sequences/N_TL_TAT.fa")),
-                      threshold = 0.9)
+    filter_with_cdhit(
+      filter_nonstandard_aa(read_fasta(paste0(data_path, "Sequences/N_TL_TAT.fa")),
+                            threshold = 0.9))
   ),
   tar_target(
     N_seqs,
@@ -105,5 +115,17 @@ list(
   tar_target(
     Stroma_CV_2_res_stats,
     get_cv_res_summary(Stroma_CV_2, "TRUE")
+  ),
+  tar_target(
+    Membrane_imp_ngrams,
+    get_imp_ngrams_mc(ngram_matrix, target_df, "membrane_target", 0.001)
+  ),
+  tar_target(
+    Membrane_CV,
+    do_cv(ngram_matrix, target_df, "membrane_target", 5, 0.001, mc = TRUE)
+  ),
+  tar_target(
+    Membrane_CV_res_stats,
+    get_cv_res_summary_mc(Membrane_CV)
   )
 )

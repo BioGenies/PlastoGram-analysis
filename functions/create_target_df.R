@@ -10,6 +10,7 @@ create_target_df <- function(annotations_file, sequences) {
            Tat_target = ifelse(dataset == "N_TL_TAT", TRUE, FALSE),
            membrane_target = case_when(dataset == "N_OM" ~ "OM",
                                        dataset %in% c("N_IM", "P_IM") ~ "IM",
-                                       dataset %in% c("N_TM", "P_TM") ~ "TM"),
+                                       dataset %in% c("N_TM", "P_TM") ~ "TM",
+                                       !(dataset %in% c("N_OM", "N_IM", "N_TM", "P_IM", "P_TM")) ~ "other"),
            S_target = ifelse(grepl("_S$", dataset), TRUE, FALSE))
 }
