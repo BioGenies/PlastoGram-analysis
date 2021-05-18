@@ -137,12 +137,12 @@ list(
   tar_target(
     Membrane_CV_class_weights,
     do_cv(ngram_matrix, target_df, "membrane_target", 3, 0.001, mc = TRUE, 
-          class_weights = c(0.21, 0.75, 0.01, 0.03))
+          class_weights = c(0.21, 0.75, 0.03, 0.01))
   ),
   tar_target(
     Membrane_CV_class_and_case_weights,
     do_cv(ngram_matrix, target_df, "membrane_target", 3, 0.001, mc = TRUE, 
-          class_weights = c(0.21, 0.75, 0.01, 0.03), case_weights = case_weights)
+          class_weights = c(0.21, 0.75, 0.03, 0.01), case_weights = case_weights)
   ),
   tar_target(
     Membrane_CV_class_weights_res_stats,
