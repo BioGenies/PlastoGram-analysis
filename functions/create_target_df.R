@@ -12,5 +12,9 @@ create_target_df <- function(annotations_file, sequences) {
                                        dataset %in% c("N_IM", "P_IM") ~ "IM",
                                        dataset %in% c("N_TM", "P_TM") ~ "TM",
                                        !(dataset %in% c("N_OM", "N_IM", "N_TM", "P_IM", "P_TM")) ~ "other"),
-           S_target = ifelse(grepl("_S$", dataset), TRUE, FALSE))
+           S_target = ifelse(grepl("_S$", dataset), TRUE, FALSE),
+           membrane_all_target = ifelse(dataset %in% c("N_OM", "N_IM", "P_IM", "N_TM", "P_TM"), TRUE, FALSE),
+           membrane_OM_target = ifelse(dataset == "N_OM", TRUE, FALSE),
+           membrane_IM_target = ifelse(dataset %in% c("N_IM", "P_IM"), TRUE, FALSE),
+           membrane_TM_target = ifelse(dataset %in% c("N_TM", "P_TM"), TRUE, FALSE))
 }

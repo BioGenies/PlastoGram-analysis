@@ -56,12 +56,13 @@ do_cv <- function(ngram_matrix, target_df, target_col, n_fold, cutoff, mc = FALS
     trained_model <- train_rf(dat, data_df[[target_col]][data_df[["fold"]] != ith_fold], imp_ngrams, class_weights, filtered_cw)
     
     if(mc == TRUE) {
+      classes <- unique(target_df[[target_col]])
       res <- data_df %>% 
         filter(fold == ith_fold) %>% 
         select(seq_name, fold, target_col) %>% 
         setNames(c("seq_name", "fold", "target")) %>% 
         bind_cols(as.data.frame(predict(trained_model, test_dat)[["predictions"]]))
-      full_res <- mutate(res, pred = c("IM", "OM", "other", "TM")[max.col(res[, c("IM", "OM", "other", "TM")])])
+      full_res <- mutate(res, pred = c(classes)[max.col(res[, c(classes)])])
     } else {
       full_res <- data_df %>% 
         filter(fold == ith_fold) %>% 
@@ -100,12 +101,13 @@ get_imp_ngrams_mc <- function(ngram_matrix, target_df, target_col, cutoff = 0.00
 
 
 get_cv_res_summary_mc <- function(mc_cv_res) {
+  classes <- unique(mc_cv_res[["target"]])
   lapply(unique(mc_cv_res[["fold"]]), function(ith_fold) {
     dat <- filter(mc_cv_res, fold == ith_fold)
     data.frame(
       fold = ith_fold,
       Accuracy = ACC(dat[["target"]], dat[["pred"]]),
-      AU1U = multiclass.AU1U(dat[, c("IM", "OM", "other", "TM")], dat[["target"]]),
+      AU1U = multiclass.AU1U(dat[, c(classes)], dat[["target"]]),
       KapS = KAPPA(dat[["target"]], dat[["pred"]])) 
   }) %>% bind_rows()
 }
