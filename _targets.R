@@ -102,56 +102,56 @@ list(
     Plastid_Nuclear_CV_2_res_stats, 
     get_cv_res_summary(Plastid_Nuclear_CV_2, "TRUE")
   ),
-  tar_target(
-    Stroma_CV,
-    do_cv(ngram_matrix, target_df, "S_target", 5, 0.001)
-  ),
-  tar_target(
-    Stroma_CV_res_stats,
-    get_cv_res_summary(Stroma_CV, "TRUE")
-  ),
-  tar_target(
-    Stroma_CV_2,
-    do_cv(ngram_matrix, target_df, "S_target", 5, 0.00001)
-  ),
-  tar_target(
-    Stroma_CV_2_res_stats,
-    get_cv_res_summary(Stroma_CV_2, "TRUE")
-  ),
-  tar_target(
-    Membrane_imp_ngrams,
-    get_imp_ngrams_mc(ngram_matrix, target_df, "membrane_target", 0.001)
-  ),
-  tar_target(
-    Membrane_CV,
-    do_cv(ngram_matrix, target_df, "membrane_target", 5, 0.001, mc = TRUE)
-  ),
-  tar_target(
-    Membrane_CV_res_stats,
-    get_cv_res_summary_mc(Membrane_CV)
-  ),
-  tar_target(
-    case_weights,
-    get_case_weights(target_df)
-  ),
-  tar_target(
-    Membrane_CV_class_weights,
-    do_cv(ngram_matrix, target_df, "membrane_target", 3, 0.001, mc = TRUE, 
-          class_weights = c(0.21, 0.75, 0.03, 0.01))
-  ),
-  tar_target(
-    Membrane_CV_class_and_case_weights,
-    do_cv(ngram_matrix, target_df, "membrane_target", 3, 0.001, mc = TRUE, 
-          class_weights = c(0.21, 0.75, 0.03, 0.01), case_weights = case_weights)
-  ),
-  tar_target(
-    Membrane_CV_class_weights_res_stats,
-    get_cv_res_summary_mc(Membrane_CV_class_weights)
-  ),
-  tar_target(
-    Membrane_CV_class_and_case_weights_res_stats,
-    get_cv_res_summary_mc(Membrane_CV_class_and_case_weights)
-  ),
+  # tar_target(
+  #   Stroma_CV,
+  #   do_cv(ngram_matrix, target_df, "S_target", 5, 0.001)
+  # ),
+  # tar_target(
+  #   Stroma_CV_res_stats,
+  #   get_cv_res_summary(Stroma_CV, "TRUE")
+  # ),
+  # tar_target(
+  #   Stroma_CV_2,
+  #   do_cv(ngram_matrix, target_df, "S_target", 5, 0.00001)
+  # ),
+  # tar_target(
+  #   Stroma_CV_2_res_stats,
+  #   get_cv_res_summary(Stroma_CV_2, "TRUE")
+  # ),
+  # tar_target(
+  #   Membrane_imp_ngrams,
+  #   get_imp_ngrams_mc(ngram_matrix, target_df, "membrane_target", 0.001)
+  # ),
+  # tar_target(
+  #   Membrane_CV,
+  #   do_cv(ngram_matrix, target_df, "membrane_target", 5, 0.001, mc = TRUE)
+  # ),
+  # tar_target(
+  #   Membrane_CV_res_stats,
+  #   get_cv_res_summary_mc(Membrane_CV)
+  # ),
+  # tar_target(
+  #   case_weights,
+  #   get_case_weights(target_df)
+  # ),
+  # tar_target(
+  #   Membrane_CV_class_weights,
+  #   do_cv(ngram_matrix, target_df, "membrane_target", 3, 0.001, mc = TRUE, 
+  #         class_weights = c(0.21, 0.75, 0.03, 0.01))
+  # ),
+  # tar_target(
+  #   Membrane_CV_class_and_case_weights,
+  #   do_cv(ngram_matrix, target_df, "membrane_target", 3, 0.001, mc = TRUE, 
+  #         class_weights = c(0.21, 0.75, 0.03, 0.01), case_weights = case_weights)
+  # ),
+  # tar_target(
+  #   Membrane_CV_class_weights_res_stats,
+  #   get_cv_res_summary_mc(Membrane_CV_class_weights)
+  # ),
+  # tar_target(
+  #   Membrane_CV_class_and_case_weights_res_stats,
+  #   get_cv_res_summary_mc(Membrane_CV_class_and_case_weights)
+  # ),
   tar_target(
     Membrane_Notmembrane_CV,
     do_cv(ngram_matrix, target_df, "membrane_all_target", 5, 0.001)
@@ -166,18 +166,15 @@ list(
   ),
   tar_target(
     Membrane_OM_CV,
-    do_cv(ngram_matrix_membrane, target_df_membrane, "membrane_OM_target", 3, 0.001,
-          class_weights = c(2599/2660, 61/26600))
+    do_cv(ngram_matrix_membrane, target_df_membrane, "membrane_OM_target", 3, 0.001)
   ),
   tar_target(
     Membrane_IM_CV,
-    do_cv(ngram_matrix_membrane, target_df_membrane, "membrane_IM_target", 5, 0.001,
-          class_weights = c(2472/2660, 188/2660))
+    do_cv(ngram_matrix_membrane, target_df_membrane, "membrane_IM_target", 5, 0.001)
   ),
   tar_target(
     Membrane_TM_CV,
-    do_cv(ngram_matrix_membrane, target_df_membrane, "membrane_TM_target", 5, 0.001,
-          class_weights = c(1491/2660, 1169/2660))
+    do_cv(ngram_matrix_membrane, target_df_membrane, "membrane_TM_target", 5, 0.001)
   ),
   tar_target(
     Membrane_Notmembrane_CV_res_stats,

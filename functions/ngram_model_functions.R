@@ -1,10 +1,10 @@
 create_ngram_matrix <- function(seqs, target_df) {
   ngrams <- lapply(target_df[["seq_name"]], function(ith_seq) {
-    count_multimers(seqs[[ith_seq]],
-                    k_vector = c(1, rep(2,2), rep(3,4)),
-                    kmer_gaps_list = list(NULL, NULL, 1, c(0,0), c(0,1), c(1,0), c(1,1)),
-                    alphabet = toupper(colnames(biogram::aaprop))) %>% 
-      binarize() %>% 
+    count_multimers(seqs[ith_seq],
+                    k_vector = c(1, rep(2,4), rep(3,4)),
+                    kmer_gaps_list = list(NULL, NULL, 1, 2, 3, c(0,0), c(0,1), c(1,0), c(1,1)),
+                    alphabet = toupper(colnames(biogram::aaprop)),
+                    with_kmer_counts = FALSE) %>% 
       as.matrix() %>% 
       as.data.frame()
   })  %>% bind_rows() 
@@ -21,17 +21,17 @@ calc_imp_ngrams <- function(ngram_matrix, target, cutoff = 0.001) {
 }
 
 
-train_rf <- function(ngram_matrix, target, imp_ngrams, class_weights = NULL, case_weights = NULL) {
+train_rf <- function(ngram_matrix, target, imp_ngrams) {
   ranger_train_data <- data.frame(ngram_matrix[, imp_ngrams],
                                   tar = as.factor(target))
-  
+  class_weights <- sapply(levels(ranger_train_data[["tar"]]), function(i) sum(ranger_train_data[["tar"]] == i)/(nrow(ranger_train_data)), USE.NAMES = FALSE)
   ranger(dependent.variable.name = "tar", data =  ranger_train_data, 
          write.forest = TRUE, probability = TRUE, num.trees = 500, 
-         verbose = FALSE, class.weights = class_weights, case.weights = case_weights)
+         verbose = FALSE, class.weights = class_weights)
 }
 
 
-do_cv <- function(ngram_matrix, target_df, target_col, n_fold, cutoff, mc = FALSE, class_weights = NULL, case_weights = NULL) {
+do_cv <- function(ngram_matrix, target_df, target_col, n_fold, cutoff, mc = FALSE) {
   
   folds <- lapply(unique(target_df[[target_col]]), function(ith_target) {
     selected <- filter(target_df, get(target_col) == ith_target)
@@ -45,7 +45,7 @@ do_cv <- function(ngram_matrix, target_df, target_col, n_fold, cutoff, mc = FALS
   
   lapply(1:n_fold, function(ith_fold) {
     dat <- ngram_matrix[data_df[["fold"]] != ith_fold, ]
-    filtered_cw <- case_weights[which(data_df[["fold"]] != ith_fold)]
+   # filtered_cw <- case_weights[which(data_df[["fold"]] != ith_fold)]
     test_dat <- ngram_matrix[data_df[["fold"]] == ith_fold, ]
     if(mc == TRUE) {
       imp_ngrams <- get_imp_ngrams_mc(dat, data_df[which(data_df[["fold"]] != ith_fold), ], target_col, cutoff)
@@ -53,7 +53,7 @@ do_cv <- function(ngram_matrix, target_df, target_col, n_fold, cutoff, mc = FALS
     } else {
       imp_ngrams <- calc_imp_ngrams(dat, data_df[[target_col]][data_df[["fold"]] != ith_fold], cutoff)
     }
-    trained_model <- train_rf(dat, data_df[[target_col]][data_df[["fold"]] != ith_fold], imp_ngrams, class_weights, filtered_cw)
+    trained_model <- train_rf(dat, data_df[[target_col]][data_df[["fold"]] != ith_fold], imp_ngrams)
     
     if(mc == TRUE) {
       classes <- unique(target_df[[target_col]])
@@ -112,9 +112,3 @@ get_cv_res_summary_mc <- function(mc_cv_res) {
   }) %>% bind_rows()
 }
 
-get_case_weights <- function(target_df, om_weight = 100, im_weight = 40, tm_weight = 1, other_weight = 3) {
-  case_when(target_df[["membrane_target"]] == "OM" ~ om_weight,
-            target_df[["membrane_target"]] == "IM" ~ im_weight,
-            target_df[["membrane_target"]] == "TM" ~ tm_weight,
-            target_df[["membrane_target"]] == "other" ~ other_weight)
-}
