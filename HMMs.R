@@ -156,8 +156,19 @@ train_tat_hsmm <- function(tat_seqs) {
 tat_hsmm_model <- train_tat_hsmm(tat_seqs)
 
 
-viterbi_res <- signalHsmm:::duration_viterbi(as.numeric(as_aa_factor(tat_seqs[[2]][["aa"]])) - 1, tat_hsmm_model[["pipar"]], tat_hsmm_model[["tpmpar"]], 
+prot_seq <- as.numeric(as_aa_factor(tat_seqs[[2]][["aa"]])) - 1
+viterbi_res <- signalHsmm:::duration_viterbi(prot_seq, tat_hsmm_model[["pipar"]], tat_hsmm_model[["tpmpar"]], 
                                              tat_hsmm_model[["od"]], tat_hsmm_model[["params"]])
 
 viterbi_path <- viterbi_res[["path"]] + 1
-data.frame(tat_seqs[[2]], viterbi_path)
+cs_pos <- ifelse(any(viterbi_path == 5), 
+                 max(which(viterbi_path == 4)) + 1, 
+                 length(prot_seq))
+
+
+
+prob_hsmm <- viterbi_res[["viterbi"]][cs_pos, viterbi_path[cs_pos]]
+prob_non <- Reduce(function(x, y) x + tat_hsmm_model[["overall_probs_log"]][y], 
+                   as.character(as_aa_factor(tat_seqs[[2]][["aa"]]))[1L:cs_pos], 0)
+prob_final <- unname(1 - 1/(1 + exp(prob.signal - prob.non)))
+
