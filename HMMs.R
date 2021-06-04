@@ -156,19 +156,22 @@ train_tat_hsmm <- function(tat_seqs) {
 tat_hsmm_model <- train_tat_hsmm(tat_seqs)
 
 
-prot_seq <- as.numeric(as_aa_factor(tat_seqs[[2]][["aa"]])) - 1
-viterbi_res <- signalHsmm:::duration_viterbi(prot_seq, tat_hsmm_model[["pipar"]], tat_hsmm_model[["tpmpar"]], 
-                                             tat_hsmm_model[["od"]], tat_hsmm_model[["params"]])
+predict_hsmm <- function(hsmm_model, prot_seq) {
+  prot_seq_numeric <- as.numeric(as_aa_factor(prot_seq)) - 1
+  viterbi_res <- signalHsmm:::duration_viterbi(prot_seq_numeric, hsmm_model[["pipar"]], hsmm_model[["tpmpar"]], 
+                                               hsmm_model[["od"]], hsmm_model[["params"]])
 
-viterbi_path <- viterbi_res[["path"]] + 1
-cs_pos <- ifelse(any(viterbi_path == 5), 
-                 max(which(viterbi_path == 4)) + 1, 
-                 length(prot_seq))
+  last_state_id <- ncol(viterbi_res[["viterbi"]])
+  viterbi_path <- viterbi_res[["path"]] + 1
+  cs_pos <- ifelse(any(viterbi_path == last_state_id), 
+                   max(which(viterbi_path == (last_state_id - 1))) + 1, 
+                   length(prot_seq))
+  
+  prob_hsmm <- viterbi_res[["viterbi"]][cs_pos, viterbi_path[cs_pos]]
+  prob_non <- Reduce(function(x, y) x + hsmm_model[["overall_probs_log"]][y + 1], 
+                     prot_seq_numeric[1L:cs_pos], 0)
+  unname(1 - 1/(1 + exp(prob_hsmm - prob_non)))
+}
 
-
-
-prob_hsmm <- viterbi_res[["viterbi"]][cs_pos, viterbi_path[cs_pos]]
-prob_non <- Reduce(function(x, y) x + tat_hsmm_model[["overall_probs_log"]][y], 
-                   as.character(as_aa_factor(tat_seqs[[2]][["aa"]]))[1L:cs_pos], 0)
-prob_final <- unname(1 - 1/(1 + exp(prob.signal - prob.non)))
+predict_hsmm(tat_hsmm_model, tat_seqs[[2]][["aa"]])
 
