@@ -122,7 +122,7 @@ train_tat_hsmm <- function(tat_seqs) {
                       rest_region = get_rest_region(tat_seqs))
   
   region_lengths <- as.matrix(data.frame(lapply(region_list, lengths)))
-  
+
   regional_aa_counts <- lapply(region_list, function(ith_region)
     colSums(do.call(rbind, lapply(ith_region, region2t))))
   
@@ -134,8 +134,7 @@ train_tat_hsmm <- function(tat_seqs) {
   params[2, "rr_region"] <- 1
   params[8, "cs_region"] <- 1
   params <- cbind(params, rep(1/max_length, max_length))
-  
-  additional_margin <-  10
+
   pipar <- c(1, 0, 0, 0, 0)
   tpmpar <- matrix(c(0, 1, 0, 0, 0,
                      0, 0, 1, 0, 0,
@@ -170,8 +169,14 @@ predict_hsmm <- function(hsmm_model, prot_seq) {
   prob_hsmm <- viterbi_res[["viterbi"]][cs_pos, viterbi_path[cs_pos]]
   prob_non <- Reduce(function(x, y) x + hsmm_model[["overall_probs_log"]][y + 1], 
                      prot_seq_numeric[1L:cs_pos], 0)
-  unname(1 - 1/(1 + exp(prob_hsmm - prob_non)))
+  list(unname(1 - 1/(1 + exp(prob_hsmm - prob_non))),
+       data.frame(seq = prot_seq, viterbi_path))
 }
 
-predict_hsmm(tat_hsmm_model, tat_seqs[[2]][["aa"]])
+lapply(1L:length(tat_seqs), function(i) {
+  data.frame(predict_hsmm(tat_hsmm_model, tat_seqs[[i]][["aa"]])[[2]], RR = tat_seqs[[i]][["RR"]])
+})
 
+table(sapply(1L:length(tat_seqs), function(i) {
+  predict_hsmm(tat_hsmm_model, tat_seqs[[i]][["aa"]])[[1]]
+}) > 0.5)
