@@ -24,7 +24,7 @@ calc_imp_ngrams <- function(ngram_matrix, target, cutoff = 0.001) {
 train_rf <- function(ngram_matrix, target, imp_ngrams) {
   ranger_train_data <- data.frame(ngram_matrix[, imp_ngrams],
                                   tar = as.factor(target))
-  class_weights <- sapply(levels(ranger_train_data[["tar"]]), function(i) sum(ranger_train_data[["tar"]] == i)/(nrow(ranger_train_data)), USE.NAMES = FALSE)
+  class_weights <- sapply(levels(ranger_train_data[["tar"]]), function(i) 1/(sum(ranger_train_data[["tar"]] == i)/(nrow(ranger_train_data))), USE.NAMES = FALSE)
   ranger(dependent.variable.name = "tar", data =  ranger_train_data, 
          write.forest = TRUE, probability = TRUE, num.trees = 500, 
          verbose = FALSE, class.weights = class_weights)

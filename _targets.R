@@ -6,6 +6,7 @@ library(cvTools)
 library(ranger)
 library(readxl)
 library(measures)
+library(rhmmer)
 
 data_path <- "~/Dropbox/Projekty/BioNgramProjects/PlastoGram/"
 
@@ -102,56 +103,6 @@ list(
     Plastid_Nuclear_CV_2_res_stats, 
     get_cv_res_summary(Plastid_Nuclear_CV_2, "TRUE")
   ),
-  # tar_target(
-  #   Stroma_CV,
-  #   do_cv(ngram_matrix, target_df, "S_target", 5, 0.001)
-  # ),
-  # tar_target(
-  #   Stroma_CV_res_stats,
-  #   get_cv_res_summary(Stroma_CV, "TRUE")
-  # ),
-  # tar_target(
-  #   Stroma_CV_2,
-  #   do_cv(ngram_matrix, target_df, "S_target", 5, 0.00001)
-  # ),
-  # tar_target(
-  #   Stroma_CV_2_res_stats,
-  #   get_cv_res_summary(Stroma_CV_2, "TRUE")
-  # ),
-  # tar_target(
-  #   Membrane_imp_ngrams,
-  #   get_imp_ngrams_mc(ngram_matrix, target_df, "membrane_target", 0.001)
-  # ),
-  # tar_target(
-  #   Membrane_CV,
-  #   do_cv(ngram_matrix, target_df, "membrane_target", 5, 0.001, mc = TRUE)
-  # ),
-  # tar_target(
-  #   Membrane_CV_res_stats,
-  #   get_cv_res_summary_mc(Membrane_CV)
-  # ),
-  # tar_target(
-  #   case_weights,
-  #   get_case_weights(target_df)
-  # ),
-  # tar_target(
-  #   Membrane_CV_class_weights,
-  #   do_cv(ngram_matrix, target_df, "membrane_target", 3, 0.001, mc = TRUE, 
-  #         class_weights = c(0.21, 0.75, 0.03, 0.01))
-  # ),
-  # tar_target(
-  #   Membrane_CV_class_and_case_weights,
-  #   do_cv(ngram_matrix, target_df, "membrane_target", 3, 0.001, mc = TRUE, 
-  #         class_weights = c(0.21, 0.75, 0.03, 0.01), case_weights = case_weights)
-  # ),
-  # tar_target(
-  #   Membrane_CV_class_weights_res_stats,
-  #   get_cv_res_summary_mc(Membrane_CV_class_weights)
-  # ),
-  # tar_target(
-  #   Membrane_CV_class_and_case_weights_res_stats,
-  #   get_cv_res_summary_mc(Membrane_CV_class_and_case_weights)
-  # ),
   tar_target(
     Membrane_Notmembrane_CV,
     do_cv(ngram_matrix, target_df, "membrane_all_target", 5, 0.001)
@@ -165,32 +116,8 @@ list(
     filter(target_df, membrane_all_target == TRUE)
   ),
   tar_target(
-    Membrane_OM_CV,
-    do_cv(ngram_matrix_membrane, target_df_membrane, "membrane_OM_target", 3, 0.001)
-  ),
-  tar_target(
-    Membrane_IM_CV,
-    do_cv(ngram_matrix_membrane, target_df_membrane, "membrane_IM_target", 5, 0.001)
-  ),
-  tar_target(
-    Membrane_TM_CV,
-    do_cv(ngram_matrix_membrane, target_df_membrane, "membrane_TM_target", 5, 0.001)
-  ),
-  tar_target(
     Membrane_Notmembrane_CV_res_stats,
     get_cv_res_summary(Membrane_Notmembrane_CV, "TRUE")
-  ),
-  tar_target(
-    Membrane_OM_CV_res_stats,
-    get_cv_res_summary(Membrane_OM_CV, "TRUE")
-  ),
-  tar_target(
-    Membrane_IM_CV_res_stats,
-    get_cv_res_summary(Membrane_IM_CV, "TRUE")
-  ),
-  tar_target(
-    Membrane_TM_CV_res_stats,
-    get_cv_res_summary(Membrane_TM_CV, "TRUE")
   ),
   tar_target(
     ngram_matrix_membrane_plastid,
@@ -204,13 +131,13 @@ list(
     Membrane_Plastid_CV,
     do_cv(ngram_matrix_membrane_plastid, 
           target_df[which(target_df[["membrane_all_target"]] == TRUE & target_df[["NP_target"]] == FALSE),], "membrane_IM_target",
-          3, 0.001)
+          5, 0.001)
   ),
   tar_target(
     Membrane_Nuclear_CV,
     do_cv(ngram_matrix_membrane_nuclear, 
           target_df[which(target_df[["membrane_all_target"]] == TRUE & target_df[["NP_target"]] == TRUE),], "membrane_target",
-          3, 0.001, mc = TRUE)
+          5, 0.001, mc = TRUE)
   ),
   tar_target(
     Membrane_Plastid_CV_res_stats,
@@ -219,5 +146,21 @@ list(
   tar_target(
     Membrane_Nuclear_CV_res_stats,
     get_cv_res_summary_mc(Membrane_Nuclear_CV)
+  ),
+  tar_target(
+    TL_CV,
+    do_hmmer_cv(N_TL_TAT_seqs, N_TL_SEC_seqs)
+  ),
+  tar_target(
+    TL_TAT_CV_res_stats,
+    summarise_hmmer_results(TL_CV, 'Tat')
+  ),
+  tar_target(
+    TL_SEC_CV_res_stats,
+    summarise_hmmer_results(TL_CV, 'Sec')
+  ),
+  tar_target(
+    full_model_CV,
+    evaluate_full_model(ngram_matrix, target_df, 5)
   )
 )
