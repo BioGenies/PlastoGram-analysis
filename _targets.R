@@ -13,6 +13,8 @@ data_path <- "~/Dropbox/Projekty/BioNgramProjects/PlastoGram/"
 source("./functions/filter_sequences.R")
 source("./functions/ngram_model_functions.R")
 source("./functions/create_target_df.R")
+source("./functions/profileHMM_functions.R")
+source("./functions/evaluate_full_model.R")
 
 set.seed(108567)
 
