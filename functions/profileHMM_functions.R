@@ -33,20 +33,20 @@ combine_tat_sec_results <- function(tat_res, sec_res, fold_df_tat, fold_df_sec, 
 }
 
 do_hmmer_cv <- function(tat_seqs, sec_seqs) {
-  folded_tat <- cvFolds(length(N_TL_TAT_seqs), K = 5)
-  fold_df_tat <- data.frame(seq_name = names(N_TL_TAT_seqs)[folded_tat[["subsets"]]], 
+  folded_tat <- cvFolds(length(tat_seqs), K = 5)
+  fold_df_tat <- data.frame(seq_name = names(tat_seqs)[folded_tat[["subsets"]]], 
                             fold = folded_tat[["which"]],
                             target = "Tat")
-  folded_sec <- cvFolds(length(N_TL_SEC_seqs), K = 5)
-  fold_df_sec <- data.frame(seq_name = names(N_TL_SEC_seqs)[folded_sec[["subsets"]]], 
+  folded_sec <- cvFolds(length(sec_seqs), K = 5)
+  fold_df_sec <- data.frame(seq_name = names(sec_seqs)[folded_sec[["subsets"]]], 
                             fold = folded_sec[["which"]],
                             target = "Sec")
   
   lapply(1:5, function(ith_fold) {
-    tat_train <- N_TL_TAT_seqs[filter(fold_df_tat, fold != ith_fold)[["seq_name"]]]
-    tat_test <- N_TL_TAT_seqs[filter(fold_df_tat, fold == ith_fold)[["seq_name"]]]
-    sec_train <- N_TL_SEC_seqs[filter(fold_df_sec, fold != ith_fold)[["seq_name"]]]
-    sec_test <- N_TL_SEC_seqs[filter(fold_df_sec, fold == ith_fold)[["seq_name"]]]
+    tat_train <- tat_seqs[filter(fold_df_tat, fold != ith_fold)[["seq_name"]]]
+    tat_test <- tat_seqs[filter(fold_df_tat, fold == ith_fold)[["seq_name"]]]
+    sec_train <- sec_seqs[filter(fold_df_sec, fold != ith_fold)[["seq_name"]]]
+    sec_test <- sec_seqs[filter(fold_df_sec, fold == ith_fold)[["seq_name"]]]
     
     train_profileHMM(tat_train, "tat_model")
     train_profileHMM(sec_train, "sec_model")
