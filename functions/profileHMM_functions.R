@@ -1,6 +1,6 @@
 train_profileHMM <- function(train_seqs, model_name, remove_files = TRUE) {
   write_fasta(train_seqs, "train_seqs.fa")
-  system('mafft  --localpair  --maxiterate 16 --reorder "train_seqs.fa" > "train_seqs_aln.fa"')
+  system('mafft  --quiet  --localpair  --maxiterate 16 --reorder "train_seqs.fa" > "train_seqs_aln.fa"')
   system(paste0("hmmbuild ", model_name, ".hmm train_seqs_aln.fa"))
   if(remove_files == TRUE) {
     file.remove(c("train_seqs.fa", "train_seqs_aln.fa"))

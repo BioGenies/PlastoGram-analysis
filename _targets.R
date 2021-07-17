@@ -106,6 +106,14 @@ list(
     get_cv_res_summary(Plastid_Nuclear_CV_2, "TRUE")
   ),
   tar_target(
+    Plastid_Nuclear_cases_CV,
+    do_cv(ngram_matrix, target_df, "NP_target", 5, 0.001, with_case_weights = TRUE)
+  ),
+  tar_target(
+    Plastid_Nuclear_cases_CV_res_stats,
+    get_cv_res_summary(Plastid_Nuclear_cases_CV, "TRUE")
+  ),
+  tar_target(
     Membrane_Notmembrane_CV,
     do_cv(ngram_matrix, target_df, "membrane_all_target", 5, 0.001)
   ),
@@ -120,6 +128,14 @@ list(
   tar_target(
     Membrane_Notmembrane_CV_res_stats,
     get_cv_res_summary(Membrane_Notmembrane_CV, "TRUE")
+  ),
+  tar_target(
+    Membrane_Notmembrane_cases_CV,
+    do_cv(ngram_matrix, target_df, "membrane_all_target", 5, 0.001, with_case_weights = TRUE)
+  ),
+  tar_target(
+    Membrane_Notmembrane_cases_CV_res_stats,
+    get_cv_res_summary(Membrane_Notmembrane_cases_CV)
   ),
   tar_target(
     ngram_matrix_membrane_plastid,
@@ -142,12 +158,32 @@ list(
           5, 0.001, mc = TRUE)
   ),
   tar_target(
+    Membrane_Plastid_cases_CV,
+    do_cv(ngram_matrix_membrane_plastid, 
+          target_df[which(target_df[["membrane_all_target"]] == TRUE & target_df[["NP_target"]] == FALSE),], "membrane_IM_target",
+          5, 0.001, with_case_weights = TRUE)
+  ),
+  tar_target(
+    Membrane_Nuclear_cases_CV,
+    do_cv(ngram_matrix_membrane_nuclear, 
+          target_df[which(target_df[["membrane_all_target"]] == TRUE & target_df[["NP_target"]] == TRUE),], "membrane_target",
+          5, 0.001, mc = TRUE, with_case_weights = TRUE)
+  ),
+  tar_target(
     Membrane_Plastid_CV_res_stats,
     get_cv_res_summary(Membrane_Plastid_CV, "TRUE")
   ),
   tar_target(
     Membrane_Nuclear_CV_res_stats,
     get_cv_res_summary_mc(Membrane_Nuclear_CV)
+  ),
+  tar_target(
+    Membrane_Plastid_cases_CV_res_stats,
+    get_cv_res_summary(Membrane_Plastid_cases_CV, "TRUE")
+  ),
+  tar_target(
+    Membrane_Nuclear_cases_CV_res_stats,
+    get_cv_res_summary_mc(Membrane_Nuclear_cases_CV)
   ),
   tar_target(
     TL_CV,
@@ -162,7 +198,19 @@ list(
     summarise_hmmer_results(TL_CV, 'Sec')
   ),
   tar_target(
-    full_model_CV,
-    evaluate_full_model(ngram_matrix, target_df, 5)
+    plastogram_CV,
+    evaluate_plastogram(ngram_matrix, target_df, 5, N_seqs, P_seqs, N_TL_TAT_seqs, N_TL_SEC_seqs)
+  ),
+  tar_target(
+    plastogram_decision_model_CV,
+    evaluate_plastogram_with_additional_model(ngram_matrix, target_df, 5, N_seqs, P_seqs, N_TL_TAT_seqs, N_TL_SEC_seqs)
+  ),
+  tar_target(
+    plastogram_cases_CV,
+    evaluate_plastogram(ngram_matrix, target_df, 5, N_seqs, P_seqs, N_TL_TAT_seqs, N_TL_SEC_seqs, with_case_weights = TRUE)
+  ),
+  tar_target(
+    plastogram_decision_model_cases_CV,
+    evaluate_plastogram_with_additional_model(ngram_matrix, target_df, 5, N_seqs, P_seqs, N_TL_TAT_seqs, N_TL_SEC_seqs, with_case_weights = TRUE)
   )
 )

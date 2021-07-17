@@ -21,17 +21,22 @@ calc_imp_ngrams <- function(ngram_matrix, target, cutoff = 0.001) {
 }
 
 
-train_rf <- function(ngram_matrix, target, imp_ngrams) {
+train_rf <- function(ngram_matrix, target, imp_ngrams, with_case_weights = FALSE) {
   ranger_train_data <- data.frame(ngram_matrix[, imp_ngrams],
                                   tar = as.factor(target))
-  class_weights <- sapply(levels(ranger_train_data[["tar"]]), function(i) 1/(sum(ranger_train_data[["tar"]] == i)/(nrow(ranger_train_data))), USE.NAMES = FALSE)
+  class_weights <- sapply(levels(ranger_train_data[["tar"]]), function(i) sum(ranger_train_data[["tar"]] == i)/nrow(ranger_train_data), USE.NAMES = FALSE)
+  if(with_case_weights == FALSE) {
+    case_weights <- NULL
+  } else {
+    case_weights <- calc_case_weights(target)
+  }
   ranger(dependent.variable.name = "tar", data =  ranger_train_data, 
          write.forest = TRUE, probability = TRUE, num.trees = 500, 
-         verbose = FALSE, class.weights = class_weights)
+         verbose = FALSE, class.weights = class_weights, case.weights = case_weights)
 }
 
 
-do_cv <- function(ngram_matrix, target_df, target_col, n_fold, cutoff, mc = FALSE) {
+do_cv <- function(ngram_matrix, target_df, target_col, n_fold, cutoff, mc = FALSE, with_case_weights = FALSE) {
   
   folds <- lapply(unique(target_df[[target_col]]), function(ith_target) {
     selected <- filter(target_df, get(target_col) == ith_target)
@@ -53,7 +58,7 @@ do_cv <- function(ngram_matrix, target_df, target_col, n_fold, cutoff, mc = FALS
     } else {
       imp_ngrams <- calc_imp_ngrams(dat, data_df[[target_col]][data_df[["fold"]] != ith_fold], cutoff)
     }
-    trained_model <- train_rf(dat, data_df[[target_col]][data_df[["fold"]] != ith_fold], imp_ngrams)
+    trained_model <- train_rf(dat, data_df[[target_col]][data_df[["fold"]] != ith_fold], imp_ngrams, with_case_weights)
     
     if(mc == TRUE) {
       classes <- unique(target_df[[target_col]])
@@ -112,3 +117,9 @@ get_cv_res_summary_mc <- function(mc_cv_res) {
   }) %>% bind_rows()
 }
 
+
+calc_case_weights <- function(target) {
+  lvls <- levels(as.factor(target))
+  weights <- sapply(lvls, function(i) sum(target == i)/length(target))
+  sapply(target, function(i) weights[which(names(weights) == i)], USE.NAMES = FALSE)
+}
