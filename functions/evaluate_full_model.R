@@ -147,7 +147,7 @@ evaluate_plastogram_with_additional_model <- function(ngram_matrix, target_df, n
     Nuclear_membrane_model <- train_rf(ngram_matrix[data_df[["fold"]] != ith_fold & data_df[["NP_target"]] == TRUE & data_df[["membrane_target"]] != "other", ],
                                        data_df[["membrane_target"]][data_df[["fold"]] != ith_fold & data_df[["NP_target"]] == TRUE & data_df[["membrane_target"]] != "other"],
                                        unique(unlist(unname(Nuclear_membrane_imp_ngrams))),
-                                       with_case_weights = vwith_case_weights)
+                                       with_case_weights = with_case_weights)
     
     train_tat <- N_TL_TAT_seqs[names(N_TL_TAT_seqs) %in% filter(data_df, fold != ith_fold & Tat_target == TRUE)[["seq_name"]]]
     train_sec <- N_TL_SEC_seqs[names(N_TL_SEC_seqs) %in% filter(data_df, fold != ith_fold & Sec_target == TRUE)[["seq_name"]]]
