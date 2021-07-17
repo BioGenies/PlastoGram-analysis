@@ -24,7 +24,7 @@ calc_imp_ngrams <- function(ngram_matrix, target, cutoff = 0.001) {
 train_rf <- function(ngram_matrix, target, imp_ngrams, with_case_weights = FALSE) {
   ranger_train_data <- data.frame(ngram_matrix[, imp_ngrams],
                                   tar = as.factor(target))
-  class_weights <- sapply(levels(ranger_train_data[["tar"]]), function(i) sum(ranger_train_data[["tar"]] == i)/nrow(ranger_train_data), USE.NAMES = FALSE)
+  class_weights <- sapply(levels(ranger_train_data[["tar"]]), function(i) 1/sum(ranger_train_data[["tar"]] == i)/nrow(ranger_train_data), USE.NAMES = FALSE)
   if(with_case_weights == FALSE) {
     case_weights <- NULL
   } else {
@@ -120,6 +120,6 @@ get_cv_res_summary_mc <- function(mc_cv_res) {
 
 calc_case_weights <- function(target) {
   lvls <- levels(as.factor(target))
-  weights <- sapply(lvls, function(i) sum(target == i)/length(target))
+  weights <- sapply(lvls, function(i) 1/sum(target == i)/length(target))
   sapply(target, function(i) weights[which(names(weights) == i)], USE.NAMES = FALSE)
 }

@@ -135,7 +135,7 @@ list(
   ),
   tar_target(
     Membrane_Notmembrane_cases_CV_res_stats,
-    get_cv_res_summary(Membrane_Notmembrane_cases_CV)
+    get_cv_res_summary(Membrane_Notmembrane_cases_CV, "TRUE")
   ),
   tar_target(
     ngram_matrix_membrane_plastid,
