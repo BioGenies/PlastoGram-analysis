@@ -120,6 +120,6 @@ get_cv_res_summary_mc <- function(mc_cv_res) {
 
 calc_case_weights <- function(target) {
   lvls <- levels(as.factor(target))
-  weights <- sapply(lvls, function(i) 1/sum(target == i)/length(target))
+  weights <- sapply(lvls, function(i) 1/(sum(target == i)/length(target)))
   sapply(target, function(i) weights[which(names(weights) == i)], USE.NAMES = FALSE)
 }
