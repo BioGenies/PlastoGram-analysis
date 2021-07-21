@@ -623,7 +623,7 @@ evaluate_plastogram_with_stroma_model_and_additional_model_for_all <- function(n
              Stroma = Stroma_res) 
     
     # Predict test sequences with 2nd tier models
-    N_notmembrane <- c(N_seqs, P_seqs)[filter(NP_Membrane_results, Nuclear > 0.5 & Membrane <= 0.5)[["seq_name"]]]
+    #N_notmembrane <- c(N_seqs, P_seqs)[filter(NP_Membrane_results, Nuclear > 0.5 & Membrane <= 0.5)[["seq_name"]]]
     Tat_res <- predict_profileHMM(c(N_seqs, P_seqs), "tat_model") %>% 
       mutate(Tat = (2^sequence_score) / (1+2^sequence_score)) %>% 
       select(c("domain_name", "Tat")) %>% 
@@ -638,12 +638,12 @@ evaluate_plastogram_with_stroma_model_and_additional_model_for_all <- function(n
     hmm_res[is.na(hmm_res)] <- 0
     
     #N_Membrane <- filter(NP_Membrane_results, Nuclear > 0.4 & Membrane > 0.3)[["seq_name"]]
-    N_Membrane_ngrams <- ngram_matrix[which(data_df[["seq_name"]] %in% N_Membrane), ]
+    #N_Membrane_ngrams <- ngram_matrix[which(data_df[["seq_name"]] %in% N_Membrane), ]
     N_Membrane_res <- cbind(data.frame(seq_name = data_df[["seq_name"]]),
                             predict(Nuclear_membrane_model, ngram_matrix)[["predictions"]])
     
     #P_Membrane <- filter(NP_Membrane_results, Nuclear <= 0.5 & Membrane > 0.5)[["seq_name"]]
-    P_Membrane_ngrams <- ngram_matrix[which(data_df[["seq_name"]] %in% P_Membrane), ]
+    #P_Membrane_ngrams <- ngram_matrix[which(data_df[["seq_name"]] %in% P_Membrane), ]
     P_Membrane_res <- cbind(data.frame(seq_name = data_df[["seq_name"]]),
                             P_IM = predict(Plastid_membrane_model, ngram_matrix)[["predictions"]][, "TRUE"])
     all_Membrane_res <- full_join(N_Membrane_res, 

@@ -1,0 +1,173 @@
+---
+title: "PlastoGram-results"
+author: "Katarzyna Sidorczuk"
+date: "7/17/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+
+library(knitr)
+library(targets)
+library(dplyr)
+library(biogram)
+library(measures)
+
+source("./functions/filter_sequences.R")
+
+tar_load(list.files("./_targets/objects"))
+
+data_path <- "/media/kasia/Data/Dropbox/Projekty/BioNgramProjects/PlastoGram/"
+```
+
+## Numbers of sequences
+
+```{r}
+seq_types <- c("N_OM", "N_IM", "P_IM", "N_TM", "P_TM", "N_S", "P_S", "N_TL_TAT", "N_TL_SEC")
+lapply(seq_types, function(ith_type) {
+  s <- read_fasta(paste0(data_path, "Sequences/", ith_type, ".fa"))
+  data.frame(Location = ith_type,
+             `All sequences` = length(s),
+             `With non-standard aa` = length(s) - length(filter_nonstandard_aa(s)),
+             `After CD-HIT reduction` = length(get(paste0(ith_type, "_seqs"))),
+             check.names = FALSE)
+}) %>% bind_rows() %>% kable()
+```
+
+## Plastid_Nuclear model performance
+
+Model without case weights, QuiPT cut-off = 0.001
+```{r}
+kable(Plastid_Nuclear_CV_res_stats)
+kable(table(Plastid_Nuclear_CV[["target"]], Plastid_Nuclear_CV[["pred"]]))
+```
+
+Model without case weights, QuiPT cut-off = 0.00001
+```{r}
+kable(Plastid_Nuclear_CV_2_res_stats)
+kable(table(Plastid_Nuclear_CV_2[["target"]], Plastid_Nuclear_CV_2[["pred"]]))
+```
+
+Model with case weights, QuiPT cut-off = 0.001
+```{r}
+kable(Plastid_Nuclear_cases_CV_res_stats)
+kable(table(Plastid_Nuclear_cases_CV[["target"]], Plastid_Nuclear_cases_CV[["pred"]]))
+```
+
+
+## Membrane_Notmembrane model performance
+
+Model without case weights, QuiPT cut-off = 0.001
+```{r}
+kable(Membrane_Notmembrane_CV_res_stats)
+kable(table(Membrane_Notmembrane_CV[["target"]], Membrane_Notmembrane_CV[["pred"]]))
+```
+
+Model with case weights, QuiPT cut-off = 0.001
+```{r}
+kable(Membrane_Notmembrane_cases_CV_res_stats)
+kable(table(Membrane_Notmembrane_cases_CV[["target"]], Membrane_Notmembrane_cases_CV[["pred"]]))
+```
+
+
+## Membrane_Plastid model performance
+
+Model without case weights, QuiPT cut-off = 0.001
+```{r}
+kable(Membrane_Plastid_CV_res_stats)
+kable(table(Membrane_Plastid_CV[["target"]], Membrane_Plastid_CV[["pred"]]))
+```
+
+Model with case weights, QuiPT cut-off = 0.001
+```{r}
+kable(Membrane_Plastid_cases_CV_res_stats)
+kable(table(Membrane_Plastid_cases_CV[["target"]], Membrane_Plastid_cases_CV[["pred"]]))
+```
+
+
+## Membrane_Nuclear model performance
+
+Model without case weights, QuiPT cut-off = 0.001
+```{r}
+kable(Membrane_Nuclear_CV_res_stats)
+kable(table(Membrane_Nuclear_CV[["target"]], Membrane_Nuclear_CV[["pred"]]))
+```
+
+Model with case weights, QuiPT cut-off = 0.001
+```{r}
+kable(Membrane_Nuclear_cases_CV_res_stats)
+kable(table(Membrane_Nuclear_cases_CV[["target"]], Membrane_Nuclear_cases_CV[["pred"]]))
+```
+
+
+## Tat model performance
+```{r}
+kable(TL_TAT_CV_res_stats)
+tat_res <- mutate(TL_CV, pred = ifelse(Tat > Sec, "Tat", "Sec"))
+kable(table(tat_res[["target"]], tat_res[["pred"]]))
+```
+
+
+## Sec model performance
+```{r}
+kable(TL_SEC_CV_res_stats)
+sec_res <- mutate(TL_CV, pred = ifelse(Sec > Tat, "Sec", "Tat"))
+kable(table(sec_res[["target"]], sec_res[["pred"]]))
+```
+
+
+## Full model performance
+
+- Without decision model - our set of decision rules
+- Decision model - random forest based on prediction results according to the model architecture (e.g. nuclear-encoded non-membrane proteins are predicted only using Sec and Tat model)
+- Decision model for all - random forest based on prediction results from all models (all proteins are predicted by all models)
+
+
+Models with QuiPT cut-off = 0.001, without case weights, without decision model
+```{r}
+kable(table(plastogram_CV[["dataset"]], plastogram_CV[["Decision"]]))
+print(paste0("Accuracy: ", ACC(plastogram_CV[["dataset"]], plastogram_CV[["Decision"]])))
+```
+
+Models with QuiPT cut-off = 0.001, with case weights, without decision model
+```{r}
+kable(table(plastogram_cases_CV[["dataset"]], plastogram_cases_CV[["Decision"]]))
+print(paste0("Accuracy: ", ACC(plastogram_cases_CV[["dataset"]], plastogram_cases_CV[["Decision"]])))
+```
+
+Models with QuiPT cut-off = 0.001, without case weights, with decision model
+```{r}
+kable(table(plastogram_decision_model_CV[["dataset"]], plastogram_decision_model_CV[["prediction"]]))
+print(paste0("Accuracy: ", ACC(plastogram_decision_model_CV[["dataset"]], plastogram_decision_model_CV[["prediction"]])))
+```
+
+Models with QuiPT cut-off = 0.001, with case weights, with decision model
+```{r}
+kable(table(plastogram_decision_model_cases_CV[["dataset"]], plastogram_decision_model_cases_CV[["prediction"]]))
+print(paste0("Accuracy: ", ACC(plastogram_decision_model_cases_CV[["dataset"]], plastogram_decision_model_cases_CV[["prediction"]])))
+```
+
+Models with QuiPT cut-off = 0.001, without case weights, with decision model for all proteins
+```{r}
+kable(table(plastogram_decision_model_for_all_CV[["dataset"]], plastogram_decision_model_for_all_CV[["prediction"]]))
+print(paste0("Accuracy: ", ACC(plastogram_decision_model_for_all_CV[["dataset"]], plastogram_decision_model_for_all_CV[["prediction"]])))
+```
+
+Models with QuiPT cut-off = 0.001, with case weights, with decision model for all proteins
+```{r}
+kable(table(plastogram_decision_model_for_all_cases_CV[["dataset"]], plastogram_decision_model_for_all_cases_CV[["prediction"]]))
+print(paste0("Accuracy: ", ACC(plastogram_decision_model_for_all_cases_CV[["dataset"]], plastogram_decision_model_for_all_cases_CV[["prediction"]])))
+```
+
+Models with QuiPT cut-off = 0.001, with case weights, with stroma model, with decision model 
+```{r}
+kable(table(plastogram_stroma_and_decision_model_cases_CV[["dataset"]], plastogram_stroma_and_decision_model_cases_CV[["prediction"]]))
+print(paste0("Accuracy: ", ACC(plastogram_stroma_and_decision_model_cases_CV[["dataset"]], plastogram_stroma_and_decision_model_cases_CV[["prediction"]])))
+```
+
+Models with QuiPT cut-off = 0.001, with case weights, with stroma model, with decision model for all
+```{r}
+kable(table(plastogram_stroma_and_decision_model_for_all_cases_CV[["dataset"]], plastogram_decision_model_for_all_cases_CV[["prediction"]]))
+print(paste0("Accuracy: ", ACC(plastogram_stroma_and_decision_model_for_all_cases_CV[["dataset"]], plastogram_stroma_and_decision_model_for_all_cases_CV[["prediction"]])))
+```

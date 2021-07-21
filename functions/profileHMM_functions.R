@@ -54,7 +54,10 @@ do_hmmer_cv <- function(tat_seqs, sec_seqs) {
     tat_res <- predict_profileHMM(c(tat_test, sec_test), "tat_model")
     sec_res <- predict_profileHMM(c(sec_test, tat_test), "sec_model")
     
-    combine_tat_sec_results(tat_res, sec_res, fold_df_tat, fold_df_sec, ith_fold)
+    combine_tat_sec_results(tat_res, sec_res, 
+                            filter(fold_df_tat, fold == ith_fold), 
+                            filter(fold_df_sec, fold == ith_fold), 
+                            ith_fold)
   }) %>% bind_rows()
 }
 

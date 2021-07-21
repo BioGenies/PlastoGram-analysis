@@ -191,7 +191,7 @@ list(
   ),
   tar_target(
     Stroma_cases_CV,
-    do_cv(gram_matrix, target_df, "S_target", 5, 0.001, with_case_weights = TRUE)
+    do_cv(ngram_matrix, target_df, "S_target", 5, 0.001, with_case_weights = TRUE)
   ),
   tar_target(
     Stroma_CV_res_stats,
