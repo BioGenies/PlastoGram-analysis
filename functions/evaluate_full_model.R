@@ -646,7 +646,7 @@ evaluate_plastogram_with_OM_stroma_model_and_additional_model <- function(ngram_
                                   P_Membrane_res,
                                   by = "seq_name")
     results <- left_join(NP_Membrane_results, full_join(hmm_res, all_Membrane_res, by = "seq_name"), by = "seq_name") 
-    Stroma_NMembrane <- c(N_Membrane, filter(hmm_res, Sec == 0 & Tat == 0))
+    Stroma_NMembrane <- c(N_Membrane, filter(hmm_res, Sec == 0 & Tat == 0)[["seq_name"]])
     Stroma_NMembrane_ngrams <- ngram_matrix[which(data_df[["seq_name"]] %in% Stroma_NMembrane), ]
     Stroma_NMembrane_res <- data.frame(seq_name = Stroma_NMembrane,
                                        OM_Stroma = predict(OM_Stroma_model, Stroma_NMembrane_ngrams)[["predictions"]][[, "TRUE"]])
