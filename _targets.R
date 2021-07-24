@@ -205,11 +205,21 @@ list(
     OM_Stroma_CV,
     do_cv(ngram_matrix[which(target_df[["membrane_target"]] == "OM" | target_df[["S_target"]] == TRUE),],
           target_df[which(target_df[["membrane_target"]] == "OM" | target_df[["S_target"]] == TRUE),],
-          "membrane_OM_target", 5, 0.001, with_case_weights = TRUE)
+          "membrane_OM_target", 5, 0.001)
   ),
   tar_target(
     OM_Stroma_CV_res_stats,
     get_cv_res_summary(OM_Stroma_CV, "TRUE")
+  ),
+  tar_target(
+    OM_Stroma_cases_CV,
+    do_cv(ngram_matrix[which(target_df[["membrane_target"]] == "OM" | target_df[["S_target"]] == TRUE),],
+          target_df[which(target_df[["membrane_target"]] == "OM" | target_df[["S_target"]] == TRUE),],
+          "membrane_OM_target", 5, 0.001, with_case_weights = TRUE)
+  ),
+  tar_target(
+    OM_Stroma_cases_CV_res_stats,
+    get_cv_res_summary(OM_Stroma_cases_CV, "TRUE")
   ),
   tar_target(
     TL_CV,
@@ -266,5 +276,13 @@ list(
   tar_target(
     plastogram_stroma_and_decision_model_for_all_CV,
     evaluate_plastogram_with_stroma_model_and_additional_model_for_all(ngram_matrix, target_df, 5, N_seqs, P_seqs, N_TL_TAT_seqs, N_TL_SEC_seqs)
+  ),
+  tar_target(
+    plastogram_OM_stroma_and_decision_model_CV,
+    evaluate_plastogram_with_OM_stroma_model_and_additional_model(ngram_matrix, target_df, 5, N_seqs, P_seqs, N_TL_TAT_seqs, N_TL_SEC_seqs)
+  ),
+  tar_target(
+    plastogram_OM_stroma_and_decision_model_cases_CV,
+    evaluate_plastogram_with_OM_stroma_model_and_additional_model(ngram_matrix, target_df, 5, N_seqs, P_seqs, N_TL_TAT_seqs, N_TL_SEC_seqs, with_case_weights = TRUE)
   )
 )
