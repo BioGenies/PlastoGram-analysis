@@ -584,7 +584,7 @@ evaluate_plastogram_with_OM_stroma_model_and_additional_model <- function(ngram_
                                with_case_weights = with_case_weights)
     
     OM_Stroma_imp_ngrams <- calc_imp_ngrams(ngram_matrix[data_df[["fold"]] != ith_fold & (data_df[["membrane_target"]] == "OM" | data_df[["S_target"]] == "TRUE"), ],
-                                         data_df[["membrane_OM_target"]][data_df[["fold"]] != ith_fold & (data_df[["membrane_target"]] == "OM" | data_df[["S_target"]] == "TRUE"), ])
+                                         data_df[["membrane_OM_target"]][data_df[["fold"]] != ith_fold & (data_df[["membrane_target"]] == "OM" | data_df[["S_target"]] == "TRUE")])
     OM_Stroma_model <- train_rf(ngram_matrix[data_df[["fold"]] != ith_fold & (data_df[["membrane_target"]] == "OM" | data_df[["S_target"]] == "TRUE"), ],
                              data_df[["membrane_OM_target"]][data_df[["fold"]] != ith_fold & (data_df[["membrane_target"]] == "OM" | data_df[["S_target"]] == "TRUE")], 
                              OM_Stroma_imp_ngrams,
@@ -649,8 +649,8 @@ evaluate_plastogram_with_OM_stroma_model_and_additional_model <- function(ngram_
     Stroma_NMembrane <- c(N_Membrane, filter(hmm_res, Sec == 0 & Tat == 0)[["seq_name"]])
     Stroma_NMembrane_ngrams <- ngram_matrix[which(data_df[["seq_name"]] %in% Stroma_NMembrane), ]
     Stroma_NMembrane_res <- data.frame(seq_name = Stroma_NMembrane,
-                                       OM_Stroma = predict(OM_Stroma_model, Stroma_NMembrane_ngrams)[["predictions"]][[, "TRUE"]])
-    all_results <- left_join(all_Membrane_res, Stroma_NMembrane_res)
+                                       OM_Stroma = predict(OM_Stroma_model, Stroma_NMembrane_ngrams)[["predictions"]][, "TRUE"])
+    all_results <- left_join(results, Stroma_NMembrane_res)
     all_results[is.na(all_results)] <- 0
     
     decision_model_train_dat <- all_results %>% 

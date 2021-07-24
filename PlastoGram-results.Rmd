@@ -127,47 +127,59 @@ kable(table(sec_res[["target"]], sec_res[["pred"]]))
 Models with QuiPT cut-off = 0.001, without case weights, without decision model
 ```{r}
 kable(table(plastogram_CV[["dataset"]], plastogram_CV[["Decision"]]))
-print(paste0("Accuracy: ", ACC(plastogram_CV[["dataset"]], plastogram_CV[["Decision"]])))
+print(paste0("plastogram_CV accuracy: ", ACC(plastogram_CV[["dataset"]], plastogram_CV[["Decision"]])))
 ```
 
 Models with QuiPT cut-off = 0.001, with case weights, without decision model
 ```{r}
 kable(table(plastogram_cases_CV[["dataset"]], plastogram_cases_CV[["Decision"]]))
-print(paste0("Accuracy: ", ACC(plastogram_cases_CV[["dataset"]], plastogram_cases_CV[["Decision"]])))
+print(paste0("plastogram_cases_CV accuracy: ", ACC(plastogram_cases_CV[["dataset"]], plastogram_cases_CV[["Decision"]])))
 ```
 
 Models with QuiPT cut-off = 0.001, without case weights, with decision model
 ```{r}
 kable(table(plastogram_decision_model_CV[["dataset"]], plastogram_decision_model_CV[["prediction"]]))
-print(paste0("Accuracy: ", ACC(plastogram_decision_model_CV[["dataset"]], plastogram_decision_model_CV[["prediction"]])))
+print(paste0("plastogram_decision_model_CV accuracy: ", ACC(plastogram_decision_model_CV[["dataset"]], plastogram_decision_model_CV[["prediction"]])))
 ```
 
 Models with QuiPT cut-off = 0.001, with case weights, with decision model
 ```{r}
 kable(table(plastogram_decision_model_cases_CV[["dataset"]], plastogram_decision_model_cases_CV[["prediction"]]))
-print(paste0("Accuracy: ", ACC(plastogram_decision_model_cases_CV[["dataset"]], plastogram_decision_model_cases_CV[["prediction"]])))
+print(paste0("plastogram_decision_model_cases_CV accuracy: ", ACC(plastogram_decision_model_cases_CV[["dataset"]], plastogram_decision_model_cases_CV[["prediction"]])))
 ```
 
 Models with QuiPT cut-off = 0.001, without case weights, with decision model for all proteins
 ```{r}
 kable(table(plastogram_decision_model_for_all_CV[["dataset"]], plastogram_decision_model_for_all_CV[["prediction"]]))
-print(paste0("Accuracy: ", ACC(plastogram_decision_model_for_all_CV[["dataset"]], plastogram_decision_model_for_all_CV[["prediction"]])))
+print(paste0("plastogram_decision_model_for_all_CV accuracy: ", ACC(plastogram_decision_model_for_all_CV[["dataset"]], plastogram_decision_model_for_all_CV[["prediction"]])))
 ```
 
 Models with QuiPT cut-off = 0.001, with case weights, with decision model for all proteins
 ```{r}
 kable(table(plastogram_decision_model_for_all_cases_CV[["dataset"]], plastogram_decision_model_for_all_cases_CV[["prediction"]]))
-print(paste0("Accuracy: ", ACC(plastogram_decision_model_for_all_cases_CV[["dataset"]], plastogram_decision_model_for_all_cases_CV[["prediction"]])))
+print(paste0("plastogram_decision_model_for_all_cases_CV accuracy: ", ACC(plastogram_decision_model_for_all_cases_CV[["dataset"]], plastogram_decision_model_for_all_cases_CV[["prediction"]])))
 ```
 
 Models with QuiPT cut-off = 0.001, with case weights, with stroma model, with decision model 
 ```{r}
 kable(table(plastogram_stroma_and_decision_model_cases_CV[["dataset"]], plastogram_stroma_and_decision_model_cases_CV[["prediction"]]))
-print(paste0("Accuracy: ", ACC(plastogram_stroma_and_decision_model_cases_CV[["dataset"]], plastogram_stroma_and_decision_model_cases_CV[["prediction"]])))
+print(paste0("plastogram_stroma_and_decision_model_cases_CV accuracy: ", ACC(plastogram_stroma_and_decision_model_cases_CV[["dataset"]], plastogram_stroma_and_decision_model_cases_CV[["prediction"]])))
 ```
 
 Models with QuiPT cut-off = 0.001, with case weights, with stroma model, with decision model for all
 ```{r}
-kable(table(plastogram_stroma_and_decision_model_for_all_cases_CV[["dataset"]], plastogram_decision_model_for_all_cases_CV[["prediction"]]))
-print(paste0("Accuracy: ", ACC(plastogram_stroma_and_decision_model_for_all_cases_CV[["dataset"]], plastogram_stroma_and_decision_model_for_all_cases_CV[["prediction"]])))
+kable(table(plastogram_stroma_and_decision_model_for_all_cases_CV[["dataset"]], plastogram_stroma_and_decision_model_for_all_cases_CV[["prediction"]]))
+print(paste0("plastogram_stroma_and_decision_model_for_all_cases_CV accuracy: ", ACC(plastogram_stroma_and_decision_model_for_all_cases_CV[["dataset"]], plastogram_stroma_and_decision_model_for_all_cases_CV[["prediction"]])))
+```
+
+Models with QuiPT cut-off = 0.001, without case weights, with OM_Stroma model, with decision model
+```{r}
+kable(table(plastogram_OM_stroma_and_decision_model_CV[["dataset"]]), plastogram_OM_stroma_and_decision_model_CV[["prediction"]])
+print(paste0("plastogram_OM_stroma_and_decision_model_CV accuracy: ", ACC(plastogram_OM_stroma_and_decision_model_CV[["dataset"]], plastogram_OM_stroma_and_decision_model_CV[["prediction"]])))
+```
+
+Models with QuiPT cut-off = 0.001, with case weights, with OM_Stroma model, with decision model
+```{r}
+kable(table(plastogram_OM_stroma_and_decision_model_cases_CV[["dataset"]]), plastogram_OM_stroma_and_decision_model_cases_CV[["prediction"]])
+print(paste0("plastogram_OM_stroma_and_decision_model_cases_CV accuracy: ", ACC(plastogram_OM_stroma_and_decision_model_cases_CV[["dataset"]], plastogram_OM_stroma_and_decision_model_cases_CV[["prediction"]])))
 ```
