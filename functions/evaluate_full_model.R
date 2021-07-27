@@ -314,8 +314,7 @@ evaluate_plastogram_with_additional_model <- function(ngram_matrix, target_df, n
       mutate(dataset = as.factor(dataset))
     decision_model <- ranger(data = decision_model_train_dat, dependent.variable.name = "dataset",
                              write.forest = TRUE, probability = TRUE, verbose = FALSE,
-                             class.weights = sapply(levels(decision_model_train_dat[["dataset"]]), function(i) 1/sum(decision_model_train_dat[["dataset"]] == i)/nrow(decision_model_train_dat), USE.NAMES = FALSE),
-                             case.weights = calc_case_weights(decision_model_train_dat[["dataset"]]))
+                             class.weights = sapply(levels(decision_model_train_dat[["dataset"]]), function(i) 1/sum(decision_model_train_dat[["dataset"]] == i)/nrow(decision_model_train_dat), USE.NAMES = FALSE))
     decision_preds <- cbind(all_results[all_results[["fold"]] == ith_fold, c("seq_name", "dataset")],
                             predict(decision_model, filter(all_results, fold == ith_fold))[["predictions"]])
     mutate(decision_preds, prediction = c("N_IM", "N_OM", "N_S", "N_TL_SEC", "N_TL_TAT", "N_TM", "P_IM", "P_S", "P_TM")
@@ -422,8 +421,7 @@ evaluate_plastogram_with_additional_model_for_all <- function(ngram_matrix, targ
       mutate(dataset = as.factor(dataset))
     decision_model <- ranger(data = decision_model_train_dat, dependent.variable.name = "dataset",
                              write.forest = TRUE, probability = TRUE, verbose = FALSE,
-                             class.weights = sapply(levels(decision_model_train_dat[["dataset"]]), function(i) 1/sum(decision_model_train_dat[["dataset"]] == i)/nrow(decision_model_train_dat), USE.NAMES = FALSE),
-                             case.weights = calc_case_weights(decision_model_train_dat[["dataset"]]))
+                             class.weights = sapply(levels(decision_model_train_dat[["dataset"]]), function(i) 1/sum(decision_model_train_dat[["dataset"]] == i)/nrow(decision_model_train_dat), USE.NAMES = FALSE))
     decision_preds <- cbind(all_results[all_results[["fold"]] == ith_fold, c("seq_name", "dataset")],
                             predict(decision_model, filter(all_results, fold == ith_fold))[["predictions"]])
     mutate(decision_preds, prediction = c("N_IM", "N_OM", "N_S", "N_TL_SEC", "N_TL_TAT", "N_TM", "P_IM", "P_S", "P_TM")
@@ -540,8 +538,7 @@ evaluate_plastogram_with_stroma_model_and_additional_model <- function(ngram_mat
       mutate(dataset = as.factor(dataset))
     decision_model <- ranger(data = decision_model_train_dat, dependent.variable.name = "dataset",
                              write.forest = TRUE, probability = TRUE, verbose = FALSE,
-                             class.weights = sapply(levels(decision_model_train_dat[["dataset"]]), function(i) 1/sum(decision_model_train_dat[["dataset"]] == i)/nrow(decision_model_train_dat), USE.NAMES = FALSE),
-                             case.weights = calc_case_weights(decision_model_train_dat[["dataset"]]))
+                             class.weights = sapply(levels(decision_model_train_dat[["dataset"]]), function(i) 1/sum(decision_model_train_dat[["dataset"]] == i)/nrow(decision_model_train_dat), USE.NAMES = FALSE))
     decision_preds <- cbind(all_results[all_results[["fold"]] == ith_fold, c("seq_name", "dataset")],
                             predict(decision_model, filter(all_results, fold == ith_fold))[["predictions"]])
     mutate(decision_preds, prediction = c("N_IM", "N_OM", "N_S", "N_TL_SEC", "N_TL_TAT", "N_TM", "P_IM", "P_S", "P_TM")
@@ -659,8 +656,7 @@ evaluate_plastogram_with_OM_stroma_model_and_additional_model <- function(ngram_
       mutate(dataset = as.factor(dataset))
     decision_model <- ranger(data = decision_model_train_dat, dependent.variable.name = "dataset",
                              write.forest = TRUE, probability = TRUE, verbose = FALSE,
-                             class.weights = sapply(levels(decision_model_train_dat[["dataset"]]), function(i) 1/sum(decision_model_train_dat[["dataset"]] == i)/nrow(decision_model_train_dat), USE.NAMES = FALSE),
-                             case.weights = calc_case_weights(decision_model_train_dat[["dataset"]]))
+                             class.weights = sapply(levels(decision_model_train_dat[["dataset"]]), function(i) 1/sum(decision_model_train_dat[["dataset"]] == i)/nrow(decision_model_train_dat), USE.NAMES = FALSE))
     decision_preds <- cbind(all_results[all_results[["fold"]] == ith_fold, c("seq_name", "dataset")],
                             predict(decision_model, filter(all_results, fold == ith_fold))[["predictions"]])
     mutate(decision_preds, prediction = c("N_IM", "N_OM", "N_S", "N_TL_SEC", "N_TL_TAT", "N_TM", "P_IM", "P_S", "P_TM")
@@ -777,8 +773,7 @@ evaluate_plastogram_with_stroma_model_and_additional_model_for_all <- function(n
       mutate(dataset = as.factor(dataset))
     decision_model <- ranger(data = decision_model_train_dat, dependent.variable.name = "dataset",
                              write.forest = TRUE, probability = TRUE, verbose = FALSE,
-                             class.weights = sapply(levels(decision_model_train_dat[["dataset"]]), function(i) 1/sum(decision_model_train_dat[["dataset"]] == i)/nrow(decision_model_train_dat), USE.NAMES = FALSE),
-                             case.weights = calc_case_weights(decision_model_train_dat[["dataset"]]))
+                             class.weights = sapply(levels(decision_model_train_dat[["dataset"]]), function(i) 1/sum(decision_model_train_dat[["dataset"]] == i)/nrow(decision_model_train_dat), USE.NAMES = FALSE))
     decision_preds <- cbind(all_results[all_results[["fold"]] == ith_fold, c("seq_name", "dataset")],
                             predict(decision_model, filter(all_results, fold == ith_fold))[["predictions"]])
     mutate(decision_preds, prediction = c("N_IM", "N_OM", "N_S", "N_TL_SEC", "N_TL_TAT", "N_TM", "P_IM", "P_S", "P_TM")
