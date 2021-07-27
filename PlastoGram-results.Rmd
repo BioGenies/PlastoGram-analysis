@@ -100,6 +100,33 @@ kable(Membrane_Nuclear_cases_CV_res_stats)
 kable(table(Membrane_Nuclear_cases_CV[["target"]], Membrane_Nuclear_cases_CV[["pred"]]))
 ```
 
+## Stroma model performance
+
+Model without case weights, QuiPT cut-off = 0.001
+```{r}
+kable(Stroma_CV_res_stats)
+kable(table(Stroma_CV[["target"]], Stroma_CV[["pred"]]))
+```
+
+Model with case weights, QuiPT cut-off = 0.001
+```{r}
+kable(Stroma_cases_CV_res_stats)
+kable(table(Stroma_cases_CV[["target"]], Stroma_cases_CV[["pred"]]))
+```
+
+## OM_Stroma model performance
+
+Model without case weights, QuiPT cut-off = 0.001
+```{r}
+kable(OM_Stroma_CV_res_stats)
+kable(table(OM_Stroma_CV[["target"]], OM_Stroma_CV[["pred"]]))
+```
+
+Model with case weights, QuiPT cut-off = 0.001
+```{r}
+kable(OM_Stroma_cases_CV_res_stats)
+kable(table(OM_Stroma_cases_CV[["target"]], OM_Stroma_cases_CV[["pred"]]))
+```
 
 ## Tat model performance
 ```{r}
@@ -174,12 +201,12 @@ print(paste0("plastogram_stroma_and_decision_model_for_all_cases_CV accuracy: ",
 
 Models with QuiPT cut-off = 0.001, without case weights, with OM_Stroma model, with decision model
 ```{r}
-kable(table(plastogram_OM_stroma_and_decision_model_CV[["dataset"]]), plastogram_OM_stroma_and_decision_model_CV[["prediction"]])
+kable(table(plastogram_OM_stroma_and_decision_model_CV[["dataset"]], plastogram_OM_stroma_and_decision_model_CV[["prediction"]]))
 print(paste0("plastogram_OM_stroma_and_decision_model_CV accuracy: ", ACC(plastogram_OM_stroma_and_decision_model_CV[["dataset"]], plastogram_OM_stroma_and_decision_model_CV[["prediction"]])))
 ```
 
 Models with QuiPT cut-off = 0.001, with case weights, with OM_Stroma model, with decision model
 ```{r}
-kable(table(plastogram_OM_stroma_and_decision_model_cases_CV[["dataset"]]), plastogram_OM_stroma_and_decision_model_cases_CV[["prediction"]])
+kable(table(plastogram_OM_stroma_and_decision_model_cases_CV[["dataset"]], plastogram_OM_stroma_and_decision_model_cases_CV[["prediction"]]))
 print(paste0("plastogram_OM_stroma_and_decision_model_cases_CV accuracy: ", ACC(plastogram_OM_stroma_and_decision_model_cases_CV[["dataset"]], plastogram_OM_stroma_and_decision_model_cases_CV[["prediction"]])))
 ```

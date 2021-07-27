@@ -468,7 +468,7 @@ evaluate_plastogram_with_OM_stroma_model_and_additional_model <- function(ngram_
     OM_Stroma_imp_ngrams <- calc_imp_ngrams(ngram_matrix[data_df[["fold"]] != ith_fold & (data_df[["membrane_target"]] == "OM" | data_df[["S_target"]] == "TRUE"), ],
                                             data_df[["membrane_OM_target"]][data_df[["fold"]] != ith_fold & target_df[["NP_target"]] == TRUE & (data_df[["membrane_target"]] == "OM" | data_df[["S_target"]] == "TRUE")])
     OM_Stroma_model <- train_rf(ngram_matrix[data_df[["fold"]] != ith_fold & target_df[["NP_target"]] == TRUE & (data_df[["membrane_target"]] == "OM" | data_df[["S_target"]] == "TRUE"), ],
-                                data_df[["membrane_OM_target"]][data_df[["fold"]] != ith_fold & (data_df[["membrane_target"]] == "OM" | data_df[["S_target"]] == "TRUE")], 
+                                data_df[["membrane_OM_target"]][data_df[["fold"]] != ith_fold & target_df[["NP_target"]] == TRUE & (data_df[["membrane_target"]] == "OM" | data_df[["S_target"]] == "TRUE")], 
                                 OM_Stroma_imp_ngrams,
                                 with_case_weights = with_case_weights_2nd)
     
