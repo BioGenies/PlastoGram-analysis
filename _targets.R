@@ -220,8 +220,8 @@ list(
   ),
   tar_target(
     OM_Stroma_cases_CV,
-    do_cv(ngram_matrix[which(target_df[["membrane_target"]] == "OM" | target_df[["S_target"]] == TRUE),],
-          target_df[which(target_df[["membrane_target"]] == "OM" | target_df[["S_target"]] == TRUE),],
+    do_cv(ngram_matrix[which(target_df[["NP_target"]] == TRUE & (target_df[["membrane_target"]] == "OM" | target_df[["S_target"]] == TRUE)), ],
+          target_df[which(target_df[["NP_target"]] == TRUE & (target_df[["membrane_target"]] == "OM" | target_df[["S_target"]] == TRUE)), ],
           "membrane_OM_target", 5, 0.001, with_case_weights = TRUE)
   ),
   tar_target(
@@ -246,7 +246,7 @@ list(
   ),
   tar_target(
     plastogram_cases_CV,
-    evaluate_plastogram(ngram_matrix, target_df, 5, N_seqs, P_seqs, N_TL_TAT_seqs, N_TL_SEC_seqs, with_case_weights = TRUE)
+    evaluate_plastogram(ngram_matrix, target_df, 5, N_seqs, P_seqs, N_TL_TAT_seqs, N_TL_SEC_seqs, with_case_weights_2nd = TRUE)
   ),
   tar_target(
     plastogram_decision_model_CV,
@@ -254,11 +254,7 @@ list(
   ),
   tar_target(
     plastogram_decision_model_cases_CV,
-    evaluate_plastogram_with_additional_model(ngram_matrix, target_df, 5, N_seqs, P_seqs, N_TL_TAT_seqs, N_TL_SEC_seqs, with_case_weights = TRUE)
-  ),
-  tar_target(
-    plastogram_decision_nuclear_model_cases_CV,
-    evaluate_plastogram_with_additional_Nuclear_model(ngram_matrix, target_df, 5, N_seqs, P_seqs, N_TL_TAT_seqs, N_TL_SEC_seqs, with_case_weights = TRUE)
+    evaluate_plastogram_with_additional_model(ngram_matrix, target_df, 5, N_seqs, P_seqs, N_TL_TAT_seqs, N_TL_SEC_seqs, with_case_weights_2nd = TRUE)
   ),
   tar_target(
     plastogram_decision_model_for_all_CV,
@@ -266,15 +262,15 @@ list(
   ),
   tar_target(
     plastogram_decision_model_for_all_cases_CV,
-    evaluate_plastogram_with_additional_model_for_all(ngram_matrix, target_df, 5, N_seqs, P_seqs, N_TL_TAT_seqs, N_TL_SEC_seqs, with_case_weights = TRUE)
+    evaluate_plastogram_with_additional_model_for_all(ngram_matrix, target_df, 5, N_seqs, P_seqs, N_TL_TAT_seqs, N_TL_SEC_seqs, with_case_weights_2nd = TRUE)
   ),
   tar_target(
     plastogram_stroma_and_decision_model_cases_CV,
-    evaluate_plastogram_with_stroma_model_and_additional_model(ngram_matrix, target_df, 5, N_seqs, P_seqs, N_TL_TAT_seqs, N_TL_SEC_seqs, with_case_weights = TRUE)
+    evaluate_plastogram_with_stroma_model_and_additional_model(ngram_matrix, target_df, 5, N_seqs, P_seqs, N_TL_TAT_seqs, N_TL_SEC_seqs, with_case_weights_2nd = TRUE)
   ),
   tar_target(
     plastogram_stroma_and_decision_model_for_all_cases_CV,
-    evaluate_plastogram_with_stroma_model_and_additional_model_for_all(ngram_matrix, target_df, 5, N_seqs, P_seqs, N_TL_TAT_seqs, N_TL_SEC_seqs, with_case_weights = TRUE)
+    evaluate_plastogram_with_stroma_model_and_additional_model_for_all(ngram_matrix, target_df, 5, N_seqs, P_seqs, N_TL_TAT_seqs, N_TL_SEC_seqs, with_case_weights_2nd = TRUE)
   ),
   tar_target(
     plastogram_stroma_and_decision_model_CV,
@@ -290,6 +286,6 @@ list(
   ),
   tar_target(
     plastogram_OM_stroma_and_decision_model_cases_CV,
-    evaluate_plastogram_with_OM_stroma_model_and_additional_model(ngram_matrix, target_df, 5, N_seqs, P_seqs, N_TL_TAT_seqs, N_TL_SEC_seqs, with_case_weights = TRUE)
+    evaluate_plastogram_with_OM_stroma_model_and_additional_model(ngram_matrix, target_df, 5, N_seqs, P_seqs, N_TL_TAT_seqs, N_TL_SEC_seqs, with_case_weights_2nd = TRUE)
   )
 )
