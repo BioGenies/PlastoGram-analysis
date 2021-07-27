@@ -10,6 +10,7 @@ library(rhmmer)
 
 data_path <- "~/Dropbox/Projekty/BioNgramProjects/PlastoGram/"
 
+source("./functions/create_datasets.R")
 source("./functions/filter_sequences.R")
 source("./functions/ngram_model_functions.R")
 source("./functions/create_target_df.R")
@@ -19,6 +20,12 @@ source("./functions/evaluate_full_model.R")
 set.seed(108567)
 
 list(
+  tar_target(
+    sequences,
+    create_datasets(paste0(data_path, "All_sequences.fasta"),
+                    paste0(data_path, "Dataset_annotations_references.xlsx"),
+                    paste0(data_path, "Sequences/"))
+  ),
   tar_target(
     N_OM_seqs,
     filter_with_cdhit(
