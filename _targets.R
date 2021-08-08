@@ -7,6 +7,7 @@ library(ranger)
 library(readxl)
 library(measures)
 library(rhmmer)
+library(purrr)
 
 data_path <- "~/Dropbox/Projekty/BioNgramProjects/PlastoGram/"
 
@@ -113,12 +114,12 @@ list(
     get_cv_res_summary(Plastid_Nuclear_CV_2, "TRUE")
   ),
   tar_target(
-    Plastid_Nuclear_cases_CV,
-    do_cv(ngram_matrix, target_df, "NP_target", 5, 0.001, with_case_weights = TRUE)
+    Plastid_Nuclear_cw_CV,
+    do_cv(ngram_matrix, target_df, "NP_target", 5, 0.001, with_class_weights = TRUE)
   ),
   tar_target(
-    Plastid_Nuclear_cases_CV_res_stats,
-    get_cv_res_summary(Plastid_Nuclear_cases_CV, "TRUE")
+    Plastid_Nuclear_cw_CV_res_stats,
+    get_cv_res_summary(Plastid_Nuclear_cw_CV, "TRUE")
   ),
   tar_target(
     Membrane_Notmembrane_CV,
@@ -137,12 +138,12 @@ list(
     get_cv_res_summary(Membrane_Notmembrane_CV, "TRUE")
   ),
   tar_target(
-    Membrane_Notmembrane_cases_CV,
-    do_cv(ngram_matrix, target_df, "membrane_all_target", 5, 0.001, with_case_weights = TRUE)
+    Membrane_Notmembrane_cw_CV,
+    do_cv(ngram_matrix, target_df, "membrane_all_target", 5, 0.001, with_class_weights = TRUE)
   ),
   tar_target(
-    Membrane_Notmembrane_cases_CV_res_stats,
-    get_cv_res_summary(Membrane_Notmembrane_cases_CV, "TRUE")
+    Membrane_Notmembrane_cw_CV_res_stats,
+    get_cv_res_summary(Membrane_Notmembrane_cw_CV, "TRUE")
   ),
   tar_target(
     ngram_matrix_membrane_plastid,
@@ -165,16 +166,16 @@ list(
           5, 0.001, mc = TRUE)
   ),
   tar_target(
-    Membrane_Plastid_cases_CV,
+    Membrane_Plastid_cw_CV,
     do_cv(ngram_matrix_membrane_plastid, 
           target_df[which(target_df[["membrane_all_target"]] == TRUE & target_df[["NP_target"]] == FALSE),], "membrane_IM_target",
-          5, 0.001, with_case_weights = TRUE)
+          5, 0.001, with_class_weights = TRUE)
   ),
   tar_target(
-    Membrane_Nuclear_cases_CV,
+    Membrane_Nuclear_cw_CV,
     do_cv(ngram_matrix_membrane_nuclear, 
           target_df[which(target_df[["membrane_all_target"]] == TRUE & target_df[["NP_target"]] == TRUE),], "membrane_target",
-          5, 0.001, mc = TRUE, with_case_weights = TRUE)
+          5, 0.001, mc = TRUE, with_class_weights = TRUE)
   ),
   tar_target(
     Membrane_Plastid_CV_res_stats,
@@ -185,28 +186,28 @@ list(
     get_cv_res_summary_mc(Membrane_Nuclear_CV)
   ),
   tar_target(
-    Membrane_Plastid_cases_CV_res_stats,
-    get_cv_res_summary(Membrane_Plastid_cases_CV, "TRUE")
+    Membrane_Plastid_cw_CV_res_stats,
+    get_cv_res_summary(Membrane_Plastid_cw_CV, "TRUE")
   ),
   tar_target(
-    Membrane_Nuclear_cases_CV_res_stats,
-    get_cv_res_summary_mc(Membrane_Nuclear_cases_CV)
+    Membrane_Nuclear_cw_CV_res_stats,
+    get_cv_res_summary_mc(Membrane_Nuclear_cw_CV)
   ),
   tar_target(
     Stroma_CV,
     do_cv(ngram_matrix, target_df, "S_target", 5, 0.001)
   ),
   tar_target(
-    Stroma_cases_CV,
-    do_cv(ngram_matrix, target_df, "S_target", 5, 0.001, with_case_weights = TRUE)
+    Stroma_cw_CV,
+    do_cv(ngram_matrix, target_df, "S_target", 5, 0.001, with_class_weights = TRUE)
   ),
   tar_target(
     Stroma_CV_res_stats,
     get_cv_res_summary(Stroma_CV, "TRUE")
   ),
   tar_target(
-    Stroma_cases_CV_res_stats,
-    get_cv_res_summary(Stroma_cases_CV, "TRUE")
+    Stroma_cw_CV_res_stats,
+    get_cv_res_summary(Stroma_cw_CV, "TRUE")
   ),
   tar_target(
     OM_Stroma_CV,
@@ -219,14 +220,14 @@ list(
     get_cv_res_summary(OM_Stroma_CV, "TRUE")
   ),
   tar_target(
-    OM_Stroma_cases_CV,
+    OM_Stroma_cw_CV,
     do_cv(ngram_matrix[which(target_df[["NP_target"]] == TRUE & (target_df[["membrane_target"]] == "OM" | target_df[["S_target"]] == TRUE)), ],
           target_df[which(target_df[["NP_target"]] == TRUE & (target_df[["membrane_target"]] == "OM" | target_df[["S_target"]] == TRUE)), ],
-          "membrane_OM_target", 5, 0.001, with_case_weights = TRUE)
+          "membrane_OM_target", 5, 0.001, with_class_weights = TRUE)
   ),
   tar_target(
-    OM_Stroma_cases_CV_res_stats,
-    get_cv_res_summary(OM_Stroma_cases_CV, "TRUE")
+    OM_Stroma_cw_CV_res_stats,
+    get_cv_res_summary(OM_Stroma_cw_CV, "TRUE")
   ),
   tar_target(
     TL_CV,
@@ -241,51 +242,11 @@ list(
     summarise_hmmer_results(TL_CV, 'Sec')
   ),
   tar_target(
-    plastogram_CV,
-    evaluate_plastogram(ngram_matrix, target_df, 5, N_seqs, P_seqs, N_TL_TAT_seqs, N_TL_SEC_seqs)
+    data_df,
+    create_folds(target_df, 5)
   ),
   tar_target(
-    plastogram_cases_CV,
-    evaluate_plastogram(ngram_matrix, target_df, 5, N_seqs, P_seqs, N_TL_TAT_seqs, N_TL_SEC_seqs, with_case_weights_2nd = TRUE)
-  ),
-  tar_target(
-    plastogram_decision_model_CV,
-    evaluate_plastogram_with_additional_model(ngram_matrix, target_df, 5, N_seqs, P_seqs, N_TL_TAT_seqs, N_TL_SEC_seqs)
-  ),
-  tar_target(
-    plastogram_decision_model_cases_CV,
-    evaluate_plastogram_with_additional_model(ngram_matrix, target_df, 5, N_seqs, P_seqs, N_TL_TAT_seqs, N_TL_SEC_seqs, with_case_weights_2nd = TRUE)
-  ),
-  tar_target(
-    plastogram_decision_model_for_all_CV,
-    evaluate_plastogram_with_additional_model_for_all(ngram_matrix, target_df, 5, N_seqs, P_seqs, N_TL_TAT_seqs, N_TL_SEC_seqs)
-  ),
-  tar_target(
-    plastogram_decision_model_for_all_cases_CV,
-    evaluate_plastogram_with_additional_model_for_all(ngram_matrix, target_df, 5, N_seqs, P_seqs, N_TL_TAT_seqs, N_TL_SEC_seqs, with_case_weights_2nd = TRUE)
-  ),
-  tar_target(
-    plastogram_stroma_and_decision_model_cases_CV,
-    evaluate_plastogram_with_stroma_model_and_additional_model(ngram_matrix, target_df, 5, N_seqs, P_seqs, N_TL_TAT_seqs, N_TL_SEC_seqs, with_case_weights_2nd = TRUE)
-  ),
-  tar_target(
-    plastogram_stroma_and_decision_model_for_all_cases_CV,
-    evaluate_plastogram_with_stroma_model_and_additional_model_for_all(ngram_matrix, target_df, 5, N_seqs, P_seqs, N_TL_TAT_seqs, N_TL_SEC_seqs, with_case_weights_2nd = TRUE)
-  ),
-  tar_target(
-    plastogram_stroma_and_decision_model_CV,
-    evaluate_plastogram_with_stroma_model_and_additional_model(ngram_matrix, target_df, 5, N_seqs, P_seqs, N_TL_TAT_seqs, N_TL_SEC_seqs)
-  ),
-  tar_target(
-    plastogram_stroma_and_decision_model_for_all_CV,
-    evaluate_plastogram_with_stroma_model_and_additional_model_for_all(ngram_matrix, target_df, 5, N_seqs, P_seqs, N_TL_TAT_seqs, N_TL_SEC_seqs)
-  ),
-  tar_target(
-    plastogram_OM_stroma_and_decision_model_CV,
-    evaluate_plastogram_with_OM_stroma_model_and_additional_model(ngram_matrix, target_df, 5, N_seqs, P_seqs, N_TL_TAT_seqs, N_TL_SEC_seqs)
-  ),
-  tar_target(
-    plastogram_OM_stroma_and_decision_model_cases_CV,
-    evaluate_plastogram_with_OM_stroma_model_and_additional_model(ngram_matrix, target_df, 5, N_seqs, P_seqs, N_TL_TAT_seqs, N_TL_SEC_seqs, with_case_weights_2nd = TRUE)
+    ensemble_performance,
+    test_ensembles("./Ensembles", ngram_matrix, data_df, c(N_seqs, P_seqs))
   )
 )
