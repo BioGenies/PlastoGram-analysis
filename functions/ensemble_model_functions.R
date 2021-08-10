@@ -49,11 +49,42 @@ train_profile_HMM_models <- function(model_df, sequences, data_df, ith_fold) {
     }
     train_seq <- sequences[names(sequences) %in% filter(data_df, eval(parse(text = filtering)))[["seq_name"]]]
     train_profileHMM(train_seq, df[["model.name"]][i])
-    return(df[["model.name"]][i])
+    df[["model.name"]][i]
   }) %>% setNames(df[["model.name"]])
 }
 
+is_empty <- function(x) {
+  x == "" | is.na(x)
+}
+
+calculate_evaluation_order <- function(model_df) {
+  model_names <- model_df[["model.name"]]
+  target_names <- filter(df, multiclass %in% c(FALSE, NA))[["target.name"]]
+  res_names <- sapply(target_names, function(i) gsub("_target", "", i), USE.NAMES = FALSE)
+  
+  orders <- rep(NA, length(model_names))
+  for (i in seq_along(model_names)) {
+    if(!(any(sapply(res_names, function(j) grepl(j, model_df[["test.filtering"]][i]))))) {
+      orders[i] <- 1
+    } 
+  }
+  calculated_res <- res_names[which(!(is.na(orders)))]
+  current_order <- 2
+  while(!(all(res_names %in% calculated_res))) {
+    for (i in which(is.na(orders))) {
+      needed_res <- res_names[sapply(res_names, function(j) grepl(j, model_df[["test.filtering"]][i]))]
+      if(all(needed_res %in% calculated_res)) {
+        orders[i] <- current_order
+      } 
+    }
+    current_order <- current_order + 1
+    calculated_res <- res_names[which(!(is.na(orders)))]
+  }
+  orders
+}
+
 predict_with_models <- function(model_df, ngram_matrix, sequences, data_df, ith_fold, ngram_models) {
+  model_df <- mutate(model_df, `evaluation.order` = calculate_evaluation_order(model_df))
   max_order <- max(model_df[["evaluation.order"]])
   current_order <- 1
   data_df_results <- data_df
@@ -61,33 +92,33 @@ predict_with_models <- function(model_df, ngram_matrix, sequences, data_df, ith_
     df <- filter(model_df, `evaluation.order` == current_order)
     results <- lapply(1:nrow(df), function(i) {
       if(df[["input.data"]][i] == "ngram_matrix") {
-        if(df[["test.filtering"]][i] == "" | is.na(df[["test.filtering"]][i])) {
-          selected <- data_df_results[["seq_name"]]
+        selected <- if(is_empty(df[["test.filtering"]][i])) {
+          data_df_results[["seq_name"]]
         } else {
-          selected <- filter(data_df_results, eval(parse(text = gsub("ith_fold", "get('ith_fold')", df[["test.filtering"]][i]))))[["seq_name"]]
+          filter(data_df_results, eval(parse(text = gsub("ith_fold", "get('ith_fold')", df[["test.filtering"]][i]))))[["seq_name"]]
         }
         test_dat <- ngram_matrix[which(data_df_results[["seq_name"]] %in% selected), ]
         if(df[["multiclass"]][i] == TRUE) {
-          preds <- cbind(data.frame(seq_name = selected),
+          cbind(data.frame(seq_name = selected),
                          predict(ngram_models[[df[["model.name"]][i]]], test_dat)[["predictions"]])
         } else {
-          preds <- data.frame(seq_name = selected,
+          data.frame(seq_name = selected,
                               pred = predict(ngram_models[[df[["model.name"]][i]]], test_dat)[["predictions"]][, "TRUE"]) %>% 
             setNames(c("seq_name", gsub("_target", "", df[["target.name"]][i])))
         }
-        preds  
+        
       } else if(df[["input.data"]][i] == "sequences") {
-        if(df[["test.filtering"]][i] == "" | is.na(df[["test.filtering"]][i])) {
-          test_seqs <- sequences
+        test_seqs <- if(is_empty(df[["test.filtering"]][i])) {
+          sequences
         } else {
-          test_seqs <- sequences[names(sequences) %in% filter(data_df_results, eval(parse(text = gsub("ith_fold", "get('ith_fold')", df[["test.filtering"]][i]))))[["seq_name"]]]
+          sequences[names(sequences) %in% filter(data_df_results, eval(parse(text = gsub("ith_fold", "get('ith_fold')", df[["test.filtering"]][i]))))[["seq_name"]]]
         }
-        preds <- predict_profileHMM(test_seqs, df[["model.name"]][i]) %>% 
+        predict_profileHMM(test_seqs, df[["model.name"]][i]) %>% 
           mutate(pred = (2^sequence_score) / (1+2^sequence_score)) %>% 
           select(c("domain_name", "pred")) %>% 
           setNames(c("seq_name", gsub("_target", "", df[["target.name"]][i])))
       }
-      preds
+      
     }) %>% reduce(., full_join, by = "seq_name")
     data_df_results <- reduce(list(data_df_results, results), left_join, by = "seq_name")
     current_order <- current_order + 1
