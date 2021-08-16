@@ -7,5 +7,6 @@ create_datasets <- function(sequence_file, annotation_file, output_dir) {
     selected <- unique(filter(dat, Final_dataset == ith_dataset)[["Entry"]])
     selected_seqs <- seqs[which(names(seqs) %in% selected)]
     write_fasta(selected_seqs, paste0(output_dir, ith_dataset, ".fa"))
-  })
+    selected_seqs
+  }) %>% setNames(datasets)
 }
