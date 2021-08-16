@@ -35,7 +35,7 @@ train_rf <- function(ngram_matrix, target, imp_ngrams, with_class_weights = FALS
 }
 
 
-do_cv <- function(ngram_matrix, target_df, target_col, n_fold, cutoff, mc = FALSE, with_case_weights = FALSE) {
+do_cv <- function(ngram_matrix, target_df, target_col, n_fold, cutoff, mc = FALSE, with_class_weights = FALSE) {
   
   folds <- lapply(unique(target_df[[target_col]]), function(ith_target) {
     selected <- filter(target_df, get(target_col) == ith_target)
@@ -57,7 +57,7 @@ do_cv <- function(ngram_matrix, target_df, target_col, n_fold, cutoff, mc = FALS
     } else {
       imp_ngrams <- calc_imp_ngrams(dat, data_df[[target_col]][data_df[["fold"]] != ith_fold], cutoff)
     }
-    trained_model <- train_rf(dat, data_df[[target_col]][data_df[["fold"]] != ith_fold], imp_ngrams, with_case_weights)
+    trained_model <- train_rf(dat, data_df[[target_col]][data_df[["fold"]] != ith_fold], imp_ngrams, with_class_weights)
     
     if(mc == TRUE) {
       classes <- unique(target_df[[target_col]])

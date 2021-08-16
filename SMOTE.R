@@ -12,8 +12,8 @@ data_df <- create_folds(target_df, 5)
 
 do_binary_smote_cv <- function(ngram_matrix, data_df, cutoff, smote = TRUE, C.perc = "balance", k = k, name) {
   lapply(unique(data_df[["fold"]]), function(ith_fold) {
-    dat <- ngram_matrix[which(data_df[["NP_target"]] == TRUE & (data_df[["membrane_target"]] == 'OM' | data_df[["S_target"]] == TRUE) & data_df[["fold"]] != ith_fold), ]
-    tar <- as.factor(filter(data_df, NP_target == TRUE & (membrane_target == 'OM' | S_target == TRUE) & fold != ith_fold)[["membrane_OM_target"]])
+    dat <- ngram_matrix[which(data_df[["Nuclear_target"]] == TRUE & (data_df[["Membrane_mc_target"]] == 'OM' | data_df[["Stroma_target"]] == TRUE) & data_df[["fold"]] != ith_fold), ]
+    tar <- as.factor(filter(data_df, Nuclear_target == TRUE & (Membrane_mc_target == 'OM' | Stroma_target == TRUE) & fold != ith_fold)[["OM_target"]])
     
     imp_ngrams <- calc_imp_ngrams(dat, as.logical(tar), cutoff)
     
@@ -60,14 +60,14 @@ smote_res <- lapply(names(models), function(ith_model) {
 stats <- smote_res %>% 
   mutate(Decision = ifelse(Prediction > 0.5, TRUE, FALSE)) %>% 
   group_by(Model, fold) %>% 
-  summarise(TP = TP(membrane_OM_target, Decision, TRUE),
-            TN = TN(membrane_OM_target, Decision, FALSE),
-            FP = FP(membrane_OM_target, Decision, TRUE),
-            FN = FN(membrane_OM_target, Decision, FALSE),
-            Sensitivity = mlr3measures::sensitivity(as.factor(membrane_OM_target), as.factor(Decision), "TRUE"),
-            Specificity = mlr3measures::specificity(as.factor(membrane_OM_target), as.factor(Decision), "TRUE"),
-            Accuracy = ACC(membrane_OM_target, Decision),
-            AUC = AUC(Prediction, membrane_OM_target, FALSE, TRUE))
+  summarise(TP = TP(OM_target, Decision, TRUE),
+            TN = TN(OM_target, Decision, FALSE),
+            FP = FP(OM_target, Decision, TRUE),
+            FN = FN(OM_target, Decision, FALSE),
+            Sensitivity = mlr3measures::sensitivity(as.factor(OM_target), as.factor(Decision), "TRUE"),
+            Specificity = mlr3measures::specificity(as.factor(OM_target), as.factor(Decision), "TRUE"),
+            Accuracy = ACC(OM_target, Decision),
+            AUC = AUC(Prediction, OM_target, FALSE, TRUE))
 
 mean_stats <- stats %>% 
   group_by(Model) %>% 

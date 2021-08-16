@@ -17,6 +17,7 @@ source("./functions/ngram_model_functions.R")
 source("./functions/create_target_df.R")
 source("./functions/profileHMM_functions.R")
 source("./functions/evaluate_full_model.R")
+source("./functions/ensemble_model_functions.R")
 
 set.seed(108567)
 
@@ -141,7 +142,7 @@ list(
   ),
   tar_target(
     target_df_membrane,
-    filter(target_df, membrane_all_target == TRUE)
+    filter(target_df, Membrane_target == TRUE)
   ),
   tar_target(
     Membrane_Notmembrane_CV_res_stats,
