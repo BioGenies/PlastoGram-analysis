@@ -7,6 +7,7 @@ library(ranger)
 library(tidyr)
 library(measures)
 library(ggplot2)
+library(RColorBrewer)
 
 tar_load(c(ngram_matrix, target_df, data_df))
 
@@ -83,15 +84,18 @@ mean_stats <- stats %>%
 
 
 ggplot(mean_stats, aes(x = mean_sensitivity, y = mean_specificity, color = Model)) +
-  geom_point(size = 3) 
+  geom_point(size = 3) +
+  scale_color_brewer(palette = "Paired")
 
 pivot_longer(mean_stats, mean_accuracy:mean_specificity, names_to = "Measure", values_to = "Value") %>% 
   ggplot(aes(x = Model, y = Value, fill = Measure)) +
   geom_boxplot() +
-  facet_wrap(~Measure, scales = "free_y", ncol = 1)
+  facet_wrap(~Measure, scales = "free_y", ncol = 1) +
+  theme(legend.position = "none")
 
 pivot_longer(stats, TP:AUC, names_to = "Measure", values_to = "Value") %>% 
   filter(Measure %in% c("Accuracy", "AUC", "Sensitivity", "Specificity")) %>% 
   ggplot(aes(x = Model, y = Value, fill = Measure)) +
   geom_boxplot() +
-  facet_wrap(~Measure, scales = "free_y", ncol = 1)
+  facet_wrap(~Measure, scales = "free_y", ncol = 1) +
+  theme(legend.position = "none")
