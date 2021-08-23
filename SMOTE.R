@@ -6,11 +6,11 @@ library(biogram)
 library(ranger)
 library(tidyr)
 library(measures)
+library(ggplot2)
 
 tar_load(c(ngram_matrix, target_df, data_df))
-data_df <- create_folds(target_df, 5)
 
-do_binary_smote_cv <- function(ngram_matrix, data_df, cutoff, smote = TRUE, C.perc = "balance", k = k, name) {
+do_binary_smote_cv <- function(ngram_matrix, data_df, cutoff, smote = TRUE, C.perc = "balance", k = k, name, rep) {
   lapply(unique(data_df[["fold"]]), function(ith_fold) {
     dat <- ngram_matrix[which(data_df[["Nuclear_target"]] == TRUE & (data_df[["Membrane_mc_target"]] == 'OM' | data_df[["Stroma_target"]] == TRUE) & data_df[["fold"]] != ith_fold), ]
     tar <- as.factor(filter(data_df, Nuclear_target == TRUE & (Membrane_mc_target == 'OM' | Stroma_target == TRUE) & fold != ith_fold)[["OM_target"]])
@@ -29,13 +29,14 @@ do_binary_smote_cv <- function(ngram_matrix, data_df, cutoff, smote = TRUE, C.pe
     
     rf <- ranger(data = train_dat, dependent.variable.name = "target", write.forest = TRUE,
                  probability = TRUE, num.trees = 500, verbose = FALSE, seed = 123456, classification = TRUE)
-    test_dat <- ngram_matrix[which(data_df[["NP_target"]] == TRUE & (data_df[["membrane_target"]] == 'OM' | data_df[["S_target"]] == TRUE) & data_df[["fold"]] == ith_fold), ]
+    test_dat <- ngram_matrix[which(data_df[["Nuclear_target"]] == TRUE & (data_df[["Membrane_mc_target"]] == 'OM' | data_df[["Stroma_target"]] == TRUE) & data_df[["fold"]] == ith_fold), ]
     
-    filter(data_df, NP_target == TRUE & (membrane_target == 'OM' | S_target == TRUE) & fold == ith_fold) %>% 
-      select(c(seq_name, membrane_OM_target, fold)) %>% 
+    filter(data_df, Nuclear_target == TRUE & (Membrane_mc_target == 'OM' | Stroma_target == TRUE) & fold == ith_fold) %>% 
+      select(c(seq_name, OM_target, fold)) %>% 
       mutate(Prediction = predict(rf, test_dat[, imp_ngrams])[["predictions"]][, "TRUE"])
   }) %>% bind_rows() %>% 
-    mutate(Model = name)
+    mutate(Model = name,
+           rep = rep)
 }
 
 models <- list(
@@ -51,15 +52,19 @@ models <- list(
   "SMOTE_0.01_(5.57,1)_3" = c(0.01, TRUE, list("TRUE" = 5.57, "FALSE" = 1), 3)
 )
 
-smote_res <- lapply(names(models), function(ith_model) {
-  do_binary_smote_cv(ngram_matrix, data_df, cutoff = models[[ith_model]][1], smote = models[[ith_model]][2], 
-                     C.perc = models[[ith_model]][3], k = models[[ith_model]][4], name = ith_model)
+smote_res <- lapply(1:10, function(i) {
+  lapply(names(models), function(ith_model) {
+    do_binary_smote_cv(ngram_matrix, data_df, cutoff = models[[ith_model]][1], smote = models[[ith_model]][2], 
+                       C.perc = models[[ith_model]][3], k = models[[ith_model]][4], name = ith_model,
+                       rep = i)
+  }) %>% bind_rows()
 }) %>% bind_rows()
+
 
 
 stats <- smote_res %>% 
   mutate(Decision = ifelse(Prediction > 0.5, TRUE, FALSE)) %>% 
-  group_by(Model, fold) %>% 
+  group_by(rep, Model, fold) %>% 
   summarise(TP = TP(OM_target, Decision, TRUE),
             TN = TN(OM_target, Decision, FALSE),
             FP = FP(OM_target, Decision, TRUE),
@@ -70,8 +75,23 @@ stats <- smote_res %>%
             AUC = AUC(Prediction, OM_target, FALSE, TRUE))
 
 mean_stats <- stats %>% 
-  group_by(Model) %>% 
+  group_by(Model, rep) %>% 
   summarise(mean_accuracy = mean(Accuracy),
             mean_AUC = mean(AUC),
             mean_sensitivity = mean(Sensitivity),
             mean_specificity = mean(Specificity))
+
+
+ggplot(mean_stats, aes(x = mean_sensitivity, y = mean_specificity, color = Model)) +
+  geom_point(size = 3) 
+
+pivot_longer(mean_stats, mean_accuracy:mean_specificity, names_to = "Measure", values_to = "Value") %>% 
+  ggplot(aes(x = Model, y = Value, fill = Measure)) +
+  geom_boxplot() +
+  facet_wrap(~Measure, scales = "free_y", ncol = 1)
+
+pivot_longer(stats, TP:AUC, names_to = "Measure", values_to = "Value") %>% 
+  filter(Measure %in% c("Accuracy", "AUC", "Sensitivity", "Specificity")) %>% 
+  ggplot(aes(x = Model, y = Value, fill = Measure)) +
+  geom_boxplot() +
+  facet_wrap(~Measure, scales = "free_y", ncol = 1)
