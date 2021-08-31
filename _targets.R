@@ -8,6 +8,7 @@ library(readxl)
 library(measures)
 library(rhmmer)
 library(purrr)
+library(combinat)
 
 data_path <- "~/Dropbox/Projekty/BioNgramProjects/PlastoGram/"
 
@@ -18,6 +19,7 @@ source("./functions/create_target_df.R")
 source("./functions/profileHMM_functions.R")
 source("./functions/evaluate_full_model.R")
 source("./functions/ensemble_model_functions.R")
+source("./functions/generate_architectures.R")
 
 set.seed(108567)
 
@@ -286,14 +288,14 @@ list(
           target_df[which(target_df[["Nuclear_target"]] == TRUE & (target_df[["Membrane_mc_target"]] == "OM" | target_df[["Stroma_target"]] == TRUE)),],
           "OM_target", 5, 0.01)
   ),
-  tar_target(
-    OM_Stroma_CV_2_res_stats,
-    get_cv_res_summary(OM_Stroma_CV_2, "TRUE")
-  ),
+  # tar_target(
+  #   OM_Stroma_CV_2_res_stats,
+  #   get_cv_res_summary(OM_Stroma_CV_2, "TRUE")
+  # ),
   tar_target(
     OM_Stroma_cw_CV_2,
-    do_cv(ngram_matrix[which(target_df[["Nuclear_target"]] == TRUE & (target_df[["Membrane_mc_target"]] == "OM" | target_df[["S_target"]] == TRUE)), ],
-          target_df[which(target_df[["Nuclear_target"]] == TRUE & (target_df[["Membrane_mc_target"]] == "OM" | target_df[["S_target"]] == TRUE)), ],
+    do_cv(ngram_matrix[which(target_df[["Nuclear_target"]] == TRUE & (target_df[["Membrane_mc_target"]] == "OM" | target_df[["Stroma_target"]] == TRUE)), ],
+          target_df[which(target_df[["Nuclear_target"]] == TRUE & (target_df[["Membrane_mc_target"]] == "OM" | target_df[["Stroma_target"]] == TRUE)), ],
           "OM_target", 5, 0.01, with_class_weights = TRUE)
   ),
   tar_target(
@@ -456,10 +458,10 @@ list(
     IM_other_membrane_CV_2_res_stats,
     get_cv_res_summary(IM_other_membrane_CV_2, "TRUE")
   ),
-  tar_target(
-    IM_other_membrane_cw_CV_2_res_stats,
-    get_cv_res_summary(IM_other_membrane_cw_CV_2, "TRUE")
-  ),
+  # tar_target(
+  #   IM_other_membrane_cw_CV_2_res_stats,
+  #   get_cv_res_summary(IM_other_membrane_cw_CV_2, "TRUE")
+  # ),
   tar_target(
     TM_other_membrane_CV,
     do_cv(ngram_matrix_membrane_nuclear, 
@@ -515,5 +517,24 @@ list(
   tar_target(
     data_df,
     create_folds(target_df, 5)
+  ),
+  tar_target(
+    model_variants,
+    get_model_variants()
+  ),
+  tar_target(
+    model_dat,
+    read.csv(paste0(data_path, "PlastoGram_models_info.csv")),
+    format = "file"
+  ),
+  tar_target(
+    architectures,
+    generate_all_architectures(model_variants = model_variants, 
+                               smote_models = c("OM_Stroma_model", "Nuclear_membrane_model", 
+                                                "N_OM_model", "N_IM_model", "N_TM_model"), 
+                               sequence_models = c("Sec_model", "Tat_model"), 
+                               model_dat = model_dat, 
+                               output_dir = paste0(data_path, "Model_architectures/"))
   )
 )
+

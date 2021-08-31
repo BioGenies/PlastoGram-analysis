@@ -126,19 +126,6 @@ predict_with_models <- function(model_df, ngram_matrix, sequences, data_df, ith_
   data_df_results
 }
 
-get_decision <- function(results) {
-  mutate(results, Decision = case_when(
-    NP > 0.5 & membrane_all <= 0.5 & Tat > Sec ~ "N_TL_TAT",
-    NP > 0.5 & membrane_all <= 0.5 & Sec > Tat ~ "N_TL_SEC",
-    NP > 0.5 & membrane_all <= 0.5 & Sec == 0 & Tat == 0 ~ "N_S",
-    NP <= 0.5 & membrane_all <= 0.5 ~ "P_S",
-    NP <= 0.5 & membrane_all > 0.5 & membrane_IM > 0.5 ~ "P_IM",
-    NP <= 0.5 & membrane_all > 0.5 & membrane_IM <= 0.5 ~ "P_TM",
-    NP > 0.5 & membrane_all > 0.5 & OM > IM & OM > TM ~ "N_OM",
-    NP > 0.5 & membrane_all > 0.5 & IM > OM & IM > TM ~ "N_IM",
-    NP > 0.5 & membrane_all > 0.5 & TM > IM & TM > IM ~ "N_TM"
-  ))
-}
 
 
 evaluate_plastogram <- function(ngram_matrix, data_df, sequences, desc_file) {
@@ -154,32 +141,33 @@ evaluate_plastogram <- function(ngram_matrix, data_df, sequences, desc_file) {
     # Predict test sequences
     results <- predict_with_models(model_df, ngram_matrix, c(N_seqs, P_seqs), data_df, ith_fold, ngram_models)
     results[is.na(results)] <- 0
-    # If no decision model is used, get final prediction based on our decision rules
-    if(!("predictions" %in% model_df[["input.data"]])) {
-      final_res <- get_decision(filter(results, fold == ith_fold))
-    } else { 
-      # Train additional model if a decision model is used
-      train_dat <- filter(results, fold != ith_fold) %>% 
-        select(-c("seq_name", "NP_target", "Sec_target", "Tat_target", "membrane_target", 
-                  "S_target", "membrane_all_target", "membrane_OM_target", "membrane_IM_target", 
-                  "membrane_TM_target", "fold")) %>% 
-        mutate(dataset = as.factor(dataset))
-      if(model_df[["class_weights"]][which(model_df[["input.data"]] == "predictions")] == TRUE) {
-        cw <- sapply(levels(train_dat[["dataset"]]), function(i) 1/sum(train_dat[["dataset"]] == i)/nrow(train_dat), USE.NAMES = FALSE)
-      } else {
-        cw <- NULL
-      }
-      decision_model <- ranger(data = train_dat, dependent.variable.name = "dataset",
-                               write.forest = TRUE, probability = TRUE, verbose = FALSE,
-                               class.weights = cw)
-      test_dat <- filter(results, fold == ith_fold) %>% 
-        select(c("seq_name", "dataset", "NP_target", "Sec_target", "Tat_target", "membrane_target", 
-                 "S_target", "membrane_all_target", "membrane_OM_target", "membrane_IM_target", 
-                 "membrane_TM_target", "fold"))
-      final_res <- cbind(test_dat, predict(decision_model, filter(results, fold == ith_fold))[["predictions"]])
-      mutate(final_res, Decision = c("N_IM", "N_OM", "N_S", "N_TL_SEC", "N_TL_TAT", "N_TM", "P_IM", "P_S", "P_TM")
-             [max.col(final_res[c("N_IM", "N_OM", "N_S", "N_TL_SEC", "N_TL_TAT", "N_TM", "P_IM", "P_S", "P_TM")])])
-    }
+    results
+    # # If no decision model is used, get final prediction based on our decision rules
+    # if(!("predictions" %in% model_df[["input.data"]])) {
+    #   final_res <- get_decision(filter(results, fold == ith_fold))
+    # } else { 
+    #   # Train additional model if a decision model is used
+    #   train_dat <- filter(results, fold != ith_fold) %>% 
+    #     select(-c("seq_name", "NP_target", "Sec_target", "Tat_target", "membrane_target", 
+    #               "S_target", "membrane_all_target", "membrane_OM_target", "membrane_IM_target", 
+    #               "membrane_TM_target", "fold")) %>% 
+    #     mutate(dataset = as.factor(dataset))
+    #   if(model_df[["class_weights"]][which(model_df[["input.data"]] == "predictions")] == TRUE) {
+    #     cw <- sapply(levels(train_dat[["dataset"]]), function(i) 1/sum(train_dat[["dataset"]] == i)/nrow(train_dat), USE.NAMES = FALSE)
+    #   } else {
+    #     cw <- NULL
+    #   }
+    #   decision_model <- ranger(data = train_dat, dependent.variable.name = "dataset",
+    #                            write.forest = TRUE, probability = TRUE, verbose = FALSE,
+    #                            class.weights = cw)
+    #   test_dat <- filter(results, fold == ith_fold) %>% 
+    #     select(c("seq_name", "dataset", "NP_target", "Sec_target", "Tat_target", "membrane_target", 
+    #              "S_target", "membrane_all_target", "membrane_OM_target", "membrane_IM_target", 
+    #              "membrane_TM_target", "fold"))
+    #   final_res <- cbind(test_dat, predict(decision_model, filter(results, fold == ith_fold))[["predictions"]])
+    #   mutate(final_res, Decision = c("N_IM", "N_OM", "N_S", "N_TL_SEC", "N_TL_TAT", "N_TM", "P_IM", "P_S", "P_TM")
+    #          [max.col(final_res[c("N_IM", "N_OM", "N_S", "N_TL_SEC", "N_TL_TAT", "N_TM", "P_IM", "P_S", "P_TM")])])
+    # }
   }) %>% bind_rows()
   
   write.csv(plastogram_predictions, gsub(".csv", "_predictions.csv", desc_file), row.names = FALSE)
