@@ -523,9 +523,13 @@ list(
     get_model_variants()
   ),
   tar_target(
-    model_dat,
-    read.csv(paste0(data_path, "PlastoGram_models_info.csv")),
+    model_dat_file,
+    paste0(data_path, "PlastoGram_models_info.csv"),
     format = "file"
+  ),
+  tar_target(
+    model_dat,
+    read.csv(model_dat_file)
   ),
   tar_target(
     architectures,
