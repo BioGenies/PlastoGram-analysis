@@ -35,40 +35,36 @@ train_rf <- function(ngram_matrix, target, imp_ngrams, with_class_weights = FALS
 }
 
 
-do_cv <- function(ngram_matrix, target_df, target_col, n_fold, cutoff, mc = FALSE, with_class_weights = FALSE) {
-  
-  folds <- lapply(unique(target_df[[target_col]]), function(ith_target) {
-    selected <- filter(target_df, get(target_col) == ith_target)
-    folded <- cvFolds(nrow(selected), K = n_fold)
-    fold_df <- data.frame(seq_name = selected[["seq_name"]][folded[["subsets"]]], 
-                          fold = folded[["which"]],
-                          stringsAsFactors = FALSE)
-  }) %>% bind_rows()
-  
-  data_df <- left_join(target_df, folds, by = "seq_name")
-  
+do_cv <- function(ngram_matrix, data_df, target_df, target_col, n_fold, cutoff, mc = FALSE, with_class_weights = FALSE, fcbf = FALSE) {
   lapply(1:n_fold, function(ith_fold) {
     dat <- ngram_matrix[data_df[["fold"]] != ith_fold, ]
-   # filtered_cw <- case_weights[which(data_df[["fold"]] != ith_fold)]
     test_dat <- ngram_matrix[data_df[["fold"]] == ith_fold, ]
-    if(mc == TRUE) {
-      imp_ngrams <- get_imp_ngrams_mc(dat, data_df[which(data_df[["fold"]] != ith_fold), ], target_col, cutoff)
-      imp_ngrams <- unique(unlist(unname(imp_ngrams)))
+    imp_ngrams <- if(mc == TRUE) {
+      if(fcbf == TRUE) {
+        do_fcbf(dat, data_df[[target_col]][which(data_df[["fold"]] != ith_fold)], min_su = cutoff, multiclass = TRUE)
+      } else {
+        imp <- get_imp_ngrams_mc(dat, data_df[which(data_df[["fold"]] != ith_fold), ], target_col, cutoff)
+        unique(unlist(unname(imp)))
+      }
     } else {
-      imp_ngrams <- calc_imp_ngrams(dat, data_df[[target_col]][data_df[["fold"]] != ith_fold], cutoff)
+      if(fcbf == TRUE) {
+        do_fcbf(dat, data_df[[target_col]][which(data_df[["fold"]] != ith_fold)], min_su = cutoff)
+      } else {
+        calc_imp_ngrams(dat, data_df[[target_col]][data_df[["fold"]] != ith_fold], cutoff) 
+      }
     }
     trained_model <- train_rf(dat, data_df[[target_col]][data_df[["fold"]] != ith_fold], imp_ngrams, with_class_weights)
     
-    if(mc == TRUE) {
+    full_res <- if(mc == TRUE) {
       classes <- unique(target_df[[target_col]])
       res <- data_df %>% 
         filter(fold == ith_fold) %>% 
         select(seq_name, fold, target_col) %>% 
         setNames(c("seq_name", "fold", "target")) %>% 
         bind_cols(as.data.frame(predict(trained_model, test_dat)[["predictions"]]))
-      full_res <- mutate(res, pred = c(classes)[max.col(res[, c(classes)])])
+      mutate(res, pred = c(classes)[max.col(res[, c(classes)])])
     } else {
-      full_res <- data_df %>% 
+      data_df %>% 
         filter(fold == ith_fold) %>% 
         select(seq_name, fold, target_col) %>% 
         setNames(c("seq_name", "fold", "target")) %>% 
@@ -121,4 +117,36 @@ calc_case_weights <- function(target) {
   lvls <- levels(as.factor(target))
   weights <- sapply(lvls, function(i) 1/(sum(target == i)/length(target)))
   sapply(target, function(i) weights[which(names(weights) == i)], USE.NAMES = FALSE)
+}
+
+
+do_fcbf <- function(ngrams, target, multiclass = FALSE, min_su = 0.01) {
+  ngrams[sapply(ngrams, is.numeric)] <- lapply(ngrams[sapply(ngrams, is.numeric)], 
+                                               as.factor)
+  if(multiclass == TRUE) {
+    combns <- combn(unique(target), 2, simplify = FALSE)
+    lapply(combns, function(ith_cmbn) {
+      tar <- sapply(target[which(target %in% ith_cmbn)], function(i) ifelse(i == ith_cmbn[1], 1, 0))
+      features <- ngrams[which(target %in% ith_cmbn), ]
+      res <- fcbf(features, as.factor(tar), samples_in_rows = TRUE, minimum_su = min_su)
+      row.names(res)
+    }) %>% unlist() %>% 
+      unique()
+  } else {
+    fcbf(ngrams, as.factor(target), samples_in_rows = TRUE, minimum_su = min_su)
+  }
+}
+
+
+test_fcbf <- function(ngram_matrix, data_df, target_df, cutoff_vec, target_col, class_weights = FALSE, mc = FALSE) {
+  lapply(cutoff_vec, function(ith_cutoff) {
+    res <- do_cv(ngram_matrix, data_df, target_df, target_col, 5, cutoff = ith_cutoff, 
+                 mc = mc, with_class_weights = class_weights, fcbf = TRUE)
+    stats <- if(mc == TRUE) {
+      get_cv_res_summary_mc(res)
+    } else {
+      get_cv_res_summary(res, "TRUE")
+    }
+   mutate(stats, cutoff = ith_cutoff)
+  }) %>% bind_rows()
 }
