@@ -1,0 +1,139 @@
+---
+title: "FCBF_QuipT_comparison"
+author: "Katarzyna Sidorczuk"
+date: "9/6/2021"
+output: html_document
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+
+library(knitr)
+library(targets)
+library(dplyr)
+
+tar_load(list.files("./_targets/objects"))
+
+```
+
+## Plastid_Nuclear model
+
+QuiPT cut-off = 0.001
+```{r}
+kable(Plastid_Nuclear_CV_res_stats)
+```
+FCBF
+```{r}
+kable(Plastid_Nuclear_FCBF_CV_res)
+```
+
+## Membrane_Notmembrane model
+QuiPT cut-off = 0.001
+```{r}
+kable(Membrane_Notmembrane_CV_res_stats)
+```
+FCBF
+```{r}
+kable(Membrane_Notmembrane_FCBF_CV_res)
+```
+
+## Nuclear_Membrane model
+QuiPT cut-off = 0.001
+```{r}
+kable(Membrane_Nuclear_CV_res_stats)
+```
+QuiPT cut-off = 0.01
+```{r}
+kable(Membrane_Nuclear_CV_2_res_stats)
+```
+FCBF
+```{r}
+kable(Nuclear_Membrane_FCBF_CV_res)
+```
+
+## Plastid_Membrane model
+QuiPT cut-off = 0.001
+```{r}
+kable(Membrane_Plastid_CV_res_stats)
+```
+FCBF
+```{r}
+kable(Plastid_Membrane_FCBF_CV_res)
+```
+
+## Stroma model
+QuiPT cut-off = 0.001
+```{r}
+kable(Stroma_CV_res_stats)
+```
+FCBF
+```{r}
+kable(Stroma_FCBF_CV_res)
+```
+
+## Nuclear_Stroma model
+QuiPT cut-off = 0.001
+```{r}
+kable(N_stroma_CV_res_stats)
+```
+FCBF
+```{r}
+kable(N_Stroma_FCBF_CV_res)
+```
+
+## Plastid_Stroma model
+QuiPT cut-off = 0.001
+```{r}
+kable(P_stroma_CV_res_stats)
+```
+FCBF
+```{r}
+kable(P_Stroma_FCBF_CV_res)
+```
+
+
+## OM_Stroma model
+QuiPT cut-off = 0.001
+```{r}
+kable(OM_Stroma_CV_res_stats)
+```
+QuiPT cut-off = 0.01
+```{r}
+kable(OM_Stroma_CV_2_res_stats)
+```
+FCBF
+```{r}
+kable(OM_Stroma_FCBF_CV_res)
+```
+
+## Nuclear OM vs. other membrane model
+QuiPT cut-off = 0.001
+```{r}
+kable(OM_other_membrane_CV_res_stats)
+```
+FCBF
+```{r}
+kable(OM_other_membrane_FCBF_CV_res)
+```
+
+## Nuclear IM vs. other membrane model
+QuiPT cut-off = 0.001
+```{r}
+kable(IM_other_membrane_CV_res_stats)
+```
+FCBF
+```{r}
+kable(IM_other_membrane_FCBF_CV_res)
+```
+
+## Nuclear TM vs. other membrane model
+QuiPT cut-off = 0.001
+```{r}
+kable(TM_other_membrane_CV_res_stats)
+```
+FCBF
+```{r}
+kable(TM_other_membrane_FCBF_CV_res)
+```
+

@@ -128,12 +128,13 @@ do_fcbf <- function(ngrams, target, multiclass = FALSE, min_su = 0.01) {
     lapply(combns, function(ith_cmbn) {
       tar <- sapply(target[which(target %in% ith_cmbn)], function(i) ifelse(i == ith_cmbn[1], 1, 0))
       features <- ngrams[which(target %in% ith_cmbn), ]
-      res <- fcbf(features, as.factor(tar), samples_in_rows = TRUE, minimum_su = min_su)
+      res <- fcbf(features, as.factor(tar), min_su, samples_in_rows = TRUE)
       row.names(res)
     }) %>% unlist() %>% 
       unique()
   } else {
-    fcbf(ngrams, as.factor(target), samples_in_rows = TRUE, minimum_su = min_su)
+    res <- fcbf(ngrams, as.factor(target), min_su, samples_in_rows = TRUE)
+    row.names(res)
   }
 }
 
