@@ -67,5 +67,5 @@ summarise_hmmer_results <- function(cv_res, type) {
     setNames(c("seq_name", "fold", "target", "prob")) %>% 
     mutate(target = ifelse(target == type, TRUE, FALSE),
            pred = ifelse(prob > 0.5, TRUE, FALSE)) %>% 
-    get_cv_res_summary("TRUE")
+    get_cv_res_summary("TRUE", ngrams = FALSE)
 }

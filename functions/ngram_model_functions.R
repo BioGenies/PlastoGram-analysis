@@ -62,23 +62,30 @@ do_cv <- function(ngram_matrix, data_df, target_df, target_col, n_fold, cutoff, 
         select(seq_name, fold, target_col) %>% 
         setNames(c("seq_name", "fold", "target")) %>% 
         bind_cols(as.data.frame(predict(trained_model, test_dat)[["predictions"]]))
-      mutate(res, pred = c(classes)[max.col(res[, c(classes)])])
+      mutate(res, pred = c(classes)[max.col(res[, c(classes)])],
+             imp_ngrams = length(imp_ngrams))
     } else {
       data_df %>% 
         filter(fold == ith_fold) %>% 
         select(seq_name, fold, target_col) %>% 
         setNames(c("seq_name", "fold", "target")) %>% 
         mutate(prob = predict(trained_model, test_dat)[["predictions"]][, "TRUE"],
-               pred = ifelse(prob > 0.5, TRUE, FALSE))
+               pred = ifelse(prob > 0.5, TRUE, FALSE),
+               imp_ngrams = length(imp_ngrams))
     }
     full_res
   }) %>% bind_rows()
 } 
 
 
-get_cv_res_summary <- function(cv_res, positive) {
-  cv_res %>% 
-    group_by(fold) %>% 
+get_cv_res_summary <- function(cv_res, positive, ngrams = TRUE) {
+  if(ngrams == FALSE) {
+    cv_res %>% 
+      group_by(fold) 
+  } else {
+    cv_res %>% 
+      group_by(fold, imp_ngrams) 
+  } %>% 
     summarise(TP = mlr3measures::tp(factor(target), factor(pred), positive),
               TN = mlr3measures::tn(factor(target), factor(pred), positive),
               FP = mlr3measures::fp(factor(target), factor(pred), positive),
@@ -106,6 +113,7 @@ get_cv_res_summary_mc <- function(mc_cv_res) {
     dat <- filter(mc_cv_res, fold == ith_fold)
     data.frame(
       fold = ith_fold,
+      imp_ngrams = dat[["imp_ngrams"]][1],
       Accuracy = ACC(dat[["target"]], dat[["pred"]]),
       AU1U = multiclass.AU1U(dat[, c(classes)], dat[["target"]]),
       KapS = KAPPA(dat[["target"]], dat[["pred"]])) 
