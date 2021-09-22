@@ -10,6 +10,7 @@ library(rhmmer)
 library(purrr)
 library(combinat)
 library(FCBF)
+library(UBL)
 
 data_path <- "~/Dropbox/Projekty/BioNgramProjects/PlastoGram/"
 
