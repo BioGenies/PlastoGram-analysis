@@ -18,33 +18,37 @@ get_model_variants <- function() {
 }
 
 
-generate_all_architectures <- function(model_variants, smote_models, sequence_models, model_dat, output_dir) {
-  lapply(seq_along(model_variants), function(ith_variant) {
-    n_models <- length(model_variants[[ith_variant]])
-    model_names <- model_variants[[ith_variant]]
-    n_smote_models <- sum(model_names %in% smote_models)
-    pos_smote_models <- which(model_names %in% smote_models)
-    input_types <- sapply(model_names, function(i) ifelse(i %in% sequence_models, "sequences", "ngram_matrix"))
-    df <- left_join(
-      data.frame(
-        Model_name = model_names,
-        Input_data = input_types), 
-      model_dat)
-    if(n_smote_models == 0) {
-      architecture <- mutate(df, SMOTE = FALSE)
-      write.csv(architecture, file = paste0(output_dir, "Architecture_", names(model_variants)[ith_variant], ".csv"), row.names = FALSE)
-    } else {
-      lapply(0:n_smote_models, function(i) {
-        smote_permutations <- permn(c(rep(TRUE, i), rep(FALSE, n_smote_models-i)))
-        lapply(seq_along(smote_permutations), function(ith_perm) {
-          smote <- rep(FALSE, n_models)
+generate_all_architectures <- function(model_variants, smote_models, sequence_models, model_dat, filtering_df, output_dir) {
+  model_dat <- model_dat[which(!(grepl("SMOTE", model_dat[["Model_name"]]))), ]
+  filtering_options <- colnames(filtering_df)[2:ncol(filtering_df)]
+  lapply(filtering_options, function(ith_filtering) {
+    lapply(seq_along(model_variants), function(ith_variant) {
+      n_models <- length(model_variants[[ith_variant]])
+      model_names <- model_variants[[ith_variant]]
+      n_smote_models <- sum(model_names %in% smote_models)
+      pos_smote_models <- which(model_names %in% smote_models)
+      res_filtering <- sapply(model_names, function(i) filtering_df[[ith_filtering]][which(filtering_df[["Model_name"]] == i)])
+      df <- left_join(
+        data.frame(
+          Model_name = model_names,
+          Test_filtering = sapply(res_filtering, function(i) ifelse(is.na(i), "", i))),
+        model_dat)
+      if(n_smote_models == 0) {
+        architecture <- mutate(df, SMOTE = FALSE)
+        write.csv(architecture, file = paste0(output_dir, "Architecture_", names(model_variants)[ith_variant], ".csv"), row.names = FALSE)
+      } else {
+        lapply(0:n_smote_models, function(i) {
+          smote_permutations <- permn(c(rep(TRUE, i), rep(FALSE, n_smote_models-i)))
+          lapply(seq_along(smote_permutations), function(ith_perm) {
+            smote <- rep(FALSE, n_models)
             smote[pos_smote_models] <- smote_permutations[[ith_perm]]
-          architecture <- mutate(df, SMOTE = smote)
-          write.csv(architecture, file = paste0(output_dir, "Architecture_", names(model_variants)[ith_variant], "_", i, "-", ith_perm, ".csv"), row.names = FALSE)
+            architecture <- mutate(df, SMOTE = smote)
+            write.csv(architecture, file = paste0(output_dir, "Architecture_", names(model_variants)[ith_variant], "_", i, "-", ith_perm, "_", ith_filtering, ".csv"), row.names = FALSE)
+          })
         })
-      })
-    }
-  }) 
+      }
+    }) 
+  })
 }
 
 

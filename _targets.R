@@ -514,15 +514,25 @@ list(
     model_dat,
     read.csv(model_dat_file)
   ),
-  # tar_target(
-  #   architectures,
-  #   generate_all_architectures(model_variants = model_variants, 
-  #                              smote_models = c("OM_Stroma_model", "Nuclear_membrane_model", 
-  #                                               "N_OM_model", "N_IM_model", "N_TM_model"), 
-  #                              sequence_models = c("Sec_model", "Tat_model"), 
-  #                              model_dat = model_dat, 
-  #                              output_dir = paste0(data_path, "Model_architectures/"))
-  # ),
+  tar_target(
+    test_filtering_options_file,
+    paste0(data_path, "PlastoGram_models_results_filtering.csv"),
+    format = "file"
+  ),
+  tar_target(
+    filtering_df,
+    read.csv(test_filtering_options_file)
+  ),
+  tar_target(
+    architectures,
+    generate_all_architectures(model_variants = model_variants,
+                               smote_models = c("OM_Stroma_model", "Nuclear_membrane_model",
+                                                "N_OM_model", "N_IM_model", "N_TM_model"),
+                               sequence_models = c("Sec_model", "Tat_model"),
+                               model_dat = model_dat,
+                               filtering_df = filtering_df,
+                               output_dir = paste0(data_path, "Model_architectures/"))
+  ),
   tar_target(  
     Plastid_Nuclear_FCBF_CV_res,
     test_fcbf(ngram_matrix, data_df, c(0.05, 0.025, 0.01, 0.005, 0.001), "Nuclear_target")
