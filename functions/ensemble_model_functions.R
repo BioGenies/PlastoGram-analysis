@@ -10,47 +10,48 @@ create_folds <- function(target_df, n_fold) {
 }
 
 train_ngram_models <- function(model_df, ngram_matrix, data_df, ith_fold) {
-  df <- filter(model_df, `input.data` == "ngram_matrix")
+  df <- filter(model_df, Input_data == "ngrams")
   lapply(1:nrow(df), function(i) {
-    if(df[["input.data.filtering"]][i] != "") {
-      filtering <- paste0("fold != ", ith_fold, " & ", df[["input.data.filtering"]][i])
+    print(paste0("Training ", df[["Model_name"]][i], " fold ", ith_fold))
+    if(df[["Input_filtering"]][i] != "") {
+      filtering <- paste0("fold != ", ith_fold, " & ", df[["Input_filtering"]][i])
     } else {
       filtering <- paste0("fold != ", ith_fold)
     }
     selected <- filter(data_df, eval(parse(text = filtering)))[["seq_name"]]
-    target <- data_df[[df[["target.name"]][i]]][which(data_df[["seq_name"]] %in% selected)]
+    target <- data_df[[df[["Target_name"]][i]]][which(data_df[["seq_name"]] %in% selected)]
     train_dat <- ngram_matrix[which(data_df[["seq_name"]] %in% selected), ]
-    if(df[["multiclass"]][i] == TRUE) {
-      train_rf(train_dat,
-               target,
-               unique(
-                 unlist(
-                   unname(
-                     get_imp_ngrams_mc(train_dat, 
-                                       data_df[which(data_df[["seq_name"]] %in% selected), ],
-                                       df[["target.name"]][i])))),
-               with_class_weights = df[["class_weights"]][i])
-    } else {
-      train_rf(train_dat,
-               target,
-               calc_imp_ngrams(train_dat, as.logical(target)),
-               with_class_weights = df[["class_weights"]][i])
+    imp_ngrams <- if(df[["Multiclass"]][i] == TRUE) {
+      unique(
+        unlist(
+          unname(
+            get_imp_ngrams_mc(train_dat, 
+                              data_df[which(data_df[["seq_name"]] %in% selected), ],
+                              df[["Target_name"]][i]))))
+    } else{
+      calc_imp_ngrams(train_dat, as.logical(target))
     }
-  }) %>% setNames(df[["model.name"]])
+    if(grepl("SMOTE", df[["Model_name"]][i])) {
+      train_rf(train_dat, target, imp_ngrams, with_class_weights = FALSE, smote = TRUE)
+    } else {
+      train_rf(train_dat, target, imp_ngrams, with_class_weights = FALSE, smote = FALSE)
+    }
+  
+  }) %>% setNames(df[["Model_name"]])
 }
 
 train_profile_HMM_models <- function(model_df, sequences, data_df, ith_fold) {
-  df <- filter(model_df, `input.data` == "sequences")
+  df <- filter(model_df, Input_data == "sequences")
   lapply(1:nrow(df), function(i) {
-    if(df[["input.data.filtering"]][i] != "") {
-      filtering <- paste0("fold != ", ith_fold, " & ", df[["input.data.filtering"]][i])
+    if(df[["Input_filtering"]][i] != "") {
+      filtering <- paste0("fold != ", ith_fold, " & ", df[["Input_filtering"]][i])
     } else {
       filtering <- paste0("fold != ", ith_fold)
     }
     train_seq <- sequences[names(sequences) %in% filter(data_df, eval(parse(text = filtering)))[["seq_name"]]]
-    train_profileHMM(train_seq, df[["model.name"]][i])
-    df[["model.name"]][i]
-  }) %>% setNames(df[["model.name"]])
+    train_profileHMM(train_seq, df[["Model_name"]][i])
+    df[["Model_name"]][i]
+  }) %>% setNames(df[["Model_name"]])
 }
 
 is_empty <- function(x) {
@@ -100,10 +101,10 @@ predict_with_models <- function(model_df, ngram_matrix, sequences, data_df, ith_
         test_dat <- ngram_matrix[which(data_df_results[["seq_name"]] %in% selected), ]
         if(df[["multiclass"]][i] == TRUE) {
           cbind(data.frame(seq_name = selected),
-                         predict(ngram_models[[df[["model.name"]][i]]], test_dat)[["predictions"]])
+                predict(ngram_models[[df[["model.name"]][i]]], test_dat)[["predictions"]])
         } else {
           data.frame(seq_name = selected,
-                              pred = predict(ngram_models[[df[["model.name"]][i]]], test_dat)[["predictions"]][, "TRUE"]) %>% 
+                     pred = predict(ngram_models[[df[["model.name"]][i]]], test_dat)[["predictions"]][, "TRUE"]) %>% 
             setNames(c("seq_name", gsub("_target", "", df[["target.name"]][i])))
         }
         
@@ -125,6 +126,49 @@ predict_with_models <- function(model_df, ngram_matrix, sequences, data_df, ith_
   } 
   data_df_results
 }
+
+predict_with_all_models <- function(model_df, data_df, test_ngram_matrix, test_df, test_sequences, ngram_models, ith_fold) {
+  lapply(1:nrow(model_df), function(i) {
+    results <- if(model_df[["Input_data"]][i] == "ngrams") {
+      test_dat <- ngram_matrix[which(data_df[["seq_name"]] %in% test_df[["seq_name"]]), ]
+      if(model_df[["Multiclass"]][i] == TRUE) {
+        cbind(data.frame(seq_name = test_df[["seq_name"]]),
+              predict(ngram_models[[model_df[["Model_name"]][i]]], test_dat)[["predictions"]])
+      } else {
+        data.frame(seq_name = test_df[["seq_name"]],
+                   pred = predict(ngram_models[[model_df[["Model_name"]][i]]], test_dat)[["predictions"]][, "TRUE"]) %>% 
+          setNames(c("seq_name", gsub("_target", "", model_df[["Target_name"]][i])))
+      }
+      
+    } else if(model_df[["Input_data"]][i] == "sequences") {
+      predict_profileHMM(test_sequences, model_df[["Model_name"]][i]) %>% 
+        mutate(pred = (2^sequence_score) / (1+2^sequence_score)) %>% 
+        select(c("domain_name", "pred")) %>% 
+        setNames(c("seq_name", model_df[["Model_name"]][i]))
+    }
+    
+    #write.csv(results, paste0(model_df[["Model_name"]][i], "_predictions_fold", ith_fold, ".csv"), row.names = FALSE)
+  }) %>% reduce(., full_join, by = "seq_name") %>% 
+    mutate(fold = ith_fold)
+}
+
+get_all_models_predictions <- function(ngram_matrix, sequences, data_df, model_df, data_path) {
+  
+  res <- lapply(unique(data_df[["fold"]]), function(ith_fold) {
+    dat <- ngram_matrix[data_df[["fold"]] != ith_fold, ]
+    test_dat <- ngram_matrix[data_df[["fold"]] == ith_fold, ]
+    test_df <- filter(data_df, fold == ith_fold)
+    test_seqs <- sequences[which(names(sequences) %in% test_df[["seq_name"]])]
+    
+    ngram_models <- train_ngram_models(model_df, ngram_matrix, data_df, ith_fold)
+    hmm_models <- train_profile_HMM_models(model_df, sequences, data_df, ith_fold)
+    
+    predict_with_all_models(model_df, data_df, test_dat, test_df, test_seqs, ngram_models, ith_fold)
+  }) %>% bind_rows()
+  write.csv(res, paste0(data_path, "All_models_predictions.csv"), row.names = FALSE)
+  res
+} 
+
 
 
 
