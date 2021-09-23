@@ -8,8 +8,10 @@ train_profileHMM <- function(train_seqs, model_name, remove_files = TRUE) {
 }
 
 predict_profileHMM <- function(test_seqs, model_name, remove_files = TRUE) {
+  invisible({
   write_fasta(test_seqs, "test_seqs.fa")
   system(paste0("hmmsearch --tblout hmmer_res ", model_name, ".hmm test_seqs.fa")) 
+  })
   res <- bind_rows(read_tblout("hmmer_res")) 
   if(remove_files == TRUE) {
     file.remove(c("test_seqs.fa", "hmmer_res", paste0(model_name, ".hmm")))

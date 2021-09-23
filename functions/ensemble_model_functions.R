@@ -133,25 +133,24 @@ predict_with_all_models <- function(model_df, data_df, test_ngram_matrix, test_d
       if(model_df[["Multiclass"]][i] == TRUE) {
         x <- cbind(data.frame(seq_name = test_df[["seq_name"]]),
                    predict(ngram_models[[model_df[["Model_name"]][i]]], test_ngram_matrix)[["predictions"]])
-        colnames(x) <- sappply(colnames(x), function(i) ifelse(i == "seq_name", "seq_name", paste0(model_df[["Model_name"]][i], "_", i)))
+        colnames(x) <- sapply(colnames(x), function(j) ifelse(j == "seq_name", "seq_name", paste0(model_df[["Model_name"]][i], "_", j)))
+        x
       } else {
         data.frame(seq_name = test_df[["seq_name"]],
                    pred = predict(ngram_models[[model_df[["Model_name"]][i]]], test_ngram_matrix)[["predictions"]][, "TRUE"]) %>% 
-          setNames(c("seq_name", gsub("_target", "", model_df[["Model_name"]][i])))
+          setNames(c("seq_name", gsub("_model", "", model_df[["Model_name"]][i])))
       }
       
     } else if(model_df[["Input_data"]][i] == "sequences") {
-      res <- predict_profileHMM(test_sequences, model_df[["Model_name"]][i]) %>% 
+      predict_profileHMM(test_sequences, model_df[["Model_name"]][i]) %>% 
         mutate(pred = (2^sequence_score) / (1+2^sequence_score)) %>% 
         select(c("domain_name", "pred")) %>% 
         setNames(c("seq_name", model_df[["Model_name"]][i]))
-      res[is.na(res)] <- 0
-      res
     }
-    
     #write.csv(results, paste0(model_df[["Model_name"]][i], "_predictions_fold", ith_fold, ".csv"), row.names = FALSE)
   }) %>% reduce(., full_join, by = "seq_name") %>% 
-    mutate(fold = ith_fold)
+    mutate(fold = ith_fold,
+           pred = ifelse(is.na(pred), 0, pred))
 }
 
 get_all_models_predictions <- function(ngram_matrix, sequences, data_df, model_df, data_path) {
