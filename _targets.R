@@ -12,7 +12,6 @@ library(combinat)
 library(FCBF)
 library(UBL)
 library(nnet)
-library(irr)
 
 data_path <- "~/Dropbox/Projekty/BioNgramProjects/PlastoGram/"
 

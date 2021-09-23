@@ -63,6 +63,13 @@
       "Source": "Bioconductor",
       "Hash": "c83f2dd16f1a385e8399eaa70412367b"
     },
+    "FNN": {
+      "Package": "FNN",
+      "Version": "1.1.3",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "b56998fff55e4a4b4860ad6e8c67e0f9"
+    },
     "GenomeInfoDb": {
       "Package": "GenomeInfoDb",
       "Version": "1.26.7",
@@ -93,6 +100,13 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "d1bc1c8e9c0ace57ec9ffea01021d45f"
+    },
+    "MBA": {
+      "Package": "MBA",
+      "Version": "0.0-9",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "d04f461e5002616b82560aea581ad7ff"
     },
     "Matrix": {
       "Package": "Matrix",
@@ -175,6 +189,13 @@
       "Source": "Bioconductor",
       "Hash": "2da24c5f66521d18cff602d324834b20"
     },
+    "UBL": {
+      "Package": "UBL",
+      "Version": "0.0.7",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "c5b9f554ec19412c99f0d3e595620d38"
+    },
     "XVector": {
       "Package": "XVector",
       "Version": "0.30.0",
@@ -194,6 +215,13 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "50c838a310445e954bc13f26f26a6ecf"
+    },
+    "automap": {
+      "Package": "automap",
+      "Version": "1.0-14",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "7db350883cbbf8ca18fcfbf7a987261c"
     },
     "backports": {
       "Package": "backports",
@@ -438,6 +466,13 @@
       "Repository": "CRAN",
       "Hash": "7d7f283939f563670a697165b2cf5560"
     },
+    "gstat": {
+      "Package": "gstat",
+      "Version": "2.0-7",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "3f6fc9e5925a6cefade271c8eb6ae3ca"
+    },
     "gtable": {
       "Package": "gtable",
       "Version": "0.3.0",
@@ -493,6 +528,13 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "7b1f856410253d56ea67ad808f7cdff6"
+    },
+    "intervals": {
+      "Package": "intervals",
+      "Version": "0.15.2",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "079e6e04c6aafe087aba89f93311d8ba"
     },
     "isoband": {
       "Package": "isoband",
@@ -746,6 +788,13 @@
       "Repository": "CRAN",
       "Hash": "97def703420c8ab10d8f0e6c72101e02"
     },
+    "randomForest": {
+      "Package": "randomForest",
+      "Version": "4.6-14",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "6367ba8128568cc5ebf8082e440948e4"
+    },
     "ranger": {
       "Package": "ranger",
       "Version": "0.12.1",
@@ -787,6 +836,13 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "398cc1ea892e1aade66d1ecbb2874d24"
+    },
+    "reshape": {
+      "Package": "reshape",
+      "Version": "0.8.8",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "0f4d941129e00ed34a7d192b1da7ccef"
     },
     "rhmmer": {
       "Package": "rhmmer",
@@ -840,7 +896,8 @@
     "seqR": {
       "Package": "seqR",
       "Version": "0.8.0",
-      "Source": "unknown",
+      "Source": "Repository",
+      "Repository": null,
       "Hash": "71e60e94d8617ff69a51fb1bc0c11ad5"
     },
     "sets": {
@@ -856,6 +913,20 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "73c92e0f6f2a29786505152040c35825"
+    },
+    "sp": {
+      "Package": "sp",
+      "Version": "1.4-5",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "dfd843ee98246cf932823acf613b05dd"
+    },
+    "spacetime": {
+      "Package": "spacetime",
+      "Version": "1.2-5",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "ae7c96972e3291d52e91cbe335e9167c"
     },
     "stringi": {
       "Package": "stringi",
@@ -962,6 +1033,13 @@
       "Repository": "CRAN",
       "Hash": "a42372606cb76f34da9d090326e9f955"
     },
+    "xts": {
+      "Package": "xts",
+      "Version": "0.12.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "ca2fd4ad8ef78cca3aa2b30f992798a8"
+    },
     "yaml": {
       "Package": "yaml",
       "Version": "2.2.1",
@@ -974,6 +1052,13 @@
       "Version": "1.36.0",
       "Source": "Bioconductor",
       "Hash": "effcbe90f6986ca6f81ce4d67db7238b"
+    },
+    "zoo": {
+      "Package": "zoo",
+      "Version": "1.8-9",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "035d1c7c12593038c26fb1c2fd40c4d2"
     }
   }
 }
