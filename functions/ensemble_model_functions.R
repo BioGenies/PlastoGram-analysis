@@ -36,7 +36,7 @@ train_ngram_models <- function(model_df, ngram_matrix, data_df, ith_fold) {
     } else {
       train_rf(train_dat, target, imp_ngrams, with_class_weights = FALSE, smote = FALSE)
     }
-  
+    
   }) %>% setNames(df[["Model_name"]])
 }
 
@@ -130,21 +130,23 @@ predict_with_models <- function(model_df, ngram_matrix, sequences, data_df, ith_
 predict_with_all_models <- function(model_df, data_df, test_ngram_matrix, test_df, test_sequences, ngram_models, ith_fold) {
   lapply(1:nrow(model_df), function(i) {
     results <- if(model_df[["Input_data"]][i] == "ngrams") {
-      test_dat <- ngram_matrix[which(data_df[["seq_name"]] %in% test_df[["seq_name"]]), ]
       if(model_df[["Multiclass"]][i] == TRUE) {
-        cbind(data.frame(seq_name = test_df[["seq_name"]]),
-              predict(ngram_models[[model_df[["Model_name"]][i]]], test_dat)[["predictions"]])
+        x <- cbind(data.frame(seq_name = test_df[["seq_name"]]),
+                   predict(ngram_models[[model_df[["Model_name"]][i]]], test_ngram_matrix)[["predictions"]])
+        colnames(x) <- sappply(colnames(x), function(i) ifelse(i == "seq_name", "seq_name", paste0(model_df[["Model_name"]][i], "_", i)))
       } else {
         data.frame(seq_name = test_df[["seq_name"]],
-                   pred = predict(ngram_models[[model_df[["Model_name"]][i]]], test_dat)[["predictions"]][, "TRUE"]) %>% 
-          setNames(c("seq_name", gsub("_target", "", model_df[["Target_name"]][i])))
+                   pred = predict(ngram_models[[model_df[["Model_name"]][i]]], test_ngram_matrix)[["predictions"]][, "TRUE"]) %>% 
+          setNames(c("seq_name", gsub("_target", "", model_df[["Model_name"]][i])))
       }
       
     } else if(model_df[["Input_data"]][i] == "sequences") {
-      predict_profileHMM(test_sequences, model_df[["Model_name"]][i]) %>% 
+      res <- predict_profileHMM(test_sequences, model_df[["Model_name"]][i]) %>% 
         mutate(pred = (2^sequence_score) / (1+2^sequence_score)) %>% 
         select(c("domain_name", "pred")) %>% 
         setNames(c("seq_name", model_df[["Model_name"]][i]))
+      res[is.na(res)] <- 0
+      res
     }
     
     #write.csv(results, paste0(model_df[["Model_name"]][i], "_predictions_fold", ith_fold, ".csv"), row.names = FALSE)
