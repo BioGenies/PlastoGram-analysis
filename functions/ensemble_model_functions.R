@@ -84,48 +84,6 @@ calculate_evaluation_order <- function(model_df) {
   orders
 }
 
-predict_with_models <- function(model_df, ngram_matrix, sequences, data_df, ith_fold, ngram_models) {
-  model_df <- mutate(model_df, `evaluation.order` = calculate_evaluation_order(model_df))
-  max_order <- max(model_df[["evaluation.order"]])
-  current_order <- 1
-  data_df_results <- data_df
-  while(current_order < max_order) {
-    df <- filter(model_df, `evaluation.order` == current_order)
-    results <- lapply(1:nrow(df), function(i) {
-      if(df[["input.data"]][i] == "ngram_matrix") {
-        selected <- if(is_empty(df[["test.filtering"]][i])) {
-          data_df_results[["seq_name"]]
-        } else {
-          filter(data_df_results, eval(parse(text = gsub("ith_fold", "get('ith_fold')", df[["test.filtering"]][i]))))[["seq_name"]]
-        }
-        test_dat <- ngram_matrix[which(data_df_results[["seq_name"]] %in% selected), ]
-        if(df[["multiclass"]][i] == TRUE) {
-          cbind(data.frame(seq_name = selected),
-                predict(ngram_models[[df[["model.name"]][i]]], test_dat)[["predictions"]])
-        } else {
-          data.frame(seq_name = selected,
-                     pred = predict(ngram_models[[df[["model.name"]][i]]], test_dat)[["predictions"]][, "TRUE"]) %>% 
-            setNames(c("seq_name", gsub("_target", "", df[["target.name"]][i])))
-        }
-        
-      } else if(df[["input.data"]][i] == "sequences") {
-        test_seqs <- if(is_empty(df[["test.filtering"]][i])) {
-          sequences
-        } else {
-          sequences[names(sequences) %in% filter(data_df_results, eval(parse(text = gsub("ith_fold", "get('ith_fold')", df[["test.filtering"]][i]))))[["seq_name"]]]
-        }
-        predict_profileHMM(test_seqs, df[["model.name"]][i]) %>% 
-          mutate(pred = (2^sequence_score) / (1+2^sequence_score)) %>% 
-          select(c("domain_name", "pred")) %>% 
-          setNames(c("seq_name", gsub("_target", "", df[["target.name"]][i])))
-      }
-      
-    }) %>% reduce(., full_join, by = "seq_name")
-    data_df_results <- reduce(list(data_df_results, results), left_join, by = "seq_name")
-    current_order <- current_order + 1
-  } 
-  data_df_results
-}
 
 predict_with_all_models <- function(model_df, data_df, test_ngram_matrix, test_df, test_sequences, ngram_models, ith_fold) {
   lapply(1:nrow(model_df), function(i) {
@@ -138,7 +96,7 @@ predict_with_all_models <- function(model_df, data_df, test_ngram_matrix, test_d
       } else {
         data.frame(seq_name = test_df[["seq_name"]],
                    pred = predict(ngram_models[[model_df[["Model_name"]][i]]], test_ngram_matrix)[["predictions"]][, "TRUE"]) %>% 
-          setNames(c("seq_name", gsub("_model", "", model_df[["Model_name"]][i])))
+          setNames(c("seq_name", model_df[["Model_name"]][i]))
       }
       
     } else if(model_df[["Input_data"]][i] == "sequences") {
@@ -149,8 +107,7 @@ predict_with_all_models <- function(model_df, data_df, test_ngram_matrix, test_d
     }
     #write.csv(results, paste0(model_df[["Model_name"]][i], "_predictions_fold", ith_fold, ".csv"), row.names = FALSE)
   }) %>% reduce(., full_join, by = "seq_name") %>% 
-    mutate(fold = ith_fold,
-           pred = ifelse(is.na(pred), 0, pred))
+    mutate(fold = ith_fold)
 }
 
 get_all_models_predictions <- function(ngram_matrix, sequences, data_df, model_df, data_path) {
@@ -169,8 +126,6 @@ get_all_models_predictions <- function(ngram_matrix, sequences, data_df, model_d
   write.csv(res, paste0(data_path, "All_models_predictions.csv"), row.names = FALSE)
   res
 } 
-
-
 
 
 evaluate_plastogram <- function(ngram_matrix, data_df, sequences, desc_file) {
