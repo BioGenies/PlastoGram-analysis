@@ -11,6 +11,8 @@ library(purrr)
 library(combinat)
 library(FCBF)
 library(UBL)
+library(nnet)
+library(irr)
 
 data_path <- "~/Dropbox/Projekty/BioNgramProjects/PlastoGram/"
 
@@ -610,7 +612,13 @@ list(
     architecture_results,
     generate_results_for_architectures(architecture_files,
                                        all_models_predictions,
-                                       paste0(data_path, "Model_architectures_results/"))
+                                       paste0(data_path, "Model_architectures_results/"),
+                                       data_df_final)
+  ),
+  tar_target(
+    architectures_performance,
+    evaluate_all_architectures(paste0(data_path, "Model_architectures_results/"),
+                               paste0(data_path, "Architectures_performance.csv"))
   )
 )
 

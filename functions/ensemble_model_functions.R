@@ -133,11 +133,11 @@ filter_results_for_single_architecture <- function(architecture_file, all_models
   arch <- read.csv(architecture_file)
   res_colnames <- unlist(sapply(arch[["Model_name"]], function(ith_name) {
     if(grepl("Nuclear_membrane_model", ith_name)) 
-      {paste0(ith_name, c("_OM", "_IM", "_TM"))
-      } else {
-        ith_name
-      }
-    }, USE.NAMES = FALSE))
+    {paste0(ith_name, c("_OM", "_IM", "_TM"))
+    } else {
+      ith_name
+    }
+  }, USE.NAMES = FALSE))
   res <- lapply(1:nrow(arch), function(i) {
     if(arch[["Multiclass"]][i] == FALSE) {
       if(is.na(arch[["Test_filtering"]][i]) | arch[["Test_filtering"]][i] == "") {
@@ -178,21 +178,60 @@ filter_results_for_single_architecture <- function(architecture_file, all_models
 }
 
 
-generate_results_for_architectures <- function(architecture_file_list, all_models_results, outdir) {
+generate_results_for_architectures <- function(architecture_file_list, all_models_results, outdir, data_df) {
   lapply(architecture_file_list, function(ith_file) {
-    res <- filter_results_for_single_architecture(ith_file, all_models_results)
-    filename <- paste0(outdir, gsub(".csv", "_results.csv", last(strsplit(ith_file, "/")[[1]]), fixed = TRUE))
-    write.csv(res, filename, row.names = FALSE)
+    model <- gsub(".csv", "", last(strsplit(ith_file, "/")[[1]]))
+    res <- left_join(data_df[, c("seq_name", "dataset")], 
+                     filter_results_for_single_architecture(ith_file, all_models_results),
+                     by = "seq_name")
+    full_results <- lapply(unique(res[["fold"]]), function(ith_fold) {
+      train_dat <- select(filter(res, fold != ith_fold), -seq_name)
+      test_dat <- filter(res, fold == ith_fold)
+      lm_model <- multinom(dataset ~ ., train_dat, model = TRUE)
+      preds <- test_dat %>%
+        select(c("dataset", "fold")) %>%
+        mutate(Prediction = predict(lm_model, test_dat))
+      probs <- predict(lm_model, test_dat, type = "probs") %>% 
+        as.data.frame() %>% 
+        mutate(Probability = sapply(1:nrow(.), function(i) max(.[i,])))
+      cbind(preds, probs) %>% 
+        mutate(fold = ith_fold)
+    }) %>% bind_rows()
+    write.csv(full_results, paste0(outdir, model, "_results.csv"), row.names = FALSE)
   })
 }
 
-
-
-test_ensembles <- function(desc_files_dir, ngram_matrix, data_df, sequences) {
-  desc_files <- list.files(desc_files_dir, full.names = TRUE)
-  lapply(desc_files, function(ith_file) {
-    res <- evaluate_plastogram(ngram_matrix, data_df, sequences, ith_file)
-    data.frame(ensemble = gsub(".csv", "", last(strsplit(ith_file, "/")[[1]])),
-               kappa = KAPPA(res[["dataset"]], res[["Decision"]]))
+evaluate_all_architectures <- function(architecture_results_dir, outfile) {
+  res_files <- list.files(architecture_results_dir, full.names = TRUE)
+  performance_results <- lapply(res_files, function(ith_file) {
+    res <- read.csv(ith_file)
+    lapply(unique(res[["fold"]]), function(ith_fold) {
+      dat <- filter(res, fold == ith_fold)
+      data.frame(
+        model = gsub("_results.csv", "", last(strsplit(ith_file, "/")[[1]])),
+        fold = ith_fold,
+        AU1U = multiclass.AU1U(dat[, 4:(ncol(dat)-1)], dat[["dataset"]]),
+        kappa = KAPPA(dat[["dataset"]], dat[["Prediction"]]),
+        N_IM_sensitivity = TPR(ifelse(dat[["dataset"]] == "N_IM", TRUE, FALSE),
+                               ifelse(dat[["Prediction"]] == "N_IM", TRUE, FALSE), TRUE),
+        N_OM_sensitivity = TPR(ifelse(dat[["dataset"]] == "N_OM", TRUE, FALSE),
+                               ifelse(dat[["Prediction"]] == "N_OM", TRUE, FALSE), TRUE),
+        N_TM_sensitivity = TPR(ifelse(dat[["dataset"]] == "N_TM", TRUE, FALSE),
+                               ifelse(dat[["Prediction"]] == "N_TM", TRUE, FALSE), TRUE),
+        N_S_sensitivity = TPR(ifelse(dat[["dataset"]] == "N_S", TRUE, FALSE),
+                               ifelse(dat[["Prediction"]] == "N_S", TRUE, FALSE), TRUE),
+        N_TL_SEC_sensitivity = TPR(ifelse(dat[["dataset"]] == "N_TL_SEC", TRUE, FALSE),
+                               ifelse(dat[["Prediction"]] == "N_TL_SEC", TRUE, FALSE), TRUE),
+        N_TL_TAT_sensitivity = TPR(ifelse(dat[["dataset"]] == "N_TL_TAT", TRUE, FALSE),
+                                   ifelse(dat[["Prediction"]] == "N_TL_TAT", TRUE, FALSE), TRUE),
+        P_IM_sensitivity = TPR(ifelse(dat[["dataset"]] == "P_IM", TRUE, FALSE),
+                               ifelse(dat[["Prediction"]] == "P_IM", TRUE, FALSE), TRUE),
+        P_TM_sensitivity = TPR(ifelse(dat[["dataset"]] == "P_TM", TRUE, FALSE),
+                               ifelse(dat[["Prediction"]] == "P_TM", TRUE, FALSE), TRUE),
+        P_S_sensitivity = TPR(ifelse(dat[["dataset"]] == "P_S", TRUE, FALSE),
+                              ifelse(dat[["Prediction"]] == "P_S", TRUE, FALSE), TRUE)
+      )
+    }) %>% bind_rows()
   }) %>% bind_rows()
+  write.csv(performance_results, outfile, row.names = FALSE)
 }
