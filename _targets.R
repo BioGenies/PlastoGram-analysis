@@ -616,8 +616,12 @@ list(
                                        data_df_final)
   ),
   tar_target(
+    architecture_results_files,
+    list.files(paste0(data_path, "Model_architectures_results"), full.names = TRUE)
+  ),
+  tar_target(
     architectures_performance,
-    evaluate_all_architectures(paste0(data_path, "Model_architectures_results/"),
+    evaluate_all_architectures(architecture_results_files,
                                paste0(data_path, "Architectures_performance.csv"))
   )
 )

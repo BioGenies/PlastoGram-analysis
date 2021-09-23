@@ -201,8 +201,7 @@ generate_results_for_architectures <- function(architecture_file_list, all_model
   })
 }
 
-evaluate_all_architectures <- function(architecture_results_dir, outfile) {
-  res_files <- list.files(architecture_results_dir, full.names = TRUE)
+evaluate_all_architectures <- function(res_files, outfile) {
   performance_results <- lapply(res_files, function(ith_file) {
     res <- read.csv(ith_file)
     lapply(unique(res[["fold"]]), function(ith_fold) {
