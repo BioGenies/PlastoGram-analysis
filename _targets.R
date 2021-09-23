@@ -601,6 +601,16 @@ list(
   tar_target(
     all_models_predictions,
     get_all_models_predictions(ngram_matrix, c(N_seqs, P_seqs), data_df_final, model_dat, data_path)
+  ),
+  tar_target(
+    architecture_files,
+    list.files(paste0(data_path, "Model_architectures/"), full.names = TRUE)
+  ),
+  tar_target(
+    architecture_results,
+    generate_results_for_architectures(architecture_files,
+                                       all_models_predictions,
+                                       paste0(data_path, "Model_architectures_results/"))
   )
 )
 

@@ -128,53 +128,64 @@ get_all_models_predictions <- function(ngram_matrix, sequences, data_df, model_d
 } 
 
 
-evaluate_plastogram <- function(ngram_matrix, data_df, sequences, desc_file) {
-  
-  model_df <- read.csv(desc_file)
-  
-  plastogram_predictions <- lapply(unique(data_df[["fold"]]), function(ith_fold) {
-    
-    # Train models
-    ngram_models <- train_ngram_models(model_df, ngram_matrix, data_df, ith_fold)
-    profile_HMM_models <- train_profile_HMM_models(model_df, sequences, data_df, ith_fold)
-    
-    # Predict test sequences
-    results <- predict_with_models(model_df, ngram_matrix, c(N_seqs, P_seqs), data_df, ith_fold, ngram_models)
-    results[is.na(results)] <- 0
-    results
-    # # If no decision model is used, get final prediction based on our decision rules
-    # if(!("predictions" %in% model_df[["input.data"]])) {
-    #   final_res <- get_decision(filter(results, fold == ith_fold))
-    # } else { 
-    #   # Train additional model if a decision model is used
-    #   train_dat <- filter(results, fold != ith_fold) %>% 
-    #     select(-c("seq_name", "NP_target", "Sec_target", "Tat_target", "membrane_target", 
-    #               "S_target", "membrane_all_target", "membrane_OM_target", "membrane_IM_target", 
-    #               "membrane_TM_target", "fold")) %>% 
-    #     mutate(dataset = as.factor(dataset))
-    #   if(model_df[["class_weights"]][which(model_df[["input.data"]] == "predictions")] == TRUE) {
-    #     cw <- sapply(levels(train_dat[["dataset"]]), function(i) 1/sum(train_dat[["dataset"]] == i)/nrow(train_dat), USE.NAMES = FALSE)
-    #   } else {
-    #     cw <- NULL
-    #   }
-    #   decision_model <- ranger(data = train_dat, dependent.variable.name = "dataset",
-    #                            write.forest = TRUE, probability = TRUE, verbose = FALSE,
-    #                            class.weights = cw)
-    #   test_dat <- filter(results, fold == ith_fold) %>% 
-    #     select(c("seq_name", "dataset", "NP_target", "Sec_target", "Tat_target", "membrane_target", 
-    #              "S_target", "membrane_all_target", "membrane_OM_target", "membrane_IM_target", 
-    #              "membrane_TM_target", "fold"))
-    #   final_res <- cbind(test_dat, predict(decision_model, filter(results, fold == ith_fold))[["predictions"]])
-    #   mutate(final_res, Decision = c("N_IM", "N_OM", "N_S", "N_TL_SEC", "N_TL_TAT", "N_TM", "P_IM", "P_S", "P_TM")
-    #          [max.col(final_res[c("N_IM", "N_OM", "N_S", "N_TL_SEC", "N_TL_TAT", "N_TM", "P_IM", "P_S", "P_TM")])])
-    # }
-  }) %>% bind_rows()
-  
-  write.csv(plastogram_predictions, gsub(".csv", "_predictions.csv", desc_file), row.names = FALSE)
-  
-  plastogram_predictions
-  
+filter_results_for_single_architecture <- function(architecture_file, all_models_results) {
+  all_models_results[is.na(all_models_results)] <- 0
+  arch <- read.csv(architecture_file)
+  res_colnames <- unlist(sapply(arch[["Model_name"]], function(ith_name) {
+    if(grepl("Nuclear_membrane_model", ith_name)) 
+      {paste0(ith_name, c("_OM", "_IM", "_TM"))
+      } else {
+        ith_name
+      }
+    }, USE.NAMES = FALSE))
+  res <- lapply(1:nrow(arch), function(i) {
+    if(arch[["Multiclass"]][i] == FALSE) {
+      if(is.na(arch[["Test_filtering"]][i]) | arch[["Test_filtering"]][i] == "") {
+        if(arch[["SMOTE"]][i] == FALSE) {
+          select(all_models_results, c(seq_name, fold, arch[["Model_name"]][i]))
+        } else {
+          select(all_models_results, c(seq_name, fold, paste0(arch[["Model_name"]][i], "_SMOTE")))
+        }
+      } else {
+        filtering <- arch[["Test_filtering"]][i]
+        if(arch[["SMOTE"]][i] == FALSE) {
+          select(filter(all_models_results, eval(parse(text = filtering))), c(seq_name, fold, arch[["Model_name"]][i]))
+        } else {
+          select(filter(all_models_results, eval(parse(text = filtering))), c(seq_name, fold, paste0(arch[["Model_name"]][i], "_SMOTE")))
+        }
+      }
+    } else {
+      if(is.na(arch[["Test_filtering"]][i]) | arch[["Test_filtering"]][i] == "") {
+        if(arch[["SMOTE"]][i] == FALSE) {
+          select(all_models_results, c(seq_name, fold, Nuclear_membrane_model_OM, Nuclear_membrane_model_IM, Nuclear_membrane_model_TM))
+        } else {
+          select(all_models_results, c(seq_name, fold, Nuclear_membrane_model_SMOTE_OM, Nuclear_membrane_model_SMOTE_IM, Nuclear_membrane_model_SMOTE_TM))
+        }
+      } else {
+        filtering <- arch[["Test_filtering"]][i]
+        if(arch[["SMOTE"]][i] == FALSE) {
+          select(filter(all_models_results, eval(parse(text = filtering))), 
+                 c(seq_name, fold, Nuclear_membrane_model_OM, Nuclear_membrane_model_IM, Nuclear_membrane_model_TM))
+        } else {
+          select(filter(all_models_results, eval(parse(text = filtering))),  
+                 c(seq_name, fold, Nuclear_membrane_model_SMOTE_OM, Nuclear_membrane_model_SMOTE_IM, Nuclear_membrane_model_SMOTE_TM))
+        }
+      }
+    }
+  }) %>% reduce(., left_join, by = c("seq_name", "fold"))
+  res[is.na(res)] <- 0
+  res
 }
+
+
+generate_results_for_architectures <- function(architecture_file_list, all_models_results, outdir) {
+  lapply(architecture_file_list, function(ith_file) {
+    res <- filter_results_for_single_architecture(ith_file, all_models_results)
+    filename <- paste0(outdir, gsub(".csv", "_results.csv", last(strsplit(ith_file, "/")[[1]]), fixed = TRUE))
+    write.csv(res, filename, row.names = FALSE)
+  })
+}
+
 
 
 test_ensembles <- function(desc_files_dir, ngram_matrix, data_df, sequences) {
