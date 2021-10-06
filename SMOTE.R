@@ -118,7 +118,7 @@ do_multiclass_smote_cv <- function(ngram_matrix, data_df, cutoff, smote = TRUE, 
       x <- cbind(dat[, imp_ngrams], target = tar)
       x[sapply(x, is.numeric)] <- lapply(x[sapply(x, is.numeric)], 
                                          as.factor)
-      x <- SmoteClassif(target ~ ., x, C.perc = C.perc, dist = "Overlap")
+      x <- SmoteClassif(target ~ ., x, C.perc = C.perc, k = k, dist = "Overlap")
       modifyList(x, lapply(x[, which(colnames(x) != "target")], function(i) as.numeric(as.character(i))))
     }
     

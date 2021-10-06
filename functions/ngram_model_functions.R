@@ -21,9 +21,15 @@ calc_imp_ngrams <- function(ngram_matrix, target, cutoff = 0.001) {
 }
 
 
-train_rf <- function(ngram_matrix, target, imp_ngrams, with_class_weights = FALSE) {
-  ranger_train_data <- data.frame(ngram_matrix[, imp_ngrams],
-                                  tar = as.factor(target))
+train_rf <- function(ngram_matrix, target, imp_ngrams, with_class_weights = FALSE, smote = FALSE) {
+  ranger_train_data <- if(smote == TRUE) {
+    do_smote(ngram_matrix[, imp_ngrams], target, setNames(as.list(unname(1/(table(target)/max(table(target))))), names(table(target)))) %>% 
+      mutate(tar = as.factor(tar))
+  } else {
+    data.frame(ngram_matrix[, imp_ngrams],
+               tar = as.factor(target))
+  }
+
   if(with_class_weights == FALSE) {
     class_weights <- NULL
   } else {
@@ -35,7 +41,7 @@ train_rf <- function(ngram_matrix, target, imp_ngrams, with_class_weights = FALS
 }
 
 
-do_cv <- function(ngram_matrix, data_df, target_df, target_col, n_fold, cutoff, mc = FALSE, with_class_weights = FALSE, fcbf = FALSE) {
+do_cv <- function(ngram_matrix, data_df, target_col, n_fold, cutoff, mc = FALSE, with_class_weights = FALSE, fcbf = FALSE) {
   lapply(1:n_fold, function(ith_fold) {
     dat <- ngram_matrix[data_df[["fold"]] != ith_fold, ]
     test_dat <- ngram_matrix[data_df[["fold"]] == ith_fold, ]
@@ -56,7 +62,7 @@ do_cv <- function(ngram_matrix, data_df, target_df, target_col, n_fold, cutoff, 
     trained_model <- train_rf(dat, data_df[[target_col]][data_df[["fold"]] != ith_fold], imp_ngrams, with_class_weights)
     
     full_res <- if(mc == TRUE) {
-      classes <- unique(target_df[[target_col]])
+      classes <- unique(data_df[[target_col]])
       res <- data_df %>% 
         filter(fold == ith_fold) %>% 
         select(seq_name, fold, target_col) %>% 
@@ -147,9 +153,9 @@ do_fcbf <- function(ngrams, target, multiclass = FALSE, min_su = 0.01) {
 }
 
 
-test_fcbf <- function(ngram_matrix, data_df, target_df, cutoff_vec, target_col, class_weights = FALSE, mc = FALSE) {
+test_fcbf <- function(ngram_matrix, data_df, cutoff_vec, target_col, class_weights = FALSE, mc = FALSE) {
   lapply(cutoff_vec, function(ith_cutoff) {
-    res <- do_cv(ngram_matrix, data_df, target_df, target_col, 5, cutoff = ith_cutoff, 
+    res <- do_cv(ngram_matrix, data_df, target_col, 5, cutoff = ith_cutoff, 
                  mc = mc, with_class_weights = class_weights, fcbf = TRUE)
     stats <- if(mc == TRUE) {
       get_cv_res_summary_mc(res)
@@ -158,4 +164,13 @@ test_fcbf <- function(ngram_matrix, data_df, target_df, cutoff_vec, target_col, 
     }
    mutate(stats, cutoff = ith_cutoff)
   }) %>% bind_rows()
+}
+
+
+do_smote <- function(imp_ngram_matrix, tar, C.perc) {
+      x <- cbind(imp_ngram_matrix, tar = as.factor(tar))
+      x[sapply(x, is.numeric)] <- lapply(x[sapply(x, is.numeric)], 
+                                         as.factor)
+      x <- SmoteClassif(tar ~ ., x, C.perc = C.perc, k  = 5, dist = "Overlap")
+      modifyList(x, lapply(x[, which(colnames(x) != "tar")], function(i) as.numeric(as.character(i))))
 }
