@@ -610,7 +610,7 @@ list(
   tar_target(
     architecture_results,
     generate_results_for_architectures(architecture_files,
-                                       all_models_predictions,
+                                       paste0(data_path, "All_models_predictions.csv"),
                                        paste0(data_path, "Model_architectures_results/"),
                                        data_df_final)
   ),
