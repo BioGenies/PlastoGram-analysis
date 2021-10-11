@@ -369,15 +369,15 @@ pre code {
 <tbody>
 <tr class="odd">
 <td align="left">N_OM</td>
-<td align="right">64</td>
+<td align="right">59</td>
 <td align="right">0</td>
-<td align="right">61</td>
+<td align="right">56</td>
 </tr>
 <tr class="even">
 <td align="left">N_IM</td>
-<td align="right">60</td>
+<td align="right">59</td>
 <td align="right">0</td>
-<td align="right">58</td>
+<td align="right">59</td>
 </tr>
 <tr class="odd">
 <td align="left">P_IM</td>
@@ -387,27 +387,27 @@ pre code {
 </tr>
 <tr class="even">
 <td align="left">N_TM</td>
-<td align="right">286</td>
+<td align="right">276</td>
 <td align="right">1</td>
-<td align="right">230</td>
+<td align="right">222</td>
 </tr>
 <tr class="odd">
 <td align="left">P_TM</td>
-<td align="right">4481</td>
+<td align="right">4456</td>
 <td align="right">14</td>
-<td align="right">1260</td>
+<td align="right">1237</td>
 </tr>
 <tr class="even">
 <td align="left">N_S</td>
-<td align="right">394</td>
+<td align="right">357</td>
 <td align="right">0</td>
-<td align="right">345</td>
+<td align="right">340</td>
 </tr>
 <tr class="odd">
 <td align="left">P_S</td>
-<td align="right">1514</td>
+<td align="right">1417</td>
 <td align="right">9</td>
-<td align="right">455</td>
+<td align="right">419</td>
 </tr>
 <tr class="even">
 <td align="left">N_TL_TAT</td>
@@ -426,11 +426,12 @@ pre code {
 </div>
 <div id="plastid_nuclear-model-performance" class="section level2">
 <h2>Plastid_Nuclear model performance</h2>
-<p>Model without case weights, QuiPT cut-off = 0.001</p>
+<p>Model without class weights, QuiPT cut-off = 0.001</p>
 <table>
 <thead>
 <tr class="header">
 <th align="right">fold</th>
+<th align="right">imp_ngrams</th>
 <th align="right">TP</th>
 <th align="right">TN</th>
 <th align="right">FP</th>
@@ -442,48 +443,53 @@ pre code {
 <tbody>
 <tr class="odd">
 <td align="right">1</td>
+<td align="right">8937</td>
 <td align="right">152</td>
-<td align="right">368</td>
-<td align="right">2</td>
+<td align="right">358</td>
+<td align="right">0</td>
 <td align="right">10</td>
-<td align="right">0.9978478</td>
-<td align="right">0.9774436</td>
+<td align="right">0.9986206</td>
+<td align="right">0.9807692</td>
 </tr>
 <tr class="even">
 <td align="right">2</td>
-<td align="right">151</td>
-<td align="right">368</td>
-<td align="right">1</td>
-<td align="right">11</td>
-<td align="right">0.9983271</td>
-<td align="right">0.9774011</td>
+<td align="right">9033</td>
+<td align="right">145</td>
+<td align="right">352</td>
+<td align="right">6</td>
+<td align="right">16</td>
+<td align="right">0.9946563</td>
+<td align="right">0.9576108</td>
 </tr>
 <tr class="odd">
 <td align="right">3</td>
-<td align="right">149</td>
-<td align="right">364</td>
+<td align="right">8926</td>
+<td align="right">144</td>
+<td align="right">353</td>
+<td align="right">4</td>
+<td align="right">16</td>
+<td align="right">0.9964636</td>
+<td align="right">0.9613153</td>
+</tr>
+<tr class="even">
+<td align="right">4</td>
+<td align="right">8840</td>
+<td align="right">145</td>
+<td align="right">354</td>
+<td align="right">2</td>
+<td align="right">14</td>
+<td align="right">0.9985867</td>
+<td align="right">0.9689320</td>
+</tr>
+<tr class="odd">
 <td align="right">5</td>
+<td align="right">8615</td>
+<td align="right">144</td>
+<td align="right">355</td>
+<td align="right">0</td>
 <td align="right">13</td>
-<td align="right">0.9953495</td>
-<td align="right">0.9661017</td>
-</tr>
-<tr class="even">
-<td align="right">4</td>
-<td align="right">151</td>
-<td align="right">362</td>
-<td align="right">7</td>
-<td align="right">11</td>
-<td align="right">0.9951320</td>
-<td align="right">0.9661017</td>
-</tr>
-<tr class="odd">
-<td align="right">5</td>
-<td align="right">144</td>
-<td align="right">366</td>
-<td align="right">3</td>
-<td align="right">17</td>
-<td align="right">0.9979296</td>
-<td align="right">0.9622642</td>
+<td align="right">0.9991926</td>
+<td align="right">0.9746094</td>
 </tr>
 </tbody>
 </table>
@@ -498,99 +504,17 @@ pre code {
 <tbody>
 <tr class="odd">
 <td align="left">FALSE</td>
-<td align="right">1828</td>
-<td align="right">18</td>
-</tr>
-<tr class="even">
-<td align="left">TRUE</td>
-<td align="right">62</td>
-<td align="right">747</td>
-</tr>
-</tbody>
-</table>
-<p>Model without case weights, QuiPT cut-off = 0.00001</p>
-<table>
-<thead>
-<tr class="header">
-<th align="right">fold</th>
-<th align="right">TP</th>
-<th align="right">TN</th>
-<th align="right">FP</th>
-<th align="right">FN</th>
-<th align="right">AUC</th>
-<th align="right">ACC</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="right">1</td>
-<td align="right">147</td>
-<td align="right">368</td>
-<td align="right">2</td>
-<td align="right">15</td>
-<td align="right">0.9982816</td>
-<td align="right">0.9680451</td>
-</tr>
-<tr class="even">
-<td align="right">2</td>
-<td align="right">152</td>
-<td align="right">365</td>
-<td align="right">4</td>
-<td align="right">10</td>
-<td align="right">0.9977082</td>
-<td align="right">0.9736347</td>
-</tr>
-<tr class="odd">
-<td align="right">3</td>
-<td align="right">146</td>
-<td align="right">366</td>
-<td align="right">3</td>
-<td align="right">16</td>
-<td align="right">0.9946803</td>
-<td align="right">0.9642185</td>
-</tr>
-<tr class="even">
-<td align="right">4</td>
-<td align="right">151</td>
-<td align="right">364</td>
-<td align="right">5</td>
-<td align="right">11</td>
-<td align="right">0.9954833</td>
-<td align="right">0.9698682</td>
-</tr>
-<tr class="odd">
-<td align="right">5</td>
-<td align="right">144</td>
-<td align="right">367</td>
-<td align="right">2</td>
-<td align="right">17</td>
-<td align="right">0.9971721</td>
-<td align="right">0.9641509</td>
-</tr>
-</tbody>
-</table>
-<table>
-<thead>
-<tr class="header">
-<th align="left"></th>
-<th align="right">FALSE</th>
-<th align="right">TRUE</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">FALSE</td>
-<td align="right">1830</td>
-<td align="right">16</td>
+<td align="right">1772</td>
+<td align="right">12</td>
 </tr>
 <tr class="even">
 <td align="left">TRUE</td>
 <td align="right">69</td>
-<td align="right">740</td>
+<td align="right">730</td>
 </tr>
 </tbody>
 </table>
-<p>Model with case weights, QuiPT cut-off = 0.001</p>
+<p>Model without class weights, QuiPT cut-off = 0.00001</p>
 <table>
 <thead>
 <tr class="header">
@@ -606,48 +530,48 @@ pre code {
 <tbody>
 <tr class="odd">
 <td align="right">1</td>
-<td align="right">157</td>
-<td align="right">359</td>
-<td align="right">11</td>
-<td align="right">5</td>
-<td align="right">0.9940274</td>
-<td align="right">0.9699248</td>
+<td align="right">144</td>
+<td align="right">356</td>
+<td align="right">1</td>
+<td align="right">16</td>
+<td align="right">0.9982668</td>
+<td align="right">0.9671180</td>
 </tr>
 <tr class="even">
 <td align="right">2</td>
-<td align="right">159</td>
-<td align="right">365</td>
-<td align="right">4</td>
-<td align="right">3</td>
-<td align="right">0.9981599</td>
-<td align="right">0.9868173</td>
+<td align="right">145</td>
+<td align="right">352</td>
+<td align="right">5</td>
+<td align="right">15</td>
+<td align="right">0.9958333</td>
+<td align="right">0.9613153</td>
 </tr>
 <tr class="odd">
 <td align="right">3</td>
-<td align="right">156</td>
-<td align="right">363</td>
-<td align="right">6</td>
-<td align="right">6</td>
-<td align="right">0.9982937</td>
-<td align="right">0.9774011</td>
+<td align="right">147</td>
+<td align="right">356</td>
+<td align="right">1</td>
+<td align="right">13</td>
+<td align="right">0.9962885</td>
+<td align="right">0.9729207</td>
 </tr>
 <tr class="even">
 <td align="right">4</td>
-<td align="right">159</td>
-<td align="right">366</td>
-<td align="right">3</td>
-<td align="right">3</td>
-<td align="right">0.9988792</td>
-<td align="right">0.9887006</td>
+<td align="right">149</td>
+<td align="right">353</td>
+<td align="right">4</td>
+<td align="right">11</td>
+<td align="right">0.9973039</td>
+<td align="right">0.9709865</td>
 </tr>
 <tr class="odd">
 <td align="right">5</td>
-<td align="right">158</td>
-<td align="right">366</td>
-<td align="right">3</td>
-<td align="right">3</td>
-<td align="right">0.9993940</td>
-<td align="right">0.9886792</td>
+<td align="right">149</td>
+<td align="right">355</td>
+<td align="right">1</td>
+<td align="right">10</td>
+<td align="right">0.9977563</td>
+<td align="right">0.9786408</td>
 </tr>
 </tbody>
 </table>
@@ -662,24 +586,113 @@ pre code {
 <tbody>
 <tr class="odd">
 <td align="left">FALSE</td>
-<td align="right">1819</td>
-<td align="right">27</td>
+<td align="right">1772</td>
+<td align="right">12</td>
 </tr>
 <tr class="even">
 <td align="left">TRUE</td>
-<td align="right">20</td>
-<td align="right">789</td>
+<td align="right">65</td>
+<td align="right">734</td>
+</tr>
+</tbody>
+</table>
+<p>Model with class weights, QuiPT cut-off = 0.001</p>
+<table>
+<thead>
+<tr class="header">
+<th align="right">fold</th>
+<th align="right">imp_ngrams</th>
+<th align="right">TP</th>
+<th align="right">TN</th>
+<th align="right">FP</th>
+<th align="right">FN</th>
+<th align="right">AUC</th>
+<th align="right">ACC</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">8937</td>
+<td align="right">150</td>
+<td align="right">358</td>
+<td align="right">0</td>
+<td align="right">12</td>
+<td align="right">0.9977585</td>
+<td align="right">0.9769231</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="right">9033</td>
+<td align="right">146</td>
+<td align="right">354</td>
+<td align="right">4</td>
+<td align="right">15</td>
+<td align="right">0.9949512</td>
+<td align="right">0.9633911</td>
+</tr>
+<tr class="odd">
+<td align="right">3</td>
+<td align="right">8926</td>
+<td align="right">148</td>
+<td align="right">353</td>
+<td align="right">4</td>
+<td align="right">12</td>
+<td align="right">0.9975315</td>
+<td align="right">0.9690522</td>
+</tr>
+<tr class="even">
+<td align="right">4</td>
+<td align="right">8840</td>
+<td align="right">146</td>
+<td align="right">354</td>
+<td align="right">2</td>
+<td align="right">13</td>
+<td align="right">0.9985690</td>
+<td align="right">0.9708738</td>
+</tr>
+<tr class="odd">
+<td align="right">5</td>
+<td align="right">8615</td>
+<td align="right">140</td>
+<td align="right">355</td>
+<td align="right">0</td>
+<td align="right">17</td>
+<td align="right">0.9990670</td>
+<td align="right">0.9667969</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="right">FALSE</th>
+<th align="right">TRUE</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">FALSE</td>
+<td align="right">1774</td>
+<td align="right">10</td>
+</tr>
+<tr class="even">
+<td align="left">TRUE</td>
+<td align="right">69</td>
+<td align="right">730</td>
 </tr>
 </tbody>
 </table>
 </div>
 <div id="membrane_notmembrane-model-performance" class="section level2">
 <h2>Membrane_Notmembrane model performance</h2>
-<p>Model without case weights, QuiPT cut-off = 0.001</p>
+<p>Model without class weights, QuiPT cut-off = 0.001</p>
 <table>
 <thead>
 <tr class="header">
 <th align="right">fold</th>
+<th align="right">imp_ngrams</th>
 <th align="right">TP</th>
 <th align="right">TN</th>
 <th align="right">FP</th>
@@ -691,48 +704,53 @@ pre code {
 <tbody>
 <tr class="odd">
 <td align="right">1</td>
-<td align="right">325</td>
-<td align="right">169</td>
-<td align="right">15</td>
+<td align="right">8093</td>
+<td align="right">333</td>
+<td align="right">164</td>
+<td align="right">13</td>
+<td align="right">10</td>
+<td align="right">0.9930490</td>
+<td align="right">0.9557692</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="right">8085</td>
+<td align="right">320</td>
+<td align="right">156</td>
+<td align="right">21</td>
 <td align="right">22</td>
-<td align="right">0.9885979</td>
-<td align="right">0.9303202</td>
-</tr>
-<tr class="even">
-<td align="right">2</td>
-<td align="right">335</td>
-<td align="right">161</td>
-<td align="right">23</td>
-<td align="right">12</td>
-<td align="right">0.9887859</td>
-<td align="right">0.9340866</td>
+<td align="right">0.9801269</td>
+<td align="right">0.9171484</td>
 </tr>
 <tr class="odd">
 <td align="right">3</td>
-<td align="right">329</td>
-<td align="right">163</td>
-<td align="right">21</td>
-<td align="right">18</td>
-<td align="right">0.9834451</td>
-<td align="right">0.9265537</td>
+<td align="right">7883</td>
+<td align="right">327</td>
+<td align="right">162</td>
+<td align="right">15</td>
+<td align="right">13</td>
+<td align="right">0.9889498</td>
+<td align="right">0.9458414</td>
 </tr>
 <tr class="even">
 <td align="right">4</td>
-<td align="right">328</td>
-<td align="right">168</td>
-<td align="right">16</td>
-<td align="right">19</td>
-<td align="right">0.9861546</td>
-<td align="right">0.9340866</td>
+<td align="right">7923</td>
+<td align="right">316</td>
+<td align="right">161</td>
+<td align="right">15</td>
+<td align="right">23</td>
+<td align="right">0.9853681</td>
+<td align="right">0.9262136</td>
 </tr>
 <tr class="odd">
 <td align="right">5</td>
-<td align="right">331</td>
-<td align="right">163</td>
-<td align="right">21</td>
+<td align="right">7919</td>
+<td align="right">322</td>
+<td align="right">162</td>
+<td align="right">12</td>
 <td align="right">16</td>
-<td align="right">0.9865932</td>
-<td align="right">0.9303202</td>
+<td align="right">0.9907332</td>
+<td align="right">0.9453125</td>
 </tr>
 </tbody>
 </table>
@@ -747,21 +765,22 @@ pre code {
 <tbody>
 <tr class="odd">
 <td align="left">FALSE</td>
-<td align="right">824</td>
-<td align="right">96</td>
+<td align="right">805</td>
+<td align="right">76</td>
 </tr>
 <tr class="even">
 <td align="left">TRUE</td>
-<td align="right">87</td>
-<td align="right">1648</td>
+<td align="right">84</td>
+<td align="right">1618</td>
 </tr>
 </tbody>
 </table>
-<p>Model with case weights, QuiPT cut-off = 0.001</p>
+<p>Model with class weights, QuiPT cut-off = 0.001</p>
 <table>
 <thead>
 <tr class="header">
 <th align="right">fold</th>
+<th align="right">imp_ngrams</th>
 <th align="right">TP</th>
 <th align="right">TN</th>
 <th align="right">FP</th>
@@ -773,48 +792,53 @@ pre code {
 <tbody>
 <tr class="odd">
 <td align="right">1</td>
-<td align="right">323</td>
-<td align="right">179</td>
-<td align="right">5</td>
-<td align="right">24</td>
-<td align="right">0.9875486</td>
-<td align="right">0.9453861</td>
+<td align="right">8093</td>
+<td align="right">331</td>
+<td align="right">164</td>
+<td align="right">13</td>
+<td align="right">12</td>
+<td align="right">0.9911219</td>
+<td align="right">0.9519231</td>
 </tr>
 <tr class="even">
 <td align="right">2</td>
-<td align="right">324</td>
-<td align="right">179</td>
-<td align="right">5</td>
-<td align="right">23</td>
-<td align="right">0.9909159</td>
-<td align="right">0.9472693</td>
+<td align="right">8085</td>
+<td align="right">320</td>
+<td align="right">158</td>
+<td align="right">19</td>
+<td align="right">22</td>
+<td align="right">0.9804407</td>
+<td align="right">0.9210019</td>
 </tr>
 <tr class="odd">
 <td align="right">3</td>
-<td align="right">317</td>
-<td align="right">177</td>
-<td align="right">7</td>
-<td align="right">30</td>
-<td align="right">0.9808138</td>
-<td align="right">0.9303202</td>
+<td align="right">7883</td>
+<td align="right">326</td>
+<td align="right">161</td>
+<td align="right">16</td>
+<td align="right">14</td>
+<td align="right">0.9881356</td>
+<td align="right">0.9419729</td>
 </tr>
 <tr class="even">
 <td align="right">4</td>
-<td align="right">322</td>
-<td align="right">179</td>
-<td align="right">5</td>
-<td align="right">25</td>
-<td align="right">0.9921689</td>
-<td align="right">0.9435028</td>
+<td align="right">7923</td>
+<td align="right">318</td>
+<td align="right">161</td>
+<td align="right">15</td>
+<td align="right">21</td>
+<td align="right">0.9861558</td>
+<td align="right">0.9300971</td>
 </tr>
 <tr class="odd">
 <td align="right">5</td>
-<td align="right">309</td>
-<td align="right">181</td>
-<td align="right">3</td>
-<td align="right">38</td>
-<td align="right">0.9894280</td>
-<td align="right">0.9227872</td>
+<td align="right">7919</td>
+<td align="right">321</td>
+<td align="right">162</td>
+<td align="right">12</td>
+<td align="right">17</td>
+<td align="right">0.9900020</td>
+<td align="right">0.9433594</td>
 </tr>
 </tbody>
 </table>
@@ -829,24 +853,25 @@ pre code {
 <tbody>
 <tr class="odd">
 <td align="left">FALSE</td>
-<td align="right">895</td>
-<td align="right">25</td>
+<td align="right">806</td>
+<td align="right">75</td>
 </tr>
 <tr class="even">
 <td align="left">TRUE</td>
-<td align="right">140</td>
-<td align="right">1595</td>
+<td align="right">86</td>
+<td align="right">1616</td>
 </tr>
 </tbody>
 </table>
 </div>
 <div id="membrane_plastid-model-performance" class="section level2">
 <h2>Membrane_Plastid model performance</h2>
-<p>Model without case weights, QuiPT cut-off = 0.001</p>
+<p>Model without class weights, QuiPT cut-off = 0.001</p>
 <table>
 <thead>
 <tr class="header">
 <th align="right">fold</th>
+<th align="right">imp_ngrams</th>
 <th align="right">TP</th>
 <th align="right">TN</th>
 <th align="right">FP</th>
@@ -858,48 +883,53 @@ pre code {
 <tbody>
 <tr class="odd">
 <td align="right">1</td>
-<td align="right">21</td>
-<td align="right">252</td>
+<td align="right">12797</td>
+<td align="right">25</td>
+<td align="right">248</td>
 <td align="right">0</td>
-<td align="right">5</td>
-<td align="right">0.9990842</td>
-<td align="right">0.9820144</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0.9963504</td>
 </tr>
 <tr class="even">
 <td align="right">2</td>
-<td align="right">26</td>
-<td align="right">252</td>
+<td align="right">12899</td>
+<td align="right">24</td>
+<td align="right">248</td>
 <td align="right">0</td>
-<td align="right">0</td>
-<td align="right">1.0000000</td>
-<td align="right">1.0000000</td>
+<td align="right">2</td>
+<td align="right">1</td>
+<td align="right">0.9927007</td>
 </tr>
 <tr class="odd">
 <td align="right">3</td>
-<td align="right">25</td>
-<td align="right">252</td>
+<td align="right">13729</td>
+<td align="right">23</td>
+<td align="right">247</td>
 <td align="right">0</td>
+<td align="right">3</td>
 <td align="right">1</td>
-<td align="right">1.0000000</td>
-<td align="right">0.9964029</td>
+<td align="right">0.9890110</td>
 </tr>
 <tr class="even">
 <td align="right">4</td>
+<td align="right">13953</td>
 <td align="right">25</td>
-<td align="right">252</td>
+<td align="right">247</td>
 <td align="right">0</td>
 <td align="right">0</td>
-<td align="right">1.0000000</td>
+<td align="right">1</td>
 <td align="right">1.0000000</td>
 </tr>
 <tr class="odd">
 <td align="right">5</td>
-<td align="right">24</td>
-<td align="right">252</td>
+<td align="right">13571</td>
+<td align="right">25</td>
+<td align="right">247</td>
+<td align="right">0</td>
 <td align="right">0</td>
 <td align="right">1</td>
 <td align="right">1.0000000</td>
-<td align="right">0.9963899</td>
 </tr>
 </tbody>
 </table>
@@ -914,21 +944,22 @@ pre code {
 <tbody>
 <tr class="odd">
 <td align="left">FALSE</td>
-<td align="right">1260</td>
+<td align="right">1237</td>
 <td align="right">0</td>
 </tr>
 <tr class="even">
 <td align="left">TRUE</td>
-<td align="right">7</td>
-<td align="right">121</td>
+<td align="right">6</td>
+<td align="right">122</td>
 </tr>
 </tbody>
 </table>
-<p>Model with case weights, QuiPT cut-off = 0.001</p>
+<p>Model with class weights, QuiPT cut-off = 0.001</p>
 <table>
 <thead>
 <tr class="header">
 <th align="right">fold</th>
+<th align="right">imp_ngrams</th>
 <th align="right">TP</th>
 <th align="right">TN</th>
 <th align="right">FP</th>
@@ -940,35 +971,39 @@ pre code {
 <tbody>
 <tr class="odd">
 <td align="right">1</td>
+<td align="right">12797</td>
 <td align="right">25</td>
-<td align="right">252</td>
+<td align="right">248</td>
 <td align="right">0</td>
 <td align="right">1</td>
 <td align="right">1.0000000</td>
-<td align="right">0.9964029</td>
+<td align="right">0.9963504</td>
 </tr>
 <tr class="even">
 <td align="right">2</td>
-<td align="right">26</td>
-<td align="right">251</td>
-<td align="right">1</td>
+<td align="right">12899</td>
+<td align="right">24</td>
+<td align="right">248</td>
 <td align="right">0</td>
-<td align="right">0.9998474</td>
-<td align="right">0.9964029</td>
+<td align="right">2</td>
+<td align="right">0.9996898</td>
+<td align="right">0.9927007</td>
 </tr>
 <tr class="odd">
 <td align="right">3</td>
-<td align="right">25</td>
-<td align="right">252</td>
+<td align="right">13729</td>
+<td align="right">24</td>
+<td align="right">247</td>
 <td align="right">0</td>
-<td align="right">1</td>
-<td align="right">0.9998474</td>
-<td align="right">0.9964029</td>
+<td align="right">2</td>
+<td align="right">1.0000000</td>
+<td align="right">0.9926740</td>
 </tr>
 <tr class="even">
 <td align="right">4</td>
+<td align="right">13953</td>
 <td align="right">25</td>
-<td align="right">252</td>
+<td align="right">247</td>
 <td align="right">0</td>
 <td align="right">0</td>
 <td align="right">1.0000000</td>
@@ -976,12 +1011,13 @@ pre code {
 </tr>
 <tr class="odd">
 <td align="right">5</td>
-<td align="right">24</td>
-<td align="right">252</td>
+<td align="right">13571</td>
+<td align="right">25</td>
+<td align="right">247</td>
 <td align="right">0</td>
-<td align="right">1</td>
+<td align="right">0</td>
 <td align="right">1.0000000</td>
-<td align="right">0.9963899</td>
+<td align="right">1.0000000</td>
 </tr>
 </tbody>
 </table>
@@ -996,24 +1032,25 @@ pre code {
 <tbody>
 <tr class="odd">
 <td align="left">FALSE</td>
-<td align="right">1259</td>
-<td align="right">1</td>
+<td align="right">1237</td>
+<td align="right">0</td>
 </tr>
 <tr class="even">
 <td align="left">TRUE</td>
-<td align="right">3</td>
-<td align="right">125</td>
+<td align="right">5</td>
+<td align="right">123</td>
 </tr>
 </tbody>
 </table>
 </div>
 <div id="membrane_nuclear-model-performance" class="section level2">
 <h2>Membrane_Nuclear model performance</h2>
-<p>Model without case weights, QuiPT cut-off = 0.001</p>
+<p>Model without class weights, QuiPT cut-off = 0.001</p>
 <table>
 <thead>
 <tr class="header">
 <th align="right">fold</th>
+<th align="right">imp_ngrams</th>
 <th align="right">Accuracy</th>
 <th align="right">AU1U</th>
 <th align="right">KapS</th>
@@ -1022,33 +1059,38 @@ pre code {
 <tbody>
 <tr class="odd">
 <td align="right">1</td>
-<td align="right">0.8169014</td>
-<td align="right">0.8473616</td>
-<td align="right">0.5823529</td>
+<td align="right">64</td>
+<td align="right">0.7391304</td>
+<td align="right">0.8277778</td>
+<td align="right">0.4225941</td>
 </tr>
 <tr class="even">
 <td align="right">2</td>
-<td align="right">0.7428571</td>
-<td align="right">0.7682166</td>
-<td align="right">0.4062205</td>
+<td align="right">390</td>
+<td align="right">0.6911765</td>
+<td align="right">0.7992705</td>
+<td align="right">0.2359551</td>
 </tr>
 <tr class="odd">
 <td align="right">3</td>
-<td align="right">0.7857143</td>
-<td align="right">0.8945250</td>
-<td align="right">0.4888023</td>
+<td align="right">85</td>
+<td align="right">0.7611940</td>
+<td align="right">0.8519284</td>
+<td align="right">0.4442716</td>
 </tr>
 <tr class="even">
 <td align="right">4</td>
-<td align="right">0.7647059</td>
-<td align="right">0.8798541</td>
-<td align="right">0.4377261</td>
+<td align="right">114</td>
+<td align="right">0.7761194</td>
+<td align="right">0.8412534</td>
+<td align="right">0.4795443</td>
 </tr>
 <tr class="odd">
 <td align="right">5</td>
-<td align="right">0.7794118</td>
-<td align="right">0.8511785</td>
-<td align="right">0.4897449</td>
+<td align="right">130</td>
+<td align="right">0.7727273</td>
+<td align="right">0.7995868</td>
+<td align="right">0.5312500</td>
 </tr>
 </tbody>
 </table>
@@ -1064,29 +1106,267 @@ pre code {
 <tbody>
 <tr class="odd">
 <td align="left">IM</td>
-<td align="right">25</td>
+<td align="right">20</td>
+<td align="right">9</td>
+<td align="right">30</td>
+</tr>
+<tr class="even">
+<td align="left">OM</td>
+<td align="right">7</td>
+<td align="right">21</td>
+<td align="right">28</td>
+</tr>
+<tr class="odd">
+<td align="left">TM</td>
+<td align="right">8</td>
+<td align="right">3</td>
+<td align="right">211</td>
+</tr>
+</tbody>
+</table>
+<p>Model without class weights, QuiPT cut-off = 0.01</p>
+<table>
+<thead>
+<tr class="header">
+<th align="right">fold</th>
+<th align="right">imp_ngrams</th>
+<th align="right">Accuracy</th>
+<th align="right">AU1U</th>
+<th align="right">KapS</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">421</td>
+<td align="right">0.8260870</td>
+<td align="right">0.8595679</td>
+<td align="right">0.5964912</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="right">1040</td>
+<td align="right">0.6764706</td>
+<td align="right">0.8108866</td>
+<td align="right">0.1842966</td>
+</tr>
+<tr class="odd">
+<td align="right">3</td>
+<td align="right">400</td>
+<td align="right">0.7910448</td>
+<td align="right">0.8542241</td>
+<td align="right">0.5137377</td>
+</tr>
+<tr class="even">
 <td align="right">4</td>
+<td align="right">482</td>
+<td align="right">0.7761194</td>
+<td align="right">0.8558310</td>
+<td align="right">0.4702161</td>
+</tr>
+<tr class="odd">
+<td align="right">5</td>
+<td align="right">601</td>
+<td align="right">0.7575758</td>
+<td align="right">0.8085399</td>
+<td align="right">0.4482759</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="right">IM</th>
+<th align="right">OM</th>
+<th align="right">TM</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">IM</td>
+<td align="right">22</td>
+<td align="right">4</td>
+<td align="right">33</td>
+</tr>
+<tr class="even">
+<td align="left">OM</td>
+<td align="right">5</td>
+<td align="right">20</td>
+<td align="right">31</td>
+</tr>
+<tr class="odd">
+<td align="left">TM</td>
+<td align="right">6</td>
+<td align="right">0</td>
+<td align="right">216</td>
+</tr>
+</tbody>
+</table>
+<p>Model without class weights, QuiPT cut-off = 0.05</p>
+<table>
+<thead>
+<tr class="header">
+<th align="right">fold</th>
+<th align="right">imp_ngrams</th>
+<th align="right">Accuracy</th>
+<th align="right">AU1U</th>
+<th align="right">KapS</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">1595</td>
+<td align="right">0.7971014</td>
+<td align="right">0.8716049</td>
+<td align="right">0.5292398</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="right">2766</td>
+<td align="right">0.6911765</td>
+<td align="right">0.8281706</td>
+<td align="right">0.2217984</td>
+</tr>
+<tr class="odd">
+<td align="right">3</td>
+<td align="right">1862</td>
+<td align="right">0.7761194</td>
+<td align="right">0.8677112</td>
+<td align="right">0.4608369</td>
+</tr>
+<tr class="even">
+<td align="right">4</td>
+<td align="right">2024</td>
+<td align="right">0.7611940</td>
+<td align="right">0.8755165</td>
+<td align="right">0.4154853</td>
+</tr>
+<tr class="odd">
+<td align="right">5</td>
+<td align="right">2340</td>
+<td align="right">0.7575758</td>
+<td align="right">0.8037190</td>
+<td align="right">0.4285714</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="right">IM</th>
+<th align="right">OM</th>
+<th align="right">TM</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">IM</td>
+<td align="right">19</td>
+<td align="right">4</td>
+<td align="right">36</td>
+</tr>
+<tr class="even">
+<td align="left">OM</td>
+<td align="right">2</td>
+<td align="right">20</td>
+<td align="right">34</td>
+</tr>
+<tr class="odd">
+<td align="left">TM</td>
+<td align="right">6</td>
+<td align="right">0</td>
+<td align="right">216</td>
+</tr>
+</tbody>
+</table>
+<p>Model with class weights, QuiPT cut-off = 0.001</p>
+<table>
+<thead>
+<tr class="header">
+<th align="right">fold</th>
+<th align="right">imp_ngrams</th>
+<th align="right">Accuracy</th>
+<th align="right">AU1U</th>
+<th align="right">KapS</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">64</td>
+<td align="right">0.7681159</td>
+<td align="right">0.8216049</td>
+<td align="right">0.4787535</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="right">390</td>
+<td align="right">0.6911765</td>
+<td align="right">0.8019080</td>
+<td align="right">-0.0855188</td>
+</tr>
+<tr class="odd">
+<td align="right">3</td>
+<td align="right">85</td>
+<td align="right">0.7611940</td>
+<td align="right">0.8469353</td>
+<td align="right">0.4442716</td>
+</tr>
+<tr class="even">
+<td align="right">4</td>
+<td align="right">114</td>
+<td align="right">0.8059701</td>
+<td align="right">0.8412534</td>
+<td align="right">0.5489384</td>
+</tr>
+<tr class="odd">
+<td align="right">5</td>
+<td align="right">130</td>
+<td align="right">0.7727273</td>
+<td align="right">0.8106061</td>
+<td align="right">0.5312500</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="right">IM</th>
+<th align="right">OM</th>
+<th align="right">TM</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">IM</td>
+<td align="right">22</td>
+<td align="right">7</td>
+<td align="right">30</td>
+</tr>
+<tr class="even">
+<td align="left">OM</td>
+<td align="right">5</td>
+<td align="right">22</td>
 <td align="right">29</td>
 </tr>
-<tr class="even">
-<td align="left">OM</td>
-<td align="right">3</td>
-<td align="right">23</td>
-<td align="right">35</td>
-</tr>
 <tr class="odd">
 <td align="left">TM</td>
-<td align="right">5</td>
-<td align="right">1</td>
-<td align="right">222</td>
+<td align="right">8</td>
+<td align="right">2</td>
+<td align="right">212</td>
 </tr>
 </tbody>
 </table>
-<p>Model with case weights, QuiPT cut-off = 0.001</p>
+<p>Model with class weights, QuiPT cut-off = 0.01</p>
 <table>
 <thead>
 <tr class="header">
 <th align="right">fold</th>
+<th align="right">imp_ngrams</th>
 <th align="right">Accuracy</th>
 <th align="right">AU1U</th>
 <th align="right">KapS</th>
@@ -1095,33 +1375,38 @@ pre code {
 <tbody>
 <tr class="odd">
 <td align="right">1</td>
-<td align="right">0.8169014</td>
-<td align="right">0.8228354</td>
-<td align="right">0.6325637</td>
+<td align="right">421</td>
+<td align="right">0.7971014</td>
+<td align="right">0.8398148</td>
+<td align="right">0.5215453</td>
 </tr>
 <tr class="even">
 <td align="right">2</td>
-<td align="right">0.7285714</td>
-<td align="right">0.7897544</td>
-<td align="right">0.4197208</td>
+<td align="right">1040</td>
+<td align="right">0.6911765</td>
+<td align="right">0.8186869</td>
+<td align="right">0.2066667</td>
 </tr>
 <tr class="odd">
 <td align="right">3</td>
-<td align="right">0.8285714</td>
-<td align="right">0.8360507</td>
-<td align="right">0.6335079</td>
+<td align="right">400</td>
+<td align="right">0.7761194</td>
+<td align="right">0.8402204</td>
+<td align="right">0.4702161</td>
 </tr>
 <tr class="even">
 <td align="right">4</td>
-<td align="right">0.7500000</td>
-<td align="right">0.7941639</td>
-<td align="right">0.4492616</td>
+<td align="right">482</td>
+<td align="right">0.7611940</td>
+<td align="right">0.8375230</td>
+<td align="right">0.4351949</td>
 </tr>
 <tr class="odd">
 <td align="right">5</td>
-<td align="right">0.7794118</td>
-<td align="right">0.8216049</td>
-<td align="right">0.5367847</td>
+<td align="right">601</td>
+<td align="right">0.7575758</td>
+<td align="right">0.8030303</td>
+<td align="right">0.4666667</td>
 </tr>
 </tbody>
 </table>
@@ -1137,28 +1422,643 @@ pre code {
 <tbody>
 <tr class="odd">
 <td align="left">IM</td>
-<td align="right">28</td>
-<td align="right">8</td>
-<td align="right">22</td>
+<td align="right">20</td>
+<td align="right">5</td>
+<td align="right">34</td>
 </tr>
 <tr class="even">
 <td align="left">OM</td>
 <td align="right">4</td>
-<td align="right">34</td>
-<td align="right">23</td>
+<td align="right">20</td>
+<td align="right">32</td>
 </tr>
 <tr class="odd">
 <td align="left">TM</td>
-<td align="right">15</td>
+<td align="right">7</td>
+<td align="right">0</td>
+<td align="right">215</td>
+</tr>
+</tbody>
+</table>
+<p>Model with class weights, QuiPT cut-off = 0.05</p>
+<table>
+<thead>
+<tr class="header">
+<th align="right">fold</th>
+<th align="right">imp_ngrams</th>
+<th align="right">Accuracy</th>
+<th align="right">AU1U</th>
+<th align="right">KapS</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">1595</td>
+<td align="right">0.8115942</td>
+<td align="right">0.8509259</td>
+<td align="right">0.5628655</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="right">2766</td>
+<td align="right">0.6911765</td>
+<td align="right">0.8014590</td>
+<td align="right">0.2213740</td>
+</tr>
+<tr class="odd">
+<td align="right">3</td>
+<td align="right">1862</td>
+<td align="right">0.7761194</td>
+<td align="right">0.8672521</td>
+<td align="right">0.4608369</td>
+</tr>
+<tr class="even">
 <td align="right">4</td>
-<td align="right">209</td>
+<td align="right">2024</td>
+<td align="right">0.7611940</td>
+<td align="right">0.8604798</td>
+<td align="right">0.4154853</td>
+</tr>
+<tr class="odd">
+<td align="right">5</td>
+<td align="right">2340</td>
+<td align="right">0.7575758</td>
+<td align="right">0.8388430</td>
+<td align="right">0.4285714</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="right">IM</th>
+<th align="right">OM</th>
+<th align="right">TM</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">IM</td>
+<td align="right">19</td>
+<td align="right">4</td>
+<td align="right">36</td>
+</tr>
+<tr class="even">
+<td align="left">OM</td>
+<td align="right">3</td>
+<td align="right">20</td>
+<td align="right">33</td>
+</tr>
+<tr class="odd">
+<td align="left">TM</td>
+<td align="right">4</td>
+<td align="right">1</td>
+<td align="right">217</td>
 </tr>
 </tbody>
 </table>
 </div>
-<div id="stroma-model-performance" class="section level2">
-<h2>Stroma model performance</h2>
-<p>Model without case weights, QuiPT cut-off = 0.001</p>
+<div id="nuclear-om-vs.-other-membrane-model-performance" class="section level2">
+<h2>Nuclear OM vs. other membrane model performance</h2>
+<p>Model without class weights, QuiPT cut-off = 0.001</p>
+<table>
+<thead>
+<tr class="header">
+<th align="right">fold</th>
+<th align="right">imp_ngrams</th>
+<th align="right">TP</th>
+<th align="right">TN</th>
+<th align="right">FP</th>
+<th align="right">FN</th>
+<th align="right">AUC</th>
+<th align="right">ACC</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">62</td>
+<td align="right">4</td>
+<td align="right">57</td>
+<td align="right">0</td>
+<td align="right">8</td>
+<td align="right">0.8961988</td>
+<td align="right">0.8840580</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="right">121</td>
+<td align="right">2</td>
+<td align="right">53</td>
+<td align="right">4</td>
+<td align="right">9</td>
+<td align="right">0.8357257</td>
+<td align="right">0.8088235</td>
+</tr>
+<tr class="odd">
+<td align="right">3</td>
+<td align="right">60</td>
+<td align="right">4</td>
+<td align="right">56</td>
+<td align="right">0</td>
+<td align="right">7</td>
+<td align="right">0.8961039</td>
+<td align="right">0.8955224</td>
+</tr>
+<tr class="even">
+<td align="right">4</td>
+<td align="right">87</td>
+<td align="right">5</td>
+<td align="right">55</td>
+<td align="right">1</td>
+<td align="right">6</td>
+<td align="right">0.8344156</td>
+<td align="right">0.8955224</td>
+</tr>
+<tr class="odd">
+<td align="right">5</td>
+<td align="right">47</td>
+<td align="right">5</td>
+<td align="right">55</td>
+<td align="right">0</td>
+<td align="right">6</td>
+<td align="right">0.8760331</td>
+<td align="right">0.9090909</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="right">FALSE</th>
+<th align="right">TRUE</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">FALSE</td>
+<td align="right">276</td>
+<td align="right">5</td>
+</tr>
+<tr class="even">
+<td align="left">TRUE</td>
+<td align="right">36</td>
+<td align="right">20</td>
+</tr>
+</tbody>
+</table>
+<p>Model with class weights, QuiPT cut-off = 0.001</p>
+<table>
+<thead>
+<tr class="header">
+<th align="right">fold</th>
+<th align="right">imp_ngrams</th>
+<th align="right">TP</th>
+<th align="right">TN</th>
+<th align="right">FP</th>
+<th align="right">FN</th>
+<th align="right">AUC</th>
+<th align="right">ACC</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">62</td>
+<td align="right">4</td>
+<td align="right">56</td>
+<td align="right">1</td>
+<td align="right">8</td>
+<td align="right">0.8947368</td>
+<td align="right">0.8695652</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="right">121</td>
+<td align="right">3</td>
+<td align="right">54</td>
+<td align="right">3</td>
+<td align="right">8</td>
+<td align="right">0.8500797</td>
+<td align="right">0.8382353</td>
+</tr>
+<tr class="odd">
+<td align="right">3</td>
+<td align="right">60</td>
+<td align="right">4</td>
+<td align="right">56</td>
+<td align="right">0</td>
+<td align="right">7</td>
+<td align="right">0.8847403</td>
+<td align="right">0.8955224</td>
+</tr>
+<tr class="even">
+<td align="right">4</td>
+<td align="right">87</td>
+<td align="right">4</td>
+<td align="right">55</td>
+<td align="right">1</td>
+<td align="right">7</td>
+<td align="right">0.8246753</td>
+<td align="right">0.8805970</td>
+</tr>
+<tr class="odd">
+<td align="right">5</td>
+<td align="right">47</td>
+<td align="right">5</td>
+<td align="right">55</td>
+<td align="right">0</td>
+<td align="right">6</td>
+<td align="right">0.8628099</td>
+<td align="right">0.9090909</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="right">FALSE</th>
+<th align="right">TRUE</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">FALSE</td>
+<td align="right">276</td>
+<td align="right">5</td>
+</tr>
+<tr class="even">
+<td align="left">TRUE</td>
+<td align="right">36</td>
+<td align="right">20</td>
+</tr>
+</tbody>
+</table>
+<p>Model without class weights, QuiPT cut-off = 0.01</p>
+<table>
+<thead>
+<tr class="header">
+<th align="right">fold</th>
+<th align="right">imp_ngrams</th>
+<th align="right">TP</th>
+<th align="right">TN</th>
+<th align="right">FP</th>
+<th align="right">FN</th>
+<th align="right">AUC</th>
+<th align="right">ACC</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">197</td>
+<td align="right">5</td>
+<td align="right">57</td>
+<td align="right">0</td>
+<td align="right">7</td>
+<td align="right">0.8771930</td>
+<td align="right">0.8985507</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="right">398</td>
+<td align="right">2</td>
+<td align="right">55</td>
+<td align="right">2</td>
+<td align="right">9</td>
+<td align="right">0.8229665</td>
+<td align="right">0.8382353</td>
+</tr>
+<tr class="odd">
+<td align="right">3</td>
+<td align="right">164</td>
+<td align="right">2</td>
+<td align="right">56</td>
+<td align="right">0</td>
+<td align="right">9</td>
+<td align="right">0.8944805</td>
+<td align="right">0.8656716</td>
+</tr>
+<tr class="even">
+<td align="right">4</td>
+<td align="right">216</td>
+<td align="right">4</td>
+<td align="right">55</td>
+<td align="right">1</td>
+<td align="right">7</td>
+<td align="right">0.8977273</td>
+<td align="right">0.8805970</td>
+</tr>
+<tr class="odd">
+<td align="right">5</td>
+<td align="right">202</td>
+<td align="right">3</td>
+<td align="right">55</td>
+<td align="right">0</td>
+<td align="right">8</td>
+<td align="right">0.9570248</td>
+<td align="right">0.8787879</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="right">FALSE</th>
+<th align="right">TRUE</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">FALSE</td>
+<td align="right">278</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">TRUE</td>
+<td align="right">40</td>
+<td align="right">16</td>
+</tr>
+</tbody>
+</table>
+<p>Model with class weights, QuiPT cut-off = 0.01</p>
+<table>
+<thead>
+<tr class="header">
+<th align="right">fold</th>
+<th align="right">imp_ngrams</th>
+<th align="right">TP</th>
+<th align="right">TN</th>
+<th align="right">FP</th>
+<th align="right">FN</th>
+<th align="right">AUC</th>
+<th align="right">ACC</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">197</td>
+<td align="right">5</td>
+<td align="right">57</td>
+<td align="right">0</td>
+<td align="right">7</td>
+<td align="right">0.8757310</td>
+<td align="right">0.8985507</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="right">398</td>
+<td align="right">2</td>
+<td align="right">54</td>
+<td align="right">3</td>
+<td align="right">9</td>
+<td align="right">0.8277512</td>
+<td align="right">0.8235294</td>
+</tr>
+<tr class="odd">
+<td align="right">3</td>
+<td align="right">164</td>
+<td align="right">3</td>
+<td align="right">56</td>
+<td align="right">0</td>
+<td align="right">8</td>
+<td align="right">0.8766234</td>
+<td align="right">0.8805970</td>
+</tr>
+<tr class="even">
+<td align="right">4</td>
+<td align="right">216</td>
+<td align="right">4</td>
+<td align="right">55</td>
+<td align="right">1</td>
+<td align="right">7</td>
+<td align="right">0.8993506</td>
+<td align="right">0.8805970</td>
+</tr>
+<tr class="odd">
+<td align="right">5</td>
+<td align="right">202</td>
+<td align="right">3</td>
+<td align="right">55</td>
+<td align="right">0</td>
+<td align="right">8</td>
+<td align="right">0.9520661</td>
+<td align="right">0.8787879</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="right">FALSE</th>
+<th align="right">TRUE</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">FALSE</td>
+<td align="right">277</td>
+<td align="right">4</td>
+</tr>
+<tr class="even">
+<td align="left">TRUE</td>
+<td align="right">39</td>
+<td align="right">17</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="nuclear-im-vs.-other-membrane-model-performance" class="section level2">
+<h2>Nuclear IM vs. other membrane model performance</h2>
+<p>Model without class weights, QuiPT cut-off = 0.001</p>
+<table>
+<thead>
+<tr class="header">
+<th align="right">fold</th>
+<th align="right">imp_ngrams</th>
+<th align="right">TP</th>
+<th align="right">TN</th>
+<th align="right">FP</th>
+<th align="right">FN</th>
+<th align="right">AUC</th>
+<th align="right">ACC</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">116</td>
+<td align="right">4</td>
+<td align="right">57</td>
+<td align="right">0</td>
+<td align="right">8</td>
+<td align="right">0.8845029</td>
+<td align="right">0.8840580</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="right">180</td>
+<td align="right">2</td>
+<td align="right">56</td>
+<td align="right">0</td>
+<td align="right">10</td>
+<td align="right">0.8720238</td>
+<td align="right">0.8529412</td>
+</tr>
+<tr class="odd">
+<td align="right">3</td>
+<td align="right">114</td>
+<td align="right">3</td>
+<td align="right">54</td>
+<td align="right">1</td>
+<td align="right">9</td>
+<td align="right">0.8818182</td>
+<td align="right">0.8507463</td>
+</tr>
+<tr class="even">
+<td align="right">4</td>
+<td align="right">128</td>
+<td align="right">2</td>
+<td align="right">54</td>
+<td align="right">1</td>
+<td align="right">10</td>
+<td align="right">0.8863636</td>
+<td align="right">0.8358209</td>
+</tr>
+<tr class="odd">
+<td align="right">5</td>
+<td align="right">219</td>
+<td align="right">3</td>
+<td align="right">51</td>
+<td align="right">4</td>
+<td align="right">8</td>
+<td align="right">0.7834711</td>
+<td align="right">0.8181818</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="right">FALSE</th>
+<th align="right">TRUE</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">FALSE</td>
+<td align="right">272</td>
+<td align="right">6</td>
+</tr>
+<tr class="even">
+<td align="left">TRUE</td>
+<td align="right">45</td>
+<td align="right">14</td>
+</tr>
+</tbody>
+</table>
+<p>Model with class weights, QuiPT cut-off = 0.001</p>
+<table>
+<thead>
+<tr class="header">
+<th align="right">fold</th>
+<th align="right">imp_ngrams</th>
+<th align="right">TP</th>
+<th align="right">TN</th>
+<th align="right">FP</th>
+<th align="right">FN</th>
+<th align="right">AUC</th>
+<th align="right">ACC</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">116</td>
+<td align="right">3</td>
+<td align="right">57</td>
+<td align="right">0</td>
+<td align="right">9</td>
+<td align="right">0.8888889</td>
+<td align="right">0.8695652</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="right">180</td>
+<td align="right">2</td>
+<td align="right">56</td>
+<td align="right">0</td>
+<td align="right">10</td>
+<td align="right">0.8779762</td>
+<td align="right">0.8529412</td>
+</tr>
+<tr class="odd">
+<td align="right">3</td>
+<td align="right">114</td>
+<td align="right">3</td>
+<td align="right">54</td>
+<td align="right">1</td>
+<td align="right">9</td>
+<td align="right">0.8893939</td>
+<td align="right">0.8507463</td>
+</tr>
+<tr class="even">
+<td align="right">4</td>
+<td align="right">128</td>
+<td align="right">2</td>
+<td align="right">54</td>
+<td align="right">1</td>
+<td align="right">10</td>
+<td align="right">0.9075758</td>
+<td align="right">0.8358209</td>
+</tr>
+<tr class="odd">
+<td align="right">5</td>
+<td align="right">219</td>
+<td align="right">3</td>
+<td align="right">51</td>
+<td align="right">4</td>
+<td align="right">8</td>
+<td align="right">0.7966942</td>
+<td align="right">0.8181818</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="right">FALSE</th>
+<th align="right">TRUE</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">FALSE</td>
+<td align="right">272</td>
+<td align="right">6</td>
+</tr>
+<tr class="even">
+<td align="left">TRUE</td>
+<td align="right">46</td>
+<td align="right">13</td>
+</tr>
+</tbody>
+</table>
+<!-- Model without class weights, QuiPT cut-off = 0.01 -->
+<!-- ```{r} -->
+<!-- kable(IM_other_membrane_CV_2_res_stats) -->
+<!-- kable(table(IM_other_membrane_CV_2[["target"]], IM_other_membrane_CV_2[["pred"]])) -->
+<!-- ``` -->
+<p>Model with class weights, QuiPT cut-off = 0.01</p>
 <table>
 <thead>
 <tr class="header">
@@ -1174,48 +2074,48 @@ pre code {
 <tbody>
 <tr class="odd">
 <td align="right">1</td>
-<td align="right">133</td>
-<td align="right">362</td>
-<td align="right">10</td>
-<td align="right">27</td>
-<td align="right">0.9855679</td>
-<td align="right">0.9304511</td>
+<td align="right">0</td>
+<td align="right">55</td>
+<td align="right">1</td>
+<td align="right">12</td>
+<td align="right">0.8601190</td>
+<td align="right">0.8088235</td>
 </tr>
 <tr class="even">
 <td align="right">2</td>
-<td align="right">120</td>
-<td align="right">368</td>
-<td align="right">4</td>
-<td align="right">40</td>
-<td align="right">0.9789483</td>
-<td align="right">0.9172932</td>
+<td align="right">3</td>
+<td align="right">56</td>
+<td align="right">0</td>
+<td align="right">9</td>
+<td align="right">0.9255952</td>
+<td align="right">0.8676471</td>
 </tr>
 <tr class="odd">
 <td align="right">3</td>
-<td align="right">130</td>
-<td align="right">362</td>
-<td align="right">9</td>
-<td align="right">30</td>
-<td align="right">0.9827662</td>
-<td align="right">0.9265537</td>
+<td align="right">6</td>
+<td align="right">55</td>
+<td align="right">1</td>
+<td align="right">6</td>
+<td align="right">0.8705357</td>
+<td align="right">0.8970588</td>
 </tr>
 <tr class="even">
 <td align="right">4</td>
-<td align="right">124</td>
-<td align="right">359</td>
-<td align="right">12</td>
-<td align="right">35</td>
-<td align="right">0.9777586</td>
-<td align="right">0.9113208</td>
+<td align="right">4</td>
+<td align="right">55</td>
+<td align="right">0</td>
+<td align="right">8</td>
+<td align="right">0.9181818</td>
+<td align="right">0.8805970</td>
 </tr>
 <tr class="odd">
 <td align="right">5</td>
-<td align="right">133</td>
-<td align="right">363</td>
-<td align="right">8</td>
-<td align="right">26</td>
-<td align="right">0.9848277</td>
-<td align="right">0.9358491</td>
+<td align="right">2</td>
+<td align="right">54</td>
+<td align="right">1</td>
+<td align="right">9</td>
+<td align="right">0.8396694</td>
+<td align="right">0.8484848</td>
 </tr>
 </tbody>
 </table>
@@ -1230,21 +2130,25 @@ pre code {
 <tbody>
 <tr class="odd">
 <td align="left">FALSE</td>
-<td align="right">1814</td>
-<td align="right">43</td>
+<td align="right">275</td>
+<td align="right">3</td>
 </tr>
 <tr class="even">
 <td align="left">TRUE</td>
-<td align="right">158</td>
-<td align="right">640</td>
+<td align="right">44</td>
+<td align="right">15</td>
 </tr>
 </tbody>
 </table>
-<p>Model with case weights, QuiPT cut-off = 0.001</p>
+</div>
+<div id="nuclear-tm-vs.-other-membrane-model-performance" class="section level2">
+<h2>Nuclear TM vs. other membrane model performance</h2>
+<p>Model without class weights, QuiPT cut-off = 0.001</p>
 <table>
 <thead>
 <tr class="header">
 <th align="right">fold</th>
+<th align="right">imp_ngrams</th>
 <th align="right">TP</th>
 <th align="right">TN</th>
 <th align="right">FP</th>
@@ -1257,47 +2161,52 @@ pre code {
 <tr class="odd">
 <td align="right">1</td>
 <td align="right">139</td>
-<td align="right">348</td>
-<td align="right">24</td>
-<td align="right">21</td>
-<td align="right">0.9762097</td>
-<td align="right">0.9154135</td>
+<td align="right">43</td>
+<td align="right">13</td>
+<td align="right">11</td>
+<td align="right">2</td>
+<td align="right">0.9027778</td>
+<td align="right">0.8115942</td>
 </tr>
 <tr class="even">
 <td align="right">2</td>
-<td align="right">147</td>
-<td align="right">344</td>
-<td align="right">28</td>
-<td align="right">13</td>
-<td align="right">0.9850806</td>
-<td align="right">0.9229323</td>
+<td align="right">203</td>
+<td align="right">40</td>
+<td align="right">14</td>
+<td align="right">9</td>
+<td align="right">5</td>
+<td align="right">0.8589372</td>
+<td align="right">0.7941176</td>
 </tr>
 <tr class="odd">
 <td align="right">3</td>
-<td align="right">152</td>
-<td align="right">347</td>
-<td align="right">24</td>
-<td align="right">8</td>
-<td align="right">0.9904650</td>
-<td align="right">0.9397363</td>
+<td align="right">155</td>
+<td align="right">42</td>
+<td align="right">12</td>
+<td align="right">11</td>
+<td align="right">2</td>
+<td align="right">0.9021739</td>
+<td align="right">0.8059701</td>
 </tr>
 <tr class="even">
 <td align="right">4</td>
-<td align="right">147</td>
-<td align="right">339</td>
-<td align="right">32</td>
-<td align="right">12</td>
-<td align="right">0.9835393</td>
-<td align="right">0.9169811</td>
+<td align="right">171</td>
+<td align="right">42</td>
+<td align="right">14</td>
+<td align="right">9</td>
+<td align="right">2</td>
+<td align="right">0.9090909</td>
+<td align="right">0.8358209</td>
 </tr>
 <tr class="odd">
 <td align="right">5</td>
-<td align="right">147</td>
-<td align="right">349</td>
-<td align="right">22</td>
-<td align="right">12</td>
-<td align="right">0.9897269</td>
-<td align="right">0.9358491</td>
+<td align="right">173</td>
+<td align="right">37</td>
+<td align="right">14</td>
+<td align="right">8</td>
+<td align="right">7</td>
+<td align="right">0.9039256</td>
+<td align="right">0.7727273</td>
 </tr>
 </tbody>
 </table>
@@ -1312,24 +2221,1178 @@ pre code {
 <tbody>
 <tr class="odd">
 <td align="left">FALSE</td>
-<td align="right">1727</td>
-<td align="right">130</td>
+<td align="right">67</td>
+<td align="right">48</td>
 </tr>
 <tr class="even">
 <td align="left">TRUE</td>
-<td align="right">66</td>
-<td align="right">732</td>
+<td align="right">18</td>
+<td align="right">204</td>
+</tr>
+</tbody>
+</table>
+<p>Model with class weights, QuiPT cut-off = 0.001</p>
+<table>
+<thead>
+<tr class="header">
+<th align="right">fold</th>
+<th align="right">imp_ngrams</th>
+<th align="right">TP</th>
+<th align="right">TN</th>
+<th align="right">FP</th>
+<th align="right">FN</th>
+<th align="right">AUC</th>
+<th align="right">ACC</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">139</td>
+<td align="right">43</td>
+<td align="right">14</td>
+<td align="right">10</td>
+<td align="right">2</td>
+<td align="right">0.9101852</td>
+<td align="right">0.8260870</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="right">203</td>
+<td align="right">41</td>
+<td align="right">15</td>
+<td align="right">8</td>
+<td align="right">4</td>
+<td align="right">0.8608696</td>
+<td align="right">0.8235294</td>
+</tr>
+<tr class="odd">
+<td align="right">3</td>
+<td align="right">155</td>
+<td align="right">43</td>
+<td align="right">11</td>
+<td align="right">12</td>
+<td align="right">1</td>
+<td align="right">0.8952569</td>
+<td align="right">0.8059701</td>
+</tr>
+<tr class="even">
+<td align="right">4</td>
+<td align="right">171</td>
+<td align="right">42</td>
+<td align="right">14</td>
+<td align="right">9</td>
+<td align="right">2</td>
+<td align="right">0.9110672</td>
+<td align="right">0.8358209</td>
+</tr>
+<tr class="odd">
+<td align="right">5</td>
+<td align="right">173</td>
+<td align="right">37</td>
+<td align="right">14</td>
+<td align="right">8</td>
+<td align="right">7</td>
+<td align="right">0.8966942</td>
+<td align="right">0.7727273</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="right">FALSE</th>
+<th align="right">TRUE</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">FALSE</td>
+<td align="right">68</td>
+<td align="right">47</td>
+</tr>
+<tr class="even">
+<td align="left">TRUE</td>
+<td align="right">16</td>
+<td align="right">206</td>
+</tr>
+</tbody>
+</table>
+<p>Model without class weights, QuiPT cut-off = 0.01</p>
+<table>
+<thead>
+<tr class="header">
+<th align="right">fold</th>
+<th align="right">imp_ngrams</th>
+<th align="right">TP</th>
+<th align="right">TN</th>
+<th align="right">FP</th>
+<th align="right">FN</th>
+<th align="right">AUC</th>
+<th align="right">ACC</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">470</td>
+<td align="right">41</td>
+<td align="right">15</td>
+<td align="right">9</td>
+<td align="right">4</td>
+<td align="right">0.9148148</td>
+<td align="right">0.8115942</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="right">635</td>
+<td align="right">41</td>
+<td align="right">10</td>
+<td align="right">13</td>
+<td align="right">4</td>
+<td align="right">0.8792271</td>
+<td align="right">0.7500000</td>
+</tr>
+<tr class="odd">
+<td align="right">3</td>
+<td align="right">517</td>
+<td align="right">43</td>
+<td align="right">13</td>
+<td align="right">10</td>
+<td align="right">1</td>
+<td align="right">0.9288538</td>
+<td align="right">0.8358209</td>
+</tr>
+<tr class="even">
+<td align="right">4</td>
+<td align="right">590</td>
+<td align="right">43</td>
+<td align="right">16</td>
+<td align="right">7</td>
+<td align="right">1</td>
+<td align="right">0.9120553</td>
+<td align="right">0.8805970</td>
+</tr>
+<tr class="odd">
+<td align="right">5</td>
+<td align="right">670</td>
+<td align="right">35</td>
+<td align="right">14</td>
+<td align="right">8</td>
+<td align="right">9</td>
+<td align="right">0.8925620</td>
+<td align="right">0.7424242</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="right">FALSE</th>
+<th align="right">TRUE</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">FALSE</td>
+<td align="right">68</td>
+<td align="right">47</td>
+</tr>
+<tr class="even">
+<td align="left">TRUE</td>
+<td align="right">19</td>
+<td align="right">203</td>
+</tr>
+</tbody>
+</table>
+<p>Model with class weights, QuiPT cut-off = 0.01</p>
+<table>
+<thead>
+<tr class="header">
+<th align="right">fold</th>
+<th align="right">imp_ngrams</th>
+<th align="right">TP</th>
+<th align="right">TN</th>
+<th align="right">FP</th>
+<th align="right">FN</th>
+<th align="right">AUC</th>
+<th align="right">ACC</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">470</td>
+<td align="right">42</td>
+<td align="right">15</td>
+<td align="right">9</td>
+<td align="right">3</td>
+<td align="right">0.9148148</td>
+<td align="right">0.8260870</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="right">635</td>
+<td align="right">42</td>
+<td align="right">13</td>
+<td align="right">10</td>
+<td align="right">3</td>
+<td align="right">0.8724638</td>
+<td align="right">0.8088235</td>
+</tr>
+<tr class="odd">
+<td align="right">3</td>
+<td align="right">517</td>
+<td align="right">43</td>
+<td align="right">14</td>
+<td align="right">9</td>
+<td align="right">1</td>
+<td align="right">0.9219368</td>
+<td align="right">0.8507463</td>
+</tr>
+<tr class="even">
+<td align="right">4</td>
+<td align="right">590</td>
+<td align="right">43</td>
+<td align="right">16</td>
+<td align="right">7</td>
+<td align="right">1</td>
+<td align="right">0.9169960</td>
+<td align="right">0.8805970</td>
+</tr>
+<tr class="odd">
+<td align="right">5</td>
+<td align="right">670</td>
+<td align="right">35</td>
+<td align="right">14</td>
+<td align="right">8</td>
+<td align="right">9</td>
+<td align="right">0.8770661</td>
+<td align="right">0.7424242</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="right">FALSE</th>
+<th align="right">TRUE</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">FALSE</td>
+<td align="right">72</td>
+<td align="right">43</td>
+</tr>
+<tr class="even">
+<td align="left">TRUE</td>
+<td align="right">17</td>
+<td align="right">205</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="stroma-model-performance" class="section level2">
+<h2>Stroma model performance</h2>
+<p>Model without class weights, QuiPT cut-off = 0.001</p>
+<table>
+<thead>
+<tr class="header">
+<th align="right">fold</th>
+<th align="right">imp_ngrams</th>
+<th align="right">TP</th>
+<th align="right">TN</th>
+<th align="right">FP</th>
+<th align="right">FN</th>
+<th align="right">AUC</th>
+<th align="right">ACC</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">7727</td>
+<td align="right">118</td>
+<td align="right">358</td>
+<td align="right">10</td>
+<td align="right">34</td>
+<td align="right">0.9857158</td>
+<td align="right">0.9153846</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="right">7432</td>
+<td align="right">125</td>
+<td align="right">358</td>
+<td align="right">9</td>
+<td align="right">27</td>
+<td align="right">0.9809802</td>
+<td align="right">0.9306358</td>
+</tr>
+<tr class="odd">
+<td align="right">3</td>
+<td align="right">7539</td>
+<td align="right">120</td>
+<td align="right">358</td>
+<td align="right">7</td>
+<td align="right">32</td>
+<td align="right">0.9873468</td>
+<td align="right">0.9245648</td>
+</tr>
+<tr class="even">
+<td align="right">4</td>
+<td align="right">7502</td>
+<td align="right">122</td>
+<td align="right">356</td>
+<td align="right">7</td>
+<td align="right">30</td>
+<td align="right">0.9814412</td>
+<td align="right">0.9281553</td>
+</tr>
+<tr class="odd">
+<td align="right">5</td>
+<td align="right">7447</td>
+<td align="right">130</td>
+<td align="right">354</td>
+<td align="right">7</td>
+<td align="right">21</td>
+<td align="right">0.9878373</td>
+<td align="right">0.9453125</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="right">FALSE</th>
+<th align="right">TRUE</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">FALSE</td>
+<td align="right">1784</td>
+<td align="right">40</td>
+</tr>
+<tr class="even">
+<td align="left">TRUE</td>
+<td align="right">144</td>
+<td align="right">615</td>
+</tr>
+</tbody>
+</table>
+<p>Model with class weights, QuiPT cut-off = 0.001</p>
+<table>
+<thead>
+<tr class="header">
+<th align="right">fold</th>
+<th align="right">imp_ngrams</th>
+<th align="right">TP</th>
+<th align="right">TN</th>
+<th align="right">FP</th>
+<th align="right">FN</th>
+<th align="right">AUC</th>
+<th align="right">ACC</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">7727</td>
+<td align="right">122</td>
+<td align="right">360</td>
+<td align="right">8</td>
+<td align="right">30</td>
+<td align="right">0.9866276</td>
+<td align="right">0.9269231</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="right">7432</td>
+<td align="right">123</td>
+<td align="right">355</td>
+<td align="right">12</td>
+<td align="right">29</td>
+<td align="right">0.9811953</td>
+<td align="right">0.9210019</td>
+</tr>
+<tr class="odd">
+<td align="right">3</td>
+<td align="right">7539</td>
+<td align="right">123</td>
+<td align="right">356</td>
+<td align="right">9</td>
+<td align="right">29</td>
+<td align="right">0.9871305</td>
+<td align="right">0.9264990</td>
+</tr>
+<tr class="even">
+<td align="right">4</td>
+<td align="right">7502</td>
+<td align="right">123</td>
+<td align="right">354</td>
+<td align="right">9</td>
+<td align="right">29</td>
+<td align="right">0.9801000</td>
+<td align="right">0.9262136</td>
+</tr>
+<tr class="odd">
+<td align="right">5</td>
+<td align="right">7447</td>
+<td align="right">125</td>
+<td align="right">354</td>
+<td align="right">7</td>
+<td align="right">26</td>
+<td align="right">0.9883510</td>
+<td align="right">0.9355469</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="right">FALSE</th>
+<th align="right">TRUE</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">FALSE</td>
+<td align="right">1779</td>
+<td align="right">45</td>
+</tr>
+<tr class="even">
+<td align="left">TRUE</td>
+<td align="right">143</td>
+<td align="right">616</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="plastid-stroma-model-performance" class="section level2">
+<h2>Plastid stroma model performance</h2>
+<p>Model without class weights, QuiPT cut-off = 0.001</p>
+<table>
+<thead>
+<tr class="header">
+<th align="right">fold</th>
+<th align="right">imp_ngrams</th>
+<th align="right">TP</th>
+<th align="right">TN</th>
+<th align="right">FP</th>
+<th align="right">FN</th>
+<th align="right">AUC</th>
+<th align="right">ACC</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">7131</td>
+<td align="right">79</td>
+<td align="right">274</td>
+<td align="right">0</td>
+<td align="right">5</td>
+<td align="right">0.9998262</td>
+<td align="right">0.9860335</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="right">7154</td>
+<td align="right">75</td>
+<td align="right">274</td>
+<td align="right">0</td>
+<td align="right">9</td>
+<td align="right">0.9994352</td>
+<td align="right">0.9748603</td>
+</tr>
+<tr class="odd">
+<td align="right">3</td>
+<td align="right">7003</td>
+<td align="right">77</td>
+<td align="right">272</td>
+<td align="right">1</td>
+<td align="right">7</td>
+<td align="right">0.9993895</td>
+<td align="right">0.9775910</td>
+</tr>
+<tr class="even">
+<td align="right">4</td>
+<td align="right">6811</td>
+<td align="right">79</td>
+<td align="right">272</td>
+<td align="right">0</td>
+<td align="right">5</td>
+<td align="right">1.0000000</td>
+<td align="right">0.9859551</td>
+</tr>
+<tr class="odd">
+<td align="right">5</td>
+<td align="right">7207</td>
+<td align="right">74</td>
+<td align="right">272</td>
+<td align="right">0</td>
+<td align="right">9</td>
+<td align="right">0.9994685</td>
+<td align="right">0.9746479</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="right">FALSE</th>
+<th align="right">TRUE</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">FALSE</td>
+<td align="right">1364</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">TRUE</td>
+<td align="right">35</td>
+<td align="right">384</td>
+</tr>
+</tbody>
+</table>
+<p>Model with class weights, QuiPT cut-off = 0.001</p>
+<table>
+<thead>
+<tr class="header">
+<th align="right">fold</th>
+<th align="right">imp_ngrams</th>
+<th align="right">TP</th>
+<th align="right">TN</th>
+<th align="right">FP</th>
+<th align="right">FN</th>
+<th align="right">AUC</th>
+<th align="right">ACC</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">7131</td>
+<td align="right">79</td>
+<td align="right">274</td>
+<td align="right">0</td>
+<td align="right">5</td>
+<td align="right">1.0000000</td>
+<td align="right">0.9860335</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="right">7154</td>
+<td align="right">75</td>
+<td align="right">274</td>
+<td align="right">0</td>
+<td align="right">9</td>
+<td align="right">0.9992614</td>
+<td align="right">0.9748603</td>
+</tr>
+<tr class="odd">
+<td align="right">3</td>
+<td align="right">7003</td>
+<td align="right">77</td>
+<td align="right">272</td>
+<td align="right">1</td>
+<td align="right">7</td>
+<td align="right">0.9996075</td>
+<td align="right">0.9775910</td>
+</tr>
+<tr class="even">
+<td align="right">4</td>
+<td align="right">6811</td>
+<td align="right">79</td>
+<td align="right">272</td>
+<td align="right">0</td>
+<td align="right">5</td>
+<td align="right">0.9999562</td>
+<td align="right">0.9859551</td>
+</tr>
+<tr class="odd">
+<td align="right">5</td>
+<td align="right">7207</td>
+<td align="right">72</td>
+<td align="right">272</td>
+<td align="right">0</td>
+<td align="right">11</td>
+<td align="right">0.9996456</td>
+<td align="right">0.9690141</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="right">FALSE</th>
+<th align="right">TRUE</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">FALSE</td>
+<td align="right">1364</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">TRUE</td>
+<td align="right">37</td>
+<td align="right">382</td>
+</tr>
+</tbody>
+</table>
+<p>Model without class weights, QuiPT cut-off = 0.01</p>
+<table>
+<thead>
+<tr class="header">
+<th align="right">fold</th>
+<th align="right">imp_ngrams</th>
+<th align="right">TP</th>
+<th align="right">TN</th>
+<th align="right">FP</th>
+<th align="right">FN</th>
+<th align="right">AUC</th>
+<th align="right">ACC</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">9870</td>
+<td align="right">79</td>
+<td align="right">274</td>
+<td align="right">0</td>
+<td align="right">5</td>
+<td align="right">0.9999566</td>
+<td align="right">0.9860335</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="right">9891</td>
+<td align="right">74</td>
+<td align="right">274</td>
+<td align="right">0</td>
+<td align="right">10</td>
+<td align="right">0.9991745</td>
+<td align="right">0.9720670</td>
+</tr>
+<tr class="odd">
+<td align="right">3</td>
+<td align="right">9801</td>
+<td align="right">78</td>
+<td align="right">272</td>
+<td align="right">1</td>
+<td align="right">6</td>
+<td align="right">0.9993895</td>
+<td align="right">0.9803922</td>
+</tr>
+<tr class="even">
+<td align="right">4</td>
+<td align="right">9438</td>
+<td align="right">80</td>
+<td align="right">272</td>
+<td align="right">0</td>
+<td align="right">4</td>
+<td align="right">0.9999562</td>
+<td align="right">0.9887640</td>
+</tr>
+<tr class="odd">
+<td align="right">5</td>
+<td align="right">9947</td>
+<td align="right">74</td>
+<td align="right">272</td>
+<td align="right">0</td>
+<td align="right">9</td>
+<td align="right">0.9994242</td>
+<td align="right">0.9746479</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="right">FALSE</th>
+<th align="right">TRUE</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">FALSE</td>
+<td align="right">1364</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">TRUE</td>
+<td align="right">35</td>
+<td align="right">384</td>
+</tr>
+</tbody>
+</table>
+<p>Model with class weights, QuiPT cut-off = 0.01</p>
+<table>
+<thead>
+<tr class="header">
+<th align="right">fold</th>
+<th align="right">imp_ngrams</th>
+<th align="right">TP</th>
+<th align="right">TN</th>
+<th align="right">FP</th>
+<th align="right">FN</th>
+<th align="right">AUC</th>
+<th align="right">ACC</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">9870</td>
+<td align="right">79</td>
+<td align="right">274</td>
+<td align="right">0</td>
+<td align="right">5</td>
+<td align="right">1.0000000</td>
+<td align="right">0.9860335</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="right">9891</td>
+<td align="right">74</td>
+<td align="right">274</td>
+<td align="right">0</td>
+<td align="right">10</td>
+<td align="right">0.9995221</td>
+<td align="right">0.9720670</td>
+</tr>
+<tr class="odd">
+<td align="right">3</td>
+<td align="right">9801</td>
+<td align="right">77</td>
+<td align="right">272</td>
+<td align="right">1</td>
+<td align="right">7</td>
+<td align="right">0.9996511</td>
+<td align="right">0.9775910</td>
+</tr>
+<tr class="even">
+<td align="right">4</td>
+<td align="right">9438</td>
+<td align="right">80</td>
+<td align="right">272</td>
+<td align="right">0</td>
+<td align="right">4</td>
+<td align="right">0.9999562</td>
+<td align="right">0.9887640</td>
+</tr>
+<tr class="odd">
+<td align="right">5</td>
+<td align="right">9947</td>
+<td align="right">74</td>
+<td align="right">272</td>
+<td align="right">0</td>
+<td align="right">9</td>
+<td align="right">0.9994685</td>
+<td align="right">0.9746479</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="right">FALSE</th>
+<th align="right">TRUE</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">FALSE</td>
+<td align="right">1364</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">TRUE</td>
+<td align="right">35</td>
+<td align="right">384</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="nuclear-stroma-model-performance" class="section level2">
+<h2>Nuclear stroma model performance</h2>
+<p>Model without class weights, QuiPT cut-off = 0.001</p>
+<table>
+<thead>
+<tr class="header">
+<th align="right">fold</th>
+<th align="right">imp_ngrams</th>
+<th align="right">TP</th>
+<th align="right">TN</th>
+<th align="right">FP</th>
+<th align="right">FN</th>
+<th align="right">AUC</th>
+<th align="right">ACC</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">540</td>
+<td align="right">44</td>
+<td align="right">78</td>
+<td align="right">16</td>
+<td align="right">24</td>
+<td align="right">0.8667084</td>
+<td align="right">0.7530864</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="right">493</td>
+<td align="right">49</td>
+<td align="right">76</td>
+<td align="right">17</td>
+<td align="right">19</td>
+<td align="right">0.8472486</td>
+<td align="right">0.7763975</td>
+</tr>
+<tr class="odd">
+<td align="right">3</td>
+<td align="right">577</td>
+<td align="right">46</td>
+<td align="right">77</td>
+<td align="right">15</td>
+<td align="right">22</td>
+<td align="right">0.8663683</td>
+<td align="right">0.7687500</td>
+</tr>
+<tr class="even">
+<td align="right">4</td>
+<td align="right">694</td>
+<td align="right">43</td>
+<td align="right">77</td>
+<td align="right">14</td>
+<td align="right">25</td>
+<td align="right">0.8416290</td>
+<td align="right">0.7547170</td>
+</tr>
+<tr class="odd">
+<td align="right">5</td>
+<td align="right">348</td>
+<td align="right">54</td>
+<td align="right">71</td>
+<td align="right">18</td>
+<td align="right">14</td>
+<td align="right">0.9031725</td>
+<td align="right">0.7961783</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="right">FALSE</th>
+<th align="right">TRUE</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">FALSE</td>
+<td align="right">379</td>
+<td align="right">80</td>
+</tr>
+<tr class="even">
+<td align="left">TRUE</td>
+<td align="right">104</td>
+<td align="right">236</td>
+</tr>
+</tbody>
+</table>
+<p>Model with class weights, QuiPT cut-off = 0.001</p>
+<table>
+<thead>
+<tr class="header">
+<th align="right">fold</th>
+<th align="right">imp_ngrams</th>
+<th align="right">TP</th>
+<th align="right">TN</th>
+<th align="right">FP</th>
+<th align="right">FN</th>
+<th align="right">AUC</th>
+<th align="right">ACC</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">540</td>
+<td align="right">44</td>
+<td align="right">79</td>
+<td align="right">15</td>
+<td align="right">24</td>
+<td align="right">0.8649875</td>
+<td align="right">0.7592593</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="right">493</td>
+<td align="right">48</td>
+<td align="right">77</td>
+<td align="right">16</td>
+<td align="right">20</td>
+<td align="right">0.8426629</td>
+<td align="right">0.7763975</td>
+</tr>
+<tr class="odd">
+<td align="right">3</td>
+<td align="right">577</td>
+<td align="right">46</td>
+<td align="right">78</td>
+<td align="right">14</td>
+<td align="right">22</td>
+<td align="right">0.8607737</td>
+<td align="right">0.7750000</td>
+</tr>
+<tr class="even">
+<td align="right">4</td>
+<td align="right">694</td>
+<td align="right">44</td>
+<td align="right">77</td>
+<td align="right">14</td>
+<td align="right">24</td>
+<td align="right">0.8437298</td>
+<td align="right">0.7610063</td>
+</tr>
+<tr class="odd">
+<td align="right">5</td>
+<td align="right">348</td>
+<td align="right">54</td>
+<td align="right">73</td>
+<td align="right">16</td>
+<td align="right">14</td>
+<td align="right">0.9079643</td>
+<td align="right">0.8089172</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="right">FALSE</th>
+<th align="right">TRUE</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">FALSE</td>
+<td align="right">384</td>
+<td align="right">75</td>
+</tr>
+<tr class="even">
+<td align="left">TRUE</td>
+<td align="right">104</td>
+<td align="right">236</td>
+</tr>
+</tbody>
+</table>
+<p>Model without class weights, QuiPT cut-off = 0.01</p>
+<table>
+<thead>
+<tr class="header">
+<th align="right">fold</th>
+<th align="right">imp_ngrams</th>
+<th align="right">TP</th>
+<th align="right">TN</th>
+<th align="right">FP</th>
+<th align="right">FN</th>
+<th align="right">AUC</th>
+<th align="right">ACC</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">1283</td>
+<td align="right">44</td>
+<td align="right">79</td>
+<td align="right">15</td>
+<td align="right">24</td>
+<td align="right">0.8782854</td>
+<td align="right">0.7592593</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="right">1196</td>
+<td align="right">50</td>
+<td align="right">77</td>
+<td align="right">16</td>
+<td align="right">18</td>
+<td align="right">0.8638520</td>
+<td align="right">0.7888199</td>
+</tr>
+<tr class="odd">
+<td align="right">3</td>
+<td align="right">1338</td>
+<td align="right">45</td>
+<td align="right">79</td>
+<td align="right">13</td>
+<td align="right">23</td>
+<td align="right">0.8836317</td>
+<td align="right">0.7750000</td>
+</tr>
+<tr class="even">
+<td align="right">4</td>
+<td align="right">1547</td>
+<td align="right">40</td>
+<td align="right">80</td>
+<td align="right">11</td>
+<td align="right">28</td>
+<td align="right">0.8443762</td>
+<td align="right">0.7547170</td>
+</tr>
+<tr class="odd">
+<td align="right">5</td>
+<td align="right">908</td>
+<td align="right">55</td>
+<td align="right">73</td>
+<td align="right">16</td>
+<td align="right">13</td>
+<td align="right">0.9104428</td>
+<td align="right">0.8152866</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="right">FALSE</th>
+<th align="right">TRUE</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">FALSE</td>
+<td align="right">388</td>
+<td align="right">71</td>
+</tr>
+<tr class="even">
+<td align="left">TRUE</td>
+<td align="right">106</td>
+<td align="right">234</td>
+</tr>
+</tbody>
+</table>
+<p>Model with class weights, QuiPT cut-off = 0.01</p>
+<table>
+<thead>
+<tr class="header">
+<th align="right">fold</th>
+<th align="right">imp_ngrams</th>
+<th align="right">TP</th>
+<th align="right">TN</th>
+<th align="right">FP</th>
+<th align="right">FN</th>
+<th align="right">AUC</th>
+<th align="right">ACC</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">1283</td>
+<td align="right">43</td>
+<td align="right">79</td>
+<td align="right">15</td>
+<td align="right">25</td>
+<td align="right">0.8729662</td>
+<td align="right">0.7530864</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="right">1196</td>
+<td align="right">50</td>
+<td align="right">79</td>
+<td align="right">14</td>
+<td align="right">18</td>
+<td align="right">0.8684377</td>
+<td align="right">0.8012422</td>
+</tr>
+<tr class="odd">
+<td align="right">3</td>
+<td align="right">1338</td>
+<td align="right">47</td>
+<td align="right">77</td>
+<td align="right">15</td>
+<td align="right">21</td>
+<td align="right">0.8847506</td>
+<td align="right">0.7750000</td>
+</tr>
+<tr class="even">
+<td align="right">4</td>
+<td align="right">1547</td>
+<td align="right">45</td>
+<td align="right">79</td>
+<td align="right">12</td>
+<td align="right">23</td>
+<td align="right">0.8501939</td>
+<td align="right">0.7798742</td>
+</tr>
+<tr class="odd">
+<td align="right">5</td>
+<td align="right">908</td>
+<td align="right">56</td>
+<td align="right">76</td>
+<td align="right">13</td>
+<td align="right">12</td>
+<td align="right">0.9137475</td>
+<td align="right">0.8407643</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="right">FALSE</th>
+<th align="right">TRUE</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">FALSE</td>
+<td align="right">390</td>
+<td align="right">69</td>
+</tr>
+<tr class="even">
+<td align="left">TRUE</td>
+<td align="right">99</td>
+<td align="right">241</td>
 </tr>
 </tbody>
 </table>
 </div>
 <div id="om_stroma-model-performance" class="section level2">
 <h2>OM_Stroma model performance</h2>
-<p>Model without case weights, QuiPT cut-off = 0.001</p>
+<p>Model without class weights, QuiPT cut-off = 0.001</p>
 <table>
 <thead>
 <tr class="header">
 <th align="right">fold</th>
+<th align="right">imp_ngrams</th>
 <th align="right">TP</th>
 <th align="right">TN</th>
 <th align="right">FP</th>
@@ -1341,48 +3404,53 @@ pre code {
 <tbody>
 <tr class="odd">
 <td align="right">1</td>
-<td align="right">5</td>
-<td align="right">160</td>
-<td align="right">0</td>
-<td align="right">8</td>
-<td align="right">0.8745192</td>
-<td align="right">0.9537572</td>
-</tr>
-<tr class="even">
-<td align="right">2</td>
-<td align="right">1</td>
-<td align="right">160</td>
-<td align="right">0</td>
-<td align="right">11</td>
-<td align="right">0.8927083</td>
-<td align="right">0.9360465</td>
-</tr>
-<tr class="odd">
-<td align="right">3</td>
-<td align="right">1</td>
-<td align="right">160</td>
-<td align="right">0</td>
-<td align="right">11</td>
-<td align="right">0.8786458</td>
-<td align="right">0.9360465</td>
-</tr>
-<tr class="even">
-<td align="right">4</td>
-<td align="right">4</td>
-<td align="right">159</td>
-<td align="right">0</td>
-<td align="right">8</td>
-<td align="right">0.9412998</td>
-<td align="right">0.9532164</td>
-</tr>
-<tr class="odd">
-<td align="right">5</td>
-<td align="right">2</td>
-<td align="right">159</td>
-<td align="right">0</td>
 <td align="right">10</td>
-<td align="right">0.9182390</td>
-<td align="right">0.9415205</td>
+<td align="right">4</td>
+<td align="right">66</td>
+<td align="right">2</td>
+<td align="right">8</td>
+<td align="right">0.8051471</td>
+<td align="right">0.8750000</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="right">7</td>
+<td align="right">2</td>
+<td align="right">67</td>
+<td align="right">1</td>
+<td align="right">9</td>
+<td align="right">0.7733957</td>
+<td align="right">0.8734177</td>
+</tr>
+<tr class="odd">
+<td align="right">3</td>
+<td align="right">5</td>
+<td align="right">5</td>
+<td align="right">66</td>
+<td align="right">2</td>
+<td align="right">6</td>
+<td align="right">0.8201872</td>
+<td align="right">0.8987342</td>
+</tr>
+<tr class="even">
+<td align="right">4</td>
+<td align="right">9</td>
+<td align="right">2</td>
+<td align="right">68</td>
+<td align="right">0</td>
+<td align="right">9</td>
+<td align="right">0.6176471</td>
+<td align="right">0.8860759</td>
+</tr>
+<tr class="odd">
+<td align="right">5</td>
+<td align="right">8</td>
+<td align="right">4</td>
+<td align="right">68</td>
+<td align="right">0</td>
+<td align="right">7</td>
+<td align="right">0.7219251</td>
+<td align="right">0.9113924</td>
 </tr>
 </tbody>
 </table>
@@ -1397,21 +3465,22 @@ pre code {
 <tbody>
 <tr class="odd">
 <td align="left">FALSE</td>
-<td align="right">798</td>
-<td align="right">0</td>
+<td align="right">335</td>
+<td align="right">5</td>
 </tr>
 <tr class="even">
 <td align="left">TRUE</td>
-<td align="right">48</td>
-<td align="right">13</td>
+<td align="right">39</td>
+<td align="right">17</td>
 </tr>
 </tbody>
 </table>
-<p>Model with case weights, QuiPT cut-off = 0.001</p>
+<p>Model with class weights, QuiPT cut-off = 0.001</p>
 <table>
 <thead>
 <tr class="header">
 <th align="right">fold</th>
+<th align="right">imp_ngrams</th>
 <th align="right">TP</th>
 <th align="right">TN</th>
 <th align="right">FP</th>
@@ -1423,48 +3492,53 @@ pre code {
 <tbody>
 <tr class="odd">
 <td align="right">1</td>
-<td align="right">7</td>
-<td align="right">54</td>
-<td align="right">14</td>
-<td align="right">6</td>
-<td align="right">0.6951357</td>
-<td align="right">0.7530864</td>
+<td align="right">10</td>
+<td align="right">4</td>
+<td align="right">66</td>
+<td align="right">2</td>
+<td align="right">8</td>
+<td align="right">0.8026961</td>
+<td align="right">0.8750000</td>
 </tr>
 <tr class="even">
 <td align="right">2</td>
 <td align="right">7</td>
-<td align="right">62</td>
-<td align="right">6</td>
-<td align="right">5</td>
-<td align="right">0.7162990</td>
-<td align="right">0.8625000</td>
+<td align="right">2</td>
+<td align="right">67</td>
+<td align="right">1</td>
+<td align="right">9</td>
+<td align="right">0.7814171</td>
+<td align="right">0.8734177</td>
 </tr>
 <tr class="odd">
 <td align="right">3</td>
+<td align="right">5</td>
+<td align="right">3</td>
+<td align="right">67</td>
+<td align="right">1</td>
 <td align="right">8</td>
-<td align="right">64</td>
-<td align="right">4</td>
-<td align="right">4</td>
-<td align="right">0.8854167</td>
-<td align="right">0.9000000</td>
+<td align="right">0.8255348</td>
+<td align="right">0.8860759</td>
 </tr>
 <tr class="even">
 <td align="right">4</td>
-<td align="right">6</td>
-<td align="right">61</td>
-<td align="right">7</td>
-<td align="right">6</td>
-<td align="right">0.7800245</td>
-<td align="right">0.8375000</td>
+<td align="right">9</td>
+<td align="right">2</td>
+<td align="right">68</td>
+<td align="right">0</td>
+<td align="right">9</td>
+<td align="right">0.6136364</td>
+<td align="right">0.8860759</td>
 </tr>
 <tr class="odd">
 <td align="right">5</td>
-<td align="right">6</td>
-<td align="right">62</td>
-<td align="right">6</td>
-<td align="right">6</td>
-<td align="right">0.8112745</td>
-<td align="right">0.8500000</td>
+<td align="right">8</td>
+<td align="right">4</td>
+<td align="right">68</td>
+<td align="right">0</td>
+<td align="right">7</td>
+<td align="right">0.7232620</td>
+<td align="right">0.9113924</td>
 </tr>
 </tbody>
 </table>
@@ -1479,13 +3553,189 @@ pre code {
 <tbody>
 <tr class="odd">
 <td align="left">FALSE</td>
-<td align="right">303</td>
-<td align="right">37</td>
+<td align="right">336</td>
+<td align="right">4</td>
 </tr>
 <tr class="even">
 <td align="left">TRUE</td>
-<td align="right">27</td>
-<td align="right">34</td>
+<td align="right">41</td>
+<td align="right">15</td>
+</tr>
+</tbody>
+</table>
+<p>Model without class weights, QuiPT cut-off = 0.01</p>
+<table>
+<thead>
+<tr class="header">
+<th align="right">fold</th>
+<th align="right">imp_ngrams</th>
+<th align="right">TP</th>
+<th align="right">TN</th>
+<th align="right">FP</th>
+<th align="right">FN</th>
+<th align="right">AUC</th>
+<th align="right">ACC</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">42</td>
+<td align="right">3</td>
+<td align="right">68</td>
+<td align="right">0</td>
+<td align="right">9</td>
+<td align="right">0.8284314</td>
+<td align="right">0.8875000</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="right">43</td>
+<td align="right">2</td>
+<td align="right">68</td>
+<td align="right">0</td>
+<td align="right">9</td>
+<td align="right">0.8569519</td>
+<td align="right">0.8860759</td>
+</tr>
+<tr class="odd">
+<td align="right">3</td>
+<td align="right">20</td>
+<td align="right">4</td>
+<td align="right">67</td>
+<td align="right">1</td>
+<td align="right">7</td>
+<td align="right">0.7573529</td>
+<td align="right">0.8987342</td>
+</tr>
+<tr class="even">
+<td align="right">4</td>
+<td align="right">44</td>
+<td align="right">4</td>
+<td align="right">68</td>
+<td align="right">0</td>
+<td align="right">7</td>
+<td align="right">0.9131016</td>
+<td align="right">0.9113924</td>
+</tr>
+<tr class="odd">
+<td align="right">5</td>
+<td align="right">40</td>
+<td align="right">4</td>
+<td align="right">68</td>
+<td align="right">0</td>
+<td align="right">7</td>
+<td align="right">0.8462567</td>
+<td align="right">0.9113924</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="right">FALSE</th>
+<th align="right">TRUE</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">FALSE</td>
+<td align="right">339</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">TRUE</td>
+<td align="right">39</td>
+<td align="right">17</td>
+</tr>
+</tbody>
+</table>
+<p>Model with class weights, QuiPT cut-off = 0.01</p>
+<table>
+<thead>
+<tr class="header">
+<th align="right">fold</th>
+<th align="right">imp_ngrams</th>
+<th align="right">TP</th>
+<th align="right">TN</th>
+<th align="right">FP</th>
+<th align="right">FN</th>
+<th align="right">AUC</th>
+<th align="right">ACC</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">42</td>
+<td align="right">3</td>
+<td align="right">68</td>
+<td align="right">0</td>
+<td align="right">9</td>
+<td align="right">0.8370098</td>
+<td align="right">0.8875000</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="right">43</td>
+<td align="right">2</td>
+<td align="right">68</td>
+<td align="right">0</td>
+<td align="right">9</td>
+<td align="right">0.8636364</td>
+<td align="right">0.8860759</td>
+</tr>
+<tr class="odd">
+<td align="right">3</td>
+<td align="right">20</td>
+<td align="right">4</td>
+<td align="right">66</td>
+<td align="right">2</td>
+<td align="right">7</td>
+<td align="right">0.7653743</td>
+<td align="right">0.8860759</td>
+</tr>
+<tr class="even">
+<td align="right">4</td>
+<td align="right">44</td>
+<td align="right">4</td>
+<td align="right">68</td>
+<td align="right">0</td>
+<td align="right">7</td>
+<td align="right">0.9050802</td>
+<td align="right">0.9113924</td>
+</tr>
+<tr class="odd">
+<td align="right">5</td>
+<td align="right">40</td>
+<td align="right">4</td>
+<td align="right">68</td>
+<td align="right">0</td>
+<td align="right">7</td>
+<td align="right">0.8502674</td>
+<td align="right">0.9113924</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="right">FALSE</th>
+<th align="right">TRUE</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">FALSE</td>
+<td align="right">338</td>
+<td align="right">2</td>
+</tr>
+<tr class="even">
+<td align="left">TRUE</td>
+<td align="right">39</td>
+<td align="right">17</td>
 </tr>
 </tbody>
 </table>
@@ -1495,60 +3745,867 @@ pre code {
 <table>
 <thead>
 <tr class="header">
+<th align="left">seq_name</th>
 <th align="right">fold</th>
-<th align="right">TP</th>
-<th align="right">TN</th>
-<th align="right">FP</th>
-<th align="right">FN</th>
-<th align="right">AUC</th>
-<th align="right">ACC</th>
+<th align="left">target</th>
+<th align="right">prob</th>
+<th align="left">pred</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
+<td align="left">P26320</td>
 <td align="right">1</td>
-<td align="right">14</td>
-<td align="right">9</td>
-<td align="right">0</td>
-<td align="right">2</td>
-<td align="right">0.9375</td>
-<td align="right">0.9200000</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
 </tr>
 <tr class="even">
-<td align="right">2</td>
-<td align="right">14</td>
-<td align="right">9</td>
-<td align="right">0</td>
-<td align="right">2</td>
-<td align="right">0.9375</td>
-<td align="right">0.9200000</td>
+<td align="left">O49079</td>
+<td align="right">1</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
 </tr>
 <tr class="odd">
+<td align="left">P27665</td>
+<td align="right">1</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="even">
+<td align="left">P00289</td>
+<td align="right">1</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="odd">
+<td align="left">P42699</td>
+<td align="right">1</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="even">
+<td align="left">Q9ZVL6</td>
+<td align="right">1</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="odd">
+<td align="left">Q9SSA5</td>
+<td align="right">1</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="even">
+<td align="left">Q9SW33</td>
+<td align="right">1</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="odd">
+<td align="left">Q9SBN6</td>
+<td align="right">1</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="even">
+<td align="left">Q9SCY2</td>
+<td align="right">1</td>
+<td align="left">TRUE</td>
+<td align="right">0.9999799</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="odd">
+<td align="left">F4J3G5</td>
+<td align="right">1</td>
+<td align="left">TRUE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="even">
+<td align="left">O22870</td>
+<td align="right">1</td>
+<td align="left">TRUE</td>
+<td align="right">1.0000000</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="odd">
+<td align="left">Q00GL7</td>
+<td align="right">1</td>
+<td align="left">TRUE</td>
+<td align="right">1.0000000</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">P93566</td>
+<td align="right">1</td>
+<td align="left">TRUE</td>
+<td align="right">1.0000000</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="odd">
+<td align="left">P43310</td>
+<td align="right">1</td>
+<td align="left">TRUE</td>
+<td align="right">1.0000000</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">Q08303</td>
+<td align="right">1</td>
+<td align="left">TRUE</td>
+<td align="right">1.0000000</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="odd">
+<td align="left">P82281</td>
+<td align="right">1</td>
+<td align="left">TRUE</td>
+<td align="right">1.0000000</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">Q9SR70</td>
+<td align="right">1</td>
+<td align="left">TRUE</td>
+<td align="right">0.9999695</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="odd">
+<td align="left">Q39195</td>
+<td align="right">1</td>
+<td align="left">TRUE</td>
+<td align="right">0.9999988</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">Q9LXX5</td>
+<td align="right">1</td>
+<td align="left">TRUE</td>
+<td align="right">1.0000000</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="odd">
+<td align="left">Q9SLQ8</td>
+<td align="right">1</td>
+<td align="left">TRUE</td>
+<td align="right">1.0000000</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">P11471</td>
+<td align="right">1</td>
+<td align="left">TRUE</td>
+<td align="right">1.0000000</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="odd">
+<td align="left">Q9MB14</td>
+<td align="right">1</td>
+<td align="left">TRUE</td>
+<td align="right">1.0000000</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">P16059</td>
+<td align="right">1</td>
+<td align="left">TRUE</td>
+<td align="right">1.0000000</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="odd">
+<td align="left">Q9SGH4</td>
+<td align="right">1</td>
+<td align="left">TRUE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="even">
+<td align="left">Q8H1Q1</td>
+<td align="right">2</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="odd">
+<td align="left">A0A4Y1YTM1</td>
+<td align="right">2</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="even">
+<td align="left">O22160</td>
+<td align="right">2</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="odd">
+<td align="left">P08248</td>
+<td align="right">2</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="even">
+<td align="left">P46483</td>
+<td align="right">2</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="odd">
+<td align="left">Q39249</td>
+<td align="right">2</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="even">
+<td align="left">Q93VA3</td>
+<td align="right">2</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="odd">
+<td align="left">Q40593</td>
+<td align="right">2</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="even">
+<td align="left">A2Y4G9</td>
+<td align="right">2</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="odd">
+<td align="left">O22682</td>
+<td align="right">2</td>
+<td align="left">TRUE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="even">
+<td align="left">Q04127</td>
+<td align="right">2</td>
+<td align="left">TRUE</td>
+<td align="right">1.0000000</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="odd">
+<td align="left">O49292</td>
+<td align="right">2</td>
+<td align="left">TRUE</td>
+<td align="right">1.0000000</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">Q84XB6</td>
+<td align="right">2</td>
+<td align="left">TRUE</td>
+<td align="right">0.9999997</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="odd">
+<td align="left">B3EWI4</td>
+<td align="right">2</td>
+<td align="left">TRUE</td>
+<td align="right">0.9999998</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">Q06215</td>
+<td align="right">2</td>
+<td align="left">TRUE</td>
+<td align="right">1.0000000</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="odd">
+<td align="left">Q9ZVZ9</td>
+<td align="right">2</td>
+<td align="left">TRUE</td>
+<td align="right">0.9999938</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">P82538</td>
+<td align="right">2</td>
+<td align="left">TRUE</td>
+<td align="right">1.0000000</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="odd">
+<td align="left">P12302</td>
+<td align="right">2</td>
+<td align="left">TRUE</td>
+<td align="right">1.0000000</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">Q9LDY5</td>
+<td align="right">2</td>
+<td align="left">TRUE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="odd">
+<td align="left">P43311</td>
+<td align="right">2</td>
+<td align="left">TRUE</td>
+<td align="right">1.0000000</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">O49080</td>
+<td align="right">2</td>
+<td align="left">TRUE</td>
+<td align="right">1.0000000</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="odd">
+<td align="left">Q9LYR5</td>
+<td align="right">2</td>
+<td align="left">TRUE</td>
+<td align="right">1.0000000</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">P31093</td>
+<td align="right">2</td>
+<td align="left">TRUE</td>
+<td align="right">0.9999969</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="odd">
+<td align="left">O82660</td>
+<td align="right">2</td>
+<td align="left">TRUE</td>
+<td align="right">1.0000000</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">Q6UIL3</td>
+<td align="right">2</td>
+<td align="left">TRUE</td>
+<td align="right">1.0000000</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="odd">
+<td align="left">Q9SCY3</td>
 <td align="right">3</td>
-<td align="right">12</td>
-<td align="right">9</td>
-<td align="right">0</td>
-<td align="right">4</td>
-<td align="right">0.8750</td>
-<td align="right">0.8400000</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
 </tr>
 <tr class="even">
-<td align="right">4</td>
-<td align="right">12</td>
-<td align="right">8</td>
-<td align="right">0</td>
-<td align="right">4</td>
-<td align="right">0.8750</td>
-<td align="right">0.8333333</td>
+<td align="left">P23321</td>
+<td align="right">3</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
 </tr>
 <tr class="odd">
+<td align="left">P12853</td>
+<td align="right">3</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="even">
+<td align="left">O23614</td>
+<td align="right">3</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="odd">
+<td align="left">P12359</td>
+<td align="right">3</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="even">
+<td align="left">P11490</td>
+<td align="right">3</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="odd">
+<td align="left">P14226</td>
+<td align="right">3</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="even">
+<td align="left">P16002</td>
+<td align="right">3</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="odd">
+<td align="left">O22646</td>
+<td align="right">3</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="even">
+<td align="left">Q40407</td>
+<td align="right">3</td>
+<td align="left">TRUE</td>
+<td align="right">1.0000000</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="odd">
+<td align="left">Q41643</td>
+<td align="right">3</td>
+<td align="left">TRUE</td>
+<td align="right">0.9999983</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">Q9LU10</td>
+<td align="right">3</td>
+<td align="left">TRUE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="odd">
+<td align="left">C0HJG3</td>
+<td align="right">3</td>
+<td align="left">TRUE</td>
+<td align="right">1.0000000</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">Q9S720</td>
+<td align="right">3</td>
+<td align="left">TRUE</td>
+<td align="right">1.0000000</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="odd">
+<td align="left">Q9SBN5</td>
+<td align="right">3</td>
+<td align="left">TRUE</td>
+<td align="right">0.9999537</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">O22773</td>
+<td align="right">3</td>
+<td align="left">TRUE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="odd">
+<td align="left">Q9LM71</td>
+<td align="right">3</td>
+<td align="left">TRUE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="even">
+<td align="left">P82715</td>
+<td align="right">3</td>
+<td align="left">TRUE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="odd">
+<td align="left">O80634</td>
+<td align="right">3</td>
+<td align="left">TRUE</td>
+<td align="right">1.0000000</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">Q9ZQS5</td>
+<td align="right">3</td>
+<td align="left">TRUE</td>
+<td align="right">1.0000000</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="odd">
+<td align="left">O22591</td>
+<td align="right">3</td>
+<td align="left">TRUE</td>
+<td align="right">1.0000000</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">P43309</td>
+<td align="right">3</td>
+<td align="left">TRUE</td>
+<td align="right">1.0000000</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="odd">
+<td align="left">Q0WRJ7</td>
+<td align="right">3</td>
+<td align="left">TRUE</td>
+<td align="right">1.0000000</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">P83646</td>
+<td align="right">3</td>
+<td align="left">TRUE</td>
+<td align="right">1.0000000</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="odd">
+<td align="left">A0A1D6KL43</td>
+<td align="right">3</td>
+<td align="left">TRUE</td>
+<td align="right">0.9999997</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">P08197</td>
+<td align="right">4</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="odd">
+<td align="left">Q40251</td>
+<td align="right">4</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="even">
+<td align="left">P18068</td>
+<td align="right">4</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="odd">
+<td align="left">P85194</td>
+<td align="right">4</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="even">
+<td align="left">O22609</td>
+<td align="right">4</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="odd">
+<td align="left">A2Y886</td>
+<td align="right">4</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="even">
+<td align="left">P00299</td>
+<td align="right">4</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="odd">
+<td align="left">P81760</td>
+<td align="right">4</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="even">
+<td align="left">O64750</td>
+<td align="right">4</td>
+<td align="left">TRUE</td>
+<td align="right">0.9999995</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="odd">
+<td align="left">Q8VY52</td>
+<td align="right">4</td>
+<td align="left">TRUE</td>
+<td align="right">1.0000000</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">Q9XI73</td>
+<td align="right">4</td>
+<td align="left">TRUE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="odd">
+<td align="left">Q8LB65</td>
+<td align="right">4</td>
+<td align="left">TRUE</td>
+<td align="right">0.9999942</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">Q00434</td>
+<td align="right">4</td>
+<td align="left">TRUE</td>
+<td align="right">1.0000000</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="odd">
+<td align="left">Q08304</td>
+<td align="right">4</td>
+<td align="left">TRUE</td>
+<td align="right">1.0000000</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">Q7XY82</td>
+<td align="right">4</td>
+<td align="left">TRUE</td>
+<td align="right">0.9999938</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="odd">
+<td align="left">P49107</td>
+<td align="right">4</td>
+<td align="left">TRUE</td>
+<td align="right">1.0000000</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">Q08296</td>
+<td align="right">4</td>
+<td align="left">TRUE</td>
+<td align="right">1.0000000</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="odd">
+<td align="left">O81864</td>
+<td align="right">4</td>
+<td align="left">TRUE</td>
+<td align="right">0.9999918</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">Q42029</td>
+<td align="right">4</td>
+<td align="left">TRUE</td>
+<td align="right">1.0000000</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="odd">
+<td align="left">O81103</td>
+<td align="right">4</td>
+<td align="left">TRUE</td>
+<td align="right">1.0000000</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">O23166</td>
+<td align="right">4</td>
+<td align="left">TRUE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="odd">
+<td align="left">Q08306</td>
+<td align="right">4</td>
+<td align="left">TRUE</td>
+<td align="right">1.0000000</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">Q9LR64</td>
+<td align="right">4</td>
+<td align="left">TRUE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="odd">
+<td align="left">Q944B0</td>
+<td align="right">4</td>
+<td align="left">TRUE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="even">
+<td align="left">Q9SM43</td>
 <td align="right">5</td>
-<td align="right">12</td>
-<td align="right">8</td>
-<td align="right">0</td>
-<td align="right">3</td>
-<td align="right">0.9000</td>
-<td align="right">0.8695652</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="odd">
+<td align="left">Q9LVV5</td>
+<td align="right">5</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="even">
+<td align="left">Q9SXW9</td>
+<td align="right">5</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="odd">
+<td align="left">P17340</td>
+<td align="right">5</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="even">
+<td align="left">P07030</td>
+<td align="right">5</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="odd">
+<td align="left">P26956</td>
+<td align="right">5</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="even">
+<td align="left">F4KHG6</td>
+<td align="right">5</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="odd">
+<td align="left">P82869</td>
+<td align="right">5</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="even">
+<td align="left">Q08307</td>
+<td align="right">5</td>
+<td align="left">TRUE</td>
+<td align="right">1.0000000</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="odd">
+<td align="left">P12852</td>
+<td align="right">5</td>
+<td align="left">TRUE</td>
+<td align="right">1.0000000</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">Q41932</td>
+<td align="right">5</td>
+<td align="left">TRUE</td>
+<td align="right">1.0000000</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="odd">
+<td align="left">Q6YUA8</td>
+<td align="right">5</td>
+<td align="left">TRUE</td>
+<td align="right">0.9999953</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">P85189</td>
+<td align="right">5</td>
+<td align="left">TRUE</td>
+<td align="right">1.0000000</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="odd">
+<td align="left">Q2V4B2</td>
+<td align="right">5</td>
+<td align="left">TRUE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="even">
+<td align="left">Q9SEL7</td>
+<td align="right">5</td>
+<td align="left">TRUE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="odd">
+<td align="left">Q5Z5A8</td>
+<td align="right">5</td>
+<td align="left">TRUE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="even">
+<td align="left">Q9THX6</td>
+<td align="right">5</td>
+<td align="left">TRUE</td>
+<td align="right">0.9999999</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="odd">
+<td align="left">P31336</td>
+<td align="right">5</td>
+<td align="left">TRUE</td>
+<td align="right">0.9999999</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">Q9XFT3</td>
+<td align="right">5</td>
+<td align="left">TRUE</td>
+<td align="right">1.0000000</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="odd">
+<td align="left">Q41048</td>
+<td align="right">5</td>
+<td align="left">TRUE</td>
+<td align="right">1.0000000</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">O23403</td>
+<td align="right">5</td>
+<td align="left">TRUE</td>
+<td align="right">1.0000000</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="odd">
+<td align="left">P12301</td>
+<td align="right">5</td>
+<td align="left">TRUE</td>
+<td align="right">1.0000000</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">Q7DM39</td>
+<td align="right">5</td>
+<td align="left">TRUE</td>
+<td align="right">1.0000000</td>
+<td align="left">TRUE</td>
 </tr>
 </tbody>
 </table>
@@ -1579,60 +4636,867 @@ pre code {
 <table>
 <thead>
 <tr class="header">
+<th align="left">seq_name</th>
 <th align="right">fold</th>
-<th align="right">TP</th>
-<th align="right">TN</th>
-<th align="right">FP</th>
-<th align="right">FN</th>
-<th align="right">AUC</th>
-<th align="right">ACC</th>
+<th align="left">target</th>
+<th align="right">prob</th>
+<th align="left">pred</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
+<td align="left">P26320</td>
 <td align="right">1</td>
-<td align="right">7</td>
-<td align="right">16</td>
-<td align="right">0</td>
-<td align="right">2</td>
-<td align="right">0.8888889</td>
-<td align="right">0.9200000</td>
+<td align="left">TRUE</td>
+<td align="right">1.0000000</td>
+<td align="left">TRUE</td>
 </tr>
 <tr class="even">
-<td align="right">2</td>
-<td align="right">6</td>
-<td align="right">16</td>
-<td align="right">0</td>
-<td align="right">3</td>
-<td align="right">0.8333333</td>
-<td align="right">0.8800000</td>
+<td align="left">O49079</td>
+<td align="right">1</td>
+<td align="left">TRUE</td>
+<td align="right">1.0000000</td>
+<td align="left">TRUE</td>
 </tr>
 <tr class="odd">
-<td align="right">3</td>
-<td align="right">7</td>
-<td align="right">15</td>
+<td align="left">P27665</td>
 <td align="right">1</td>
-<td align="right">2</td>
-<td align="right">0.8819444</td>
-<td align="right">0.8800000</td>
+<td align="left">TRUE</td>
+<td align="right">1.0000000</td>
+<td align="left">TRUE</td>
 </tr>
 <tr class="even">
+<td align="left">P00289</td>
+<td align="right">1</td>
+<td align="left">TRUE</td>
+<td align="right">1.0000000</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="odd">
+<td align="left">P42699</td>
+<td align="right">1</td>
+<td align="left">TRUE</td>
+<td align="right">1.0000000</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">Q9ZVL6</td>
+<td align="right">1</td>
+<td align="left">TRUE</td>
+<td align="right">1.0000000</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="odd">
+<td align="left">Q9SSA5</td>
+<td align="right">1</td>
+<td align="left">TRUE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="even">
+<td align="left">Q9SW33</td>
+<td align="right">1</td>
+<td align="left">TRUE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="odd">
+<td align="left">Q9SBN6</td>
+<td align="right">1</td>
+<td align="left">TRUE</td>
+<td align="right">1.0000000</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">Q9SCY2</td>
+<td align="right">1</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="odd">
+<td align="left">F4J3G5</td>
+<td align="right">1</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="even">
+<td align="left">O22870</td>
+<td align="right">1</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="odd">
+<td align="left">Q00GL7</td>
+<td align="right">1</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="even">
+<td align="left">P93566</td>
+<td align="right">1</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="odd">
+<td align="left">P43310</td>
+<td align="right">1</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="even">
+<td align="left">Q08303</td>
+<td align="right">1</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="odd">
+<td align="left">P82281</td>
+<td align="right">1</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="even">
+<td align="left">Q9SR70</td>
+<td align="right">1</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="odd">
+<td align="left">Q39195</td>
+<td align="right">1</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="even">
+<td align="left">Q9LXX5</td>
+<td align="right">1</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="odd">
+<td align="left">Q9SLQ8</td>
+<td align="right">1</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="even">
+<td align="left">P11471</td>
+<td align="right">1</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="odd">
+<td align="left">Q9MB14</td>
+<td align="right">1</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="even">
+<td align="left">P16059</td>
+<td align="right">1</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="odd">
+<td align="left">Q9SGH4</td>
+<td align="right">1</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="even">
+<td align="left">Q8H1Q1</td>
+<td align="right">2</td>
+<td align="left">TRUE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="odd">
+<td align="left">A0A4Y1YTM1</td>
+<td align="right">2</td>
+<td align="left">TRUE</td>
+<td align="right">1.0000000</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">O22160</td>
+<td align="right">2</td>
+<td align="left">TRUE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="odd">
+<td align="left">P08248</td>
+<td align="right">2</td>
+<td align="left">TRUE</td>
+<td align="right">1.0000000</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">P46483</td>
+<td align="right">2</td>
+<td align="left">TRUE</td>
+<td align="right">1.0000000</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="odd">
+<td align="left">Q39249</td>
+<td align="right">2</td>
+<td align="left">TRUE</td>
+<td align="right">1.0000000</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">Q93VA3</td>
+<td align="right">2</td>
+<td align="left">TRUE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="odd">
+<td align="left">Q40593</td>
+<td align="right">2</td>
+<td align="left">TRUE</td>
+<td align="right">1.0000000</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">A2Y4G9</td>
+<td align="right">2</td>
+<td align="left">TRUE</td>
+<td align="right">1.0000000</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="odd">
+<td align="left">O22682</td>
+<td align="right">2</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="even">
+<td align="left">Q04127</td>
+<td align="right">2</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="odd">
+<td align="left">O49292</td>
+<td align="right">2</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="even">
+<td align="left">Q84XB6</td>
+<td align="right">2</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="odd">
+<td align="left">B3EWI4</td>
+<td align="right">2</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="even">
+<td align="left">Q06215</td>
+<td align="right">2</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="odd">
+<td align="left">Q9ZVZ9</td>
+<td align="right">2</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="even">
+<td align="left">P82538</td>
+<td align="right">2</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="odd">
+<td align="left">P12302</td>
+<td align="right">2</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="even">
+<td align="left">Q9LDY5</td>
+<td align="right">2</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="odd">
+<td align="left">P43311</td>
+<td align="right">2</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="even">
+<td align="left">O49080</td>
+<td align="right">2</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="odd">
+<td align="left">Q9LYR5</td>
+<td align="right">2</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="even">
+<td align="left">P31093</td>
+<td align="right">2</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="odd">
+<td align="left">O82660</td>
+<td align="right">2</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="even">
+<td align="left">Q6UIL3</td>
+<td align="right">2</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="odd">
+<td align="left">Q9SCY3</td>
+<td align="right">3</td>
+<td align="left">TRUE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="even">
+<td align="left">P23321</td>
+<td align="right">3</td>
+<td align="left">TRUE</td>
+<td align="right">1.0000000</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="odd">
+<td align="left">P12853</td>
+<td align="right">3</td>
+<td align="left">TRUE</td>
+<td align="right">1.0000000</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">O23614</td>
+<td align="right">3</td>
+<td align="left">TRUE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="odd">
+<td align="left">P12359</td>
+<td align="right">3</td>
+<td align="left">TRUE</td>
+<td align="right">1.0000000</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">P11490</td>
+<td align="right">3</td>
+<td align="left">TRUE</td>
+<td align="right">1.0000000</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="odd">
+<td align="left">P14226</td>
+<td align="right">3</td>
+<td align="left">TRUE</td>
+<td align="right">1.0000000</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">P16002</td>
+<td align="right">3</td>
+<td align="left">TRUE</td>
+<td align="right">1.0000000</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="odd">
+<td align="left">O22646</td>
+<td align="right">3</td>
+<td align="left">TRUE</td>
+<td align="right">1.0000000</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">Q40407</td>
+<td align="right">3</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="odd">
+<td align="left">Q41643</td>
+<td align="right">3</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="even">
+<td align="left">Q9LU10</td>
+<td align="right">3</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="odd">
+<td align="left">C0HJG3</td>
+<td align="right">3</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="even">
+<td align="left">Q9S720</td>
+<td align="right">3</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="odd">
+<td align="left">Q9SBN5</td>
+<td align="right">3</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="even">
+<td align="left">O22773</td>
+<td align="right">3</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="odd">
+<td align="left">Q9LM71</td>
+<td align="right">3</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="even">
+<td align="left">P82715</td>
+<td align="right">3</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="odd">
+<td align="left">O80634</td>
+<td align="right">3</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="even">
+<td align="left">Q9ZQS5</td>
+<td align="right">3</td>
+<td align="left">FALSE</td>
+<td align="right">0.9999137</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="odd">
+<td align="left">O22591</td>
+<td align="right">3</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="even">
+<td align="left">P43309</td>
+<td align="right">3</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="odd">
+<td align="left">Q0WRJ7</td>
+<td align="right">3</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="even">
+<td align="left">P83646</td>
+<td align="right">3</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="odd">
+<td align="left">A0A1D6KL43</td>
+<td align="right">3</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="even">
+<td align="left">P08197</td>
 <td align="right">4</td>
-<td align="right">5</td>
-<td align="right">15</td>
-<td align="right">1</td>
-<td align="right">3</td>
-<td align="right">0.8007812</td>
-<td align="right">0.8333333</td>
+<td align="left">TRUE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
 </tr>
 <tr class="odd">
+<td align="left">Q40251</td>
+<td align="right">4</td>
+<td align="left">TRUE</td>
+<td align="right">1.0000000</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">P18068</td>
+<td align="right">4</td>
+<td align="left">TRUE</td>
+<td align="right">1.0000000</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="odd">
+<td align="left">P85194</td>
+<td align="right">4</td>
+<td align="left">TRUE</td>
+<td align="right">1.0000000</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">O22609</td>
+<td align="right">4</td>
+<td align="left">TRUE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="odd">
+<td align="left">A2Y886</td>
+<td align="right">4</td>
+<td align="left">TRUE</td>
+<td align="right">1.0000000</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">P00299</td>
+<td align="right">4</td>
+<td align="left">TRUE</td>
+<td align="right">1.0000000</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="odd">
+<td align="left">P81760</td>
+<td align="right">4</td>
+<td align="left">TRUE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="even">
+<td align="left">O64750</td>
+<td align="right">4</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="odd">
+<td align="left">Q8VY52</td>
+<td align="right">4</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="even">
+<td align="left">Q9XI73</td>
+<td align="right">4</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="odd">
+<td align="left">Q8LB65</td>
+<td align="right">4</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="even">
+<td align="left">Q00434</td>
+<td align="right">4</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="odd">
+<td align="left">Q08304</td>
+<td align="right">4</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="even">
+<td align="left">Q7XY82</td>
+<td align="right">4</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="odd">
+<td align="left">P49107</td>
+<td align="right">4</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="even">
+<td align="left">Q08296</td>
+<td align="right">4</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="odd">
+<td align="left">O81864</td>
+<td align="right">4</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="even">
+<td align="left">Q42029</td>
+<td align="right">4</td>
+<td align="left">FALSE</td>
+<td align="right">0.9996995</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="odd">
+<td align="left">O81103</td>
+<td align="right">4</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="even">
+<td align="left">O23166</td>
+<td align="right">4</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="odd">
+<td align="left">Q08306</td>
+<td align="right">4</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="even">
+<td align="left">Q9LR64</td>
+<td align="right">4</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="odd">
+<td align="left">Q944B0</td>
+<td align="right">4</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="even">
+<td align="left">Q9SM43</td>
 <td align="right">5</td>
+<td align="left">TRUE</td>
+<td align="right">1.0000000</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="odd">
+<td align="left">Q9LVV5</td>
 <td align="right">5</td>
-<td align="right">15</td>
-<td align="right">0</td>
-<td align="right">3</td>
-<td align="right">0.8125000</td>
-<td align="right">0.8695652</td>
+<td align="left">TRUE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="even">
+<td align="left">Q9SXW9</td>
+<td align="right">5</td>
+<td align="left">TRUE</td>
+<td align="right">1.0000000</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="odd">
+<td align="left">P17340</td>
+<td align="right">5</td>
+<td align="left">TRUE</td>
+<td align="right">1.0000000</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">P07030</td>
+<td align="right">5</td>
+<td align="left">TRUE</td>
+<td align="right">1.0000000</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="odd">
+<td align="left">P26956</td>
+<td align="right">5</td>
+<td align="left">TRUE</td>
+<td align="right">1.0000000</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">F4KHG6</td>
+<td align="right">5</td>
+<td align="left">TRUE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="odd">
+<td align="left">P82869</td>
+<td align="right">5</td>
+<td align="left">TRUE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="even">
+<td align="left">Q08307</td>
+<td align="right">5</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="odd">
+<td align="left">P12852</td>
+<td align="right">5</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="even">
+<td align="left">Q41932</td>
+<td align="right">5</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="odd">
+<td align="left">Q6YUA8</td>
+<td align="right">5</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="even">
+<td align="left">P85189</td>
+<td align="right">5</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="odd">
+<td align="left">Q2V4B2</td>
+<td align="right">5</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="even">
+<td align="left">Q9SEL7</td>
+<td align="right">5</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="odd">
+<td align="left">Q5Z5A8</td>
+<td align="right">5</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="even">
+<td align="left">Q9THX6</td>
+<td align="right">5</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="odd">
+<td align="left">P31336</td>
+<td align="right">5</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="even">
+<td align="left">Q9XFT3</td>
+<td align="right">5</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="odd">
+<td align="left">Q41048</td>
+<td align="right">5</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="even">
+<td align="left">O23403</td>
+<td align="right">5</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="odd">
+<td align="left">P12301</td>
+<td align="right">5</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="even">
+<td align="left">Q7DM39</td>
+<td align="right">5</td>
+<td align="left">FALSE</td>
+<td align="right">0.0000000</td>
+<td align="left">FALSE</td>
 </tr>
 </tbody>
 </table>
@@ -1657,1294 +5521,6 @@ pre code {
 </tr>
 </tbody>
 </table>
-</div>
-<div id="full-model-performance" class="section level2">
-<h2>Full model performance</h2>
-<ul>
-<li>Without decision model - our set of decision rules</li>
-<li>Decision model - random forest based on prediction results according to the model architecture (e.g. nuclear-encoded non-membrane proteins are predicted only using Sec and Tat model)</li>
-<li>Decision model for all - random forest based on prediction results from all models (all proteins are predicted by all models)</li>
-</ul>
-<p>Models with QuiPT cut-off = 0.001, without case weights, without decision model</p>
-<table>
-<thead>
-<tr class="header">
-<th align="left"></th>
-<th align="right">N_IM</th>
-<th align="right">N_OM</th>
-<th align="right">N_S</th>
-<th align="right">N_TL_SEC</th>
-<th align="right">N_TL_TAT</th>
-<th align="right">N_TM</th>
-<th align="right">P_IM</th>
-<th align="right">P_S</th>
-<th align="right">P_TM</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">N_IM</td>
-<td align="right">12</td>
-<td align="right">0</td>
-<td align="right">19</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">21</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">6</td>
-</tr>
-<tr class="even">
-<td align="left">N_OM</td>
-<td align="right">0</td>
-<td align="right">11</td>
-<td align="right">26</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">13</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">11</td>
-</tr>
-<tr class="odd">
-<td align="left">N_S</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">295</td>
-<td align="right">2</td>
-<td align="right">1</td>
-<td align="right">23</td>
-<td align="right">0</td>
-<td align="right">9</td>
-<td align="right">10</td>
-</tr>
-<tr class="even">
-<td align="left">N_TL_SEC</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">9</td>
-<td align="right">30</td>
-<td align="right">1</td>
-<td align="right">2</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">1</td>
-</tr>
-<tr class="odd">
-<td align="left">N_TL_TAT</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">10</td>
-<td align="right">0</td>
-<td align="right">45</td>
-<td align="right">19</td>
-<td align="right">0</td>
-<td align="right">2</td>
-<td align="right">3</td>
-</tr>
-<tr class="even">
-<td align="left">N_TM</td>
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="right">38</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">162</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">27</td>
-</tr>
-<tr class="odd">
-<td align="left">P_IM</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">123</td>
-<td align="right">0</td>
-<td align="right">4</td>
-</tr>
-<tr class="even">
-<td align="left">P_S</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">10</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">2</td>
-<td align="right">412</td>
-<td align="right">34</td>
-</tr>
-<tr class="odd">
-<td align="left">P_TM</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">6</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">1254</td>
-</tr>
-</tbody>
-</table>
-<pre><code>## [1] &quot;plastogram_CV accuracy: 0.88286252354049&quot;</code></pre>
-<p>Models with QuiPT cut-off = 0.001, with case weights, without decision model</p>
-<table>
-<thead>
-<tr class="header">
-<th align="left"></th>
-<th align="right">N_IM</th>
-<th align="right">N_OM</th>
-<th align="right">N_S</th>
-<th align="right">N_TL_SEC</th>
-<th align="right">N_TL_TAT</th>
-<th align="right">N_TM</th>
-<th align="right">P_IM</th>
-<th align="right">P_S</th>
-<th align="right">P_TM</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">N_IM</td>
-<td align="right">27</td>
-<td align="right">0</td>
-<td align="right">19</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">8</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">4</td>
-</tr>
-<tr class="even">
-<td align="left">N_OM</td>
-<td align="right">1</td>
-<td align="right">17</td>
-<td align="right">23</td>
-<td align="right">0</td>
-<td align="right">1</td>
-<td align="right">9</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">10</td>
-</tr>
-<tr class="odd">
-<td align="left">N_S</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">301</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">25</td>
-<td align="right">0</td>
-<td align="right">7</td>
-<td align="right">7</td>
-</tr>
-<tr class="even">
-<td align="left">N_TL_SEC</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">11</td>
-<td align="right">28</td>
-<td align="right">1</td>
-<td align="right">2</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">1</td>
-</tr>
-<tr class="odd">
-<td align="left">N_TL_TAT</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">10</td>
-<td align="right">1</td>
-<td align="right">44</td>
-<td align="right">16</td>
-<td align="right">0</td>
-<td align="right">4</td>
-<td align="right">4</td>
-</tr>
-<tr class="even">
-<td align="left">N_TM</td>
-<td align="right">7</td>
-<td align="right">2</td>
-<td align="right">36</td>
-<td align="right">0</td>
-<td align="right">1</td>
-<td align="right">159</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">23</td>
-</tr>
-<tr class="odd">
-<td align="left">P_IM</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">124</td>
-<td align="right">0</td>
-<td align="right">3</td>
-</tr>
-<tr class="even">
-<td align="left">P_S</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">10</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">3</td>
-<td align="right">417</td>
-<td align="right">28</td>
-</tr>
-<tr class="odd">
-<td align="left">P_TM</td>
-<td align="right">2</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">6</td>
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="right">1251</td>
-</tr>
-</tbody>
-</table>
-<pre><code>## [1] &quot;plastogram_cases_CV accuracy: 0.891902071563089&quot;</code></pre>
-<p>Models with QuiPT cut-off = 0.001, without case weights, with decision model</p>
-<table>
-<thead>
-<tr class="header">
-<th align="left"></th>
-<th align="right">N_IM</th>
-<th align="right">N_OM</th>
-<th align="right">N_S</th>
-<th align="right">N_TL_SEC</th>
-<th align="right">N_TL_TAT</th>
-<th align="right">N_TM</th>
-<th align="right">P_IM</th>
-<th align="right">P_S</th>
-<th align="right">P_TM</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">N_IM</td>
-<td align="right">24</td>
-<td align="right">0</td>
-<td align="right">20</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">8</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">6</td>
-</tr>
-<tr class="even">
-<td align="left">N_OM</td>
-<td align="right">0</td>
-<td align="right">18</td>
-<td align="right">23</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">10</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">10</td>
-</tr>
-<tr class="odd">
-<td align="left">N_S</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">294</td>
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="right">27</td>
-<td align="right">0</td>
-<td align="right">12</td>
-<td align="right">6</td>
-</tr>
-<tr class="even">
-<td align="left">N_TL_SEC</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">10</td>
-<td align="right">29</td>
-<td align="right">2</td>
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">1</td>
-</tr>
-<tr class="odd">
-<td align="left">N_TL_TAT</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">14</td>
-<td align="right">0</td>
-<td align="right">40</td>
-<td align="right">19</td>
-<td align="right">0</td>
-<td align="right">2</td>
-<td align="right">4</td>
-</tr>
-<tr class="even">
-<td align="left">N_TM</td>
-<td align="right">3</td>
-<td align="right">1</td>
-<td align="right">36</td>
-<td align="right">0</td>
-<td align="right">1</td>
-<td align="right">162</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">25</td>
-</tr>
-<tr class="odd">
-<td align="left">P_IM</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">125</td>
-<td align="right">0</td>
-<td align="right">2</td>
-</tr>
-<tr class="even">
-<td align="left">P_S</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">8</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">1</td>
-<td align="right">422</td>
-<td align="right">27</td>
-</tr>
-<tr class="odd">
-<td align="left">P_TM</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">7</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">1252</td>
-</tr>
-</tbody>
-</table>
-<pre><code>## [1] &quot;plastogram_decision_model_CV accuracy: 0.891148775894539&quot;</code></pre>
-<p>Models with QuiPT cut-off = 0.001, with case weights, with decision model</p>
-<table>
-<thead>
-<tr class="header">
-<th align="left"></th>
-<th align="right">N_IM</th>
-<th align="right">N_OM</th>
-<th align="right">N_S</th>
-<th align="right">N_TL_SEC</th>
-<th align="right">N_TL_TAT</th>
-<th align="right">N_TM</th>
-<th align="right">P_IM</th>
-<th align="right">P_S</th>
-<th align="right">P_TM</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">N_IM</td>
-<td align="right">15</td>
-<td align="right">0</td>
-<td align="right">19</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">18</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">6</td>
-</tr>
-<tr class="even">
-<td align="left">N_OM</td>
-<td align="right">0</td>
-<td align="right">11</td>
-<td align="right">26</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">13</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">11</td>
-</tr>
-<tr class="odd">
-<td align="left">N_S</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">294</td>
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="right">26</td>
-<td align="right">0</td>
-<td align="right">11</td>
-<td align="right">8</td>
-</tr>
-<tr class="even">
-<td align="left">N_TL_SEC</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">7</td>
-<td align="right">30</td>
-<td align="right">1</td>
-<td align="right">4</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">1</td>
-</tr>
-<tr class="odd">
-<td align="left">N_TL_TAT</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">11</td>
-<td align="right">0</td>
-<td align="right">44</td>
-<td align="right">18</td>
-<td align="right">0</td>
-<td align="right">2</td>
-<td align="right">4</td>
-</tr>
-<tr class="even">
-<td align="left">N_TM</td>
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="right">36</td>
-<td align="right">0</td>
-<td align="right">1</td>
-<td align="right">166</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">24</td>
-</tr>
-<tr class="odd">
-<td align="left">P_IM</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">116</td>
-<td align="right">0</td>
-<td align="right">11</td>
-</tr>
-<tr class="even">
-<td align="left">P_S</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">9</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">2</td>
-<td align="right">420</td>
-<td align="right">27</td>
-</tr>
-<tr class="odd">
-<td align="left">P_TM</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">7</td>
-<td align="right">0</td>
-<td align="right">1</td>
-<td align="right">1252</td>
-</tr>
-</tbody>
-</table>
-<pre><code>## [1] &quot;plastogram_decision_model_cases_CV accuracy: 0.884369114877589&quot;</code></pre>
-<p>Models with QuiPT cut-off = 0.001, without case weights, with decision model for all proteins</p>
-<table>
-<thead>
-<tr class="header">
-<th align="left"></th>
-<th align="right">N_IM</th>
-<th align="right">N_OM</th>
-<th align="right">N_S</th>
-<th align="right">N_TL_SEC</th>
-<th align="right">N_TL_TAT</th>
-<th align="right">N_TM</th>
-<th align="right">P_IM</th>
-<th align="right">P_S</th>
-<th align="right">P_TM</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">N_IM</td>
-<td align="right">16</td>
-<td align="right">0</td>
-<td align="right">24</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">13</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">5</td>
-</tr>
-<tr class="even">
-<td align="left">N_OM</td>
-<td align="right">0</td>
-<td align="right">13</td>
-<td align="right">28</td>
-<td align="right">2</td>
-<td align="right">0</td>
-<td align="right">8</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">10</td>
-</tr>
-<tr class="odd">
-<td align="left">N_S</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">306</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">18</td>
-<td align="right">0</td>
-<td align="right">11</td>
-<td align="right">5</td>
-</tr>
-<tr class="even">
-<td align="left">N_TL_SEC</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">10</td>
-<td align="right">28</td>
-<td align="right">3</td>
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">1</td>
-</tr>
-<tr class="odd">
-<td align="left">N_TL_TAT</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">7</td>
-<td align="right">0</td>
-<td align="right">57</td>
-<td align="right">11</td>
-<td align="right">0</td>
-<td align="right">2</td>
-<td align="right">2</td>
-</tr>
-<tr class="even">
-<td align="left">N_TM</td>
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="right">46</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">162</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">19</td>
-</tr>
-<tr class="odd">
-<td align="left">P_IM</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">122</td>
-<td align="right">1</td>
-<td align="right">4</td>
-</tr>
-<tr class="even">
-<td align="left">P_S</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">11</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">424</td>
-<td align="right">23</td>
-</tr>
-<tr class="odd">
-<td align="left">P_TM</td>
-<td align="right">0</td>
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">6</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">1252</td>
-</tr>
-</tbody>
-</table>
-<pre><code>## [1] &quot;plastogram_decision_model_for_all_CV accuracy: 0.896421845574388&quot;</code></pre>
-<p>Models with QuiPT cut-off = 0.001, with case weights, with decision model for all proteins</p>
-<table>
-<thead>
-<tr class="header">
-<th align="left"></th>
-<th align="right">N_IM</th>
-<th align="right">N_OM</th>
-<th align="right">N_S</th>
-<th align="right">N_TL_SEC</th>
-<th align="right">N_TL_TAT</th>
-<th align="right">N_TM</th>
-<th align="right">P_IM</th>
-<th align="right">P_S</th>
-<th align="right">P_TM</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">N_IM</td>
-<td align="right">9</td>
-<td align="right">0</td>
-<td align="right">24</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">17</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">8</td>
-</tr>
-<tr class="even">
-<td align="left">N_OM</td>
-<td align="right">0</td>
-<td align="right">13</td>
-<td align="right">28</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">10</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">10</td>
-</tr>
-<tr class="odd">
-<td align="left">N_S</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">298</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">25</td>
-<td align="right">0</td>
-<td align="right">12</td>
-<td align="right">5</td>
-</tr>
-<tr class="even">
-<td align="left">N_TL_SEC</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">9</td>
-<td align="right">29</td>
-<td align="right">2</td>
-<td align="right">2</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">1</td>
-</tr>
-<tr class="odd">
-<td align="left">N_TL_TAT</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">15</td>
-<td align="right">0</td>
-<td align="right">49</td>
-<td align="right">11</td>
-<td align="right">0</td>
-<td align="right">2</td>
-<td align="right">2</td>
-</tr>
-<tr class="even">
-<td align="left">N_TM</td>
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="right">44</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">164</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">19</td>
-</tr>
-<tr class="odd">
-<td align="left">P_IM</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">102</td>
-<td align="right">1</td>
-<td align="right">24</td>
-</tr>
-<tr class="even">
-<td align="left">P_S</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">8</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">425</td>
-<td align="right">25</td>
-</tr>
-<tr class="odd">
-<td align="left">P_TM</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">8</td>
-<td align="right">0</td>
-<td align="right">1</td>
-<td align="right">1251</td>
-</tr>
-</tbody>
-</table>
-<pre><code>## [1] &quot;plastogram_decision_model_for_all_cases_CV accuracy: 0.88135593220339&quot;</code></pre>
-<p>Models with QuiPT cut-off = 0.001, with case weights, with stroma model, with decision model</p>
-<table>
-<thead>
-<tr class="header">
-<th align="left"></th>
-<th align="right">N_IM</th>
-<th align="right">N_OM</th>
-<th align="right">N_S</th>
-<th align="right">N_TL_SEC</th>
-<th align="right">N_TL_TAT</th>
-<th align="right">N_TM</th>
-<th align="right">P_IM</th>
-<th align="right">P_S</th>
-<th align="right">P_TM</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">N_IM</td>
-<td align="right">15</td>
-<td align="right">0</td>
-<td align="right">9</td>
-<td align="right">1</td>
-<td align="right">10</td>
-<td align="right">17</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">6</td>
-</tr>
-<tr class="even">
-<td align="left">N_OM</td>
-<td align="right">0</td>
-<td align="right">17</td>
-<td align="right">15</td>
-<td align="right">1</td>
-<td align="right">7</td>
-<td align="right">10</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">11</td>
-</tr>
-<tr class="odd">
-<td align="left">N_S</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">249</td>
-<td align="right">6</td>
-<td align="right">43</td>
-<td align="right">24</td>
-<td align="right">0</td>
-<td align="right">10</td>
-<td align="right">8</td>
-</tr>
-<tr class="even">
-<td align="left">N_TL_SEC</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">5</td>
-<td align="right">33</td>
-<td align="right">2</td>
-<td align="right">2</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">1</td>
-</tr>
-<tr class="odd">
-<td align="left">N_TL_TAT</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">4</td>
-<td align="right">2</td>
-<td align="right">49</td>
-<td align="right">19</td>
-<td align="right">0</td>
-<td align="right">1</td>
-<td align="right">4</td>
-</tr>
-<tr class="even">
-<td align="left">N_TM</td>
-<td align="right">2</td>
-<td align="right">0</td>
-<td align="right">21</td>
-<td align="right">2</td>
-<td align="right">15</td>
-<td align="right">167</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">21</td>
-</tr>
-<tr class="odd">
-<td align="left">P_IM</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="right">116</td>
-<td align="right">0</td>
-<td align="right">11</td>
-</tr>
-<tr class="even">
-<td align="left">P_S</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">7</td>
-<td align="right">0</td>
-<td align="right">2</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">415</td>
-<td align="right">34</td>
-</tr>
-<tr class="odd">
-<td align="left">P_TM</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">7</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">1253</td>
-</tr>
-</tbody>
-</table>
-<pre><code>## [1] &quot;plastogram_stroma_and_decision_model_cases_CV accuracy: 0.871563088512241&quot;</code></pre>
-<p>Models with QuiPT cut-off = 0.001, with case weights, with stroma model, with decision model for all</p>
-<table>
-<thead>
-<tr class="header">
-<th align="left"></th>
-<th align="right">N_IM</th>
-<th align="right">N_OM</th>
-<th align="right">N_S</th>
-<th align="right">N_TL_SEC</th>
-<th align="right">N_TL_TAT</th>
-<th align="right">N_TM</th>
-<th align="right">P_IM</th>
-<th align="right">P_S</th>
-<th align="right">P_TM</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">N_IM</td>
-<td align="right">7</td>
-<td align="right">0</td>
-<td align="right">7</td>
-<td align="right">1</td>
-<td align="right">5</td>
-<td align="right">33</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">5</td>
-</tr>
-<tr class="even">
-<td align="left">N_OM</td>
-<td align="right">0</td>
-<td align="right">13</td>
-<td align="right">10</td>
-<td align="right">0</td>
-<td align="right">13</td>
-<td align="right">15</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">10</td>
-</tr>
-<tr class="odd">
-<td align="left">N_S</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">250</td>
-<td align="right">3</td>
-<td align="right">39</td>
-<td align="right">39</td>
-<td align="right">0</td>
-<td align="right">3</td>
-<td align="right">6</td>
-</tr>
-<tr class="even">
-<td align="left">N_TL_SEC</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">3</td>
-<td align="right">29</td>
-<td align="right">7</td>
-<td align="right">3</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">1</td>
-</tr>
-<tr class="odd">
-<td align="left">N_TL_TAT</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">3</td>
-<td align="right">0</td>
-<td align="right">61</td>
-<td align="right">13</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">2</td>
-</tr>
-<tr class="even">
-<td align="left">N_TM</td>
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="right">16</td>
-<td align="right">3</td>
-<td align="right">16</td>
-<td align="right">175</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">17</td>
-</tr>
-<tr class="odd">
-<td align="left">P_IM</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">114</td>
-<td align="right">0</td>
-<td align="right">13</td>
-</tr>
-<tr class="even">
-<td align="left">P_S</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">7</td>
-<td align="right">0</td>
-<td align="right">1</td>
-<td align="right">2</td>
-<td align="right">1</td>
-<td align="right">416</td>
-<td align="right">31</td>
-</tr>
-<tr class="odd">
-<td align="left">P_TM</td>
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">10</td>
-<td align="right">0</td>
-<td align="right">1</td>
-<td align="right">1248</td>
-</tr>
-</tbody>
-</table>
-<pre><code>## [1] &quot;plastogram_stroma_and_decision_model_for_all_cases_CV accuracy: 0.871186440677966&quot;</code></pre>
-<p>Models with QuiPT cut-off = 0.001, without case weights, with OM_Stroma model, with decision model</p>
-<table>
-<thead>
-<tr class="header">
-<th align="left"></th>
-<th align="right">N_IM</th>
-<th align="right">N_OM</th>
-<th align="right">N_S</th>
-<th align="right">N_TL_SEC</th>
-<th align="right">N_TL_TAT</th>
-<th align="right">N_TM</th>
-<th align="right">P_IM</th>
-<th align="right">P_S</th>
-<th align="right">P_TM</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">N_IM</td>
-<td align="right">25</td>
-<td align="right">0</td>
-<td align="right">16</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">10</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">7</td>
-</tr>
-<tr class="even">
-<td align="left">N_OM</td>
-<td align="right">1</td>
-<td align="right">18</td>
-<td align="right">23</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">9</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">10</td>
-</tr>
-<tr class="odd">
-<td align="left">N_S</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">298</td>
-<td align="right">0</td>
-<td align="right">1</td>
-<td align="right">20</td>
-<td align="right">0</td>
-<td align="right">14</td>
-<td align="right">7</td>
-</tr>
-<tr class="even">
-<td align="left">N_TL_SEC</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">10</td>
-<td align="right">30</td>
-<td align="right">0</td>
-<td align="right">2</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">1</td>
-</tr>
-<tr class="odd">
-<td align="left">N_TL_TAT</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">11</td>
-<td align="right">0</td>
-<td align="right">46</td>
-<td align="right">15</td>
-<td align="right">0</td>
-<td align="right">2</td>
-<td align="right">5</td>
-</tr>
-<tr class="even">
-<td align="left">N_TM</td>
-<td align="right">3</td>
-<td align="right">0</td>
-<td align="right">39</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">160</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">26</td>
-</tr>
-<tr class="odd">
-<td align="left">P_IM</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">125</td>
-<td align="right">0</td>
-<td align="right">2</td>
-</tr>
-<tr class="even">
-<td align="left">P_S</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">10</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">2</td>
-<td align="right">424</td>
-<td align="right">22</td>
-</tr>
-<tr class="odd">
-<td align="left">P_TM</td>
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">6</td>
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="right">1252</td>
-</tr>
-</tbody>
-</table>
-<pre><code>## [1] &quot;plastogram_OM_stroma_and_decision_model_CV accuracy: 0.895668549905838&quot;</code></pre>
-<p>Models with QuiPT cut-off = 0.001, with case weights, with OM_Stroma model, with decision model</p>
-<table>
-<thead>
-<tr class="header">
-<th align="left"></th>
-<th align="right">N_IM</th>
-<th align="right">N_OM</th>
-<th align="right">N_S</th>
-<th align="right">N_TL_SEC</th>
-<th align="right">N_TL_TAT</th>
-<th align="right">N_TM</th>
-<th align="right">P_IM</th>
-<th align="right">P_S</th>
-<th align="right">P_TM</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">N_IM</td>
-<td align="right">15</td>
-<td align="right">0</td>
-<td align="right">22</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">16</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">5</td>
-</tr>
-<tr class="even">
-<td align="left">N_OM</td>
-<td align="right">0</td>
-<td align="right">14</td>
-<td align="right">26</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">11</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">10</td>
-</tr>
-<tr class="odd">
-<td align="left">N_S</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">301</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">23</td>
-<td align="right">0</td>
-<td align="right">12</td>
-<td align="right">4</td>
-</tr>
-<tr class="even">
-<td align="left">N_TL_SEC</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">7</td>
-<td align="right">31</td>
-<td align="right">2</td>
-<td align="right">2</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">1</td>
-</tr>
-<tr class="odd">
-<td align="left">N_TL_TAT</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">8</td>
-<td align="right">1</td>
-<td align="right">45</td>
-<td align="right">17</td>
-<td align="right">0</td>
-<td align="right">5</td>
-<td align="right">3</td>
-</tr>
-<tr class="even">
-<td align="left">N_TM</td>
-<td align="right">2</td>
-<td align="right">0</td>
-<td align="right">37</td>
-<td align="right">0</td>
-<td align="right">1</td>
-<td align="right">162</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">26</td>
-</tr>
-<tr class="odd">
-<td align="left">P_IM</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">113</td>
-<td align="right">0</td>
-<td align="right">14</td>
-</tr>
-<tr class="even">
-<td align="left">P_S</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">10</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">426</td>
-<td align="right">22</td>
-</tr>
-<tr class="odd">
-<td align="left">P_TM</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">7</td>
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="right">1252</td>
-</tr>
-</tbody>
-</table>
-<pre><code>## [1] &quot;plastogram_OM_stroma_and_decision_model_cases_CV accuracy: 0.888512241054614&quot;</code></pre>
 </div>
 
 

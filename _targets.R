@@ -624,7 +624,7 @@ list(
                                paste0(data_path, "Architectures_performance.csv"))
   ),
   tar_target(
-    mean_architecture_perfromance,
+    mean_architecture_performance,
     get_mean_performance_of_architectures(architectures_performance,
                                           paste0(data_path, "Architectures_mean_performance.csv"))
   )
