@@ -14,6 +14,7 @@ library(targets)
 library(dplyr)
 
 tar_load(list.files("./_targets/objects"))
+source("functions/ngram_model_functions.R")
 
 ```
 
@@ -100,6 +101,7 @@ kable(OM_Stroma_CV_res_stats)
 ```
 QuiPT cut-off = 0.01
 ```{r}
+OM_Stroma_CV_2_res_stats <- get_cv_res_summary(OM_Stroma_CV_2, "TRUE")
 kable(OM_Stroma_CV_2_res_stats)
 ```
 FCBF

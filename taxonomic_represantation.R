@@ -12,19 +12,12 @@ plot_tax_rep <- function(dat, set) {
     coord_flip() +
     theme_bw() +
     ggtitle(set) 
-  ggsave(filename = paste0("plots/Tax_rep_", set, ".png"), plot = p, width = 10, height = nrow(dat)/4)
+  ggsave(filename = paste0("results/Tax_rep_plots/Tax_rep_", set, ".png"), plot = p, width = 10, height = nrow(dat)/4, limitsize = FALSE)
 }
 
 
-ntm <- read_fasta("N_TM.fa")
-
-dplg <- ntm[which(sapply(ntm, function(i) grepl("DPLG", paste(i, collapse = ""))))]
-
-write_fasta(dplg, file = "dplg.fa")
-
-
-df <- read_xlsx("/media/kasia/Data/Dropbox/Projekty/BioNgramProjects/PlastoGram/Annotations/All_proteins.xlsx")
-ntl <- read_fasta("N_TL_TAT.fa")
+df <- read_xlsx("/media/kasia/Data/Dropbox/Projekty/BioNgramProjects/PlastoGram/Dataset_annotations_references.xlsx")
+# Dropbox link to the file: https://www.dropbox.com/s/wuewgtk6c0mnwrd/Dataset_annotations_references.xlsx
 
 tax_rep <- df %>% 
   filter(!(Final_dataset %in% c("-", "P_TL_SEC"))) %>% 
@@ -46,12 +39,10 @@ tax_rep_to_plot <- df %>%
   summarise(count = ifelse(n() == 1, count, n()))
   
 
-lapply(unique(filter(tax_rep_to_plot, Final_dataset %in% c("N_OM", "N_TM", "N_S", "N_TL_SEC", "N_TL_TAT"))[["Final_dataset"]]), function(ith_set) {
+lapply(unique(filter(tax_rep_to_plot, Final_dataset %in% c("N_OM", "N_IM", "N_TM", "N_S", "N_TL_SEC", "N_TL_TAT", "P_IM"))[["Final_dataset"]]), function(ith_set) {
   filter(tax_rep_to_plot, Final_dataset == ith_set) %>% 
   plot_tax_rep(ith_set)
 })
-
-plot_tax_rep(filter(tax_rep, Final_dataset == "N_IM"), "N_IM")
 
 
 tax_rep_to_plot_p <- df %>% 
@@ -65,7 +56,7 @@ tax_rep_to_plot_p <- df %>%
   summarise(count = ifelse(n() == 1, count, n()))
 
 
-lapply(unique(filter(tax_rep_to_plot, Final_dataset %in% c("P_TM", "P_S", "P_IM"))[["Final_dataset"]]), function(ith_set) {
+lapply(unique(filter(tax_rep_to_plot, Final_dataset %in% c("P_TM", "P_S"))[["Final_dataset"]]), function(ith_set) {
   filter(tax_rep_to_plot_p, Final_dataset == ith_set) %>% 
     plot_tax_rep(ith_set)
 })

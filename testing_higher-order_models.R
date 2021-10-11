@@ -3,7 +3,7 @@ library(nnet)
 library(dplyr)
 library(measures)
 
-all_models_results <- readRDS("~/RProjects/PlastoGram-analysis/data/all_models_results.rds")
+all_models_results <- readRDS("./data/all_models_results.rds")
 
 dat <- select(all_models_results, c("dataset", "fold", "Nuclear", "Membrane", "Tat", "Sec", "IM", "OM", "TM", "P_IM"))
 dat[is.na(dat)] <- 0

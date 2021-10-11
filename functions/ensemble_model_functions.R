@@ -9,14 +9,14 @@ create_folds <- function(target_df, n_fold) {
   left_join(target_df, folds, by = "seq_name")
 }
 
-train_ngram_models <- function(model_df, ngram_matrix, data_df, ith_fold) {
+train_ngram_models <- function(model_df, ngram_matrix, data_df, filtering_colname, filtering_term) {
   df <- filter(model_df, Input_data == "ngrams")
   lapply(1:nrow(df), function(i) {
-    print(paste0("Training ", df[["Model_name"]][i], " fold ", ith_fold))
+    #print(paste0("Training ", df[["Model_name"]][i], " fold ", ith_fold))
     if(df[["Input_filtering"]][i] != "") {
-      filtering <- paste0("fold != ", ith_fold, " & ", df[["Input_filtering"]][i])
+      filtering <- paste0(filtering_colname, " != ", filtering_term, " & ", df[["Input_filtering"]][i])
     } else {
-      filtering <- paste0("fold != ", ith_fold)
+      filtering <- paste0(filtering_colname, " != ", filtering_term)
     }
     selected <- filter(data_df, eval(parse(text = filtering)))[["seq_name"]]
     target <- data_df[[df[["Target_name"]][i]]][which(data_df[["seq_name"]] %in% selected)]
@@ -40,13 +40,13 @@ train_ngram_models <- function(model_df, ngram_matrix, data_df, ith_fold) {
   }) %>% setNames(df[["Model_name"]])
 }
 
-train_profile_HMM_models <- function(model_df, sequences, data_df, ith_fold) {
+train_profile_HMM_models <- function(model_df, sequences, data_df, filtering_colname, filtering_term) {
   df <- filter(model_df, Input_data == "sequences")
   lapply(1:nrow(df), function(i) {
     if(df[["Input_filtering"]][i] != "") {
-      filtering <- paste0("fold != ", ith_fold, " & ", df[["Input_filtering"]][i])
+      filtering <- paste0(filtering_colname, " != ", filtering_term, " & ", df[["Input_filtering"]][i])
     } else {
-      filtering <- paste0("fold != ", ith_fold)
+      filtering <- paste0(filtering_colname, " != ", filtering_term)
     }
     train_seq <- sequences[names(sequences) %in% filter(data_df, eval(parse(text = filtering)))[["seq_name"]]]
     train_profileHMM(train_seq, df[["Model_name"]][i])
@@ -118,8 +118,8 @@ get_all_models_predictions <- function(ngram_matrix, sequences, data_df, model_d
     test_df <- filter(data_df, fold == ith_fold)
     test_seqs <- sequences[which(names(sequences) %in% test_df[["seq_name"]])]
     
-    ngram_models <- train_ngram_models(model_df, ngram_matrix, data_df, ith_fold)
-    hmm_models <- train_profile_HMM_models(model_df, sequences, data_df, ith_fold)
+    ngram_models <- train_ngram_models(model_df, ngram_matrix, data_df, "fold", ith_fold)
+    hmm_models <- train_profile_HMM_models(model_df, sequences, data_df, "fold", ith_fold)
     
     predict_with_all_models(model_df, data_df, test_dat, test_df, test_seqs, ngram_models, ith_fold)
   }) %>% bind_rows()
@@ -218,9 +218,9 @@ evaluate_all_architectures <- function(res_files, outfile) {
         N_TM_sensitivity = TPR(ifelse(dat[["dataset"]] == "N_TM", TRUE, FALSE),
                                ifelse(dat[["Prediction"]] == "N_TM", TRUE, FALSE), TRUE),
         N_S_sensitivity = TPR(ifelse(dat[["dataset"]] == "N_S", TRUE, FALSE),
-                               ifelse(dat[["Prediction"]] == "N_S", TRUE, FALSE), TRUE),
+                              ifelse(dat[["Prediction"]] == "N_S", TRUE, FALSE), TRUE),
         N_TL_SEC_sensitivity = TPR(ifelse(dat[["dataset"]] == "N_TL_SEC", TRUE, FALSE),
-                               ifelse(dat[["Prediction"]] == "N_TL_SEC", TRUE, FALSE), TRUE),
+                                   ifelse(dat[["Prediction"]] == "N_TL_SEC", TRUE, FALSE), TRUE),
         N_TL_TAT_sensitivity = TPR(ifelse(dat[["dataset"]] == "N_TL_TAT", TRUE, FALSE),
                                    ifelse(dat[["Prediction"]] == "N_TL_TAT", TRUE, FALSE), TRUE),
         P_IM_sensitivity = TPR(ifelse(dat[["dataset"]] == "P_IM", TRUE, FALSE),
@@ -233,4 +233,24 @@ evaluate_all_architectures <- function(res_files, outfile) {
     }) %>% bind_rows()
   }) %>% bind_rows()
   write.csv(performance_results, outfile, row.names = FALSE)
+  performance_results
+}
+
+
+get_mean_performance_of_architectures <- function(performance_results, outfile) {
+  summ <- performance_results %>% 
+    group_by(model) %>% 
+    summarise(mean_AU1U = mean(AU1U),
+              mean_kappa = mean(kappa),
+              mean_N_IM_sensitivity = mean(N_IM_sensitivity),
+              mean_N_OM_sensitivity = mean(N_OM_sensitivity),
+              mean_N_TM_sensitivity = mean(N_TM_sensitivity),
+              mean_N_S_sensitivity = mean(N_S_sensitivity),
+              mean_N_TL_SEC_sensitivity = mean(N_TL_SEC_sensitivity),
+              mean_N_TL_TAT_sensitivity = mean(N_TL_TAT_sensitivity),
+              mean_P_IM_sensitivity = mean(P_IM_sensitivity),
+              mean_P_TM_sensitivity = mean(P_TM_sensitivity),
+              mean_P_S_sensitivity = mean(P_S_sensitivity))
+  write.csv(summ, outfile, row.names = FALSE)
+  summ
 }

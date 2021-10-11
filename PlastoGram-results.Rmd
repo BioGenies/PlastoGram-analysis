@@ -37,96 +37,270 @@ lapply(seq_types, function(ith_type) {
 
 ## Plastid_Nuclear model performance
 
-Model without case weights, QuiPT cut-off = 0.001
+Model without class weights, QuiPT cut-off = 0.001
 ```{r}
 kable(Plastid_Nuclear_CV_res_stats)
 kable(table(Plastid_Nuclear_CV[["target"]], Plastid_Nuclear_CV[["pred"]]))
 ```
 
-Model without case weights, QuiPT cut-off = 0.00001
+Model without class weights, QuiPT cut-off = 0.00001
 ```{r}
 kable(Plastid_Nuclear_CV_2_res_stats)
 kable(table(Plastid_Nuclear_CV_2[["target"]], Plastid_Nuclear_CV_2[["pred"]]))
 ```
 
-Model with case weights, QuiPT cut-off = 0.001
+Model with class weights, QuiPT cut-off = 0.001
 ```{r}
-kable(Plastid_Nuclear_cases_CV_res_stats)
-kable(table(Plastid_Nuclear_cases_CV[["target"]], Plastid_Nuclear_cases_CV[["pred"]]))
+kable(Plastid_Nuclear_cw_CV_res_stats)
+kable(table(Plastid_Nuclear_cw_CV[["target"]], Plastid_Nuclear_cw_CV[["pred"]]))
 ```
 
 
 ## Membrane_Notmembrane model performance
 
-Model without case weights, QuiPT cut-off = 0.001
+Model without class weights, QuiPT cut-off = 0.001
 ```{r}
 kable(Membrane_Notmembrane_CV_res_stats)
 kable(table(Membrane_Notmembrane_CV[["target"]], Membrane_Notmembrane_CV[["pred"]]))
 ```
 
-Model with case weights, QuiPT cut-off = 0.001
+Model with class weights, QuiPT cut-off = 0.001
 ```{r}
-kable(Membrane_Notmembrane_cases_CV_res_stats)
-kable(table(Membrane_Notmembrane_cases_CV[["target"]], Membrane_Notmembrane_cases_CV[["pred"]]))
+kable(Membrane_Notmembrane_cw_CV_res_stats)
+kable(table(Membrane_Notmembrane_cw_CV[["target"]], Membrane_Notmembrane_cw_CV[["pred"]]))
 ```
 
 
 ## Membrane_Plastid model performance
 
-Model without case weights, QuiPT cut-off = 0.001
+Model without class weights, QuiPT cut-off = 0.001
 ```{r}
 kable(Membrane_Plastid_CV_res_stats)
 kable(table(Membrane_Plastid_CV[["target"]], Membrane_Plastid_CV[["pred"]]))
 ```
 
-Model with case weights, QuiPT cut-off = 0.001
+Model with class weights, QuiPT cut-off = 0.001
 ```{r}
-kable(Membrane_Plastid_cases_CV_res_stats)
-kable(table(Membrane_Plastid_cases_CV[["target"]], Membrane_Plastid_cases_CV[["pred"]]))
+kable(Membrane_Plastid_cw_CV_res_stats)
+kable(table(Membrane_Plastid_cw_CV[["target"]], Membrane_Plastid_cw_CV[["pred"]]))
 ```
 
 
 ## Membrane_Nuclear model performance
 
-Model without case weights, QuiPT cut-off = 0.001
+Model without class weights, QuiPT cut-off = 0.001
 ```{r}
 kable(Membrane_Nuclear_CV_res_stats)
 kable(table(Membrane_Nuclear_CV[["target"]], Membrane_Nuclear_CV[["pred"]]))
 ```
 
-Model with case weights, QuiPT cut-off = 0.001
+Model without class weights, QuiPT cut-off = 0.01
 ```{r}
-kable(Membrane_Nuclear_cases_CV_res_stats)
-kable(table(Membrane_Nuclear_cases_CV[["target"]], Membrane_Nuclear_cases_CV[["pred"]]))
+kable(Membrane_Nuclear_CV_2_res_stats)
+kable(table(Membrane_Nuclear_CV_2[["target"]], Membrane_Nuclear_CV_2[["pred"]]))
 ```
+
+Model without class weights, QuiPT cut-off = 0.05
+```{r}
+kable(Membrane_Nuclear_CV_3_res_stats)
+kable(table(Membrane_Nuclear_CV_3[["target"]], Membrane_Nuclear_CV_3[["pred"]]))
+```
+
+Model with class weights, QuiPT cut-off = 0.001
+```{r}
+kable(Membrane_Nuclear_cw_CV_res_stats)
+kable(table(Membrane_Nuclear_cw_CV[["target"]], Membrane_Nuclear_cw_CV[["pred"]]))
+```
+
+Model with class weights, QuiPT cut-off = 0.01
+```{r}
+kable(Membrane_Nuclear_cw_CV_2_res_stats)
+kable(table(Membrane_Nuclear_cw_CV_2[["target"]], Membrane_Nuclear_cw_CV_2[["pred"]]))
+```
+
+Model with class weights, QuiPT cut-off = 0.05
+```{r}
+kable(Membrane_Nuclear_cw_CV_3_res_stats)
+kable(table(Membrane_Nuclear_cw_CV_3[["target"]], Membrane_Nuclear_cw_CV_3[["pred"]]))
+```
+
+
+## Nuclear OM vs. other membrane model performance
+
+Model without class weights, QuiPT cut-off = 0.001
+```{r}
+kable(OM_other_membrane_CV_res_stats)
+kable(table(OM_other_membrane_CV[["target"]], OM_other_membrane_CV[["pred"]]))
+```
+
+Model with class weights, QuiPT cut-off = 0.001
+```{r}
+kable(OM_other_membrane_cw_CV_res_stats)
+kable(table(OM_other_membrane_cw_CV[["target"]], OM_other_membrane_cw_CV[["pred"]]))
+```
+
+Model without class weights, QuiPT cut-off = 0.01
+```{r}
+kable(OM_other_membrane_CV_2_res_stats)
+kable(table(OM_other_membrane_CV_2[["target"]], OM_other_membrane_CV_2[["pred"]]))
+```
+
+Model with class weights, QuiPT cut-off = 0.01
+```{r}
+kable(OM_other_membrane_cw_CV_2_res_stats)
+kable(table(OM_other_membrane_cw_CV_2[["target"]], OM_other_membrane_cw_CV_2[["pred"]]))
+```
+
+
+## Nuclear IM vs. other membrane model performance
+
+Model without class weights, QuiPT cut-off = 0.001
+```{r}
+kable(IM_other_membrane_CV_res_stats)
+kable(table(IM_other_membrane_CV[["target"]], IM_other_membrane_CV[["pred"]]))
+```
+
+Model with class weights, QuiPT cut-off = 0.001
+```{r}
+kable(IM_other_membrane_cw_CV_res_stats)
+kable(table(IM_other_membrane_cw_CV[["target"]], IM_other_membrane_cw_CV[["pred"]]))
+```
+
+<!-- Model without class weights, QuiPT cut-off = 0.01 -->
+<!-- ```{r} -->
+<!-- kable(IM_other_membrane_CV_2_res_stats) -->
+<!-- kable(table(IM_other_membrane_CV_2[["target"]], IM_other_membrane_CV_2[["pred"]])) -->
+<!-- ``` -->
+
+Model with class weights, QuiPT cut-off = 0.01
+```{r}
+kable(IM_other_membrane_cw_CV_2_res_stats)
+kable(table(IM_other_membrane_cw_CV_2[["target"]], IM_other_membrane_cw_CV_2[["pred"]]))
+```
+
+
+## Nuclear TM vs. other membrane model performance
+
+Model without class weights, QuiPT cut-off = 0.001
+```{r}
+kable(TM_other_membrane_CV_res_stats)
+kable(table(TM_other_membrane_CV[["target"]], TM_other_membrane_CV[["pred"]]))
+```
+
+Model with class weights, QuiPT cut-off = 0.001
+```{r}
+kable(TM_other_membrane_cw_CV_res_stats)
+kable(table(TM_other_membrane_cw_CV[["target"]], TM_other_membrane_cw_CV[["pred"]]))
+```
+
+Model without class weights, QuiPT cut-off = 0.01
+```{r}
+kable(TM_other_membrane_CV_2_res_stats)
+kable(table(TM_other_membrane_CV_2[["target"]], TM_other_membrane_CV_2[["pred"]]))
+```
+
+Model with class weights, QuiPT cut-off = 0.01
+```{r}
+kable(TM_other_membrane_cw_CV_2_res_stats)
+kable(table(TM_other_membrane_cw_CV_2[["target"]], TM_other_membrane_cw_CV_2[["pred"]]))
+```
+
 
 ## Stroma model performance
 
-Model without case weights, QuiPT cut-off = 0.001
+Model without class weights, QuiPT cut-off = 0.001
 ```{r}
 kable(Stroma_CV_res_stats)
 kable(table(Stroma_CV[["target"]], Stroma_CV[["pred"]]))
 ```
 
-Model with case weights, QuiPT cut-off = 0.001
+Model with class weights, QuiPT cut-off = 0.001
 ```{r}
-kable(Stroma_cases_CV_res_stats)
-kable(table(Stroma_cases_CV[["target"]], Stroma_cases_CV[["pred"]]))
+kable(Stroma_cw_CV_res_stats)
+kable(table(Stroma_cw_CV[["target"]], Stroma_cw_CV[["pred"]]))
 ```
+
+
+## Plastid stroma model performance
+
+Model without class weights, QuiPT cut-off = 0.001
+```{r}
+kable(P_stroma_CV_res_stats)
+kable(table(P_stroma_CV[["target"]], P_stroma_CV[["pred"]]))
+```
+
+Model with class weights, QuiPT cut-off = 0.001
+```{r}
+kable(P_stroma_cw_CV_res_stats)
+kable(table(P_stroma_cw_CV[["target"]], P_stroma_cw_CV[["pred"]]))
+```
+
+Model without class weights, QuiPT cut-off = 0.01
+```{r}
+kable(P_stroma_CV_2_res_stats)
+kable(table(P_stroma_CV[["target"]], P_stroma_CV[["pred"]]))
+```
+
+Model with class weights, QuiPT cut-off = 0.01
+```{r}
+kable(P_stroma_cw_CV_2_res_stats)
+kable(table(P_stroma_cw_CV_2[["target"]], P_stroma_cw_CV_2[["pred"]]))
+```
+
+
+## Nuclear stroma model performance
+
+Model without class weights, QuiPT cut-off = 0.001
+```{r}
+kable(N_stroma_CV_res_stats)
+kable(table(N_stroma_CV[["target"]], N_stroma_CV[["pred"]]))
+```
+
+Model with class weights, QuiPT cut-off = 0.001
+```{r}
+kable(N_stroma_cw_CV_res_stats)
+kable(table(N_stroma_cw_CV[["target"]], N_stroma_cw_CV[["pred"]]))
+```
+
+Model without class weights, QuiPT cut-off = 0.01
+```{r}
+kable(N_stroma_CV_2_res_stats)
+kable(table(N_stroma_CV_2[["target"]], N_stroma_CV_2[["pred"]]))
+```
+
+Model with class weights, QuiPT cut-off = 0.01
+```{r}
+kable(N_stroma_cw_CV_2_res_stats)
+kable(table(N_stroma_cw_CV_2[["target"]], N_stroma_cw_CV_2[["pred"]]))
+```
+
 
 ## OM_Stroma model performance
 
-Model without case weights, QuiPT cut-off = 0.001
+Model without class weights, QuiPT cut-off = 0.001
 ```{r}
 kable(OM_Stroma_CV_res_stats)
 kable(table(OM_Stroma_CV[["target"]], OM_Stroma_CV[["pred"]]))
 ```
 
-Model with case weights, QuiPT cut-off = 0.001
+Model with class weights, QuiPT cut-off = 0.001
 ```{r}
-kable(OM_Stroma_cases_CV_res_stats)
-kable(table(OM_Stroma_cases_CV[["target"]], OM_Stroma_cases_CV[["pred"]]))
+kable(OM_Stroma_cw_CV_res_stats)
+kable(table(OM_Stroma_cw_CV[["target"]], OM_Stroma_cw_CV[["pred"]]))
 ```
+
+Model without class weights, QuiPT cut-off = 0.01
+```{r}
+kable(OM_Stroma_CV_2_res_stats)
+kable(table(OM_Stroma_CV_2[["target"]], OM_Stroma_CV_2[["pred"]]))
+```
+
+Model with class weights, QuiPT cut-off = 0.01
+```{r}
+kable(OM_Stroma_cw_CV_2_res_stats)
+kable(table(OM_Stroma_cw_CV_2[["target"]], OM_Stroma_cw_CV_2[["pred"]]))
+```
+
 
 ## Tat model performance
 ```{r}
@@ -144,69 +318,3 @@ kable(table(sec_res[["target"]], sec_res[["pred"]]))
 ```
 
 
-## Full model performance
-
-- Without decision model - our set of decision rules
-- Decision model - random forest based on prediction results according to the model architecture (e.g. nuclear-encoded non-membrane proteins are predicted only using Sec and Tat model)
-- Decision model for all - random forest based on prediction results from all models (all proteins are predicted by all models)
-
-
-Models with QuiPT cut-off = 0.001, without case weights, without decision model
-```{r}
-kable(table(plastogram_CV[["dataset"]], plastogram_CV[["Decision"]]))
-print(paste0("plastogram_CV accuracy: ", ACC(plastogram_CV[["dataset"]], plastogram_CV[["Decision"]])))
-```
-
-Models with QuiPT cut-off = 0.001, with case weights, without decision model
-```{r}
-kable(table(plastogram_cases_CV[["dataset"]], plastogram_cases_CV[["Decision"]]))
-print(paste0("plastogram_cases_CV accuracy: ", ACC(plastogram_cases_CV[["dataset"]], plastogram_cases_CV[["Decision"]])))
-```
-
-Models with QuiPT cut-off = 0.001, without case weights, with decision model
-```{r}
-kable(table(plastogram_decision_model_CV[["dataset"]], plastogram_decision_model_CV[["prediction"]]))
-print(paste0("plastogram_decision_model_CV accuracy: ", ACC(plastogram_decision_model_CV[["dataset"]], plastogram_decision_model_CV[["prediction"]])))
-```
-
-Models with QuiPT cut-off = 0.001, with case weights, with decision model
-```{r}
-kable(table(plastogram_decision_model_cases_CV[["dataset"]], plastogram_decision_model_cases_CV[["prediction"]]))
-print(paste0("plastogram_decision_model_cases_CV accuracy: ", ACC(plastogram_decision_model_cases_CV[["dataset"]], plastogram_decision_model_cases_CV[["prediction"]])))
-```
-
-Models with QuiPT cut-off = 0.001, without case weights, with decision model for all proteins
-```{r}
-kable(table(plastogram_decision_model_for_all_CV[["dataset"]], plastogram_decision_model_for_all_CV[["prediction"]]))
-print(paste0("plastogram_decision_model_for_all_CV accuracy: ", ACC(plastogram_decision_model_for_all_CV[["dataset"]], plastogram_decision_model_for_all_CV[["prediction"]])))
-```
-
-Models with QuiPT cut-off = 0.001, with case weights, with decision model for all proteins
-```{r}
-kable(table(plastogram_decision_model_for_all_cases_CV[["dataset"]], plastogram_decision_model_for_all_cases_CV[["prediction"]]))
-print(paste0("plastogram_decision_model_for_all_cases_CV accuracy: ", ACC(plastogram_decision_model_for_all_cases_CV[["dataset"]], plastogram_decision_model_for_all_cases_CV[["prediction"]])))
-```
-
-Models with QuiPT cut-off = 0.001, with case weights, with stroma model, with decision model 
-```{r}
-kable(table(plastogram_stroma_and_decision_model_cases_CV[["dataset"]], plastogram_stroma_and_decision_model_cases_CV[["prediction"]]))
-print(paste0("plastogram_stroma_and_decision_model_cases_CV accuracy: ", ACC(plastogram_stroma_and_decision_model_cases_CV[["dataset"]], plastogram_stroma_and_decision_model_cases_CV[["prediction"]])))
-```
-
-Models with QuiPT cut-off = 0.001, with case weights, with stroma model, with decision model for all
-```{r}
-kable(table(plastogram_stroma_and_decision_model_for_all_cases_CV[["dataset"]], plastogram_stroma_and_decision_model_for_all_cases_CV[["prediction"]]))
-print(paste0("plastogram_stroma_and_decision_model_for_all_cases_CV accuracy: ", ACC(plastogram_stroma_and_decision_model_for_all_cases_CV[["dataset"]], plastogram_stroma_and_decision_model_for_all_cases_CV[["prediction"]])))
-```
-
-Models with QuiPT cut-off = 0.001, without case weights, with OM_Stroma model, with decision model
-```{r}
-kable(table(plastogram_OM_stroma_and_decision_model_CV[["dataset"]], plastogram_OM_stroma_and_decision_model_CV[["prediction"]]))
-print(paste0("plastogram_OM_stroma_and_decision_model_CV accuracy: ", ACC(plastogram_OM_stroma_and_decision_model_CV[["dataset"]], plastogram_OM_stroma_and_decision_model_CV[["prediction"]])))
-```
-
-Models with QuiPT cut-off = 0.001, with case weights, with OM_Stroma model, with decision model
-```{r}
-kable(table(plastogram_OM_stroma_and_decision_model_cases_CV[["dataset"]], plastogram_OM_stroma_and_decision_model_cases_CV[["prediction"]]))
-print(paste0("plastogram_OM_stroma_and_decision_model_cases_CV accuracy: ", ACC(plastogram_OM_stroma_and_decision_model_cases_CV[["dataset"]], plastogram_OM_stroma_and_decision_model_cases_CV[["prediction"]])))
-```
