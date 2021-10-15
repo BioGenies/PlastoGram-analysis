@@ -12,13 +12,21 @@ create_folds <- function(target_df, n_fold) {
 train_ngram_models <- function(model_df, ngram_matrix, data_df, filtering_colname, filtering_term) {
   df <- filter(model_df, Input_data == "ngrams")
   lapply(1:nrow(df), function(i) {
-    #print(paste0("Training ", df[["Model_name"]][i], " fold ", ith_fold))
-    if(df[["Input_filtering"]][i] != "") {
-      filtering <- paste0(filtering_colname, " != ", filtering_term, " & ", df[["Input_filtering"]][i])
-    } else {
-      filtering <- paste0(filtering_colname, " != ", filtering_term)
+    selected <- if(is.null(filtering_colname) & is.null(filtering_term)) {
+      if(df[["Input_filtering"]][i] != "") {
+        filtering <- paste0(df[["Input_filtering"]][i])
+        filter(data_df, eval(parse(text = filtering)))[["seq_name"]]
+      } else {
+        data_df[["seq_name"]]
+      }
+    } else { 
+      filtering <- if(df[["Input_filtering"]][i] != "") {
+        paste0(filtering_colname, " != ", filtering_term, " & ", df[["Input_filtering"]][i])
+      } else {
+        paste0(filtering_colname, " != ", filtering_term)
+      }
+      filter(data_df, eval(parse(text = filtering)))[["seq_name"]]
     }
-    selected <- filter(data_df, eval(parse(text = filtering)))[["seq_name"]]
     target <- data_df[[df[["Target_name"]][i]]][which(data_df[["seq_name"]] %in% selected)]
     train_dat <- ngram_matrix[which(data_df[["seq_name"]] %in% selected), ]
     imp_ngrams <- if(df[["Multiclass"]][i] == TRUE) {
@@ -27,9 +35,9 @@ train_ngram_models <- function(model_df, ngram_matrix, data_df, filtering_colnam
           unname(
             get_imp_ngrams_mc(train_dat, 
                               data_df[which(data_df[["seq_name"]] %in% selected), ],
-                              df[["Target_name"]][i]))))
+                              df[["Target_name"]][i], cutoff = 0.01))))
     } else{
-      calc_imp_ngrams(train_dat, as.logical(target))
+      calc_imp_ngrams(train_dat, as.logical(target), cutoff = 0.01)
     }
     if(grepl("SMOTE", df[["Model_name"]][i])) {
       train_rf(train_dat, target, imp_ngrams, with_class_weights = FALSE, smote = TRUE)
@@ -118,8 +126,8 @@ get_all_models_predictions <- function(ngram_matrix, sequences, data_df, model_d
     test_df <- filter(data_df, fold == ith_fold)
     test_seqs <- sequences[which(names(sequences) %in% test_df[["seq_name"]])]
     
-    ngram_models <- train_ngram_models(model_df, ngram_matrix, data_df, "fold", ith_fold)
-    hmm_models <- train_profile_HMM_models(model_df, sequences, data_df, "fold", ith_fold)
+    ngram_models <- train_ngram_models(model_df, ngram_matrix, data_df, filtering_colname = "fold", filtering_term =  ith_fold)
+    hmm_models <- train_profile_HMM_models(model_df, sequences, data_df, filtering_colname = "fold", filtering_term = ith_fold)
     
     predict_with_all_models(model_df, data_df, test_dat, test_df, test_seqs, ngram_models, ith_fold)
   }) %>% bind_rows()
