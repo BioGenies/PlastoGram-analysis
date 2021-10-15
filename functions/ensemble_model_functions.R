@@ -279,3 +279,9 @@ get_mean_performance_of_architectures <- function(performance_results, outfile) 
   summ
 }
 
+
+train_glm <- function(prediction_results, data_df) {
+  train_dat <- left_join(prediction_results, data_df[, c("seq_name", "dataset")], by = "seq_name")
+  train_dat[is.na(train_dat)] <- 0
+  multinom(dataset ~ ., data = train_dat, model = TRUE, MaxNWts = 25000)
+}

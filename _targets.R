@@ -638,18 +638,23 @@ list(
   ),
   tar_target(
     PlastoGram_hmm_Sec,
-    train_profileHMM(N_TL_SEC_seqs, "PlastoGram_Sec_model", remove_files = TRUE),
+    paste0(train_profileHMM(N_TL_SEC_seqs, "PlastoGram_Sec_model", remove_files = TRUE), ".hmm"),
     format = "file"
   ),
   tar_target(
     PlastoGram_hmm_Tat,
-    train_profileHMM(N_TL_TAT_seqs, "PlastoGram_Tat_model", remove_files = TRUE),
+    paste0(train_profileHMM(N_TL_TAT_seqs, "PlastoGram_Tat_model", remove_files = TRUE), ".hmm"),
     format = "file"
   ),
   tar_target(
     PlastoGram_predictions,
     predict_with_all_models(PlastoGram_final_architecture, ngram_matrix, data_df_final, c(N_seqs, P_seqs), PlastoGram_ngram_models, 
-                            list("Sec_model" = PlastoGram_hmm_Sec, "Tat_model" = PlastoGram_hmm_Tat), ith_fold = NULL, remove_hmm_files = FALSE)
+                            list("Sec_model" = gsub(".hmm", "", PlastoGram_hmm_Sec), "Tat_model" = gsub(".hmm", "", PlastoGram_hmm_Tat)), 
+                            ith_fold = NULL, remove_hmm_files = FALSE)
+  ),
+  tar_target(
+    PlastoGram_glm_model,
+    train_glm(PlastoGram_predictions, data_df_final)
   )
 )
 
