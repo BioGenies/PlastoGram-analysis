@@ -5,7 +5,7 @@ train_profileHMM <- function(train_seqs, model_name, remove_files = TRUE) {
   if(remove_files == TRUE) {
     file.remove(c("train_seqs.fa", "train_seqs_aln.fa"))
   }
-  paste0(model_name, ".hmm")
+    model_name
 }
 
 predict_profileHMM <- function(test_seqs, model_name, remove_files = TRUE) {

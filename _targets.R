@@ -630,20 +630,20 @@ list(
   ),
   tar_target(
     PlastoGram_final_architecture,
-    read.csv(paste0(data_path, "Model_architectures/Architecture_v8_1-2_No_filtering.csv"))
+    read.csv(paste0(data_path, "Model_architectures/Architecture_v6_2-4_No_filtering.csv"))
   ),
   tar_target(
     PlastoGram_ngram_models,
     train_ngram_models(PlastoGram_final_architecture, ngram_matrix, data_df_final, filtering_colname = NULL, filtering_term = NULL)
   ),
   tar_target(
-    PlatoGram_hmm_Sec,
-    train_profile_HMM(N_TL_SEC_seqs, "PlastoGram_Sec_model", remove_files = TRUE),
+    PlastoGram_hmm_Sec,
+    train_profileHMM(N_TL_SEC_seqs, "PlastoGram_Sec_model", remove_files = TRUE),
     format = "file"
   ),
   tar_target(
-    PlatoGram_hmm_Tat,
-    train_profile_HMM(N_TL_TAT_seqs, "PlastoGram_Tat_model", remove_files = TRUE),
+    PlastoGram_hmm_Tat,
+    train_profileHMM(N_TL_TAT_seqs, "PlastoGram_Tat_model", remove_files = TRUE),
     format = "file"
   ),
   tar_target(

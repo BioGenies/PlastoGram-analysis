@@ -202,8 +202,7 @@ filter_results_for_single_architecture <- function(architecture_file, all_models
 }
 
 
-generate_results_for_architectures <- function(architecture_file_list, all_models_results_file, outdir, data_df) {
-  all_models_results <- read.csv(all_models_results_file)
+generate_results_for_architectures <- function(architecture_file_list, all_models_results, outdir, data_df) {
   lapply(architecture_file_list, function(ith_file) {
     model <- gsub(".csv", "", last(strsplit(ith_file, "/")[[1]]))
     res <- left_join(data_df[, c("seq_name", "dataset")], 
