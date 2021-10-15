@@ -601,7 +601,7 @@ list(
   ),
   tar_target(
     all_models_predictions,
-    get_all_models_predictions(ngram_matrix, c(N_seqs, P_seqs), data_df_final, model_dat, data_path)
+    get_all_models_predictions(ngram_matrix, c(N_seqs, P_seqs), data_df_final, model_dat, data_path, remove_hmm_files = TRUE)
   ),
   tar_target(
     architecture_files,
@@ -637,12 +637,19 @@ list(
     train_ngram_models(PlastoGram_final_architecture, ngram_matrix, data_df_final, filtering_colname = NULL, filtering_term = NULL)
   ),
   tar_target(
-    PlatoGram_hmm_models,
-    train_profile_HMM_models(PlastoGram_final_architecture, c(N_seqs, P_seqs), data_df_final, filtering_colname = NULL, filtering_term = NULL)
+    PlatoGram_hmm_Sec,
+    train_profile_HMM(N_TL_SEC_seqs, "PlastoGram_Sec_model", remove_files = TRUE),
+    format = "file"
+  ),
+  tar_target(
+    PlatoGram_hmm_Tat,
+    train_profile_HMM(N_TL_TAT_seqs, "PlastoGram_Tat_model", remove_files = TRUE),
+    format = "file"
   ),
   tar_target(
     PlastoGram_predictions,
-    predict_with_all_models(PlastoGram_final_architecture, ngram_matrix, data_df_final, c(N_seqs, P_seqs), PlastoGram_ngram_models, ith_fold = NULL)
+    predict_with_all_models(PlastoGram_final_architecture, ngram_matrix, data_df_final, c(N_seqs, P_seqs), PlastoGram_ngram_models, 
+                            list("Sec_model" = PlastoGram_hmm_Sec, "Tat_model" = PlastoGram_hmm_Tat), ith_fold = NULL, remove_hmm_files = FALSE)
   )
 )
 

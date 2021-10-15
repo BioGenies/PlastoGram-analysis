@@ -103,7 +103,8 @@ calculate_evaluation_order <- function(model_df) {
 }
 
 
-predict_with_all_models <- function(model_df, test_ngram_matrix, test_df, test_sequences, ngram_models, ith_fold) {
+predict_with_all_models <- function(model_df, test_ngram_matrix, test_df, test_sequences, ngram_models, 
+                                    hmm_models = list("Sec_model" = "Sec_model", "Tat_model" = "Tat_model"), ith_fold, remove_hmm_files = TRUE) {
   all_preds <- lapply(1:nrow(model_df), function(i) {
     results <- if(model_df[["Input_data"]][i] == "ngrams") {
       if(model_df[["Multiclass"]][i] == TRUE) {
@@ -118,7 +119,7 @@ predict_with_all_models <- function(model_df, test_ngram_matrix, test_df, test_s
       }
       
     } else if(model_df[["Input_data"]][i] == "sequences") {
-      predict_profileHMM(test_sequences, model_df[["Model_name"]][i]) %>% 
+      predict_profileHMM(test_sequences, hmm_models[model_df[["Model_name"]][i]], remove_files = remove_hmm_files) %>% 
         mutate(pred = (2^sequence_score) / (1+2^sequence_score)) %>% 
         select(c("domain_name", "pred")) %>% 
         setNames(c("seq_name", model_df[["Model_name"]][i]))
@@ -133,7 +134,7 @@ predict_with_all_models <- function(model_df, test_ngram_matrix, test_df, test_s
   }
 }
 
-get_all_models_predictions <- function(ngram_matrix, sequences, data_df, model_df, data_path) {
+get_all_models_predictions <- function(ngram_matrix, sequences, data_df, model_df, data_path, remove_hmm_files = FALSE) {
   
   res <- lapply(unique(data_df[["fold"]]), function(ith_fold) {
     dat <- ngram_matrix[data_df[["fold"]] != ith_fold, ]
@@ -144,7 +145,7 @@ get_all_models_predictions <- function(ngram_matrix, sequences, data_df, model_d
     ngram_models <- train_ngram_models(model_df, ngram_matrix, data_df, filtering_colname = "fold", filtering_term =  ith_fold)
     hmm_models <- train_profile_HMM_models(model_df, sequences, data_df, filtering_colname = "fold", filtering_term = ith_fold)
     
-    predict_with_all_models(model_df, test_dat, test_df, test_seqs, ngram_models, ith_fold)
+    predict_with_all_models(model_df, test_dat, test_df, test_seqs, ngram_models, hmm_models, ith_fold, remove_hmm_files = remove_hmm_files)
   }) %>% bind_rows()
   write.csv(res, paste0(data_path, "All_models_predictions.csv"), row.names = FALSE)
   res
@@ -278,3 +279,4 @@ get_mean_performance_of_architectures <- function(performance_results, outfile) 
   write.csv(summ, outfile, row.names = FALSE)
   summ
 }
+
