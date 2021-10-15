@@ -610,7 +610,7 @@ list(
   tar_target(
     architecture_results,
     generate_results_for_architectures(architecture_files,
-                                       paste0(data_path, "All_models_predictions.csv"),
+                                       all_models_predictions,
                                        paste0(data_path, "Model_architectures_results/"),
                                        data_df_final)
   ),
@@ -627,6 +627,22 @@ list(
     mean_architecture_performance,
     get_mean_performance_of_architectures(architectures_performance,
                                           paste0(data_path, "Architectures_mean_performance.csv"))
+  ),
+  tar_target(
+    PlastoGram_final_architecture,
+    read.csv(paste0(data_path, "Model_architectures/Architecture_v8_1-2_No_filtering.csv"))
+  ),
+  tar_target(
+    PlastoGram_ngram_models,
+    train_ngram_models(PlastoGram_final_architecture, ngram_matrix, data_df_final, filtering_colname = NULL, filtering_term = NULL)
+  ),
+  tar_target(
+    PlatoGram_hmm_models,
+    train_profile_HMM_models(PlastoGram_final_architecture, c(N_seqs, P_seqs), data_df_final, filtering_colname = NULL, filtering_term = NULL)
+  ),
+  tar_target(
+    PlastoGram_predictions,
+    predict_with_all_models(PlastoGram_final_architecture, ngram_matrix, data_df_final, c(N_seqs, P_seqs), PlastoGram_ngram_models, ith_fold = NULL)
   )
 )
 
