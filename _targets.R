@@ -630,7 +630,7 @@ list(
   ),
   tar_target(
     PlastoGram_final_architecture,
-    read.csv(paste0(data_path, "Model_architectures/Architecture_v6_2-4_No_filtering.csv"))
+    read.csv(paste0(data_path, "Final_PlastoGram_model_architecture.csv"))
   ),
   tar_target(
     PlastoGram_ngram_models,
