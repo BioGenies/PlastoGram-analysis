@@ -124,49 +124,13 @@ filter(arch_dat, measure %in% c("mean_N_TL_SEC_sensitivity", "mean_N_TL_TAT_sens
 ```
 
 
-## Performance of all architectures based on variant 8
-
-Mean Kappa and AU1U
+## Performance of the six best architectures (according to mean kappa value) in 10-fold CV
 ```{r fig.height=12}
-plot_dat <- filter(arch_dat, arch_variant == "v8", hierarchical == FALSE) %>% 
-  pivot_wider(names_from = "measure", values_from = "value") %>% 
-  mutate(models = case_when(sec == TRUE & tat == TRUE ~ "with Sec and Tat",
-                            sec == FALSE & tat == TRUE ~ "without Sec",
-                            sec == TRUE & tat == FALSE ~ "without Tat"),
-         type = gsub("_Filtering_0.5", "", gsub("Architecture_v8_|Architecture_v8-Sec_|Architecture_v8-Tat_", "", model)))
-
-ggplot(plot_dat, aes(x = mean_kappa, y = mean_AU1U, color = type)) +
-  geom_point(aes(shape = models), size = 2) +
-  geom_text_repel(label = plot_dat[["model"]]) +
-  theme_bw() +
-  coord_equal()
-```
-
-Mean N_IM and N_OM sensitivity
-```{r fig.height=12}
-ggplot(plot_dat, aes(x = mean_kappa, y = mean_N_IM_sensitivity, z = mean_N_OM_sensitivity, color = type)) +
-  geom_point(aes(shape = models), size = 2) +
-  geom_text_repel(label = plot_dat[["model"]], size = 3, max.overlaps = 15) +
-  theme_bw() 
-
-```
-
-Performance of architectures based on variant 8 (excluding architectures without Tat models as their overall performance is significantly lower) in 10-fold CV
-```{r fig.height=12}
-filter(architectures_performance, grepl("v8_|v8-Sec", model) & grepl("No_filtering", model)) %>% 
-  pivot_longer(cols = !c(model, fold)) %>% 
-  ggplot(aes(y = model, x = value)) +
-  geom_boxplot() +
-  facet_wrap(~name, scales = "free_x") +
-  theme_bw()
-```
-
-Performance of the five best architectures (according to mean kappa value) in 10-fold CV
-```{r fig.height=12}
-filter(architectures_performance, model %in% c("Architecture_v8-Sec_2-1_No_filtering", "Architecture_v8_1-2_No_filtering", "Architecture_v8_2-1_No_filtering", 
-                       "Architecture_v8-Sec_1-2_No_filtering", "Architecture_v8_2-3_No_filtering"))  %>% 
-  mutate(model = factor(model, levels = rev(c("Architecture_v8-Sec_2-1_No_filtering", "Architecture_v8_1-2_No_filtering", "Architecture_v8_2-1_No_filtering", 
-                                          "Architecture_v8-Sec_1-2_No_filtering", "Architecture_v8_2-3_No_filtering")))) %>% 
+best_6 <- mean_architecture_performance %>% 
+  arrange(desc(mean_kappa)) %>% 
+  head()
+filter(architectures_performance, model %in% best_6[["model"]])  %>% 
+  mutate(model = factor(model, levels = rev(best_6[["model"]]))) %>% 
   pivot_longer(cols = !c(model, fold)) %>% 
   ggplot(aes(y = model, x = value)) +
   geom_boxplot() +
