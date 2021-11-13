@@ -1,0 +1,110 @@
+---
+title: "Dataset exploration"
+author: "Katarzyna Sidorczuk"
+date: "11/13/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, fig.width = 12, fig.height = 9)
+
+library(dplyr)
+library(ggplot2)
+library(tidyr)
+library(ggrepel)
+library(targets)
+library(ggbiplot)
+
+tar_load(c(N_TL_SEC_seqs, N_TL_TAT_seqs, N_S_seqs, N_OM_seqs, N_IM_seqs, N_TM_seqs,
+           P_S_seqs, P_IM_seqs, P_TM_seqs, ngram_matrix, data_df_final, PlastoGram_ngram_models))
+```
+
+
+## Amino acid composition
+```{r}
+seqs <- list("N_TL_SEC" = N_TL_SEC_seqs, "N_TL_TAT" = N_TL_TAT_seqs, "N_S" = N_S_seqs, "N_OM" = N_OM_seqs, 
+             "N_IM" = N_IM_seqs, "N_TM" = N_TM_seqs, "P_S" = P_S_seqs, "P_IM" = P_IM_seqs, "P_TM" = P_TM_seqs)
+
+seqs_colors <- c("N_OM" = "#8210c9", "N_IM" = "#344feb", "P_IM" = "#69cdff", "N_S" = "#ccbf10", "P_S" = "#fff575", 
+                 "N_TM" = "#911a1a", "P_TM" = "#ff7d7d", "N_TL" = "#118a0c")#, "N_TL_TAT" = "#9fff9c")
+
+colors <- c("#8210c9", "#344feb", "#69cdff", "#ccbf10", "#fff575", "#911a1a", "#ff7d7d", "#118a0c", "#9fff9c")
+
+aa_comp <- lapply(names(seqs), function(ith_set) {
+  aa <- as.matrix(table(unlist(unname(seqs[[ith_set]]))))/length(unlist(seqs[[ith_set]])) 
+  data.frame(aa = row.names(aa),
+             freq = aa[,1],
+             dataset = ith_set)
+}) %>% bind_rows()
+
+
+aa_comp_peptides <- lapply(names(seqs), function(i) {
+  ds <- seqs[[i]]
+  lapply(names(ds), function(ith_prot) {
+    data.frame(table(factor(ds[[ith_prot]], levels = c("A", "C", "D", "E", "F", "G", "H",
+                                                       "I", "K", "L", "M", "N", "P", "Q",
+                                                       "R", "S", "T", "V", "W", "Y")))/length(ds[[ith_prot]])) %>%
+      setNames(c("Amino acid", "Frequency"))  %>%
+      mutate(dataset = i,
+             prot_name = ith_prot)
+  }) %>% bind_rows()
+}) %>% bind_rows() %>% 
+  mutate(dataset = ifelse(dataset %in% c("N_TL_TAT", "N_TL_SEC"), "N_TL", dataset)) %>% 
+  pivot_wider(names_from = "Amino acid", values_from = "Frequency") %>% 
+  mutate(Source = ifelse(grepl("P_", dataset), "Plastid", "Nuclear"),
+         Stroma = ifelse(grepl("_S$", dataset), TRUE, FALSE),
+         type = case_when(
+           dataset %in% c("N_TM", "P_TM") ~ "TM",
+           dataset %in% c("N_IM", "P_IM") ~ "IM",
+           dataset %in% c("N_S", "P_S") ~ "Stroma",
+           dataset == "N_OM" ~ "OM",
+           dataset == "N_TL" ~ "TL"
+         )) 
+
+
+
+ggplot(aa_comp, aes(x = aa, y = freq, fill = dataset, group = dataset)) +
+  geom_col(position = "dodge") +
+  facet_wrap(~aa, scales = "free_x")
+
+
+
+pca_res <- prcomp(select(aa_comp_peptides, -c("dataset", "prot_name", "Source", "Stroma", "type")), center = TRUE)
+
+ggbiplot(pca_res, groups = aa_comp_peptides[["dataset"]], ellipse = TRUE) +
+  scale_color_manual(values = seqs_colors) 
+
+plot_dat <- mutate(aa_comp_peptides, 
+       PC1 = pca_res[["x"]][, "PC1"],
+       PC2 = pca_res[["x"]][, "PC2"]) 
+
+
+plot_dat %>% 
+    ggplot(aes(x = PC1, y = PC2, fill = dataset, color = dataset)) +
+    stat_density_2d(aes(alpha = ..level..), geom = "polygon", color = "black", size = 0.2) +
+    scale_color_manual(values = seqs_colors) +
+    scale_fill_manual(values = seqs_colors) +
+    facet_wrap(~dataset)
+
+plot_dat %>% 
+  ggplot(aes(x = PC1, y = PC2, fill = dataset, color = dataset)) +
+  stat_density_2d(aes(alpha = ..level..), geom = "polygon", color = "black", size = 0.2) +
+  scale_color_manual(values = seqs_colors) +
+  scale_fill_manual(values = seqs_colors) +
+  facet_wrap(~Source)
+
+plot_dat %>% 
+    ggplot(aes(x = PC1, y = PC2, fill = dataset, color = dataset)) +
+    stat_density_2d(aes(alpha = ..level..), geom = "polygon", color = "black", size = 0.2) +
+    scale_color_manual(values = seqs_colors) +
+    scale_fill_manual(values = seqs_colors) +
+    facet_grid(Stroma~Source)
+
+plot_dat %>% 
+  filter(dataset %in% c("N_S", "P_S", "N_IM")) %>% 
+    ggplot(aes(x = PC1, y = PC2, fill = dataset, color = dataset)) +
+    stat_density_2d(aes(alpha = ..level..), geom = "polygon", color = "black", size = 0.2) +
+    scale_color_manual(values = unname(seqs_colors[c(3, 5, 7)])) +
+    scale_fill_manual(values = unname(seqs_colors[c(3, 5, 7)])) 
+
+```
