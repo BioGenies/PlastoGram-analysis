@@ -2,11 +2,13 @@
 title: "Dataset exploration"
 author: "Katarzyna Sidorczuk"
 date: "11/13/2021"
-output: html_document
+output: 
+  html_document:
+    toc: true
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE, fig.width = 12, fig.height = 9)
+knitr::opts_chunk$set(echo = FALSE, fig.width = 14, fig.height = 12)
 
 library(ggplot2)
 library(tidyr)
@@ -17,6 +19,7 @@ library(dplyr)
 library(biogram)
 library(factoextra)
 source("functions/ngram_model_functions.R")
+set.seed(108567)
 
 tar_load(c(N_TL_SEC_seqs, N_TL_TAT_seqs, N_S_seqs, N_OM_seqs, N_IM_seqs, N_TM_seqs,
            P_S_seqs, P_IM_seqs, P_TM_seqs, ngram_matrix, data_df_final, PlastoGram_ngram_models))
@@ -73,6 +76,26 @@ seqs_colors <- c("N_OM" = "#8210c9", "N_IM" = "#344feb", "P_IM" = "#69cdff", "N_
                  "N_TM" = "#911a1a", "P_TM" = "#ff7d7d", "N_TL" = "#ccbf10")
 
 colors <- c("#8210c9", "#344feb", "#69cdff", "#ccbf10", "#fff575", "#911a1a", "#ff7d7d", "#118a0c", "#9fff9c")
+
+
+get_pca_imp_features <- function(pca_res, n_features = 20) {
+  res_var <- get_pca_var(pca_res)
+  pc1_vars <- res_var[["contrib"]][,1:2] %>%
+    as.data.frame() %>%
+    add_rownames() %>%
+    arrange(desc(`Dim.1`)) %>%
+    head(n = n_features) %>%
+    .[["rowname"]]
+  
+  pc2_vars <- res_var[["contrib"]][,1:2] %>%
+    as.data.frame() %>%
+    add_rownames() %>%
+    arrange(desc(`Dim.2`)) %>%
+    head(n = n_features) %>%
+    .[["rowname"]]
+  c(pc1_vars, pc2_vars)
+}
+
 ```
 
 
@@ -119,7 +142,8 @@ plot_dat %>%
   facet_wrap(~dataset) +
   theme_bw() +
   theme(legend.position = "none")
-
+```
+```{r fig.height=6, fig.width = 10}
 plot_dat %>% 
   filter(dataset %in% c("N_IM", "N_S", "P_S")) %>% 
   ggplot(aes(x = PC1, y = PC2, fill = dataset, color = dataset)) +
@@ -128,7 +152,7 @@ plot_dat %>%
   scale_fill_manual(values = seqs_colors[c("N_S", "P_S", "N_IM")]) +
   theme_bw()
 ```
-```{r fig.height=5}
+```{r fig.height=8}
 plot_dat %>% 
   ggplot(aes(x = PC1, y = PC2, fill = dataset, color = dataset)) +
   stat_density_2d(aes(alpha = ..level..), geom = "polygon", color = "black", size = 0.2) +
@@ -152,17 +176,18 @@ plot_dat %>%
 ## n-gram composition
 
 ### PCA on n-gram composition of peptides (all n-grams)
-```{r}
+```{r fig.height=14}
 pca_ngram_res <- prcomp(ngram_matrix, center = TRUE)
-plot_dat_ngrams <- mutate(ngram_data, 
+plot_dat_ngrams <- mutate(ngram_data,
                           PC1 = pca_ngram_res[["x"]][, "PC1"],
-                          PC2 = pca_ngram_res[["x"]][, "PC2"]) 
+                          PC2 = pca_ngram_res[["x"]][, "PC2"])
 
 ggbiplot(pca_ngram_res, groups = plot_dat_ngrams[["dataset"]], ellipse = TRUE, alpha = 0.5, var.axes = FALSE) +
   theme_bw() +
-  scale_color_manual("Dataset", values = seqs_colors) 
-
-plot_dat_ngrams %>% 
+  scale_color_manual("Dataset", values = seqs_colors)
+```
+```{r}
+plot_dat_ngrams %>%
   ggplot(aes(x = PC1, y = PC2, fill = dataset, color = dataset)) +
   geom_point(alpha = 0.5, size = 1) +
   scale_color_manual(values = seqs_colors) +
@@ -172,28 +197,31 @@ plot_dat_ngrams %>%
   theme(legend.position = "none")
 ```
 
-### PCA on n-gram composition of peptides using Stroma_model informative n-grams 
+## Stroma_model
 
-```{r}
+### PCA on n-gram composition of peptides using Stroma_model informative n-grams
+
+```{r fig.height=12}
 stroma_model_imp_ngrams <- calc_imp_ngrams(ngram_matrix, target = ngram_data[["Stroma"]], cutoff = 0.01)
-print("Number of informative n-grams: ", length(stroma_model_imp_ngrams))
+print(paste0("Number of informative n-grams: ", length(stroma_model_imp_ngrams)))
 
 pca_ngram_res2 <- prcomp(ngram_matrix[, stroma_model_imp_ngrams], center = TRUE)
-plot_dat_ngrams <- mutate(ngram_data, 
+plot_dat_ngrams <- mutate(ngram_data,
                           PC1 = pca_ngram_res2[["x"]][, "PC1"],
-                          PC2 = pca_ngram_res2[["x"]][, "PC2"]) 
+                          PC2 = pca_ngram_res2[["x"]][, "PC2"])
 
 ggbiplot(pca_ngram_res2, groups = plot_dat_ngrams[["dataset"]], ellipse = TRUE, alpha = 0.5, var.axes = FALSE) +
   theme_bw() +
-  scale_color_manual("Dataset", values = seqs_colors) 
-
-plot_dat_ngrams %>% 
+  scale_color_manual("Dataset", values = seqs_colors)
+```
+```{r}
+plot_dat_ngrams %>%
   ggplot(aes(x = PC1, y = PC2, color = Stroma)) +
   geom_point(alpha = 0.5, size = 1) +
   scale_color_manual(values = c(`TRUE` = "#118a0c", `FALSE` = "#8210c9")) +
   theme_bw()
 
-plot_dat_ngrams %>% 
+plot_dat_ngrams %>%
   ggplot(aes(x = PC1, y = PC2, fill = Stroma, color = Stroma)) +
   geom_point(alpha = 0.5, size = 1) +
   stat_density_2d(aes(alpha = ..level..), geom = "polygon", color = "black", size = 0.2) +
@@ -201,8 +229,8 @@ plot_dat_ngrams %>%
   scale_fill_manual(values = c(`TRUE` = "#118a0c", `FALSE` = "#8210c9")) +
   theme_bw()
 ```
-```{r fig.height = 5}
-plot_dat_ngrams %>% 
+```{r fig.height = 7}
+plot_dat_ngrams %>%
   ggplot(aes(x = PC1, y = PC2, fill = Stroma, color = Stroma)) +
   geom_point(alpha = 0.5, size = 1) +
   stat_density_2d(aes(alpha = ..level..), geom = "polygon", color = "black", size = 0.2) +
@@ -213,54 +241,40 @@ plot_dat_ngrams %>%
 ```
 40 n-grams with the highest contribution to the PC1 and PC2 (20 best for each component)
 ```{r}
-res_var <- get_pca_var(pca_ngram_res2)
-
-pc1_vars <- res_var[["contrib"]][,1:2] %>% 
-    as.data.frame() %>% 
-    add_rownames() %>% 
-    arrange(desc(`Dim.1`)) %>% 
-    head(n = 20) %>% 
-    .[["rowname"]]
-
-pc2_vars <- res_var[["contrib"]][,1:2] %>% 
-    as.data.frame() %>% 
-    add_rownames() %>% 
-    arrange(desc(`Dim.2`)) %>% 
-    head(n = 20) %>% 
-    .[["rowname"]]
-
 fviz_pca_var(pca_ngram_res2,
-             col.var = "contrib", 
+             col.var = "contrib",
              gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
-             repel = TRUE, select.var = list(name = c(pc1_vars, pc2_vars))
+             repel = TRUE, select.var = list(name = get_pca_imp_features(pca_ngram_res2))
 )
 
 ```
 
-### PCA on n-gram composition of peptides using P_stroma_model informative n-grams 
+## P_stroma_model
+
+### PCA on n-gram composition of peptides using P_stroma_model informative n-grams
 ```{r}
-p_stroma_model_imp_ngrams <- calc_imp_ngrams(ngram_matrix[which(data_df_final[["Nuclear_target"]] == FALSE), ], 
-                                             target = filter(ngram_data, Source == "Plastid")[["Stroma"]], 
+p_stroma_model_imp_ngrams <- calc_imp_ngrams(ngram_matrix[which(data_df_final[["Nuclear_target"]] == FALSE), ],
+                                             target = filter(ngram_data, Source == "Plastid")[["Stroma"]],
                                              cutoff = 0.01)
-print("Number of informative n-grams: ", length(p_stroma_model_imp_ngrams))
+print(paste0("Number of informative n-grams: ", length(p_stroma_model_imp_ngrams)))
 
 pca_ngram_res3 <- prcomp(ngram_matrix[, p_stroma_model_imp_ngrams], center = TRUE)
-plot_dat_ngrams <- mutate(ngram_data, 
+plot_dat_ngrams <- mutate(ngram_data,
                           PC1 = pca_ngram_res3[["x"]][, "PC1"],
-                          PC2 = pca_ngram_res3[["x"]][, "PC2"]) 
+                          PC2 = pca_ngram_res3[["x"]][, "PC2"])
 
 ggbiplot(pca_ngram_res3, groups = plot_dat_ngrams[["dataset"]], ellipse = TRUE, alpha = 0.5, var.axes = FALSE) +
   theme_bw() +
-  scale_color_manual("Dataset", values = seqs_colors) 
+  scale_color_manual("Dataset", values = seqs_colors)
 
-plot_dat_ngrams %>% 
+plot_dat_ngrams %>%
   ggplot(aes(x = PC1, y = PC2, color = Stroma)) +
   geom_point(alpha = 0.5, size = 1) +
   scale_color_manual(values = c(`TRUE` = "#118a0c", `FALSE` = "#8210c9")) +
   theme_bw() +
   facet_wrap(~Source)
 
-plot_dat_ngrams %>% 
+plot_dat_ngrams %>%
   ggplot(aes(x = PC1, y = PC2, fill = Stroma, color = Stroma)) +
   geom_point(alpha = 0.5, size = 1) +
   stat_density_2d(aes(alpha = ..level..), geom = "polygon", color = "black", size = 0.2) +
@@ -271,54 +285,39 @@ plot_dat_ngrams %>%
 ```
 40 n-grams with the highest contribution to the PC1 and PC2 (20 best for each component)
 ```{r}
-res_var <- get_pca_var(pca_ngram_res3)
-
-pc1_vars <- res_var[["contrib"]][,1:2] %>% 
-    as.data.frame() %>% 
-    add_rownames() %>% 
-    arrange(desc(`Dim.1`)) %>% 
-    head(n = 20) %>% 
-    .[["rowname"]]
-
-pc2_vars <- res_var[["contrib"]][,1:2] %>% 
-    as.data.frame() %>% 
-    add_rownames() %>% 
-    arrange(desc(`Dim.2`)) %>% 
-    head(n = 20) %>% 
-    .[["rowname"]]
-
 fviz_pca_var(pca_ngram_res3,
-             col.var = "contrib", 
+             col.var = "contrib",
              gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
-             repel = TRUE, select.var = list(name = c(pc1_vars, pc2_vars))
+             repel = TRUE, select.var = list(name = get_pca_imp_features(pca_ngram_res3))
 )
 ```
 
+## N_stroma_model
 
-### PCA on n-gram composition of peptides using N_stroma_model informative n-grams 
+### PCA on n-gram composition of peptides using N_stroma_model informative n-grams
 ```{r}
-n_stroma_model_imp_ngrams <- calc_imp_ngrams(ngram_matrix[which(data_df_final[["Nuclear_target"]] == TRUE), ], 
-                                             target = filter(ngram_data, Source == "Nuclear")[["Stroma"]], 
+n_stroma_model_imp_ngrams <- calc_imp_ngrams(ngram_matrix[which(data_df_final[["Nuclear_target"]] == TRUE), ],
+                                             target = filter(ngram_data, Source == "Nuclear")[["Stroma"]],
                                              cutoff = 0.01)
-print("Number of informative n-grams: ", length(n_stroma_model_imp_ngrams))
+print(paste0("Number of informative n-grams: ", length(n_stroma_model_imp_ngrams)))
 
 pca_ngram_res4 <- prcomp(ngram_matrix[, n_stroma_model_imp_ngrams], center = TRUE)
-plot_dat_ngrams <- mutate(ngram_data, 
+plot_dat_ngrams <- mutate(ngram_data,
                           PC1 = pca_ngram_res4[["x"]][, "PC1"],
-                          PC2 = pca_ngram_res4[["x"]][, "PC2"]) 
+                          PC2 = pca_ngram_res4[["x"]][, "PC2"])
 
 ggbiplot(pca_ngram_res4, groups = plot_dat_ngrams[["dataset"]], ellipse = TRUE, alpha = 0.5, var.axes = FALSE) +
   theme_bw() +
-  scale_color_manual("Dataset", values = seqs_colors) 
+  scale_color_manual("Dataset", values = seqs_colors)
 
-plot_dat_ngrams %>% 
+plot_dat_ngrams %>%
   ggplot(aes(x = PC1, y = PC2, color = Stroma)) +
   geom_point(alpha = 0.5, size = 1) +
   scale_color_manual(values = c(`TRUE` = "#118a0c", `FALSE` = "#8210c9")) +
   theme_bw() +
   facet_wrap(~Source)
 
-plot_dat_ngrams %>% 
+plot_dat_ngrams %>%
   ggplot(aes(x = PC1, y = PC2, fill = Stroma, color = Stroma)) +
   geom_point(alpha = 0.5, size = 1) +
   stat_density_2d(aes(alpha = ..level..), geom = "polygon", color = "black", size = 0.2) +
@@ -329,26 +328,375 @@ plot_dat_ngrams %>%
 ```
 40 n-grams with the highest contribution to the PC1 and PC2 (20 best for each component)
 ```{r}
-res_var <- get_pca_var(pca_ngram_res4)
-
-pc1_vars <- res_var[["contrib"]][,1:2] %>% 
-    as.data.frame() %>% 
-    add_rownames() %>% 
-    arrange(desc(`Dim.1`)) %>% 
-    head(n = 20) %>% 
-    .[["rowname"]]
-
-pc2_vars <- res_var[["contrib"]][,1:2] %>% 
-    as.data.frame() %>% 
-    add_rownames() %>% 
-    arrange(desc(`Dim.2`)) %>% 
-    head(n = 20) %>% 
-    .[["rowname"]]
-
 fviz_pca_var(pca_ngram_res4,
-             col.var = "contrib", 
+             col.var = "contrib",
              gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
-             repel = TRUE, select.var = list(name = c(pc1_vars, pc2_vars))
+             repel = TRUE, select.var = list(name = get_pca_imp_features(pca_ngram_res4))
 )
 ```
 
+## OM_Stroma_model
+### PCA on n-gram composition of peptides using OM_stroma_model informative n-grams
+```{r}
+om_stroma_model_imp_ngrams <- calc_imp_ngrams(ngram_matrix[which(data_df_final[["Nuclear_target"]] == TRUE &
+                                                                   (data_df_final[["Membrane_mc_target"]] == 'OM' | data_df_final[["Stroma_target"]] == TRUE)), ],
+                                              target = filter(ngram_data, Source == "Nuclear" & (Membrane_mc_target == "OM" | Stroma_target == TRUE))[["OM_target"]],
+                                              cutoff = 0.01)
+print(paste0("Number of informative n-grams: ", length(om_stroma_model_imp_ngrams)))
+
+pca_ngram_res5 <- prcomp(ngram_matrix[, om_stroma_model_imp_ngrams], center = TRUE)
+plot_dat_ngrams <- mutate(ngram_data,
+                          PC1 = pca_ngram_res5[["x"]][, "PC1"],
+                          PC2 = pca_ngram_res5[["x"]][, "PC2"])
+
+ggbiplot(pca_ngram_res5, groups = plot_dat_ngrams[["dataset"]], ellipse = TRUE, alpha = 0.5, var.axes = FALSE) +
+  theme_bw() +
+  scale_color_manual("Dataset", values = seqs_colors)
+```
+Only nuclear OM and stroma proteins
+```{r}
+plot_dat_ngrams %>%
+  filter(dataset %in% c("N_S", "N_OM")) %>%
+  ggplot(aes(x = PC1, y = PC2, color = dataset)) +
+  geom_point() +
+  scale_color_manual(values = c(`N_S` = "#118a0c", `N_OM` = "#8210c9")) +
+  theme_bw()
+
+plot_dat_ngrams %>%
+  filter(dataset %in% c("N_S", "N_OM")) %>%
+  ggplot(aes(x = PC1, y = PC2, color = dataset, fill = dataset)) +
+  geom_point() +
+  stat_density_2d(aes(alpha = ..level..), geom = "polygon", color = "black", size = 0.2) +
+  scale_color_manual(values = c(`N_S` = "#118a0c", `N_OM` = "#8210c9")) +
+  scale_fill_manual(values = c(`N_S` = "#118a0c", `N_OM` = "#8210c9")) +
+  theme_bw()
+
+plot_dat_ngrams %>%
+  filter(dataset %in% c("N_S", "N_OM")) %>%
+  ggplot(aes(x = PC1, y = PC2, color = dataset, fill = dataset)) +
+  geom_point() +
+  stat_density_2d(aes(alpha = ..level..), geom = "polygon", color = "black", size = 0.2) +
+  scale_color_manual(values = c(`N_S` = "#118a0c", `N_OM` = "#8210c9")) +
+  scale_fill_manual(values = c(`N_S` = "#118a0c", `N_OM` = "#8210c9")) +
+  theme_bw() +
+  facet_wrap(~dataset)
+```
+40 n-grams with the highest contribution to the PC1 and PC2 (20 best for each component)
+```{r}
+fviz_pca_var(pca_ngram_res5,
+             col.var = "contrib",
+             gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
+             repel = TRUE, select.var = list(name = get_pca_imp_features(pca_ngram_res5))
+)
+```
+All informative n-grams
+```{r}
+fviz_pca_var(pca_ngram_res5,
+             col.var = "contrib",
+             gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
+             repel = TRUE, select.var = list(name = om_stroma_model_imp_ngrams)
+)
+```
+
+## Nuclear_model
+### PCA on n-gram composition of peptides using Nuclear_model informative n-grams
+```{r}
+n_model_imp_ngrams <- PlastoGram_ngram_models[["Nuclear_model"]][["forest"]][["independent.variable.names"]]
+print(paste0("Number of informative n-grams: ", length(n_model_imp_ngrams)))
+
+pca_ngram_res6 <- prcomp(ngram_matrix[, n_model_imp_ngrams], center = TRUE)
+plot_dat_ngrams <- mutate(ngram_data,
+                          PC1 = pca_ngram_res6[["x"]][, "PC1"],
+                          PC2 = pca_ngram_res6[["x"]][, "PC2"])
+
+ggbiplot(pca_ngram_res6, groups = plot_dat_ngrams[["dataset"]], ellipse = TRUE, alpha = 0.5, var.axes = FALSE) +
+  theme_bw() +
+  scale_color_manual("Dataset", values = seqs_colors)
+
+plot_dat_ngrams %>%
+  ggplot(aes(x = PC1, y = PC2, color = Source)) +
+  geom_point(alpha = 0.5, size = 1) +
+  scale_color_manual(values = c(`Nuclear` = "#118a0c", `Plastid` = "#69cdff")) +
+  theme_bw() 
+```
+Membrane and non-membrane proteins
+```{r}
+plot_dat_ngrams %>%
+  ggplot(aes(x = PC1, y = PC2, color = Source)) +
+  geom_point(alpha = 0.5, size = 1) +
+  scale_color_manual(values = c(`Nuclear` = "#118a0c", `Plastid` = "#69cdff")) +
+  theme_bw() + 
+  facet_wrap(~Membrane_target)
+
+plot_dat_ngrams %>%
+  ggplot(aes(x = PC1, y = PC2, color = Source, fill = Source)) +
+  geom_point(alpha = 0.5, size = 1) +
+  stat_density_2d(aes(alpha = ..level..), geom = "polygon", color = "black", size = 0.2) +
+  scale_fill_manual(values = c(`Nuclear` = "#118a0c", `Plastid` = "#69cdff")) +
+  scale_color_manual(values = c(`Nuclear` = "#118a0c", `Plastid` = "#69cdff")) +
+  theme_bw() + 
+  facet_wrap(~Membrane_target)
+```
+40 n-grams with the highest contribution to the PC1 and PC2 (20 best for each component)
+```{r}
+fviz_pca_var(pca_ngram_res6,
+             col.var = "contrib",
+             gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
+             repel = TRUE, select.var = list(name = get_pca_imp_features(pca_ngram_res6))
+)
+```
+
+## Membrane_model
+### PCA on n-gram composition of peptides using Membrane_model informative n-grams
+```{r}
+m_model_imp_ngrams <- PlastoGram_ngram_models[["Membrane_model"]][["forest"]][["independent.variable.names"]]
+print(paste0("Number of informative n-grams: ", length(m_model_imp_ngrams)))
+
+pca_ngram_res7 <- prcomp(ngram_matrix[, m_model_imp_ngrams], center = TRUE)
+plot_dat_ngrams <- mutate(ngram_data,
+                          PC1 = pca_ngram_res7[["x"]][, "PC1"],
+                          PC2 = pca_ngram_res7[["x"]][, "PC2"])
+
+ggbiplot(pca_ngram_res7, groups = plot_dat_ngrams[["dataset"]], ellipse = TRUE, alpha = 0.5, var.axes = FALSE) +
+  theme_bw() +
+  scale_color_manual("Dataset", values = seqs_colors)
+
+plot_dat_ngrams %>%
+  ggplot(aes(x = PC1, y = PC2, color = Membrane_target)) +
+  geom_point(alpha = 0.5, size = 1) +
+  scale_color_manual(values = c(`FALSE` = "#118a0c", `TRUE` = "#8210c9")) +
+  theme_bw()
+
+plot_dat_ngrams %>%
+  ggplot(aes(x = PC1, y = PC2, color = Membrane_target, fill = Membrane_target)) +
+  geom_point(alpha = 0.5, size = 1) +
+  stat_density_2d(aes(alpha = ..level..), geom = "polygon", color = "black", size = 0.2) +
+  scale_fill_manual(values = c(`FALSE` = "#118a0c", `TRUE` = "#8210c9")) +
+  scale_color_manual(values = c(`FALSE` = "#118a0c", `TRUE` = "#8210c9")) +
+  theme_bw()
+
+plot_dat_ngrams %>%
+  ggplot(aes(x = PC1, y = PC2, color = Membrane_target)) +
+  geom_point(alpha = 0.5, size = 1) +
+  scale_color_manual(values = c(`FALSE` = "#118a0c", `TRUE` = "#8210c9")) +
+  theme_bw() +
+  facet_wrap(~Source)
+
+plot_dat_ngrams %>%
+  ggplot(aes(x = PC1, y = PC2, color = Membrane_target, fill = Membrane_target)) +
+  geom_point(alpha = 0.5, size = 1) +
+  stat_density_2d(aes(alpha = ..level..), geom = "polygon", color = "black", size = 0.2) +
+  scale_fill_manual(values = c(`FALSE` = "#118a0c", `TRUE` = "#8210c9")) +
+  scale_color_manual(values = c(`FALSE` = "#118a0c", `TRUE` = "#8210c9")) +
+  theme_bw() +
+  facet_wrap(~Source)
+```
+40 n-grams with the highest contribution to the PC1 and PC2 (20 best for each component)
+```{r}
+fviz_pca_var(pca_ngram_res7,
+             col.var = "contrib",
+             gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
+             repel = TRUE, select.var = list(name = get_pca_imp_features(pca_ngram_res7))
+)
+```
+
+
+## Plastid_membrane model
+### PCA on n-gram composition of peptides using Plastid_membrane_model informative n-grams
+```{r}
+pm_model_imp_ngrams <- PlastoGram_ngram_models[["Plastid_membrane_model"]][["forest"]][["independent.variable.names"]]
+print(paste0("Number of informative n-grams: ", length(pm_model_imp_ngrams)))
+
+pca_ngram_res8 <- prcomp(ngram_matrix[, pm_model_imp_ngrams], center = TRUE)
+plot_dat_ngrams <- mutate(ngram_data,
+                          PC1 = pca_ngram_res8[["x"]][, "PC1"],
+                          PC2 = pca_ngram_res8[["x"]][, "PC2"])
+
+ggbiplot(pca_ngram_res8, groups = plot_dat_ngrams[["dataset"]], ellipse = TRUE, alpha = 0.5, var.axes = FALSE) +
+  theme_bw() +
+  scale_color_manual("Dataset", values = seqs_colors)
+```
+```{r fig.height = 7}
+plot_dat_ngrams %>%
+  filter(Nuclear_target == FALSE & Membrane_mc_target %in% c("IM", "TM")) %>% 
+  ggplot(aes(x = PC1, y = PC2, color = dataset)) +
+  geom_point(alpha = 0.5, size = 1) +
+  scale_color_manual(values = c("P_IM" = "#69cdff", "P_TM" = "#ff7d7d")) +
+  theme_bw()
+```
+40 n-grams with the highest contribution to the PC1 and PC2 (20 best for each component)
+```{r}
+fviz_pca_var(pca_ngram_res8,
+             col.var = "contrib",
+             gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
+             repel = TRUE, select.var = list(name = get_pca_imp_features(pca_ngram_res8))
+)
+```
+
+## Nuclear_membrane model
+### PCA on n-gram composition of peptides using Nuclear_membrane_model informative n-grams
+```{r}
+nm_model_imp_ngrams <- get_imp_ngrams_mc(ngram_matrix[which(data_df_final[["Nuclear_target"]] == TRUE & data_df_final[["Membrane_mc_target"]] != "other"), ],
+                                         filter(data_df_final, Nuclear_target == "TRUE" & Membrane_mc_target != "other"), 
+                                         "Membrane_mc_target", cutoff = 0.01)
+nm_model_imp_ngrams <- unique(unlist(unname(nm_model_imp_ngrams)))
+print(paste0("Number of informative n-grams: ", length(nm_model_imp_ngrams)))
+
+pca_ngram_res9 <- prcomp(ngram_matrix[, nm_model_imp_ngrams], center = TRUE)
+plot_dat_ngrams <- mutate(ngram_data,
+                          PC1 = pca_ngram_res9[["x"]][, "PC1"],
+                          PC2 = pca_ngram_res9[["x"]][, "PC2"])
+
+ggbiplot(pca_ngram_res9, groups = plot_dat_ngrams[["dataset"]], ellipse = TRUE, alpha = 0.5, var.axes = FALSE) +
+  theme_bw() +
+  scale_color_manual("Dataset", values = seqs_colors)
+```
+```{r fig.height = 7}
+plot_dat_ngrams %>%
+  filter(Nuclear_target == TRUE & Membrane_mc_target != "other") %>% 
+  ggplot(aes(x = PC1, y = PC2, color = dataset)) +
+  geom_point(size = 1) +
+  scale_color_manual(values = c("N_OM" = "#118a0c", "N_IM" = "#344feb", "N_TM" = "#911a1a")) +
+  theme_bw()
+
+plot_dat_ngrams %>%
+  filter(Nuclear_target == TRUE & Membrane_mc_target != "other") %>% 
+  ggplot(aes(x = PC1, y = PC2, color = dataset, fill = dataset)) +
+  geom_point(size = 1) +
+  stat_density_2d(aes(alpha = ..level..), geom = "polygon", color = "black", size = 0.2) +
+  scale_fill_manual(values = c("N_OM" = "#118a0c", "N_IM" = "#344feb", "N_TM" = "#911a1a")) +
+  scale_color_manual(values = c("N_OM" = "#118a0c", "N_IM" = "#344feb", "N_TM" = "#911a1a")) +
+  theme_bw()
+```
+40 n-grams with the highest contribution to the PC1 and PC2 (20 best for each component)
+```{r}
+fviz_pca_var(pca_ngram_res9,
+             col.var = "contrib",
+             gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
+             repel = TRUE, select.var = list(name = get_pca_imp_features(pca_ngram_res9))
+)
+```
+
+## N_OM model
+### PCA on n-gram composition of peptides using N_OM_model informative n-grams
+```{r}
+n_om_model_imp_ngrams <- PlastoGram_ngram_models[["Nuclear_OM_model"]][["forest"]][["independent.variable.names"]]
+print(paste0("Number of informative n-grams: ", length(n_om_model_imp_ngrams)))
+
+pca_ngram_res10 <- prcomp(ngram_matrix[, n_om_model_imp_ngrams], center = TRUE)
+plot_dat_ngrams <- mutate(ngram_data,
+                          PC1 = pca_ngram_res10[["x"]][, "PC1"],
+                          PC2 = pca_ngram_res10[["x"]][, "PC2"])
+
+ggbiplot(pca_ngram_res10, groups = plot_dat_ngrams[["dataset"]], ellipse = TRUE, alpha = 0.5, var.axes = FALSE) +
+  theme_bw() +
+  scale_color_manual("Dataset", values = seqs_colors)
+```
+```{r fig.height = 7}
+plot_dat_ngrams %>%
+  filter(Nuclear_target == TRUE & Membrane_mc_target != "other") %>% 
+  ggplot(aes(x = PC1, y = PC2, color = dataset)) +
+  geom_point(size = 1) +
+  scale_color_manual(values = c("N_OM" = "#118a0c", "N_IM" = "#344feb", "N_TM" = "#911a1a")) +
+  theme_bw()
+
+plot_dat_ngrams %>%
+  filter(Nuclear_target == TRUE & Membrane_mc_target != "other") %>% 
+  ggplot(aes(x = PC1, y = PC2, color = dataset, fill = dataset)) +
+  geom_point(size = 1) +
+  stat_density_2d(aes(alpha = ..level..), geom = "polygon", color = "black", size = 0.2) +
+  scale_fill_manual(values = c("N_OM" = "#118a0c", "N_IM" = "#344feb", "N_TM" = "#911a1a")) +
+  scale_color_manual(values = c("N_OM" = "#118a0c", "N_IM" = "#344feb", "N_TM" = "#911a1a")) +
+  theme_bw()
+```
+40 n-grams with the highest contribution to the PC1 and PC2 (20 best for each component)
+```{r}
+fviz_pca_var(pca_ngram_res10,
+             col.var = "contrib",
+             gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
+             repel = TRUE, select.var = list(name = get_pca_imp_features(pca_ngram_res10))
+)
+```
+
+
+## N_IM model
+### PCA on n-gram composition of peptides using N_IM_model informative n-grams
+```{r}
+n_im_model_imp_ngrams <- PlastoGram_ngram_models[["Nuclear_IM_model"]][["forest"]][["independent.variable.names"]]
+print(paste0("Number of informative n-grams: ", length(n_im_model_imp_ngrams)))
+
+pca_ngram_res11 <- prcomp(ngram_matrix[, n_im_model_imp_ngrams], center = TRUE)
+plot_dat_ngrams <- mutate(ngram_data,
+                          PC1 = pca_ngram_res11[["x"]][, "PC1"],
+                          PC2 = pca_ngram_res11[["x"]][, "PC2"])
+
+ggbiplot(pca_ngram_res11, groups = plot_dat_ngrams[["dataset"]], ellipse = TRUE, alpha = 0.5, var.axes = FALSE) +
+  theme_bw() +
+  scale_color_manual("Dataset", values = seqs_colors)
+```
+```{r fig.height = 7}
+plot_dat_ngrams %>%
+  filter(Nuclear_target == TRUE & Membrane_mc_target != "other") %>% 
+  ggplot(aes(x = PC1, y = PC2, color = dataset)) +
+  geom_point(size = 1) +
+  scale_color_manual(values = c("N_OM" = "#118a0c", "N_IM" = "#344feb", "N_TM" = "#911a1a")) +
+  theme_bw()
+
+plot_dat_ngrams %>%
+  filter(Nuclear_target == TRUE & Membrane_mc_target != "other") %>% 
+  ggplot(aes(x = PC1, y = PC2, color = dataset, fill = dataset)) +
+  geom_point(size = 1) +
+  stat_density_2d(aes(alpha = ..level..), geom = "polygon", color = "black", size = 0.2) +
+  scale_fill_manual(values = c("N_OM" = "#118a0c", "N_IM" = "#344feb", "N_TM" = "#911a1a")) +
+  scale_color_manual(values = c("N_OM" = "#118a0c", "N_IM" = "#344feb", "N_TM" = "#911a1a")) +
+  theme_bw()
+```
+40 n-grams with the highest contribution to the PC1 and PC2 (20 best for each component)
+```{r}
+fviz_pca_var(pca_ngram_res11,
+             col.var = "contrib",
+             gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
+             repel = TRUE, select.var = list(name = get_pca_imp_features(pca_ngram_res11))
+)
+```
+
+## N_TM model
+### PCA on n-gram composition of peptides using N_TM_model informative n-grams
+```{r}
+n_tm_model_imp_ngrams <- PlastoGram_ngram_models[["Nuclear_TM_model"]][["forest"]][["independent.variable.names"]]
+print(paste0("Number of informative n-grams: ", length(n_tm_model_imp_ngrams)))
+
+pca_ngram_res12 <- prcomp(ngram_matrix[, n_tm_model_imp_ngrams], center = TRUE)
+plot_dat_ngrams <- mutate(ngram_data,
+                          PC1 = pca_ngram_res12[["x"]][, "PC1"],
+                          PC2 = pca_ngram_res12[["x"]][, "PC2"])
+
+ggbiplot(pca_ngram_res12, groups = plot_dat_ngrams[["dataset"]], ellipse = TRUE, alpha = 0.5, var.axes = FALSE) +
+  theme_bw() +
+  scale_color_manual("Dataset", values = seqs_colors)
+```
+```{r fig.height = 7}
+plot_dat_ngrams %>%
+  filter(Nuclear_target == TRUE & Membrane_mc_target != "other") %>% 
+  ggplot(aes(x = PC1, y = PC2, color = dataset)) +
+  geom_point(size = 1) +
+  scale_color_manual(values = c("N_OM" = "#118a0c", "N_IM" = "#344feb", "N_TM" = "#911a1a")) +
+  theme_bw()
+
+plot_dat_ngrams %>%
+  filter(Nuclear_target == TRUE & Membrane_mc_target != "other") %>% 
+  ggplot(aes(x = PC1, y = PC2, color = dataset, fill = dataset)) +
+  geom_point(size = 1) +
+  stat_density_2d(aes(alpha = ..level..), geom = "polygon", color = "black", size = 0.2) +
+  scale_fill_manual(values = c("N_OM" = "#118a0c", "N_IM" = "#344feb", "N_TM" = "#911a1a")) +
+  scale_color_manual(values = c("N_OM" = "#118a0c", "N_IM" = "#344feb", "N_TM" = "#911a1a")) +
+  theme_bw()
+```
+40 n-grams with the highest contribution to the PC1 and PC2 (20 best for each component)
+```{r}
+fviz_pca_var(pca_ngram_res12,
+             col.var = "contrib",
+             gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
+             repel = TRUE, select.var = list(name = get_pca_imp_features(pca_ngram_res12))
+)
+```
