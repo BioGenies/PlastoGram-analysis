@@ -16,6 +16,18 @@ library(targets)
 
 tar_load(c(architectures_performance, mean_architecture_performance, model_variants))
 
+change_variant_names <- function(df, colname) {
+  df[[colname]] <- sapply(df[[colname]], function(i) case_when(grepl("v1", i) ~ gsub("v1", "NMmc", i),
+                                                               grepl("v2", i) ~ gsub("v2", "NMmc_S", i),
+                                                               grepl("v3", i) ~ gsub("v3", "NMmc_OMS", i),
+                                                               grepl("v4", i) ~ gsub("v4", "NMbin", i),
+                                                               grepl("v5", i) ~ gsub("v5", "NMbin_S", i),
+                                                               grepl("v6", i) ~ gsub("v6", "NMbin_OMS", i),
+                                                               grepl("v7", i) ~ gsub("v7", "NMmc_PS_NS", i),
+                                                               grepl("v8", i) ~ gsub("v8", "NMbin_PS_NS", i)),
+                          USE.NAMES = FALSE)
+  df
+} 
 arch_dat <- mutate(mean_architecture_performance,
                    arch_variant = sapply(mean_architecture_performance[["model"]], function(i) gsub("-Sec|-Tat", "", strsplit(i, "_")[[1]][2])),
                    hierarchical = grepl(pattern = "Filtering", x = model, ignore.case = FALSE),
@@ -31,6 +43,7 @@ arch_dat <- mutate(mean_architecture_performance,
 
 ```{r}
 data.frame(arch_variant = names(model_variants)[1:8], 
+           shortcut = c("NMmc", "NMmc_S", "NMmc_OMS", "NMbin", "NMbin_S", "NMbin_OMS", "NMmc_PS_NS", "NMbin_PS_NS"),
            models = sapply(model_variants[1:8], function(i) paste0(i, collapse = ", "))) %>% 
   knitr::kable(., row.names = FALSE)
 ```
@@ -38,6 +51,8 @@ data.frame(arch_variant = names(model_variants)[1:8],
 ## Overall performance with hierarchical or not hierarchical architecture
 
 ```{r fig.height=6}
+arch_dat <- change_variant_names(arch_dat, "arch_variant")
+
 filter(arch_dat, measure %in% c("mean_AU1U", "mean_kappa")) %>% 
   ggplot(aes(x = arch_variant, y = value, color = hierarchical)) +
   geom_boxplot() +
@@ -53,7 +68,8 @@ filter(arch_dat, !(measure %in% c("mean_AU1U", "mean_kappa"))) %>%
   geom_boxplot() +
   facet_grid(measure~hierarchical, scales = "free_y") + 
   theme_bw() +
-  theme(legend.position = "none")
+  theme(legend.position = "none",
+        axis.text.x = element_text(angle = 90))
 ```
 
 ## Prediction of the most difficult classes with hierarchical or not hierarchical architecture
@@ -63,7 +79,8 @@ filter(arch_dat, measure %in% c("mean_N_IM_sensitivity", "mean_N_OM_sensitivity"
   geom_boxplot() +
   facet_wrap(~hierarchical) + 
   theme_bw() +
-  theme(legend.position = "bottom")
+  theme(legend.position = "bottom",
+        axis.text.x = element_text(angle = 90))
 ```
 
 ## Prediction of the most difficult classes depending on the number of models that use SMOTE
@@ -127,9 +144,11 @@ filter(arch_dat, measure %in% c("mean_N_TL_SEC_sensitivity", "mean_N_TL_TAT_sens
 ## Performance of the six best architectures (according to mean kappa value) in 10-fold CV
 ```{r fig.height=12}
 best_6 <- mean_architecture_performance %>% 
+  change_variant_names("model") %>% 
   arrange(desc(mean_kappa)) %>% 
   head()
-filter(architectures_performance, model %in% best_6[["model"]])  %>% 
+  change_variant_names(architectures_performance, "model") %>% 
+filter(model %in% best_6[["model"]])  %>% 
   mutate(model = factor(model, levels = rev(best_6[["model"]]))) %>% 
   pivot_longer(cols = !c(model, fold)) %>% 
   ggplot(aes(y = model, x = value)) +
