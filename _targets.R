@@ -654,7 +654,7 @@ list(
   ),
   tar_target(
     PlastoGram_glm_model,
-    train_glm(PlastoGram_predictions, data_df_final)
+    train_multinom(PlastoGram_predictions, data_df_final)
   )
 )
 
