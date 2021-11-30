@@ -225,7 +225,7 @@ generate_results_for_architectures <- function(architecture_file_list, all_model
   })
 }
 
-evaluate_all_architectures <- function(res_files, outfile) {
+evaluate_all_architectures <- function(res_files, outfile, data_df) {
   performance_results <- lapply(res_files, function(ith_file) {
     res <- read.csv(ith_file)
     lapply(unique(res[["fold"]]), function(ith_fold) {
@@ -235,6 +235,8 @@ evaluate_all_architectures <- function(res_files, outfile) {
         fold = ith_fold,
         AU1U = multiclass.AU1U(dat[, 4:(ncol(dat)-1)], dat[["dataset"]]),
         kappa = KAPPA(dat[["dataset"]], dat[["Prediction"]]),
+        weighted_kappa = ckap(dat[, c("dataset", "Prediction")], 
+                              weight = as.matrix(bind_rows(lapply(table(data_df[["dataset"]]), function(i) ifelse(i == x, as.vector(sum(x)/(i+x)), 1)))))[["est"]],
         N_IM_sensitivity = TPR(ifelse(dat[["dataset"]] == "N_IM", TRUE, FALSE),
                                ifelse(dat[["Prediction"]] == "N_IM", TRUE, FALSE), TRUE),
         N_OM_sensitivity = TPR(ifelse(dat[["dataset"]] == "N_OM", TRUE, FALSE),
@@ -266,6 +268,7 @@ get_mean_performance_of_architectures <- function(performance_results, outfile) 
     group_by(model) %>% 
     summarise(mean_AU1U = mean(AU1U),
               mean_kappa = mean(kappa),
+              mean_weighted_kappa = mean(weighted_kappa),
               mean_N_IM_sensitivity = mean(N_IM_sensitivity),
               mean_N_OM_sensitivity = mean(N_OM_sensitivity),
               mean_N_TM_sensitivity = mean(N_TM_sensitivity),
@@ -285,4 +288,29 @@ train_multinom <- function(prediction_results, data_df) {
     select(-seq_name)
   train_dat[is.na(train_dat)] <- 0
   multinom(dataset ~ ., data = train_dat, model = TRUE)
+}
+
+
+generate_and_test_architectures <- function(model_variants, smote_models, sequence_models, model_dat, filtering_df, architectures_output_dir,
+                                            all_models_predictions, architecture_res_output_dir, data_df_final, performance_outfile) {
+  
+  generate_all_architectures(model_variants = model_variants,
+                             smote_models = smote_models,
+                             sequence_models = sequence_models,
+                             model_dat = model_dat,
+                             filtering_df = filtering_df,
+                             output_dir = architectures_output_dir)
+  
+  architecture_files <- list.files(architectures_output_dir, full.names = TRUE)
+  
+  architecture_results <- generate_results_for_architectures(architecture_files,
+                                                             all_models_predictions,
+                                                             architecture_res_output_dir,
+                                                             data_df_final)
+  
+  architecture_results_files <- list.files(architecture_res_output_dir, full.names = TRUE)
+  
+  evaluate_all_architectures(architecture_results_files,
+                             performance_outfile,
+                             data_df_final)
 }

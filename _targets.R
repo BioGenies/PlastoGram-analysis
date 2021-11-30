@@ -12,6 +12,7 @@ library(combinat)
 library(FCBF)
 library(UBL)
 library(nnet)
+library(rel)
 
 data_path <- "~/Dropbox/Projekty/BioNgramProjects/PlastoGram/"
 
@@ -509,7 +510,7 @@ list(
   ),
   tar_target(
     model_dat_file,
-    paste0(data_path, "PlastoGram_models_info.csv"),
+    "./data/PlastoGram_models_info.csv",
     format = "file"
   ),
   tar_target(
@@ -518,22 +519,12 @@ list(
   ),
   tar_target(
     test_filtering_options_file,
-    paste0(data_path, "PlastoGram_models_results_filtering.csv"),
+    "./data/PlastoGram_models_results_filtering.csv",
     format = "file"
   ),
   tar_target(
     filtering_df,
     read.csv(test_filtering_options_file)
-  ),
-  tar_target(
-    architectures,
-    generate_all_architectures(model_variants = model_variants,
-                               smote_models = c("OM_Stroma_model", "Nuclear_membrane_model",
-                                                "N_OM_model", "N_IM_model", "N_TM_model"),
-                               sequence_models = c("Sec_model", "Tat_model"),
-                               model_dat = model_dat,
-                               filtering_df = filtering_df,
-                               output_dir = paste0(data_path, "Model_architectures/"))
   ),
   tar_target(  
     Plastid_Nuclear_FCBF_CV_res,
@@ -604,24 +595,19 @@ list(
     get_all_models_predictions(ngram_matrix, c(N_seqs, P_seqs), data_df_final, model_dat, data_path, remove_hmm_files = TRUE)
   ),
   tar_target(
-    architecture_files,
-    list.files(paste0(data_path, "Model_architectures/"), full.names = TRUE)
-  ),
-  tar_target(
-    architecture_results,
-    generate_results_for_architectures(architecture_files,
-                                       all_models_predictions,
-                                       paste0(data_path, "Model_architectures_results/"),
-                                       data_df_final)
-  ),
-  tar_target(
-    architecture_results_files,
-    list.files(paste0(data_path, "Model_architectures_results"), full.names = TRUE)
-  ),
-  tar_target(
-    architectures_performance,
-    evaluate_all_architectures(architecture_results_files,
-                               paste0(data_path, "Architectures_performance.csv"))
+    architecture_performance,
+    generate_and_test_architectures(model_variants = model_variants,
+                                    smote_models = c("OM_Stroma_model", "Nuclear_membrane_model",
+                                                     "N_OM_model", "N_IM_model", "N_TM_model"),
+                                    sequence_models = c("Sec_model", "Tat_model"),
+                                    model_dat = model_dat,
+                                    filtering_df = filtering_df,
+                                    architectures_output_dir = paste0(data_path, "Model_architectures/"),
+                                    all_models_predictions = all_models_predictions, 
+                                    architecture_res_output_dir = paste0(data_path, "Model_architectures_results/"), 
+                                    data_df_final = data_df_final,
+                                    performance_outfile = paste0(data_path, "Architectures_performance.csv"))
+    
   ),
   tar_target(
     mean_architecture_performance,
@@ -630,7 +616,7 @@ list(
   ),
   tar_target(
     PlastoGram_final_architecture,
-    read.csv(paste0(data_path, "Final_PlastoGram_model_architecture.csv"))
+    read.csv("./data/Final_PlastoGram_model_architecture.csv")
   ),
   tar_target(
     PlastoGram_ngram_models,
@@ -653,7 +639,7 @@ list(
                             ith_fold = NULL, remove_hmm_files = FALSE)
   ),
   tar_target(
-    PlastoGram_glm_model,
+    PlastoGram_multinom_model,
     train_multinom(PlastoGram_predictions, data_df_final)
   )
 )
