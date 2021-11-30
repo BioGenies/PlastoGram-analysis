@@ -228,6 +228,7 @@ generate_results_for_architectures <- function(architecture_file_list, all_model
 evaluate_all_architectures <- function(res_files, outfile, data_df) {
   performance_results <- lapply(res_files, function(ith_file) {
     res <- read.csv(ith_file)
+    x <- table(data_df[["dataset"]])
     lapply(unique(res[["fold"]]), function(ith_fold) {
       dat <- filter(res, fold == ith_fold)
       data.frame(
@@ -236,7 +237,7 @@ evaluate_all_architectures <- function(res_files, outfile, data_df) {
         AU1U = multiclass.AU1U(dat[, 4:(ncol(dat)-1)], dat[["dataset"]]),
         kappa = KAPPA(dat[["dataset"]], dat[["Prediction"]]),
         weighted_kappa = ckap(dat[, c("dataset", "Prediction")], 
-                              weight = as.matrix(bind_rows(lapply(table(data_df[["dataset"]]), function(i) ifelse(i == x, as.vector(sum(x)/(i+x)), 1)))))[["est"]],
+                              weight = as.matrix(bind_rows(lapply(x, function(i) ifelse(i == x, as.vector(sum(x)/(i+x)), 1)))))[["est"]],
         N_IM_sensitivity = TPR(ifelse(dat[["dataset"]] == "N_IM", TRUE, FALSE),
                                ifelse(dat[["Prediction"]] == "N_IM", TRUE, FALSE), TRUE),
         N_OM_sensitivity = TPR(ifelse(dat[["dataset"]] == "N_OM", TRUE, FALSE),

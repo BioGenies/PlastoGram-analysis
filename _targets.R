@@ -595,7 +595,7 @@ list(
     get_all_models_predictions(ngram_matrix, c(N_seqs, P_seqs), data_df_final, model_dat, data_path, remove_hmm_files = TRUE)
   ),
   tar_target(
-    architecture_performance,
+    architectures_performance,
     generate_and_test_architectures(model_variants = model_variants,
                                     smote_models = c("OM_Stroma_model", "Nuclear_membrane_model",
                                                      "N_OM_model", "N_IM_model", "N_TM_model"),
