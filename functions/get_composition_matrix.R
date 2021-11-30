@@ -9,9 +9,9 @@ get_composition_matrix <- function(data_path, groups, length) {
     }) %>% bind_rows() %>% 
       as.matrix()
     
-    unigrams <- count_multimers(prot_matrix, k_vector = 1, alphabet = aa)
-    bigrams <- count_multimers(prot_matrix, k_vector = c(2,2), kmer_gaps_list = list(NULL, 1), alphabet = aa) 
-    trigrams <- count_multimers(prot_matrix, k_vector = c(rep(3,4)), kmer_gaps_list = list(c(0,0), c(0,1), c(1,0), c(1,1)), alphabet = aa)
+    unigrams <- count_multimers(prot_matrix, k_vector = 1, kmer_alphabet = aa)
+    bigrams <- count_multimers(prot_matrix, k_vector = c(2,2), kmer_gaps_list = list(NULL, 1), kmer_alphabet = aa) 
+    trigrams <- count_multimers(prot_matrix, k_vector = c(rep(3,4)), kmer_gaps_list = list(c(0,0), c(0,1), c(1,0), c(1,1)), kmer_alphabet = aa)
     
     freqs <- cbind(
       cbind(as.matrix(unigrams)/20, as.matrix(bigrams)/ncol(as.matrix(bigrams))),

@@ -207,10 +207,10 @@
     },
     "RcppParallel": {
       "Package": "RcppParallel",
-      "Version": "5.0.3",
+      "Version": "5.1.4",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "157a1155dc1bdbb6aba8dad88c9ef460"
+      "Hash": "0325b5be38a02d192828027983c7b470"
     },
     "S4Vectors": {
       "Package": "S4Vectors",
@@ -282,9 +282,15 @@
     "biogram": {
       "Package": "biogram",
       "Version": "1.6.3",
-      "Source": "Repository",
+      "Source": "GitHub",
       "Repository": "CRAN",
-      "Hash": "16ad11ab1148293d81ef7ab4038880aa"
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteRepo": "biogram",
+      "RemoteUsername": "michbur",
+      "RemoteRef": "HEAD",
+      "RemoteSha": "941019ff0a6e9451812ad868107c94387584224b",
+      "Hash": "ff53271d919eba0f3f72df26caefed61"
     },
     "bitops": {
       "Package": "bitops",
@@ -1251,10 +1257,10 @@
     },
     "seqR": {
       "Package": "seqR",
-      "Version": "0.8.0",
+      "Version": "1.0.1",
       "Source": "Repository",
-      "Repository": null,
-      "Hash": "71e60e94d8617ff69a51fb1bc0c11ad5"
+      "Repository": "CRAN",
+      "Hash": "19dc5754566f502da1e7b4c17d6c2285"
     },
     "sets": {
       "Package": "sets",

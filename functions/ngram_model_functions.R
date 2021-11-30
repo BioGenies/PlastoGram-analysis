@@ -3,7 +3,7 @@ create_ngram_matrix <- function(seqs, target_df) {
     count_multimers(seqs[ith_seq],
                     k_vector = c(1, rep(2,4), rep(3,4)),
                     kmer_gaps_list = list(NULL, NULL, 1, 2, 3, c(0,0), c(0,1), c(1,0), c(1,1)),
-                    alphabet = toupper(colnames(biogram::aaprop)),
+                    kmer_alphabet = toupper(colnames(biogram::aaprop)),
                     with_kmer_counts = FALSE) %>% 
       as.matrix() %>% 
       as.data.frame()
