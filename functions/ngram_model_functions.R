@@ -29,7 +29,7 @@ train_rf <- function(ngram_matrix, target, imp_ngrams, with_class_weights = FALS
     data.frame(ngram_matrix[, imp_ngrams],
                tar = as.factor(target))
   }
-
+  
   if(with_class_weights == FALSE) {
     class_weights <- NULL
   } else {
@@ -37,7 +37,8 @@ train_rf <- function(ngram_matrix, target, imp_ngrams, with_class_weights = FALS
   }
   ranger(dependent.variable.name = "tar", data =  ranger_train_data, 
          write.forest = TRUE, probability = TRUE, num.trees = 500, 
-         verbose = FALSE, class.weights = class_weights)
+         verbose = FALSE, class.weights = class_weights,
+         seed = 108567)
 }
 
 
@@ -162,15 +163,16 @@ test_fcbf <- function(ngram_matrix, data_df, cutoff_vec, target_col, class_weigh
     } else {
       get_cv_res_summary(res, "TRUE")
     }
-   mutate(stats, cutoff = ith_cutoff)
+    mutate(stats, cutoff = ith_cutoff)
   }) %>% bind_rows()
 }
 
 
 do_smote <- function(imp_ngram_matrix, tar, C.perc) {
-      x <- cbind(imp_ngram_matrix, tar = as.factor(tar))
-      x[sapply(x, is.numeric)] <- lapply(x[sapply(x, is.numeric)], 
-                                         as.factor)
-      x <- SmoteClassif(tar ~ ., x, C.perc = C.perc, k  = 5, dist = "Overlap")
-      modifyList(x, lapply(x[, which(colnames(x) != "tar")], function(i) as.numeric(as.character(i))))
+  set.seed(108567)
+  x <- cbind(imp_ngram_matrix, tar = as.factor(tar))
+  x[sapply(x, is.numeric)] <- lapply(x[sapply(x, is.numeric)], 
+                                     as.factor)
+  x <- SmoteClassif(tar ~ ., x, C.perc = C.perc, k  = 5, dist = "Overlap")
+  modifyList(x, lapply(x[, which(colnames(x) != "tar")], function(i) as.numeric(as.character(i))))
 }

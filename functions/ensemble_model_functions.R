@@ -36,7 +36,7 @@ train_ngram_models <- function(model_df, ngram_matrix, data_df, filtering_colnam
             get_imp_ngrams_mc(train_dat, 
                               data_df[which(data_df[["seq_name"]] %in% selected), ],
                               df[["Target_name"]][i], cutoff = 0.01))))
-    } else{
+    } else {
       calc_imp_ngrams(train_dat, as.logical(target), cutoff = 0.01)
     }
     if(grepl("SMOTE", df[["Model_name"]][i])) {
@@ -315,3 +315,21 @@ generate_and_test_architectures <- function(model_variants, smote_models, sequen
                              performance_outfile,
                              data_df_final)
 }
+
+
+do_jackknife <- function(ngram_matrix, sequences, data_df, model_df, data_path, remove_hmm_files = TRUE) {
+  
+  res <- lapply(unique(data_df[["seq_name"]]), function(ith_seq) {
+    print(paste0("Starting round ", which(data_df[["seq_name"]] == ith_seq), " of ", nrow(data_df)))
+    dat <- ngram_matrix[data_df[["seq_name"]] != ith_seq, ]
+    test_dat <- ngram_matrix[data_df[["fold"]] == ith_seq, ]
+    test_df <- filter(data_df, seq_name == ith_seq)
+    test_seqs <- sequences[which(names(sequences) %in% test_df[["seq_name"]])]
+    
+    ngram_models <- train_ngram_models(model_df, dat, data_df, filtering_colname = "seq_name", filtering_term = paste0("'", ith_seq, "'"))
+    hmm_models <- train_profile_HMM_models(model_df, sequences, data_df, filtering_colname = "seq_name", filtering_term = paste0("'", ith_seq, "'"))
+    predict_with_all_models(model_df, test_dat, test_df, test_seqs, ngram_models, hmm_models, ith_seq, remove_hmm_files = remove_hmm_files)
+  }) %>% bind_rows()
+  write.csv(res, paste0(data_path, "Jackknife_results.csv"), row.names = FALSE)
+  res
+} 
