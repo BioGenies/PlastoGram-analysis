@@ -641,6 +641,10 @@ list(
   tar_target(
     PlastoGram_multinom_model,
     train_multinom(PlastoGram_predictions, data_df_final)
+  ),
+  tar_target(
+    jackknife_results,
+    do_jackknife(ngram_matrix, c(N_seqs, P_seqs), data_df_final, PlastoGram_final_architecture, data_path)
   )
 )
 

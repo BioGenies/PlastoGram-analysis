@@ -322,13 +322,23 @@ do_jackknife <- function(ngram_matrix, sequences, data_df, model_df, data_path, 
   res <- lapply(unique(data_df[["seq_name"]]), function(ith_seq) {
     print(paste0("Starting round ", which(data_df[["seq_name"]] == ith_seq), " of ", nrow(data_df)))
     dat <- ngram_matrix[data_df[["seq_name"]] != ith_seq, ]
-    test_dat <- ngram_matrix[data_df[["fold"]] == ith_seq, ]
+    test_dat <- ngram_matrix[data_df[["seq_name"]] == ith_seq, ]
     test_df <- filter(data_df, seq_name == ith_seq)
     test_seqs <- sequences[which(names(sequences) %in% test_df[["seq_name"]])]
     
-    ngram_models <- train_ngram_models(model_df, dat, data_df, filtering_colname = "seq_name", filtering_term = paste0("'", ith_seq, "'"))
+    ngram_models <- train_ngram_models(model_df, ngram_matrix, data_df, filtering_colname = "seq_name", filtering_term = paste0("'", ith_seq, "'"))
     hmm_models <- train_profile_HMM_models(model_df, sequences, data_df, filtering_colname = "seq_name", filtering_term = paste0("'", ith_seq, "'"))
-    predict_with_all_models(model_df, test_dat, test_df, test_seqs, ngram_models, hmm_models, ith_seq, remove_hmm_files = remove_hmm_files)
+    train_preds <- predict_with_all_models(model_df, dat, filter(data_df, seq_name != ith_seq),  sequences[which(!(names(sequences) %in% test_df[["seq_name"]]))], ngram_models, hmm_models, ith_seq, remove_hmm_files = FALSE)
+    test_preds <- predict_with_all_models(model_df, test_dat, test_df, test_seqs, ngram_models, hmm_models, ith_seq, remove_hmm_files = TRUE)
+    test_preds[is.na(test_preds)] <- 0
+    
+    multinom_model <- train_multinom(select(train_preds, -fold), filter(data_df, seq_name != ith_seq))
+    
+    cbind(test_preds,
+          t(predict(multinom_model, test_preds, type = "probs"))) %>% 
+      mutate(Localization = predict(multinom_model,test_preds),
+             dataset = test_df[["dataset"]])
+    
   }) %>% bind_rows()
   write.csv(res, paste0(data_path, "Jackknife_results.csv"), row.names = FALSE)
   res
