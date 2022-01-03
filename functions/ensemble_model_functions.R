@@ -329,17 +329,31 @@ do_jackknife <- function(ngram_matrix, sequences, data_df, model_df, data_path, 
     ngram_models <- train_ngram_models(model_df, ngram_matrix, data_df, filtering_colname = "seq_name", filtering_term = paste0("'", ith_seq, "'"))
     hmm_models <- train_profile_HMM_models(model_df, sequences, data_df, filtering_colname = "seq_name", filtering_term = paste0("'", ith_seq, "'"))
     train_preds <- predict_with_all_models(model_df, dat, filter(data_df, seq_name != ith_seq),  sequences[which(!(names(sequences) %in% test_df[["seq_name"]]))], ngram_models, hmm_models, ith_seq, remove_hmm_files = FALSE)
+    train_preds[is.na(train_preds)] <- 0
     test_preds <- predict_with_all_models(model_df, test_dat, test_df, test_seqs, ngram_models, hmm_models, ith_seq, remove_hmm_files = TRUE)
     test_preds[is.na(test_preds)] <- 0
+    write.csv(train_preds, paste0(data_path, "Jackknife_lower_level_models_results/", ith_seq, ".csv"), row.names = FALSE)
     
-    multinom_model <- train_multinom(select(train_preds, -fold), filter(data_df, seq_name != ith_seq))
+    train_dat <- left_join(train_preds, data_df[, c("seq_name", "dataset")], by = "seq_name") %>% 
+      select(-c(seq_name, fold)) %>% 
+      mutate(dataset = as.factor(dataset))
+    higher_level_model <- ranger(dataset ~ ., data = train_dat,
+                                 write.forest = TRUE, probability = TRUE, num.trees = 500, 
+                                 verbose = FALSE, seed = 108567)
     
-    cbind(test_preds,
-          t(predict(multinom_model, test_preds, type = "probs"))) %>% 
-      mutate(Localization = predict(multinom_model,test_preds),
+    preds <- cbind(test_preds,
+                   predict(higher_level_model, test_preds)[["predictions"]]) %>% 
+      mutate(Localization = c(colnames(.)[12:20][max.col(.[, c(colnames(.)[12:20])])]),
              dataset = test_df[["dataset"]])
     
-  }) %>% bind_rows()
-  write.csv(res, paste0(data_path, "Jackknife_results.csv"), row.names = FALSE)
-  res
+    list("train_preds" = train_preds,
+         "results" = preds)
+  })
+  
+  full_res <- bind_rows(lapply(1:length(res), function(i) res[[i]][["results"]]))
+  write.csv(full_res, paste0(data_path, "Jackknife_results.csv"), row.names = FALSE)
+  lower_level_preds <- bind_rows(lapply(1:length(res), function(i) res[[i]][["train_preds"]]))
+  
+  list("results" = full_res,
+       "lower_level_train_preds" = lower_level_preds)
 } 
