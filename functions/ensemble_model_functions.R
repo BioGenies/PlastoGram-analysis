@@ -202,26 +202,36 @@ filter_results_for_single_architecture <- function(architecture_file, all_models
 }
 
 
-generate_results_for_architectures <- function(architecture_file_list, all_models_results, outdir, data_df) {
+generate_results_for_architectures <- function(architecture_file_list, all_models_results, outdir, data_df, higher_level_model = "RF") {
   lapply(architecture_file_list, function(ith_file) {
     model <- gsub(".csv", "", last(strsplit(ith_file, "/")[[1]]))
     res <- left_join(data_df[, c("seq_name", "dataset")], 
                      filter_results_for_single_architecture(ith_file, all_models_results),
                      by = "seq_name")
     full_results <- lapply(unique(res[["fold"]]), function(ith_fold) {
-      train_dat <- select(filter(res, fold != ith_fold), -seq_name)
+      train_dat <- select(filter(res, fold != ith_fold), -c(seq_name, fold))
       test_dat <- filter(res, fold == ith_fold)
-      lm_model <- multinom(dataset ~ ., train_dat, model = TRUE)
-      preds <- test_dat %>%
-        select(c("dataset", "fold")) %>%
-        mutate(Prediction = predict(lm_model, test_dat))
-      probs <- predict(lm_model, test_dat, type = "probs") %>% 
-        as.data.frame() %>% 
-        mutate(Probability = sapply(1:nrow(.), function(i) max(.[i,])))
-      cbind(preds, probs) %>% 
-        mutate(fold = ith_fold)
+      if(higher_order_model == "GLM") {
+        lm_model <- multinom(dataset ~ ., train_dat, model = TRUE)
+        preds <- test_dat %>%
+          select(c("dataset", "fold")) %>%
+          mutate(Prediction = predict(lm_model, test_dat))
+        probs <- predict(lm_model, test_dat, type = "probs") %>% 
+          as.data.frame() %>% 
+          mutate(Probability = sapply(1:nrow(.), function(i) max(.[i,])))
+        cbind(preds, probs)
+      } else {
+        rf_model <- ranger(dataset ~ ., data = mutate(train_dat, dataset = as.factor(dataset)),
+                           write.forest = TRUE, probability = TRUE, num.trees = 500, 
+                           verbose = FALSE, seed = 108567)
+        preds <- predict(rf_model, test_dat)[["predictions"]]
+        cbind(select(test_dat, c("dataset", "fold")),
+              Localization = c(colnames(preds)[max.col(preds[, c(colnames(preds))])]),
+              Probability = sapply(1:nrow(preds), function(i) max(preds[i,])))
+      }
+      
     }) %>% bind_rows()
-    write.csv(full_results, paste0(outdir, model, "_results.csv"), row.names = FALSE)
+    write.csv(full_results, paste0(outdir, model, "_", higher_level_model, "_results.csv"), row.names = FALSE)
   })
 }
 
