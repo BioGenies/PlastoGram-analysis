@@ -227,7 +227,8 @@ generate_results_for_architectures <- function(architecture_file_list, all_model
                              verbose = FALSE, seed = 108567)
           preds <- predict(rf_model, test_dat)[["predictions"]]
           cbind(select(test_dat, c("dataset", "fold")),
-                Localization = c(colnames(preds)[max.col(preds[, c(colnames(preds))])]),
+                Prediction = c(colnames(preds)[max.col(preds[, c(colnames(preds))])]),
+                preds,
                 Probability = sapply(1:nrow(preds), function(i) max(preds[i,])))
         }
       }) %>% bind_rows()
