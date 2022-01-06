@@ -327,7 +327,7 @@ generate_and_test_architectures <- function(model_variants, smote_models, sequen
 }
 
 
-do_jackknife <- function(ngram_matrix, sequences, data_df, model_df, data_path, remove_hmm_files = TRUE) {
+do_jackknife <- function(ngram_matrix, sequences, data_df, model_df, data_path, remove_hmm_files = TRUE, higher_level_model = "RF") {
   
   res <- lapply(unique(data_df[["seq_name"]]), function(ith_seq) {
     print(paste0("Starting round ", which(data_df[["seq_name"]] == ith_seq), " of ", nrow(data_df)))
@@ -342,26 +342,35 @@ do_jackknife <- function(ngram_matrix, sequences, data_df, model_df, data_path, 
     train_preds[is.na(train_preds)] <- 0
     test_preds <- predict_with_all_models(model_df, test_dat, test_df, test_seqs, ngram_models, hmm_models, ith_seq, remove_hmm_files = TRUE)
     test_preds[is.na(test_preds)] <- 0
-    write.csv(train_preds, paste0(data_path, "Jackknife_lower_level_models_results/", ith_seq, ".csv"), row.names = FALSE)
-    
+
     train_dat <- left_join(train_preds, data_df[, c("seq_name", "dataset")], by = "seq_name") %>% 
       select(-c(seq_name, fold)) %>% 
       mutate(dataset = as.factor(dataset))
-    higher_level_model <- ranger(dataset ~ ., data = train_dat,
-                                 write.forest = TRUE, probability = TRUE, num.trees = 500, 
-                                 verbose = FALSE, seed = 108567)
     
-    preds <- cbind(test_preds,
-                   predict(higher_level_model, test_preds)[["predictions"]]) %>% 
-      mutate(Localization = c(colnames(.)[12:20][max.col(.[, c(colnames(.)[12:20])])]),
-             dataset = test_df[["dataset"]])
-    
+    preds <- if(higher_level_model == "GLM") {
+      hl_model <- train_multinom(select(train_preds, -fold), filter(data_df, seq_name != ith_seq))
+      
+      cbind(test_preds,
+            t(predict(multinom_model, test_preds, type = "probs"))) %>% 
+        mutate(Localization = predict(multinom_model,test_preds),
+               dataset = test_df[["dataset"]])
+    } else {
+      hl_model <- ranger(dataset ~ ., data = train_dat,
+                         write.forest = TRUE, probability = TRUE, num.trees = 500, 
+                         verbose = FALSE, seed = 108567)
+      
+      cbind(test_preds,
+            predict(higher_level_model, test_preds)[["predictions"]]) %>% 
+        mutate(Localization = c(colnames(.)[12:20][max.col(.[, c(colnames(.)[12:20])])]),
+               dataset = test_df[["dataset"]])
+    }
+  
     list("train_preds" = train_preds,
          "results" = preds)
   })
   
   full_res <- bind_rows(lapply(1:length(res), function(i) res[[i]][["results"]]))
-  write.csv(full_res, paste0(data_path, "Jackknife_results.csv"), row.names = FALSE)
+  write.csv(full_res, paste0(data_path, "Jackknife_results_", higher_level_model, ".csv"), row.names = FALSE)
   lower_level_preds <- bind_rows(lapply(1:length(res), function(i) res[[i]][["train_preds"]]))
   
   list("results" = full_res,
