@@ -202,37 +202,39 @@ filter_results_for_single_architecture <- function(architecture_file, all_models
 }
 
 
-generate_results_for_architectures <- function(architecture_file_list, all_models_results, outdir, data_df, higher_level_model = "RF") {
-  lapply(architecture_file_list, function(ith_file) {
-    model <- gsub(".csv", "", last(strsplit(ith_file, "/")[[1]]))
-    res <- left_join(data_df[, c("seq_name", "dataset")], 
-                     filter_results_for_single_architecture(ith_file, all_models_results),
-                     by = "seq_name")
-    full_results <- lapply(unique(res[["fold"]]), function(ith_fold) {
-      train_dat <- select(filter(res, fold != ith_fold), -c(seq_name, fold))
-      test_dat <- filter(res, fold == ith_fold)
-      if(higher_order_model == "GLM") {
-        lm_model <- multinom(dataset ~ ., train_dat, model = TRUE)
-        preds <- test_dat %>%
-          select(c("dataset", "fold")) %>%
-          mutate(Prediction = predict(lm_model, test_dat))
-        probs <- predict(lm_model, test_dat, type = "probs") %>% 
-          as.data.frame() %>% 
-          mutate(Probability = sapply(1:nrow(.), function(i) max(.[i,])))
-        cbind(preds, probs)
-      } else {
-        rf_model <- ranger(dataset ~ ., data = mutate(train_dat, dataset = as.factor(dataset)),
-                           write.forest = TRUE, probability = TRUE, num.trees = 500, 
-                           verbose = FALSE, seed = 108567)
-        preds <- predict(rf_model, test_dat)[["predictions"]]
-        cbind(select(test_dat, c("dataset", "fold")),
-              Localization = c(colnames(preds)[max.col(preds[, c(colnames(preds))])]),
-              Probability = sapply(1:nrow(preds), function(i) max(preds[i,])))
-      }
-      
-    }) %>% bind_rows()
-    write.csv(full_results, paste0(outdir, model, "_", higher_level_model, "_results.csv"), row.names = FALSE)
+generate_results_for_architectures <- function(architecture_file_list, all_models_results, outdir, data_df, higher_level_models = c("RF", "GLM")) {
+  lapply(higher_level_models, function(ith_hl_model) {
+    lapply(architecture_file_list, function(ith_file) {
+      model <- gsub(".csv", "", last(strsplit(ith_file, "/")[[1]]))
+      res <- left_join(data_df[, c("seq_name", "dataset")], 
+                       filter_results_for_single_architecture(ith_file, all_models_results),
+                       by = "seq_name")
+      full_results <- lapply(unique(res[["fold"]]), function(ith_fold) {
+        train_dat <- select(filter(res, fold != ith_fold), -c(seq_name, fold))
+        test_dat <- filter(res, fold == ith_fold)
+        if(ith_hl_model == "GLM") {
+          lm_model <- multinom(dataset ~ ., train_dat, model = TRUE)
+          preds <- test_dat %>%
+            select(c("dataset", "fold")) %>%
+            mutate(Prediction = predict(lm_model, test_dat))
+          probs <- predict(lm_model, test_dat, type = "probs") %>% 
+            as.data.frame() %>% 
+            mutate(Probability = sapply(1:nrow(.), function(i) max(.[i,])))
+          cbind(preds, probs)
+        } else {
+          rf_model <- ranger(dataset ~ ., data = mutate(train_dat, dataset = as.factor(dataset)),
+                             write.forest = TRUE, probability = TRUE, num.trees = 500, 
+                             verbose = FALSE, seed = 108567)
+          preds <- predict(rf_model, test_dat)[["predictions"]]
+          cbind(select(test_dat, c("dataset", "fold")),
+                Localization = c(colnames(preds)[max.col(preds[, c(colnames(preds))])]),
+                Probability = sapply(1:nrow(preds), function(i) max(preds[i,])))
+        }
+      }) %>% bind_rows()
+      write.csv(full_results, paste0(outdir, model, "_", ith_hl_model, "_results.csv"), row.names = FALSE)
+    })
   })
+  
 }
 
 evaluate_all_architectures <- function(res_files, outfile, data_df) {
@@ -342,7 +344,7 @@ do_jackknife <- function(ngram_matrix, sequences, data_df, model_df, data_path, 
     train_preds[is.na(train_preds)] <- 0
     test_preds <- predict_with_all_models(model_df, test_dat, test_df, test_seqs, ngram_models, hmm_models, ith_seq, remove_hmm_files = TRUE)
     test_preds[is.na(test_preds)] <- 0
-
+    
     train_dat <- left_join(train_preds, data_df[, c("seq_name", "dataset")], by = "seq_name") %>% 
       select(-c(seq_name, fold)) %>% 
       mutate(dataset = as.factor(dataset))
@@ -364,7 +366,7 @@ do_jackknife <- function(ngram_matrix, sequences, data_df, model_df, data_path, 
         mutate(Localization = c(colnames(.)[12:20][max.col(.[, c(colnames(.)[12:20])])]),
                dataset = test_df[["dataset"]])
     }
-  
+    
     list("train_preds" = train_preds,
          "results" = preds)
   })
