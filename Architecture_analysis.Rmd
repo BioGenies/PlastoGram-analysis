@@ -31,11 +31,12 @@ change_variant_names <- function(df, colname) {
 arch_dat <- mutate(mean_architecture_performance,
                    arch_variant = sapply(mean_architecture_performance[["model"]], function(i) gsub("-Sec|-Tat", "", strsplit(i, "_")[[1]][2])),
                    hierarchical = grepl(pattern = "Filtering", x = model, ignore.case = FALSE),
+                   algorithm = sapply(mean_architecture_performance[["model"]], function(i) last(strsplit(i, "_")[[1]])),
                    sec = !grepl(pattern = "-Sec", x = model, ignore.case = FALSE),
                    tat = !grepl(pattern = "-Tat", x = model, ignore.case = FALSE),
                    smote = !grepl(pattern = "0-1", x = model),
                    smote_variant = sapply(mean_architecture_performance[["model"]], function(i) strsplit(i, "_")[[1]][3])) %>% 
-  pivot_longer(cols = !c(model, arch_variant, hierarchical, sec, tat, smote, smote_variant), names_to = "measure") 
+  pivot_longer(cols = !c(model, arch_variant, hierarchical, algorithm, sec, tat, smote, smote_variant), names_to = "measure") 
 
 ```
 
@@ -58,6 +59,13 @@ filter(arch_dat, measure %in% c("mean_AU1U", "mean_kappa")) %>%
   geom_boxplot() +
   facet_wrap(~measure, scales = "free_y", nrow = 2) + 
   theme_bw()
+
+filter(arch_dat, measure %in% c("mean_AU1U", "mean_kappa")) %>% 
+  ggplot(aes(x = arch_variant, y = value, color = hierarchical)) +
+  geom_boxplot() +
+  facet_grid(measure~algorithm, scales = "free_y") + 
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90))
 ```
 
 ## Prediction of all classes with hierarchical or not hierarchical architecture
@@ -70,6 +78,14 @@ filter(arch_dat, !(measure %in% c("mean_AU1U", "mean_kappa"))) %>%
   theme_bw() +
   theme(legend.position = "none",
         axis.text.x = element_text(angle = 90))
+
+filter(arch_dat, !(measure %in% c("mean_AU1U", "mean_kappa"))) %>% 
+  ggplot(aes(x = arch_variant, y = value, color = measure)) +
+  geom_boxplot() +
+  facet_grid(measure~algorithm+hierarchical, scales = "free_y") + 
+  theme_bw() +
+  theme(legend.position = "none",
+        axis.text.x = element_text(angle = 90))
 ```
 
 ## Prediction of the most difficult classes with hierarchical or not hierarchical architecture
@@ -78,6 +94,15 @@ filter(arch_dat, measure %in% c("mean_N_IM_sensitivity", "mean_N_OM_sensitivity"
   ggplot(aes(x = arch_variant, y = value, color = measure)) +
   geom_boxplot() +
   facet_wrap(~hierarchical) + 
+  theme_bw() +
+  theme(legend.position = "bottom",
+        axis.text.x = element_text(angle = 90))
+```
+```{r fig.height = 10}
+filter(arch_dat, measure %in% c("mean_N_IM_sensitivity", "mean_N_OM_sensitivity", "mean_N_TM_sensitivity", "mean_N_TL_SEC_sensitivity")) %>% 
+  ggplot(aes(x = arch_variant, y = value, color = measure)) +
+  geom_boxplot() +
+  facet_grid(algorithm~hierarchical) + 
   theme_bw() +
   theme(legend.position = "bottom",
         axis.text.x = element_text(angle = 90))
@@ -105,6 +130,27 @@ filter(arch_dat, measure %in% c("mean_AU1U", "mean_kappa")) %>%
   ggplot(aes(x = models, y = value, color = measure)) +
   geom_boxplot() +
   facet_grid(measure~arch_variant, scales = "free_y") + 
+  theme_bw() +
+  theme(legend.position = "none",
+        axis.text.x = element_text(angle = 90))
+
+filter(arch_dat, measure %in% c("mean_AU1U", "mean_kappa") & algorithm == "GLM") %>% 
+  mutate(models = case_when(sec == TRUE & tat == TRUE ~ "with Sec and Tat",
+                            sec == FALSE & tat == TRUE ~ "without Sec",
+                            sec == TRUE & tat == FALSE ~ "without Tat")) %>% 
+  ggplot(aes(x = models, y = value, color = measure)) +
+  geom_boxplot() +
+  facet_grid(measure~algorithm+arch_variant, scales = "free_y") + 
+  theme_bw() +
+  theme(legend.position = "none",
+        axis.text.x = element_text(angle = 90))
+filter(arch_dat, measure %in% c("mean_AU1U", "mean_kappa") & algorithm == "RF") %>% 
+  mutate(models = case_when(sec == TRUE & tat == TRUE ~ "with Sec and Tat",
+                            sec == FALSE & tat == TRUE ~ "without Sec",
+                            sec == TRUE & tat == FALSE ~ "without Tat")) %>% 
+  ggplot(aes(x = models, y = value, color = measure)) +
+  geom_boxplot() +
+  facet_grid(measure~algorithm+arch_variant, scales = "free_y") + 
   theme_bw() +
   theme(legend.position = "none",
         axis.text.x = element_text(angle = 90))
@@ -138,18 +184,58 @@ filter(arch_dat, measure %in% c("mean_N_TL_SEC_sensitivity", "mean_N_TL_TAT_sens
   theme_bw()+
   theme(legend.position = "bottom",
         axis.text.x = element_text(angle = 90))
+
+filter(arch_dat, measure %in% c("mean_N_TL_SEC_sensitivity", "mean_N_TL_TAT_sensitivity", "mean_N_S_sensitivity") & algorithm == "GLM") %>% 
+  mutate(models = case_when(sec == TRUE & tat == TRUE ~ "with Sec and Tat",
+                            sec == FALSE & tat == TRUE ~ "without Sec",
+                            sec == TRUE & tat == FALSE ~ "without Tat")) %>% 
+  ggplot(aes(x = models, y = value, color = hierarchical)) +
+  geom_boxplot() +
+  facet_grid(measure~algorithm+arch_variant, scales = "free_y") + 
+  theme_bw()+
+  theme(legend.position = "bottom",
+        axis.text.x = element_text(angle = 90))
+filter(arch_dat, measure %in% c("mean_N_TL_SEC_sensitivity", "mean_N_TL_TAT_sensitivity", "mean_N_S_sensitivity") & algorithm == "RF") %>% 
+  mutate(models = case_when(sec == TRUE & tat == TRUE ~ "with Sec and Tat",
+                            sec == FALSE & tat == TRUE ~ "without Sec",
+                            sec == TRUE & tat == FALSE ~ "without Tat")) %>% 
+  ggplot(aes(x = models, y = value, color = hierarchical)) +
+  geom_boxplot() +
+  facet_grid(measure~algorithm+arch_variant, scales = "free_y") + 
+  theme_bw()+
+  theme(legend.position = "bottom",
+        axis.text.x = element_text(angle = 90))
 ```
 
 
-## Performance of the six best architectures (according to mean kappa value) in 10-fold CV
+## Performance of the six best architectures (according to mean kappa value) in 10-fold CV for GLM models
 ```{r fig.height=12}
-best_6 <- mean_architecture_performance %>% 
+best_6_glm <- mean_architecture_performance %>% 
+  filter(grepl("GLM", model)) %>% 
   change_variant_names("model") %>% 
   arrange(desc(mean_kappa)) %>% 
   head()
-  change_variant_names(architectures_performance, "model") %>% 
-filter(model %in% best_6[["model"]])  %>% 
-  mutate(model = factor(model, levels = rev(best_6[["model"]]))) %>% 
+change_variant_names(architectures_performance, "model") %>% 
+  filter(model %in% best_6_glm[["model"]])  %>% 
+  mutate(model = factor(model, levels = rev(best_6_glm[["model"]]))) %>% 
+  pivot_longer(cols = !c(model, fold)) %>% 
+  ggplot(aes(y = model, x = value)) +
+  geom_boxplot() +
+  facet_wrap(~name, scales = "free_x") +
+  theme_bw()
+```
+
+
+## Performance of the six best architectures (according to mean kappa value) in 10-fold CV for RF models
+```{r fig.height=12}
+best_6_rf <- mean_architecture_performance %>% 
+  filter(grepl("RF", model)) %>% 
+  change_variant_names("model") %>% 
+  arrange(desc(mean_kappa)) %>% 
+  head()
+change_variant_names(architectures_performance, "model") %>% 
+  filter(model %in% best_6_rf[["model"]])  %>% 
+  mutate(model = factor(model, levels = rev(best_6_rf[["model"]]))) %>% 
   pivot_longer(cols = !c(model, fold)) %>% 
   ggplot(aes(y = model, x = value)) +
   geom_boxplot() +
