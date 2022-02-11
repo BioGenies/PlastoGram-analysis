@@ -329,6 +329,20 @@ generate_and_test_architectures <- function(model_variants, smote_models, sequen
                              data_df_final)
 }
 
+scaled_train_model <- function(train_df, test_df) {
+  scaled_train_df <- scale(select(train_df, -dataset))
+  scaled_test_df <- scale(select(test_df, -seq_name), center=attr(scaled_train_df, "scaled:center"),
+                          scale=attr(scaled_train_df, "scaled:scale"))
+  scaled_train_df <- data.frame(scaled_train_df)
+  scaled_train_df[["dataset"]] <- train_df[["dataset"]]
+  
+  hl_model <- invisible(multinom(dataset ~ ., data = scaled_train_df, model = TRUE))
+  
+  cbind(data.frame(seq_name = test_df[["seq_name"]]), scaled_test_df,
+        t(predict(hl_model, scaled_test_df, type = "probs"))) %>% 
+    mutate(Localization = predict(hl_model, scaled_test_df),
+           dataset = test_df[["dataset"]])
+}
 
 do_jackknife <- function(ngram_matrix, sequences, data_df, model_df, data_path, remove_hmm_files = TRUE, higher_level_model = "RF") {
   
@@ -351,29 +365,41 @@ do_jackknife <- function(ngram_matrix, sequences, data_df, model_df, data_path, 
       mutate(dataset = as.factor(dataset))
     
     preds <- if(higher_level_model == "GLM") {
+      # GLM
       hl_model <- train_multinom(select(train_preds, -fold), filter(data_df, seq_name != ith_seq))
-      
-      cbind(test_preds,
-            t(predict(multinom_model, test_preds, type = "probs"))) %>% 
-        mutate(Localization = predict(multinom_model,test_preds),
+      glm_preds <- cbind(test_preds,
+            t(predict(hl_model, test_preds, type = "probs"))) %>% 
+        mutate(Localization = predict(hl_model, test_preds),
                dataset = test_df[["dataset"]])
+      # Scaled GLM
+      glm_scaled_preds <- scaled_train_model(train_dat, select(test_preds, -fold))
+      
+      list("GLM" = glm_preds,
+           "GLM_scaled" = glm_scaled_preds)
+      
     } else {
       hl_model <- ranger(dataset ~ ., data = train_dat,
                          write.forest = TRUE, probability = TRUE, num.trees = 500, 
                          verbose = FALSE, seed = 108567)
       
-      cbind(test_preds,
-            predict(higher_level_model, test_preds)[["predictions"]]) %>% 
+      rf_preds <- cbind(test_preds,
+            predict(hl_model, test_preds)[["predictions"]]) %>% 
         mutate(Localization = c(colnames(.)[12:20][max.col(.[, c(colnames(.)[12:20])])]),
                dataset = test_df[["dataset"]])
+      
+      list("RF" = rf_preds)
     }
     
     list("train_preds" = train_preds,
          "results" = preds)
   })
   
-  full_res <- bind_rows(lapply(1:length(res), function(i) res[[i]][["results"]]))
-  write.csv(full_res, paste0(data_path, "Jackknife_results_", higher_level_model, ".csv"), row.names = FALSE)
+  full_res <- lapply(names(res[[1]][["results"]]), function(ith_res) {
+    merged_res <- bind_rows(lapply(1:length(res), function(i) res[[i]][["results"]][[ith_res]]))
+    write.csv(merged_res, paste0(data_path, "Jackknife_results_", ith_res, ".csv"), row.names = FALSE)
+    merged_res
+  }) %>% setNames(names(res[[1]][["results"]]))
+  
   lower_level_preds <- bind_rows(lapply(1:length(res), function(i) res[[i]][["train_preds"]]))
   
   list("results" = full_res,

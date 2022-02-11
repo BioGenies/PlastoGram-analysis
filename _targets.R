@@ -616,8 +616,12 @@ list(
                                           paste0(data_path, "Architectures_mean_performance.csv"))
   ),
   tar_target(
-    PlastoGram_final_architecture,
-    read.csv("./data/Final_PlastoGram_model_architecture.csv")
+    PlastoGram_best_architecture_glm,
+    read.csv(paste0(data_path, "Model_architectures/Architecture_v8_0-1_No_filtering.csv"))
+  ),
+  tar_target(
+    PlastoGram_best_architecture_rf,
+    read.csv(paste0(data_path, "Model_architectures/Architecture_v8_1-2_No_filtering.csv"))
   ),
   tar_target(
     PlastoGram_ngram_models,
@@ -646,14 +650,14 @@ list(
   tar_target(
     baseline_model_cv_res,
     do_baseline_cv(ngram_matrix, data_df_final)
+  ),
+  tar_target(
+    jackknife_results_glm,
+    do_jackknife(ngram_matrix, c(N_seqs, P_seqs), data_df_final, PlastoGram_best_architecture_glm, data_path, higher_level_model = "GLM")
+  ),
+  tar_target(
+    jackknife_results_rf,
+    do_jackknife(ngram_matrix, c(N_seqs, P_seqs), data_df_final, PlastoGram_best_architecture_rf, data_path, higher_level_model = "RF")
   )
-  # tar_target(
-  #   jackknife_results_rf,
-  #   do_jackknife(ngram_matrix, c(N_seqs, P_seqs), data_df_final, PlastoGram_final_architecture, data_path, higher_level_model = "RF")
-  # ),
-  # tar_target(
-  #   jackknife_results_glm,
-  #   do_jackknife(ngram_matrix, c(N_seqs, P_seqs), data_df_final, PlastoGram_final_architecture, data_path, higher_level_model = "GLM")
-  # )
 )
 
