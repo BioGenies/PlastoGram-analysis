@@ -11,7 +11,7 @@ knitr::opts_chunk$set(echo = FALSE, message = FALSE, fig.height = 10, fig.width 
 library(dplyr)
 library(ggplot2)
 
-data_path <- "/media/kasia/Data/Dropbox/Projekty/BioNgramProjects/PlastoGram/"
+data_path <- "~/Dropbox/Projekty/BioNgramProjects/PlastoGram/"
 
 plot_graphpart_res <- function(res_file) {
   x <- read.csv(res_file)
@@ -33,31 +33,49 @@ plot_graphpart_res <- function(res_file) {
 ## Threshold = 30%
 
 ### Needle, 11 clusters
+```
+graphpart needle --fasta-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Sequences/Datasets_for_graph-part.fa --threshold 0.3 --out-file graphpart_res_11.csv --labels-name label --partitions 11 --threads 20
+```
 ```{r}
 plot_graphpart_res(paste0(data_path, "Graph-part_results/graphpart_res_11.csv"))
 ```
 
 ### Needle, 6 clusters
+```
+graphpart needle --fasta-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Sequences/Datasets_for_graph-part.fa --threshold 0.3 --out-file graphpart_res_6.csv --labels-name label --partitions 6 --threads 20
+```
 ```{r}
 plot_graphpart_res(paste0(data_path, "Graph-part_results/graphpart_res_6.csv"))
 ```
 
 ### Needle, 4 clusters
+```
+graphpart needle --fasta-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Sequences/Datasets_for_graph-part.fa --threshold 0.3 --out-file graphpart_res_4.csv --labels-name label --partitions 4 --threads 20
+```
 ```{r}
 plot_graphpart_res(paste0(data_path, "Graph-part_results/graphpart_res_4.csv"))
 ```
 
 ### mmseqs2, 11 clusters
+```
+graphpart mmseqs2 --fasta-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Sequences/Datasets_for_graph-part.fa --threshold 0.3 --out-file graphpart_res_11_mmseqs.csv --labels-name label --partitions 11
+```
 ```{r}
 plot_graphpart_res(paste0(data_path, "Graph-part_results/graphpart_res_11_mmseqs.csv"))
 ```
 
 ### mmseqs2, 6 clusters
+```
+graphpart mmseqs2 --fasta-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Sequences/Datasets_for_graph-part.fa --threshold 0.3 --out-file graphpart_res_6_mmseqs.csv --labels-name label --partitions 6 
+```
 ```{r}
 plot_graphpart_res(paste0(data_path, "Graph-part_results/graphpart_res_6_mmseqs.csv"))
 ```
 
 ### mmseqs2, 4 clusters
+```
+graphpart mmseqs2 --fasta-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Sequences/Datasets_for_graph-part.fa --threshold 0.3 --out-file graphpart_res_4_mmseqs.csv --labels-name label --partitions 4 
+```
 ```{r}
 plot_graphpart_res(paste0(data_path, "Graph-part_results/graphpart_res_4_mmseqs.csv"))
 ```
@@ -66,31 +84,49 @@ plot_graphpart_res(paste0(data_path, "Graph-part_results/graphpart_res_4_mmseqs.
 ## Threshold = 40%
 
 ### Needle, 11 clusters
+```
+graphpart needle --fasta-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Sequences/Datasets_for_graph-part.fa --threshold 0.4 --out-file graphpart_res_11_thresh0.4.csv --labels-name label --partitions 11 --threads 20
+```
 ```{r}
 plot_graphpart_res(paste0(data_path, "Graph-part_results/graphpart_res_11_thresh0.4.csv"))
 ```
 
 ### Needle, 6 clusters
+```
+graphpart needle --fasta-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Sequences/Datasets_for_graph-part.fa --threshold 0.4 --out-file graphpart_res_6_thresh0.4.csv --labels-name label --partitions 6 --threads 20
+```
 ```{r}
 plot_graphpart_res(paste0(data_path, "Graph-part_results/graphpart_res_6_thresh0.4.csv"))
 ```
 
 ### Needle, 4 clusters
+```
+graphpart needle --fasta-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Sequences/Datasets_for_graph-part.fa --threshold 0.4 --out-file graphpart_res_4_thresh0.4.csv --labels-name label --partitions 4 --threads 20
+```
 ```{r}
 plot_graphpart_res(paste0(data_path, "Graph-part_results/graphpart_res_4_thresh0.4.csv"))
 ```
 
 ### mmseqs2, 11 clusters
+```
+graphpart mmseqs2 --fasta-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Sequences/Datasets_for_graph-part.fa --threshold 0.4 --out-file graphpart_res_11_mmseqs_thresh0.4.csv --labels-name label --partitions 11
+```
 ```{r}
 plot_graphpart_res(paste0(data_path, "Graph-part_results/graphpart_res_11_mmseqs_thresh0.4.csv"))
 ```
 
 ### mmseqs2, 6 clusters
+```
+graphpart mmseqs2 --fasta-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Sequences/Datasets_for_graph-part.fa --threshold 0.4 --out-file graphpart_res_6_mmseqs_thresh0.4.csv --labels-name label --partitions 6
+```
 ```{r}
 plot_graphpart_res(paste0(data_path, "Graph-part_results/graphpart_res_6_mmseqs_thresh0.4.csv"))
 ```
 
 ### mmseqs2, 4 clusters
+```
+graphpart mmseqs2 --fasta-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Sequences/Datasets_for_graph-part.fa --threshold 0.4 --out-file graphpart_res_4_mmseqs_thresh0.4.csv --labels-name label --partitions 4
+```
 ```{r}
 plot_graphpart_res(paste0(data_path, "Graph-part_results/graphpart_res_4_mmseqs_thresh0.4.csv"))
 ```
