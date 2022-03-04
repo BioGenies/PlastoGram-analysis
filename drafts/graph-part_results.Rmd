@@ -1,0 +1,96 @@
+---
+title: "Graph-part results"
+author: "Katarzyna Sidorczuk"
+date: "3/4/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, fig.height = 10, fig.width = 12)
+
+library(dplyr)
+library(ggplot2)
+
+data_path <- "/media/kasia/Data/Dropbox/Projekty/BioNgramProjects/PlastoGram/"
+
+plot_graphpart_res <- function(res_file) {
+  x <- read.csv(res_file)
+  y <- x %>% group_by(`label.val`, cluster) %>% summarise(n = n()) 
+  nam <- data.frame(`label.val` = 0:8, 
+                    dataset = c("N_OM", "N_IM", "P_IM", "N_S", "P_S", "N_TM", "P_TM", "N_TL_SEC", "N_TL_TAT"))
+  
+  all_res <- left_join(y, nam)
+  
+  all_res %>% 
+    mutate(cluster = as.factor(cluster)) %>% 
+    ggplot(aes(x = cluster, y = n)) +
+    geom_col() +
+    geom_text(aes(label = n), vjust = -0.5, size = 3) +
+    facet_wrap(~dataset, scales = "free_y")
+}
+```
+
+## Threshold = 30%
+
+### Needle, 11 clusters
+```{r}
+plot_graphpart_res(paste0(data_path, "Graph-part_results/graphpart_res_11.csv"))
+```
+
+### Needle, 6 clusters
+```{r}
+plot_graphpart_res(paste0(data_path, "Graph-part_results/graphpart_res_6.csv"))
+```
+
+### Needle, 4 clusters
+```{r}
+plot_graphpart_res(paste0(data_path, "Graph-part_results/graphpart_res_4.csv"))
+```
+
+### mmseqs2, 11 clusters
+```{r}
+plot_graphpart_res(paste0(data_path, "Graph-part_results/graphpart_res_11_mmseqs.csv"))
+```
+
+### mmseqs2, 6 clusters
+```{r}
+plot_graphpart_res(paste0(data_path, "Graph-part_results/graphpart_res_6_mmseqs.csv"))
+```
+
+### mmseqs2, 4 clusters
+```{r}
+plot_graphpart_res(paste0(data_path, "Graph-part_results/graphpart_res_4_mmseqs.csv"))
+```
+
+
+## Threshold = 40%
+
+### Needle, 11 clusters
+```{r}
+plot_graphpart_res(paste0(data_path, "Graph-part_results/graphpart_res_11_thresh0.4.csv"))
+```
+
+### Needle, 6 clusters
+```{r}
+plot_graphpart_res(paste0(data_path, "Graph-part_results/graphpart_res_6_thresh0.4.csv"))
+```
+
+### Needle, 4 clusters
+```{r}
+plot_graphpart_res(paste0(data_path, "Graph-part_results/graphpart_res_4_thresh0.4.csv"))
+```
+
+### mmseqs2, 11 clusters
+```{r}
+plot_graphpart_res(paste0(data_path, "Graph-part_results/graphpart_res_11_mmseqs_thresh0.4.csv"))
+```
+
+### mmseqs2, 6 clusters
+```{r}
+plot_graphpart_res(paste0(data_path, "Graph-part_results/graphpart_res_6_mmseqs_thresh0.4.csv"))
+```
+
+### mmseqs2, 4 clusters
+```{r}
+plot_graphpart_res(paste0(data_path, "Graph-part_results/graphpart_res_4_mmseqs_thresh0.4.csv"))
+```
