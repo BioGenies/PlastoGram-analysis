@@ -12,12 +12,13 @@ library(dplyr)
 library(ggplot2)
 
 data_path <- "~/Dropbox/Projekty/BioNgramProjects/PlastoGram/"
+datasets <- c("N_OM", "N_IM", "P_IM", "N_S", "P_S", "N_TM", "P_TM", "N_TL_SEC", "N_TL_TAT")
 
 plot_graphpart_res <- function(res_file) {
   x <- read.csv(res_file)
   y <- x %>% group_by(`label.val`, cluster) %>% summarise(n = n()) 
   nam <- data.frame(`label.val` = 0:8, 
-                    dataset = c("N_OM", "N_IM", "P_IM", "N_S", "P_S", "N_TM", "P_TM", "N_TL_SEC", "N_TL_TAT"))
+                    dataset = datasets)
   
   all_res <- left_join(y, nam)
   
@@ -28,7 +29,717 @@ plot_graphpart_res <- function(res_file) {
     geom_text(aes(label = n), vjust = -0.5, size = 3) +
     facet_wrap(~dataset, scales = "free_y")
 }
+
+combine_and_plot_graphpart_res <- function(type, datasets) {
+  all_dat <- lapply(datasets, function(ith_set) {
+    tryCatch({
+      read.csv(paste0(data_path, "Graph-part_results/graphpart_res_", ith_set, "_", type, ".csv")) %>% 
+        mutate(dataset = ith_set) 
+    }, error = function(e) data.frame())
+  }) %>% bind_rows()
+  
+  all_res <- all_dat %>% 
+    group_by(dataset, cluster) %>% 
+    summarise(n = n()) 
+  
+  all_res %>% 
+    mutate(cluster = as.factor(cluster)) %>% 
+    ggplot(aes(x = cluster, y = n)) +
+    geom_col() +
+    geom_text(aes(label = n), vjust = -0.5, size = 3) +
+    facet_wrap(~dataset, scales = "free_y")
+}
 ```
+
+## CD-HIT reduction 99%
+
+30%, 4 clusters
+```
+graphpart needle --fasta-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Sequences/Datasets_for_graph-part_cdhit_0.99.fa --threshold 0.3 --out-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Graph-part_results/graphpart_res_cdhit0.99_4.csv --labels-name label --partitions 4 --threads 24 --save-checkpoint-path graph-part_edgelist_99.csv
+```
+```{r}
+plot_graphpart_res(paste0(data_path, "Graph-part_results/graphpart_res_cdhit0.99_4.csv"))
+```
+
+30%, 5 clusters
+```
+graphpart precomputed --fasta-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Sequences/Datasets_for_graph-part_cdhit_0.99.fa --threshold 0.3 --out-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Graph-part_results/graphpart_res_cdhit0.99_5.csv --labels-name label --partitions 5 --edge-file graph-part_edgelist_99.csv
+```
+```{r}
+plot_graphpart_res(paste0(data_path, "Graph-part_results/graphpart_res_cdhit0.99_5.csv"))
+```
+
+30%, 6 clusters
+```
+graphpart precomputed --fasta-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Sequences/Datasets_for_graph-part_cdhit_0.99.fa --threshold 0.3 --out-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Graph-part_results/graphpart_res_cdhit0.99_6.csv --labels-name label --partitions 6 --edge-file graph-part_edgelist_99.csv
+```
+```{r}
+plot_graphpart_res(paste0(data_path, "Graph-part_results/graphpart_res_cdhit0.99_6.csv"))
+```
+
+40%, 4 clusters
+```
+graphpart precomputed --fasta-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Sequences/Datasets_for_graph-part_cdhit_0.99.fa --threshold 0.4 --out-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Graph-part_results/graphpart_res_cdhit0.99_4_thresh0.4.csv --labels-name label --partitions 4 --edge-file graph-part_edgelist_99.csv
+```
+```{r}
+plot_graphpart_res(paste0(data_path, "Graph-part_results/graphpart_res_cdhit0.99_4_thresh0.4.csv"))
+```
+
+40%, 5 clusters
+```
+graphpart precomputed --fasta-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Sequences/Datasets_for_graph-part_cdhit_0.99.fa --threshold 0.4 --out-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Graph-part_results/graphpart_res_cdhit0.99_5_thresh0.4.csv --labels-name label --partitions 5 --edge-file graph-part_edgelist_99.csv
+```
+```{r}
+plot_graphpart_res(paste0(data_path, "Graph-part_results/graphpart_res_cdhit0.99_5_thresh0.4.csv"))
+```
+
+40%, 6 clusters
+```
+graphpart precomputed --fasta-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Sequences/Datasets_for_graph-part_cdhit_0.99.fa --threshold 0.4 --out-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Graph-part_results/graphpart_res_cdhit0.99_6_thresh0.4.csv --labels-name label --partitions 6 --edge-file graph-part_edgelist_99.csv
+```
+```{r}
+plot_graphpart_res(paste0(data_path, "Graph-part_results/graphpart_res_cdhit0.99_6_thresh0.4.csv"))
+```
+
+50%, 4 clusters
+```
+graphpart precomputed --fasta-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Sequences/Datasets_for_graph-part_cdhit_0.99.fa --threshold 0.5 --out-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Graph-part_results/graphpart_res_cdhit0.99_4_thresh0.5.csv --labels-name label --partitions 4 --edge-file graph-part_edgelist_99.csv
+```
+```{r}
+plot_graphpart_res(paste0(data_path, "Graph-part_results/graphpart_res_cdhit0.99_4_thresh0.5.csv"))
+```
+
+50%, 5 clusters
+```
+graphpart precomputed --fasta-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Sequences/Datasets_for_graph-part_cdhit_0.99.fa --threshold 0.5 --out-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Graph-part_results/graphpart_res_cdhit0.99_5_thresh0.5.csv --labels-name label --partitions 5 --edge-file graph-part_edgelist_99.csv
+```
+```{r}
+plot_graphpart_res(paste0(data_path, "Graph-part_results/graphpart_res_cdhit0.99_5_thresh0.5.csv"))
+```
+
+50%, 6 clusters
+```
+graphpart precomputed --fasta-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Sequences/Datasets_for_graph-part_cdhit_0.99.fa --threshold 0.5 --out-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Graph-part_results/graphpart_res_cdhit0.99_6_thresh0.5.csv --labels-name label --partitions 6 --edge-file graph-part_edgelist_99.csv
+```
+```{r}
+plot_graphpart_res(paste0(data_path, "Graph-part_results/graphpart_res_cdhit0.99_6_thresh0.5.csv"))
+```
+
+
+
+30%, 4 clusters, no moving
+```
+graphpart precomputed --fasta-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Sequences/Datasets_for_graph-part_cdhit_0.99.fa --threshold 0.3 --out-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Graph-part_results/graphpart_res_cdhit0.99_4_nomoving.csv --labels-name label --partitions 4 --edge-file graph-part_edgelist_99.csv --no-moving
+```
+```{r}
+plot_graphpart_res(paste0(data_path, "Graph-part_results/graphpart_res_cdhit0.99_4_nomoving.csv"))
+```
+
+30%, 5 clusters, no moving
+```
+graphpart precomputed --fasta-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Sequences/Datasets_for_graph-part_cdhit_0.99.fa --threshold 0.3 --out-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Graph-part_results/graphpart_res_cdhit0.99_5_nomoving.csv --labels-name label --partitions 5 --edge-file graph-part_edgelist_99.csv --no-moving
+```
+```{r}
+plot_graphpart_res(paste0(data_path, "Graph-part_results/graphpart_res_cdhit0.99_5_nomoving.csv"))
+```
+
+30%, 6 clusters, no moving
+```
+graphpart precomputed --fasta-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Sequences/Datasets_for_graph-part_cdhit_0.99.fa --threshold 0.3 --out-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Graph-part_results/graphpart_res_cdhit0.99_6_nomoving.csv --labels-name label --partitions 6 --edge-file graph-part_edgelist_99.csv --no-moving
+```
+```{r}
+plot_graphpart_res(paste0(data_path, "Graph-part_results/graphpart_res_cdhit0.99_6_nomoving.csv"))
+```
+
+40%, 4 clusters, no moving
+```
+graphpart precomputed --fasta-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Sequences/Datasets_for_graph-part_cdhit_0.99.fa --threshold 0.4 --out-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Graph-part_results/graphpart_res_cdhit0.99_4_thresh0.4_nomoving.csv --labels-name label --partitions 4 --edge-file graph-part_edgelist_99.csv --no-moving
+```
+```{r}
+plot_graphpart_res(paste0(data_path, "Graph-part_results/graphpart_res_cdhit0.99_4_thresh0.4_nomoving.csv"))
+```
+
+40%, 5 clusters, no moving
+```
+graphpart precomputed --fasta-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Sequences/Datasets_for_graph-part_cdhit_0.99.fa --threshold 0.4 --out-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Graph-part_results/graphpart_res_cdhit0.99_5_thresh0.4_nomoving.csv --labels-name label --partitions 5 --edge-file graph-part_edgelist_99.csv --no-moving
+```
+```{r}
+plot_graphpart_res(paste0(data_path, "Graph-part_results/graphpart_res_cdhit0.99_5_thresh0.4_nomoving.csv"))
+```
+
+40%, 6 clusters, no moving
+```
+graphpart precomputed --fasta-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Sequences/Datasets_for_graph-part_cdhit_0.99.fa --threshold 0.4 --out-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Graph-part_results/graphpart_res_cdhit0.99_6_thresh0.4_nomoving.csv --labels-name label --partitions 6 --edge-file graph-part_edgelist_99.csv --no-moving
+```
+```{r}
+plot_graphpart_res(paste0(data_path, "Graph-part_results/graphpart_res_cdhit0.99_6_thresh0.4_nomoving.csv"))
+```
+
+50%, 4 clusters, no moving
+```
+graphpart precomputed --fasta-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Sequences/Datasets_for_graph-part_cdhit_0.99.fa --threshold 0.5 --out-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Graph-part_results/graphpart_res_cdhit0.99_4_thresh0.5_nomoving.csv --labels-name label --partitions 4 --edge-file graph-part_edgelist_99.csv --no-moving
+```
+```{r}
+plot_graphpart_res(paste0(data_path, "Graph-part_results/graphpart_res_cdhit0.99_4_thresh0.5_nomoving.csv"))
+```
+
+50%, 5 clusters, no moving
+```
+graphpart precomputed --fasta-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Sequences/Datasets_for_graph-part_cdhit_0.99.fa --threshold 0.5 --out-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Graph-part_results/graphpart_res_cdhit0.99_5_thresh0.5_nomoving.csv --labels-name label --partitions 5 --edge-file graph-part_edgelist_99.csv --no-moving
+```
+```{r}
+plot_graphpart_res(paste0(data_path, "Graph-part_results/graphpart_res_cdhit0.99_5_thresh0.5_nomoving.csv"))
+```
+
+50%, 6 clusters, no moving
+```
+graphpart precomputed --fasta-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Sequences/Datasets_for_graph-part_cdhit_0.99.fa --threshold 0.5 --out-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Graph-part_results/graphpart_res_cdhit0.99_6_thresh0.5_nomoving.csv --labels-name label --partitions 6 --edge-file graph-part_edgelist_99.csv --no-moving
+```
+```{r}
+plot_graphpart_res(paste0(data_path, "Graph-part_results/graphpart_res_cdhit0.99_6_thresh0.5_nomoving.csv"))
+```
+
+
+## CD-HIT 95%
+
+30%, 4 clusters
+```
+graphpart needle --fasta-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Sequences/Datasets_for_graph-part_cdhit_0.95.fa --threshold 0.3 --out-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Graph-part_results/graphpart_res_cdhit0.95_4.csv --labels-name label --partitions 4 --threads 24 --save-checkpoint-path graph-part_edgelist_95.csv
+```
+```{r}
+plot_graphpart_res(paste0(data_path, "Graph-part_results/graphpart_res_cdhit0.95_4.csv"))
+```
+
+30%, 5 clusters
+```
+graphpart precomputed --fasta-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Sequences/Datasets_for_graph-part_cdhit_0.95.fa --threshold 0.3 --out-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Graph-part_results/graphpart_res_cdhit0.95_5.csv --labels-name label --partitions 5 --edge-file graph-part_edgelist_95.csv
+```
+```{r}
+plot_graphpart_res(paste0(data_path, "Graph-part_results/graphpart_res_cdhit0.95_5.csv"))
+```
+
+30%, 6 clusters
+```
+graphpart precomputed --fasta-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Sequences/Datasets_for_graph-part_cdhit_0.95.fa --threshold 0.3 --out-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Graph-part_results/graphpart_res_cdhit0.95_6.csv --labels-name label --partitions 6 --edge-file graph-part_edgelist_95.csv
+```
+```{r}
+plot_graphpart_res(paste0(data_path, "Graph-part_results/graphpart_res_cdhit0.95_6.csv"))
+```
+
+40%, 4 clusters
+```
+graphpart precomputed --fasta-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Sequences/Datasets_for_graph-part_cdhit_0.95.fa --threshold 0.4 --out-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Graph-part_results/graphpart_res_cdhit0.95_4_thresh0.4.csv --labels-name label --partitions 4 --edge-file graph-part_edgelist_95.csv
+```
+```{r}
+plot_graphpart_res(paste0(data_path, "Graph-part_results/graphpart_res_cdhit0.95_4_thresh0.4.csv"))
+```
+
+40%, 5 clusters
+```
+graphpart precomputed --fasta-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Sequences/Datasets_for_graph-part_cdhit_0.95.fa --threshold 0.4 --out-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Graph-part_results/graphpart_res_cdhit0.95_5_thresh0.4.csv --labels-name label --partitions 5 --edge-file graph-part_edgelist_95.csv
+```
+```{r}
+plot_graphpart_res(paste0(data_path, "Graph-part_results/graphpart_res_cdhit0.95_5_thresh0.4.csv"))
+```
+
+40%, 6 clusters
+```
+graphpart precomputed --fasta-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Sequences/Datasets_for_graph-part_cdhit_0.95.fa --threshold 0.4 --out-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Graph-part_results/graphpart_res_cdhit0.95_6_thresh0.4.csv --labels-name label --partitions 6 --edge-file graph-part_edgelist_95.csv
+```
+```{r}
+plot_graphpart_res(paste0(data_path, "Graph-part_results/graphpart_res_cdhit0.95_6_thresh0.4.csv"))
+```
+
+50%, 4 clusters
+```
+graphpart precomputed --fasta-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Sequences/Datasets_for_graph-part_cdhit_0.95.fa --threshold 0.5 --out-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Graph-part_results/graphpart_res_cdhit0.95_4_thresh0.5.csv --labels-name label --partitions 4 --edge-file graph-part_edgelist_95.csv
+```
+```{r}
+plot_graphpart_res(paste0(data_path, "Graph-part_results/graphpart_res_cdhit0.95_4_thresh0.5.csv"))
+```
+
+50%, 5 clusters
+```
+graphpart precomputed --fasta-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Sequences/Datasets_for_graph-part_cdhit_0.95.fa --threshold 0.5 --out-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Graph-part_results/graphpart_res_cdhit0.95_5_thresh0.5.csv --labels-name label --partitions 5 --edge-file graph-part_edgelist_95.csv
+```
+```{r}
+plot_graphpart_res(paste0(data_path, "Graph-part_results/graphpart_res_cdhit0.95_5_thresh0.5.csv"))
+```
+
+50%, 6 clusters
+```
+graphpart precomputed --fasta-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Sequences/Datasets_for_graph-part_cdhit_0.95.fa --threshold 0.5 --out-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Graph-part_results/graphpart_res_cdhit0.95_6_thresh0.5.csv --labels-name label --partitions 6 --edge-file graph-part_edgelist_95.csv
+```
+```{r}
+plot_graphpart_res(paste0(data_path, "Graph-part_results/graphpart_res_cdhit0.95_6_thresh0.5.csv"))
+```
+
+
+
+30%, 4 clusters, no moving
+```
+graphpart precomputed --fasta-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Sequences/Datasets_for_graph-part_cdhit_0.95.fa --threshold 0.3 --out-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Graph-part_results/graphpart_res_cdhit0.95_4_nomoving.csv --labels-name label --partitions 4 --edge-file graph-part_edgelist_95.csv --no-moving
+```
+```{r}
+plot_graphpart_res(paste0(data_path, "Graph-part_results/graphpart_res_cdhit0.95_4_nomoving.csv"))
+```
+
+30%, 5 clusters, no moving
+```
+graphpart precomputed --fasta-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Sequences/Datasets_for_graph-part_cdhit_0.95.fa --threshold 0.3 --out-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Graph-part_results/graphpart_res_cdhit0.95_5_nomoving.csv --labels-name label --partitions 5 --edge-file graph-part_edgelist_95.csv --no-moving
+```
+```{r}
+plot_graphpart_res(paste0(data_path, "Graph-part_results/graphpart_res_cdhit0.95_5_nomoving.csv"))
+```
+
+30%, 6 clusters, no moving
+```
+graphpart precomputed --fasta-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Sequences/Datasets_for_graph-part_cdhit_0.95.fa --threshold 0.3 --out-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Graph-part_results/graphpart_res_cdhit0.95_6_nomoving.csv --labels-name label --partitions 6 --edge-file graph-part_edgelist_95.csv --no-moving
+```
+```{r}
+plot_graphpart_res(paste0(data_path, "Graph-part_results/graphpart_res_cdhit0.95_6_nomoving.csv"))
+```
+
+40%, 4 clusters, no moving
+```
+graphpart precomputed --fasta-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Sequences/Datasets_for_graph-part_cdhit_0.95.fa --threshold 0.4 --out-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Graph-part_results/graphpart_res_cdhit0.95_4_thresh0.4_nomoving.csv --labels-name label --partitions 4 --edge-file graph-part_edgelist_95.csv --no-moving
+```
+```{r}
+plot_graphpart_res(paste0(data_path, "Graph-part_results/graphpart_res_cdhit0.95_4_thresh0.4_nomoving.csv"))
+```
+
+40%, 5 clusters, no moving
+```
+graphpart precomputed --fasta-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Sequences/Datasets_for_graph-part_cdhit_0.95.fa --threshold 0.4 --out-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Graph-part_results/graphpart_res_cdhit0.95_5_thresh0.4_nomoving.csv --labels-name label --partitions 5 --edge-file graph-part_edgelist_95.csv --no-moving
+```
+```{r}
+plot_graphpart_res(paste0(data_path, "Graph-part_results/graphpart_res_cdhit0.95_5_thresh0.4_nomoving.csv"))
+```
+
+40%, 6 clusters, no moving
+```
+graphpart precomputed --fasta-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Sequences/Datasets_for_graph-part_cdhit_0.95.fa --threshold 0.4 --out-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Graph-part_results/graphpart_res_cdhit0.95_6_thresh0.4_nomoving.csv --labels-name label --partitions 6 --edge-file graph-part_edgelist_95.csv --no-moving
+```
+```{r}
+plot_graphpart_res(paste0(data_path, "Graph-part_results/graphpart_res_cdhit0.95_6_thresh0.4_nomoving.csv"))
+```
+
+50%, 4 clusters, no moving
+```
+graphpart precomputed --fasta-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Sequences/Datasets_for_graph-part_cdhit_0.95.fa --threshold 0.5 --out-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Graph-part_results/graphpart_res_cdhit0.95_4_thresh0.5_nomoving.csv --labels-name label --partitions 4 --edge-file graph-part_edgelist_95.csv --no-moving
+```
+```{r}
+plot_graphpart_res(paste0(data_path, "Graph-part_results/graphpart_res_cdhit0.95_4_thresh0.5_nomoving.csv"))
+```
+
+50%, 5 clusters, no moving
+```
+graphpart precomputed --fasta-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Sequences/Datasets_for_graph-part_cdhit_0.95.fa --threshold 0.5 --out-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Graph-part_results/graphpart_res_cdhit0.95_5_thresh0.5_nomoving.csv --labels-name label --partitions 5 --edge-file graph-part_edgelist_95.csv --no-moving
+```
+```{r}
+plot_graphpart_res(paste0(data_path, "Graph-part_results/graphpart_res_cdhit0.95_5_thresh0.5_nomoving.csv"))
+```
+
+50%, 6 clusters, no moving
+```
+graphpart precomputed --fasta-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Sequences/Datasets_for_graph-part_cdhit_0.95.fa --threshold 0.5 --out-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Graph-part_results/graphpart_res_cdhit0.95_6_thresh0.5_nomoving.csv --labels-name label --partitions 6 --edge-file graph-part_edgelist_95.csv --no-moving
+```
+```{r}
+plot_graphpart_res(paste0(data_path, "Graph-part_results/graphpart_res_cdhit0.95_6_thresh0.5_nomoving.csv"))
+```
+
+
+## Simple initialization
+
+30%, 4 clusters, no moving, simple initialization
+```
+graphpart needle --fasta-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Sequences/Datasets_for_graph-part.fa --threshold 0.3 --out-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Graph-part_results/graphpart_res_4_nomoving_simple.csv --no-moving --labels-name label --partitions 4 --threads 24 --initialization-mode simple
+```
+```{r}
+plot_graphpart_res(paste0(data_path, "Graph-part_results/graphpart_res_4_nomoving_simple.csv"))
+```
+
+40%, 4 clusters, no moving, simple initialization
+```
+graphpart needle --fasta-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Sequences/Datasets_for_graph-part.fa --threshold 0.4 --out-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Graph-part_results/graphpart_res_4_nomoving_thresh0.4_simple.csv --no-moving --labels-name label --partitions 4 --threads 24 --initialization-mode simple
+```
+```{r}
+plot_graphpart_res(paste0(data_path, "Graph-part_results/graphpart_res_4_nomoving_thresh0.4_simple.csv"))
+```
+
+50%, 4 clusters, no moving, simple initialization
+```
+graphpart needle --fasta-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Sequences/Datasets_for_graph-part.fa --threshold 0.5 --out-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Graph-part_results/graphpart_res_4_nomoving_thresh0.5_simple.csv --no-moving --labels-name label --partitions 4 --threads 24 --initialization-mode simple
+```
+```{r}
+plot_graphpart_res(paste0(data_path, "Graph-part_results/graphpart_res_4_nomoving_thresh0.5_simple.csv"))
+```
+
+
+30%, 5 clusters, no moving, simple initialization
+```
+graphpart needle --fasta-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Sequences/Datasets_for_graph-part.fa --threshold 0.3 --out-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Graph-part_results/graphpart_res_5_nomoving_simple.csv --no-moving --labels-name label --partitions 5 --threads 24 --initialization-mode simple
+```
+```{r}
+plot_graphpart_res(paste0(data_path, "Graph-part_results/graphpart_res_5_nomoving_simple.csv"))
+```
+
+40%, 5 clusters, no moving, simple initialization
+```
+graphpart needle --fasta-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Sequences/Datasets_for_graph-part.fa --threshold 0.4 --out-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Graph-part_results/graphpart_res_5_nomoving_thresh0.4_simple.csv --no-moving --labels-name label --partitions 5 --threads 24 --initialization-mode simple
+```
+```{r}
+plot_graphpart_res(paste0(data_path, "Graph-part_results/graphpart_res_5_nomoving_thresh0.4_simple.csv"))
+```
+
+50%, 5 clusters, no moving, simple initialization
+```
+graphpart needle --fasta-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Sequences/Datasets_for_graph-part.fa --threshold 0.5 --out-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Graph-part_results/graphpart_res_5_nomoving_thresh0.5_simple.csv --no-moving --labels-name label --partitions 5 --threads 24 --initialization-mode simple
+```
+```{r}
+plot_graphpart_res(paste0(data_path, "Graph-part_results/graphpart_res_5_nomoving_thresh0.5_simple.csv"))
+```
+
+
+
+30%, 4 clusters, moving, simple initialization
+```
+graphpart needle --fasta-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Sequences/Datasets_for_graph-part.fa --threshold 0.3 --out-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Graph-part_results/graphpart_res_4_simple.csv --labels-name label --partitions 4 --threads 24 --initialization-mode simple
+```
+```{r}
+plot_graphpart_res(paste0(data_path, "Graph-part_results/graphpart_res_4_simple.csv"))
+```
+
+40%, 4 clusters, moving, simple initialization
+```
+graphpart needle --fasta-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Sequences/Datasets_for_graph-part.fa --threshold 0.4 --out-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Graph-part_results/graphpart_res_4_thresh0.4_simple.csv --labels-name label --partitions 4 --threads 24 --initialization-mode simple
+```
+```{r}
+plot_graphpart_res(paste0(data_path, "Graph-part_results/graphpart_res_4_thresh0.4_simple.csv"))
+```
+
+50%, 4 clusters, moving, simple initialization
+```
+graphpart needle --fasta-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Sequences/Datasets_for_graph-part.fa --threshold 0.5 --out-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Graph-part_results/graphpart_res_4_thresh0.5_simple.csv --labels-name label --partitions 4 --threads 24 --initialization-mode simple
+```
+```{r}
+plot_graphpart_res(paste0(data_path, "Graph-part_results/graphpart_res_4_thresh0.5_simple.csv"))
+```
+
+
+30%, 5 clusters, moving, simple initialization
+```
+graphpart needle --fasta-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Sequences/Datasets_for_graph-part.fa --threshold 0.3 --out-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Graph-part_results/graphpart_res_5_simple.csv --labels-name label --partitions 5 --threads 24 --initialization-mode simple
+```
+```{r}
+plot_graphpart_res(paste0(data_path, "Graph-part_results/graphpart_res_5_simple.csv"))
+```
+
+40%, 5 clusters, moving, simple initialization
+```
+graphpart needle --fasta-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Sequences/Datasets_for_graph-part.fa --threshold 0.4 --out-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Graph-part_results/graphpart_res_5_thresh0.4_simple.csv --labels-name label --partitions 5 --threads 24 --initialization-mode simple
+```
+```{r}
+plot_graphpart_res(paste0(data_path, "Graph-part_results/graphpart_res_5_thresh0.4_simple.csv"))
+```
+
+50%, 5 clusters, moving, simple initialization
+```
+graphpart needle --fasta-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Sequences/Datasets_for_graph-part.fa --threshold 0.5 --out-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Graph-part_results/graphpart_res_5_thresh0.5_simple.csv --labels-name label --partitions 5 --threads 24 --initialization-mode simple
+```
+```{r}
+plot_graphpart_res(paste0(data_path, "Graph-part_results/graphpart_res_5_thresh0.5_simple.csv"))
+```
+
+
+## CD-HIT reduction 90%
+
+30%, 4 clusters
+```
+graphpart needle --fasta-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Sequences/Datasets_for_graph-part_cdhit_0.90.fa --threshold 0.3 --out-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Graph-part_results/graphpart_res_cdhit0.90_4.csv --labels-name label --partitions 4 --threads 24 --save-checkpoint-path graph-part_edgelist_90.csv
+```
+```{r}
+plot_graphpart_res(paste0(data_path, "Graph-part_results/graphpart_res_cdhit0.90_4.csv"))
+```
+
+30%, 5 clusters
+```
+graphpart precomputed --fasta-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Sequences/Datasets_for_graph-part_cdhit_0.90.fa --threshold 0.3 --out-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Graph-part_results/graphpart_res_cdhit0.90_5.csv --labels-name label --partitions 5 --edge-file graph-part_edgelist_90.csv
+```
+```{r}
+plot_graphpart_res(paste0(data_path, "Graph-part_results/graphpart_res_cdhit0.90_5.csv"))
+```
+
+30%, 6 clusters
+```
+graphpart precomputed --fasta-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Sequences/Datasets_for_graph-part_cdhit_0.90.fa --threshold 0.3 --out-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Graph-part_results/graphpart_res_cdhit0.90_6.csv --labels-name label --partitions 6 --edge-file graph-part_edgelist_90.csv
+```
+```{r}
+plot_graphpart_res(paste0(data_path, "Graph-part_results/graphpart_res_cdhit0.90_6.csv"))
+```
+
+40%, 4 clusters
+```
+graphpart precomputed --fasta-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Sequences/Datasets_for_graph-part_cdhit_0.90.fa --threshold 0.4 --out-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Graph-part_results/graphpart_res_cdhit0.90_4_thresh0.4.csv --labels-name label --partitions 4 --edge-file graph-part_edgelist_90.csv
+```
+```{r}
+plot_graphpart_res(paste0(data_path, "Graph-part_results/graphpart_res_cdhit0.90_4_thresh0.4.csv"))
+```
+
+40%, 5 clusters
+```
+graphpart precomputed --fasta-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Sequences/Datasets_for_graph-part_cdhit_0.90.fa --threshold 0.4 --out-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Graph-part_results/graphpart_res_cdhit0.90_5_thresh0.4.csv --labels-name label --partitions 5 --edge-file graph-part_edgelist_90.csv
+```
+```{r}
+plot_graphpart_res(paste0(data_path, "Graph-part_results/graphpart_res_cdhit0.90_5_thresh0.4.csv"))
+```
+
+40%, 6 clusters
+```
+graphpart precomputed --fasta-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Sequences/Datasets_for_graph-part_cdhit_0.90.fa --threshold 0.4 --out-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Graph-part_results/graphpart_res_cdhit0.90_6_thresh0.4.csv --labels-name label --partitions 6 --edge-file graph-part_edgelist_90.csv
+```
+```{r}
+plot_graphpart_res(paste0(data_path, "Graph-part_results/graphpart_res_cdhit0.90_6_thresh0.4.csv"))
+```
+
+50%, 4 clusters
+```
+graphpart precomputed --fasta-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Sequences/Datasets_for_graph-part_cdhit_0.90.fa --threshold 0.5 --out-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Graph-part_results/graphpart_res_cdhit0.90_4_thresh0.5.csv --labels-name label --partitions 4 --edge-file graph-part_edgelist_90.csv
+```
+```{r}
+plot_graphpart_res(paste0(data_path, "Graph-part_results/graphpart_res_cdhit0.90_4_thresh0.5.csv"))
+```
+
+50%, 5 clusters
+```
+graphpart precomputed --fasta-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Sequences/Datasets_for_graph-part_cdhit_0.90.fa --threshold 0.5 --out-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Graph-part_results/graphpart_res_cdhit0.90_5_thresh0.5.csv --labels-name label --partitions 5 --edge-file graph-part_edgelist_90.csv
+```
+```{r}
+plot_graphpart_res(paste0(data_path, "Graph-part_results/graphpart_res_cdhit0.90_5_thresh0.5.csv"))
+```
+
+50%, 6 clusters
+```
+graphpart precomputed --fasta-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Sequences/Datasets_for_graph-part_cdhit_0.90.fa --threshold 0.5 --out-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Graph-part_results/graphpart_res_cdhit0.90_6_thresh0.5.csv --labels-name label --partitions 6 --edge-file graph-part_edgelist_90.csv
+```
+```{r}
+plot_graphpart_res(paste0(data_path, "Graph-part_results/graphpart_res_cdhit0.90_6_thresh0.5.csv"))
+```
+
+
+
+30%, 4 clusters, no moving
+```
+graphpart precomputed --fasta-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Sequences/Datasets_for_graph-part_cdhit_0.90.fa --threshold 0.3 --out-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Graph-part_results/graphpart_res_cdhit0.90_4_nomoving.csv --labels-name label --partitions 4 --edge-file graph-part_edgelist_90.csv --no-moving
+```
+```{r}
+plot_graphpart_res(paste0(data_path, "Graph-part_results/graphpart_res_cdhit0.90_4_nomoving.csv"))
+```
+
+30%, 5 clusters, no moving
+```
+graphpart precomputed --fasta-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Sequences/Datasets_for_graph-part_cdhit_0.90.fa --threshold 0.3 --out-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Graph-part_results/graphpart_res_cdhit0.90_5_nomoving.csv --labels-name label --partitions 5 --edge-file graph-part_edgelist_90.csv --no-moving
+```
+```{r}
+plot_graphpart_res(paste0(data_path, "Graph-part_results/graphpart_res_cdhit0.90_5_nomoving.csv"))
+```
+
+30%, 6 clusters, no moving
+```
+graphpart precomputed --fasta-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Sequences/Datasets_for_graph-part_cdhit_0.90.fa --threshold 0.3 --out-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Graph-part_results/graphpart_res_cdhit0.90_6_nomoving.csv --labels-name label --partitions 6 --edge-file graph-part_edgelist_90.csv --no-moving
+```
+```{r}
+plot_graphpart_res(paste0(data_path, "Graph-part_results/graphpart_res_cdhit0.90_6_nomoving.csv"))
+```
+
+40%, 4 clusters, no moving
+```
+graphpart precomputed --fasta-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Sequences/Datasets_for_graph-part_cdhit_0.90.fa --threshold 0.4 --out-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Graph-part_results/graphpart_res_cdhit0.90_4_thresh0.4_nomoving.csv --labels-name label --partitions 4 --edge-file graph-part_edgelist_90.csv --no-moving
+```
+```{r}
+plot_graphpart_res(paste0(data_path, "Graph-part_results/graphpart_res_cdhit0.90_4_thresh0.4_nomoving.csv"))
+```
+
+40%, 5 clusters, no moving
+```
+graphpart precomputed --fasta-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Sequences/Datasets_for_graph-part_cdhit_0.90.fa --threshold 0.4 --out-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Graph-part_results/graphpart_res_cdhit0.90_5_thresh0.4_nomoving.csv --labels-name label --partitions 5 --edge-file graph-part_edgelist_90.csv --no-moving
+```
+```{r}
+plot_graphpart_res(paste0(data_path, "Graph-part_results/graphpart_res_cdhit0.90_5_thresh0.4_nomoving.csv"))
+```
+
+40%, 6 clusters, no moving
+```
+graphpart precomputed --fasta-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Sequences/Datasets_for_graph-part_cdhit_0.90.fa --threshold 0.4 --out-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Graph-part_results/graphpart_res_cdhit0.90_6_thresh0.4_nomoving.csv --labels-name label --partitions 6 --edge-file graph-part_edgelist_90.csv --no-moving
+```
+```{r}
+plot_graphpart_res(paste0(data_path, "Graph-part_results/graphpart_res_cdhit0.90_6_thresh0.4_nomoving.csv"))
+```
+
+50%, 4 clusters, no moving
+```
+graphpart precomputed --fasta-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Sequences/Datasets_for_graph-part_cdhit_0.90.fa --threshold 0.5 --out-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Graph-part_results/graphpart_res_cdhit0.90_4_thresh0.5_nomoving.csv --labels-name label --partitions 4 --edge-file graph-part_edgelist_90.csv --no-moving
+```
+```{r}
+plot_graphpart_res(paste0(data_path, "Graph-part_results/graphpart_res_cdhit0.90_4_thresh0.5_nomoving.csv"))
+```
+
+50%, 5 clusters, no moving
+```
+graphpart precomputed --fasta-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Sequences/Datasets_for_graph-part_cdhit_0.90.fa --threshold 0.5 --out-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Graph-part_results/graphpart_res_cdhit0.90_5_thresh0.5_nomoving.csv --labels-name label --partitions 5 --edge-file graph-part_edgelist_90.csv --no-moving
+```
+```{r}
+plot_graphpart_res(paste0(data_path, "Graph-part_results/graphpart_res_cdhit0.90_5_thresh0.5_nomoving.csv"))
+```
+
+50%, 6 clusters, no moving
+```
+graphpart precomputed --fasta-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Sequences/Datasets_for_graph-part_cdhit_0.90.fa --threshold 0.5 --out-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Graph-part_results/graphpart_res_cdhit0.90_6_thresh0.5_nomoving.csv --labels-name label --partitions 6 --edge-file graph-part_edgelist_90.csv --no-moving
+```
+```{r}
+plot_graphpart_res(paste0(data_path, "Graph-part_results/graphpart_res_cdhit0.90_6_thresh0.5_nomoving.csv"))
+```
+
+
+
+## No moving option
+
+30%, 4 clusters
+```
+graphpart needle --fasta-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Sequences/Datasets_for_graph-part.fa --threshold 0.3 --out-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Graph-part_results/graphpart_res_40_nomoving.csv --no-moving --labels-name label --partitions 4 --threads 24
+```
+```{r}
+plot_graphpart_res(paste0(data_path, "Graph-part_results/graphpart_res_4_nomoving.csv"))
+```
+
+40%, 4 clusters
+```
+graphpart needle --fasta-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Sequences/Datasets_for_graph-part.fa --threshold 0.4 --out-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Graph-part_results/graphpart_res_4_nomoving_thresh0.4.csv --no-moving --labels-name label --partitions 4 --threads 24
+```
+```{r}
+plot_graphpart_res(paste0(data_path, "Graph-part_results/graphpart_res_4_nomoving_thresh0.4.csv"))
+```
+
+50%, 4 clusters
+```
+graphpart needle --fasta-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Sequences/Datasets_for_graph-part.fa --threshold 0.5 --out-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Graph-part_results/graphpart_res_4_nomoving_thresh0.5.csv --no-moving --labels-name label --partitions 4 --threads 24
+```
+```{r}
+plot_graphpart_res(paste0(data_path, "Graph-part_results/graphpart_res_4_nomoving_thresh0.5.csv"))
+```
+
+60%, 4 clusters
+```
+graphpart needle --fasta-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Sequences/Datasets_for_graph-part.fa --threshold 0.6 --out-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Graph-part_results/graphpart_res_4_nomoving_thresh0.6.csv --no-moving --labels-name label --partitions 4 --threads 24
+```
+```{r}
+plot_graphpart_res(paste0(data_path, "Graph-part_results/graphpart_res_4_nomoving_thresh0.6.csv"))
+```
+
+
+40%, 5 clusters
+```
+graphpart needle --fasta-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Sequences/Datasets_for_graph-part.fa --threshold 0.4 --out-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Graph-part_results/graphpart_res_5_nomoving_thresh0.4.csv --no-moving --labels-name label --partitions 5 --threads 24
+```
+```{r}
+plot_graphpart_res(paste0(data_path, "Graph-part_results/graphpart_res_5_nomoving_thresh0.4.csv"))
+```
+
+50%, 5 clusters
+```
+graphpart needle --fasta-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Sequences/Datasets_for_graph-part.fa --threshold 0.5 --out-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Graph-part_results/graphpart_res_5_nomoving_thresh0.5.csv --no-moving --labels-name label --partitions 5 --threads 24
+```
+```{r}
+plot_graphpart_res(paste0(data_path, "Graph-part_results/graphpart_res_5_nomoving_thresh0.5.csv"))
+```
+
+60%, 5 clusters
+```
+graphpart needle --fasta-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Sequences/Datasets_for_graph-part.fa --threshold 0.6 --out-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Graph-part_results/graphpart_res_5_nomoving_thresh0.6.csv --no-moving --labels-name label --partitions 5 --threads 24
+```
+```{r}
+plot_graphpart_res(paste0(data_path, "Graph-part_results/graphpart_res_5_nomoving_thresh0.6.csv"))
+```
+
+
+30%, 6 clusters
+```
+graphpart needle --fasta-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Sequences/Datasets_for_graph-part.fa --threshold 0.3 --out-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Graph-part_results/graphpart_res_6_nomoving.csv --no-moving --labels-name label --partitions 6 --threads 24
+```
+```{r}
+plot_graphpart_res(paste0(data_path, "Graph-part_results/graphpart_res_6_nomoving.csv"))
+```
+
+40%, 6 clusters
+```
+graphpart needle --fasta-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Sequences/Datasets_for_graph-part.fa --threshold 0.4 --out-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Graph-part_results/graphpart_res_6_nomoving_thresh0.4.csv --no-moving --labels-name label --partitions 6 --threads 24
+```
+```{r}
+plot_graphpart_res(paste0(data_path, "Graph-part_results/graphpart_res_6_nomoving_thresh0.4.csv"))
+```
+
+50%, 6 clusters
+```
+graphpart needle --fasta-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Sequences/Datasets_for_graph-part.fa --threshold 0.5 --out-file ~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Graph-part_results/graphpart_res_6_nomoving_thresh0.5.csv --no-moving --labels-name label --partitions 6 --threads 24
+```
+```{r}
+plot_graphpart_res(paste0(data_path, "Graph-part_results/graphpart_res_6_nomoving_thresh0.5.csv"))
+```
+
+
+## Partitioning within classes
+
+30%, 6 clusters
+```{r}
+combine_and_plot_graphpart_res(type = "6", datasets)
+```
+
+30%, 6 clusters, no moving
+```{r}
+combine_and_plot_graphpart_res(type = "6_nomoving", datasets)
+```
+
+30%, 4 clusters
+```{r}
+combine_and_plot_graphpart_res(type = "4", datasets)
+```
+
+30%, 4 clusters, no moving
+```{r}
+combine_and_plot_graphpart_res(type = "4_nomoving", datasets)
+```
+
+40%, 4 clusters, no moving
+```{r}
+combine_and_plot_graphpart_res(type = "4_nomoving_thresh0.4", datasets)
+```
+
+50%, 4 clusters, no moving
+```{r}
+combine_and_plot_graphpart_res(type = "4_nomoving_thresh0.5", datasets)
+```
+
+40%, 5 clusters, no moving
+```{r}
+combine_and_plot_graphpart_res(type = "5_nomoving_thresh0.4", datasets)
+```
+
+50%, 5 clusters, no moving
+```{r}
+combine_and_plot_graphpart_res(type = "5_nomoving_thresh0.5", datasets)
+```
+
+40%, 6 clusters, no moving
+```{r}
+combine_and_plot_graphpart_res(type = "6_nomoving_thresh0.4", datasets)
+```
+
+50%, 6 clusters, no moving
+```{r}
+combine_and_plot_graphpart_res(type = "6_nomoving_thresh0.5", datasets)
+```
+
+
 
 ## Threshold = 30%
 
