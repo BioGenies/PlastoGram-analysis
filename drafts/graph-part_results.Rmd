@@ -10,9 +10,21 @@ knitr::opts_chunk$set(echo = FALSE, message = FALSE, fig.height = 10, fig.width 
 
 library(dplyr)
 library(ggplot2)
+library(tidyr)
+library(DT)
 
-data_path <- "~/Dropbox/Projekty/BioNgramProjects/PlastoGram/"
+#data_path <- "~/Dropbox/Projekty/BioNgramProjects/PlastoGram/"
+data_path <- "./"
 datasets <- c("N_OM", "N_IM", "P_IM", "N_S", "P_S", "N_TM", "P_TM", "N_TL_SEC", "N_TL_TAT")
+
+options(DT.options = list(dom = "Brtip",
+                          buttons = c("copy", "csv", "excel", "print"),
+                          pageLength = 20
+))
+
+my_DT <- function(x, ...)
+  datatable(x, ..., escape = FALSE, extensions = 'Buttons', filter = "top", rownames = FALSE,
+            style = "bootstrap")
 
 plot_graphpart_res <- function(res_file) {
   x <- read.csv(res_file)
@@ -49,6 +61,44 @@ combine_and_plot_graphpart_res <- function(type, datasets) {
     geom_text(aes(label = n), vjust = -0.5, size = 3) +
     facet_wrap(~dataset, scales = "free_y")
 }
+
+nam <- data.frame(`label.val` = 0:8, 
+                    dataset = datasets)
+```
+
+## Summary
+
+```{r}
+all_res_files <- list.files(paste0(data_path, "Graph-part_results/"), full.names = TRUE, pattern = ".csv")
+whole_dataset_res_files <- all_res_files[!(grepl("N|P", all_res_files))]
+all_res <- lapply(whole_dataset_res_files, function(ith_file) {
+  read.csv(ith_file) %>% 
+    mutate(file = gsub(".csv", "", last(strsplit(ith_file, "/")[[1]]))) %>% 
+    left_join(nam) %>% 
+    group_by(file, dataset, cluster) %>% 
+    summarise(n = n()) %>% 
+    ungroup() %>% 
+    pivot_wider(names_from = cluster, values_from = n, values_fill = 0) %>% 
+    pivot_longer(3:ncol(.), names_to = "cluster", values_to = "n")
+}) %>% bind_rows()
+
+stats <- all_res %>% 
+  group_by(file, dataset) %>% 
+  summarise(sum_n = sum(n),
+            mean = mean(n),
+            sd = sd(n),
+            `sd/sum_n` = sd/sum_n) %>% 
+  arrange(`sd/sum_n`)
+
+my_DT(stats)
+```
+
+Sum of sd/sum_n for all classes
+```{r}
+stats %>% 
+  summarise(sd_sum = sum(`sd/sum_n`)) %>% 
+  arrange(sd_sum) %>% 
+  my_DT()
 ```
 
 ## CD-HIT reduction 99%
