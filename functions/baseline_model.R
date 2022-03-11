@@ -5,7 +5,7 @@ do_baseline_cv <- function(ngram_matrix, data_df) {
     
     trained_model <- ranger(x = dat, y = as.factor(data_df[["dataset"]][data_df[["fold"]] != ith_fold]),
                             write.forest = TRUE, probability = TRUE, num.trees = 500, 
-                            verbose = FALSE, seed = 108567)
+                            verbose = FALSE, seed = 427244)
     
     data_df %>% 
       filter(fold == ith_fold) %>% 

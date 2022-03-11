@@ -38,7 +38,7 @@ train_rf <- function(ngram_matrix, target, imp_ngrams, with_class_weights = FALS
   ranger(dependent.variable.name = "tar", data =  ranger_train_data, 
          write.forest = TRUE, probability = TRUE, num.trees = 500, 
          verbose = FALSE, class.weights = class_weights,
-         seed = 108567)
+         seed = 427244)
 }
 
 
@@ -169,7 +169,7 @@ test_fcbf <- function(ngram_matrix, data_df, cutoff_vec, target_col, class_weigh
 
 
 do_smote <- function(imp_ngram_matrix, tar, C.perc) {
-  set.seed(108567)
+  set.seed(427244)
   x <- cbind(imp_ngram_matrix, tar = as.factor(tar))
   x[sapply(x, is.numeric)] <- lapply(x[sapply(x, is.numeric)], 
                                      as.factor)

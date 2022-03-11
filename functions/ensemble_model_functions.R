@@ -224,7 +224,7 @@ generate_results_for_architectures <- function(architecture_file_list, all_model
         } else {
           rf_model <- ranger(dataset ~ ., data = mutate(train_dat, dataset = as.factor(dataset)),
                              write.forest = TRUE, probability = TRUE, num.trees = 500, 
-                             verbose = FALSE, seed = 108567)
+                             verbose = FALSE, seed = 427244)
           preds <- predict(rf_model, test_dat)[["predictions"]]
           cbind(select(test_dat, c("dataset", "fold")),
                 Prediction = c(colnames(preds)[max.col(preds[, c(colnames(preds))])]),
@@ -380,7 +380,7 @@ do_jackknife <- function(ngram_matrix, sequences, data_df, model_df, data_path, 
     } else {
       hl_model <- ranger(dataset ~ ., data = train_dat,
                          write.forest = TRUE, probability = TRUE, num.trees = 500, 
-                         verbose = FALSE, seed = 108567)
+                         verbose = FALSE, seed = 427244)
       
       rf_preds <- cbind(test_preds,
             predict(hl_model, test_preds)[["predictions"]]) %>% 
