@@ -1,10 +1,15 @@
-create_target_df <- function(annotations_file, sequences) {
-  read_xlsx(annotations_file) %>% 
+create_target_df <- function(annotations_file, sequences, graphpart_res) {
+  annot <- read_xlsx(annotations_file) %>% 
     select(Entry, Final_dataset) %>% 
     unique() %>% 
     setNames(c("seq_name", "dataset")) %>% 
-    filter(seq_name %in% names(sequences),
-           dataset %in% c("N_OM", "N_IM", "P_IM", "N_S", "P_S", "N_TM", "P_TM", "N_TL_SEC", "N_TL_TAT")) %>% 
+    filter(seq_name %in% names(graphpart_res[["AC"]]),
+           dataset %in% c("N_OM", "N_IM", "P_IM", "N_S", "P_S", "N_TM", "P_TM", "N_TL_SEC", "N_TL_TAT"))
+  
+  graphpart_res %>% 
+    select(c(AC, dataset, cluster)) %>% 
+    setNames(c("seq_name", "dataset", "fold")) %>% 
+    left_join(annot) %>% 
     mutate(Nuclear_target = ifelse(grepl("N_", dataset), TRUE, FALSE),
            Sec_target = ifelse(dataset == "N_TL_SEC", TRUE, FALSE),
            Tat_target = ifelse(dataset == "N_TL_TAT", TRUE, FALSE),

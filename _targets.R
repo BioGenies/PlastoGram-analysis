@@ -40,10 +40,15 @@ list(
     format = "file"
   ),
   tar_target(
+    dataset_names,
+    c("N_OM", "N_IM", "P_IM", "N_S", "P_S", "N_TM", "P_TM", "N_TL_SEC", "N_TL_TAT")
+  ),
+  tar_target(
     sequences,
     create_datasets(all_seqs_file,
                     annotations_file,
-                    paste0(data_path, "Sequences/")),
+                    paste0(data_path, "Sequences/"),
+                    dataset_names),
   ),
   tar_target(
     N_OM_seqs,
@@ -100,410 +105,31 @@ list(
       threshold = 0.9)
   ),
   tar_target(
-    N_seqs,
-    c(N_OM_seqs, N_IM_seqs, N_S_seqs, N_TM_seqs, N_TL_SEC_seqs, N_TL_TAT_seqs)
+    graphpart_input,
+    process_for_graphpart(list("N_OM" = N_OM_seqs, "N_IM" = N_IM_seqs, "P_IM" = P_IM_seqs,
+                               "N_S" = N_S_seqs, "P_S" = P_S_seqs, "N_TM" = N_TM_seqs, "P_TM" = P_TM_seqs, 
+                               "N_TL_SEC" = N_TL_SEC_seqs, "N_TL_TAT" = N_TL_TAT_seqs))
   ),
   tar_target(
-    P_seqs, 
-    c(P_IM_seqs, P_S_seqs, P_TM_seqs)
+    graphpart_res,
+    run_graphpart(graphpart_input)
   ),
   tar_target(
     target_df, 
     create_target_df(annotations_file,
-                     c(N_seqs, P_seqs))),
+                     c(N_seqs, P_seqs),
+                     graphpart_res)),
+  tar_target(
+    data_df,
+    filter(target_df, fold != 3)
+  ),
+  tar_target(
+    data_df_independent,
+    filter(target_df, fold == 3)
+  ),
   tar_target(
     ngram_matrix, 
     create_ngram_matrix(c(N_seqs, P_seqs), target_df)
-  ),
-  tar_target(
-    Plastid_Nuclear_CV, 
-    do_cv(ngram_matrix, data_df, "Nuclear_target", 5, 0.001)
-  ),
-  tar_target(
-    Plastid_Nuclear_CV_res_stats, 
-    get_cv_res_summary(Plastid_Nuclear_CV, "TRUE")
-  ),
-  tar_target(
-    Plastid_Nuclear_cw_CV,
-    do_cv(ngram_matrix, data_df, "Nuclear_target", 5, 0.001, with_class_weights = TRUE)
-  ),
-  tar_target(
-    Plastid_Nuclear_cw_CV_res_stats,
-    get_cv_res_summary(Plastid_Nuclear_cw_CV, "TRUE")
-  ),
-  tar_target(
-    Membrane_Notmembrane_CV,
-    do_cv(ngram_matrix, data_df, "Membrane_target", 5, 0.001)
-  ),
-  tar_target(
-    ngram_matrix_membrane,
-    ngram_matrix[which(target_df[["Membrane_target"]] == TRUE),]
-  ),
-  tar_target(
-    target_df_membrane,
-    filter(target_df, Membrane_target == TRUE)
-  ),
-  tar_target(
-    Membrane_Notmembrane_CV_res_stats,
-    get_cv_res_summary(Membrane_Notmembrane_CV, "TRUE")
-  ),
-  tar_target(
-    Membrane_Notmembrane_cw_CV,
-    do_cv(ngram_matrix, data_df, "Membrane_target", 5, 0.001, with_class_weights = TRUE)
-  ),
-  tar_target(
-    Membrane_Notmembrane_cw_CV_res_stats,
-    get_cv_res_summary(Membrane_Notmembrane_cw_CV, "TRUE")
-  ),
-  tar_target(
-    ngram_matrix_membrane_plastid,
-    ngram_matrix[which(target_df[["Membrane_target"]] == TRUE & target_df[["Nuclear_target"]] == FALSE),]
-  ),
-  tar_target(
-    ngram_matrix_membrane_nuclear,
-    ngram_matrix[which(target_df[["Membrane_target"]] == TRUE & target_df[["Nuclear_target"]] == TRUE),]
-  ),
-  tar_target(
-    Membrane_Plastid_CV,
-    do_cv(ngram_matrix_membrane_plastid, 
-          data_df[which(target_df[["Membrane_target"]] == TRUE & target_df[["Nuclear_target"]] == FALSE),], "IM_target",
-          5, 0.001)
-  ),
-  tar_target(
-    Membrane_Nuclear_CV,
-    do_cv(ngram_matrix_membrane_nuclear, 
-          data_df[which(target_df[["Membrane_target"]] == TRUE & target_df[["Nuclear_target"]] == TRUE),], "Membrane_mc_target",
-          5, 0.001, mc = TRUE)
-  ),
-  tar_target(
-    Membrane_Plastid_cw_CV,
-    do_cv(ngram_matrix_membrane_plastid, 
-          data_df[which(target_df[["Membrane_target"]] == TRUE & target_df[["Nuclear_target"]] == FALSE),], "IM_target",
-          5, 0.001, with_class_weights = TRUE)
-  ),
-  tar_target(
-    Membrane_Nuclear_cw_CV,
-    do_cv(ngram_matrix_membrane_nuclear, 
-          data_df[which(target_df[["Membrane_target"]] == TRUE & target_df[["Nuclear_target"]] == TRUE),], "Membrane_mc_target",
-          5, 0.001, mc = TRUE, with_class_weights = TRUE)
-  ),
-  tar_target(
-    Membrane_Plastid_CV_res_stats,
-    get_cv_res_summary(Membrane_Plastid_CV, "TRUE")
-  ),
-  tar_target(
-    Membrane_Nuclear_CV_res_stats,
-    get_cv_res_summary_mc(Membrane_Nuclear_CV)
-  ),
-  tar_target(
-    Membrane_Plastid_cw_CV_res_stats,
-    get_cv_res_summary(Membrane_Plastid_cw_CV, "TRUE")
-  ),
-  tar_target(
-    Membrane_Nuclear_cw_CV_res_stats,
-    get_cv_res_summary_mc(Membrane_Nuclear_cw_CV)
-  ),
-  tar_target(
-    Membrane_Nuclear_CV_2,
-    do_cv(ngram_matrix_membrane_nuclear, 
-          data_df[which(target_df[["Membrane_target"]] == TRUE & target_df[["Nuclear_target"]] == TRUE),], "Membrane_mc_target",
-          5, 0.01, mc = TRUE)
-  ),
-  tar_target(
-    Membrane_Nuclear_cw_CV_2,
-    do_cv(ngram_matrix_membrane_nuclear, 
-          data_df[which(target_df[["Membrane_target"]] == TRUE & target_df[["Nuclear_target"]] == TRUE),], "Membrane_mc_target",
-          5, 0.01, mc = TRUE, with_class_weights = TRUE)
-  ),
-  tar_target(
-    Membrane_Nuclear_CV_3,
-    do_cv(ngram_matrix_membrane_nuclear, 
-          data_df[which(target_df[["Membrane_target"]] == TRUE & target_df[["Nuclear_target"]] == TRUE),], "Membrane_mc_target",
-          5, 0.05, mc = TRUE)
-  ),
-  tar_target(
-    Membrane_Nuclear_cw_CV_3,
-    do_cv(ngram_matrix_membrane_nuclear, 
-          data_df[which(target_df[["Membrane_target"]] == TRUE & target_df[["Nuclear_target"]] == TRUE),], "Membrane_mc_target",
-          5, 0.05, mc = TRUE, with_class_weights = TRUE)
-  ),
-  tar_target(
-    Membrane_Nuclear_CV_2_res_stats,
-    get_cv_res_summary_mc(Membrane_Nuclear_CV_2)
-  ),
-  tar_target(
-    Membrane_Nuclear_cw_CV_2_res_stats,
-    get_cv_res_summary_mc(Membrane_Nuclear_cw_CV_2)
-  ),
-  tar_target(
-    Membrane_Nuclear_CV_3_res_stats,
-    get_cv_res_summary_mc(Membrane_Nuclear_CV_3)
-  ),
-  tar_target(
-    Membrane_Nuclear_cw_CV_3_res_stats,
-    get_cv_res_summary_mc(Membrane_Nuclear_cw_CV_3)
-  ),
-  tar_target(
-    Stroma_CV,
-    do_cv(ngram_matrix, data_df, "Stroma_target", 5, 0.001)
-  ),
-  tar_target(
-    Stroma_cw_CV,
-    do_cv(ngram_matrix, data_df, "Stroma_target", 5, 0.001, with_class_weights = TRUE)
-  ),
-  tar_target(
-    Stroma_CV_res_stats,
-    get_cv_res_summary(Stroma_CV, "TRUE")
-  ),
-  tar_target(
-    Stroma_cw_CV_res_stats,
-    get_cv_res_summary(Stroma_cw_CV, "TRUE")
-  ),
-  tar_target(
-    OM_Stroma_CV,
-    do_cv(ngram_matrix[which(target_df[["Nuclear_target"]] == TRUE & (target_df[["Membrane_mc_target"]] == "OM" | target_df[["Stroma_target"]] == TRUE)),], 
-          data_df[which(target_df[["Nuclear_target"]] == TRUE & (target_df[["Membrane_mc_target"]] == "OM" | target_df[["Stroma_target"]] == TRUE)),],
-          "OM_target", 5, 0.001)
-  ),
-  tar_target(
-    OM_Stroma_CV_res_stats,
-    get_cv_res_summary(OM_Stroma_CV, "TRUE")
-  ),
-  tar_target(
-    OM_Stroma_cw_CV,
-    do_cv(ngram_matrix[which(target_df[["Nuclear_target"]] == TRUE & (target_df[["Membrane_mc_target"]] == "OM" | target_df[["Stroma_target"]] == TRUE)), ],
-          data_df[which(target_df[["Nuclear_target"]] == TRUE & (target_df[["Membrane_mc_target"]] == "OM" | target_df[["Stroma_target"]] == TRUE)), ],
-          "OM_target", 5, 0.001, with_class_weights = TRUE)
-  ),
-  tar_target(
-    OM_Stroma_cw_CV_res_stats,
-    get_cv_res_summary(OM_Stroma_cw_CV, "TRUE")
-  ),
-  tar_target(
-    OM_Stroma_CV_2,
-    do_cv(ngram_matrix[which(target_df[["Nuclear_target"]] == TRUE & (target_df[["Membrane_mc_target"]] == "OM" | target_df[["Stroma_target"]] == TRUE)),], 
-          data_df[which(target_df[["Nuclear_target"]] == TRUE & (target_df[["Membrane_mc_target"]] == "OM" | target_df[["Stroma_target"]] == TRUE)),],
-          "OM_target", 5, 0.01)
-  ),
-  tar_target(
-    OM_Stroma_CV_2_res_stats,
-    get_cv_res_summary(OM_Stroma_CV_2, "TRUE")
-  ),
-  tar_target(
-    OM_Stroma_cw_CV_2,
-    do_cv(ngram_matrix[which(target_df[["Nuclear_target"]] == TRUE & (target_df[["Membrane_mc_target"]] == "OM" | target_df[["Stroma_target"]] == TRUE)), ], 
-          data_df[which(target_df[["Nuclear_target"]] == TRUE & (target_df[["Membrane_mc_target"]] == "OM" | target_df[["Stroma_target"]] == TRUE)), ],
-          "OM_target", 5, 0.01, with_class_weights = TRUE)
-  ),
-  tar_target(
-    OM_Stroma_cw_CV_2_res_stats,
-    get_cv_res_summary(OM_Stroma_cw_CV_2, "TRUE")
-  ),
-  tar_target(
-    P_stroma_CV,
-    do_cv(ngram_matrix[which(target_df[["Nuclear_target"]] == FALSE), ], 
-          data_df[which(target_df[["Nuclear_target"]] == FALSE), ],
-          "Stroma_target", 5, 0.001)
-  ),
-  tar_target(
-    P_stroma_cw_CV,
-    do_cv(ngram_matrix[which(target_df[["Nuclear_target"]] == FALSE), ], 
-          data_df[which(target_df[["Nuclear_target"]] == FALSE), ],
-          "Stroma_target", 5, 0.001, with_class_weights = TRUE)
-  ),
-  tar_target(
-    P_stroma_CV_2,
-    do_cv(ngram_matrix[which(target_df[["Nuclear_target"]] == FALSE), ], 
-          data_df[which(target_df[["Nuclear_target"]] == FALSE), ],
-          "Stroma_target", 5, 0.01)
-  ),
-  tar_target(
-    P_stroma_cw_CV_2,
-    do_cv(ngram_matrix[which(target_df[["Nuclear_target"]] == FALSE), ], 
-          data_df[which(target_df[["Nuclear_target"]] == FALSE), ],
-          "Stroma_target", 5, 0.01, with_class_weights = TRUE)
-  ),
-  tar_target(
-    P_stroma_CV_res_stats,
-    get_cv_res_summary(P_stroma_CV, "TRUE")
-  ),
-  tar_target(
-    P_stroma_CV_2_res_stats,
-    get_cv_res_summary(P_stroma_CV_2, "TRUE")
-  ),
-  tar_target(
-    P_stroma_cw_CV_res_stats,
-    get_cv_res_summary(P_stroma_cw_CV, "TRUE")
-  ),
-  tar_target(
-    P_stroma_cw_CV_2_res_stats,
-    get_cv_res_summary(P_stroma_cw_CV_2, "TRUE")
-  ),
-  tar_target(
-    N_stroma_CV,
-    do_cv(ngram_matrix[which(target_df[["Nuclear_target"]] == TRUE), ], 
-          data_df[which(target_df[["Nuclear_target"]] == TRUE), ],
-          "Stroma_target", 5, 0.001)
-  ),
-  tar_target(
-    N_stroma_cw_CV,
-    do_cv(ngram_matrix[which(target_df[["Nuclear_target"]] == TRUE), ], 
-          data_df[which(target_df[["Nuclear_target"]] == TRUE), ],
-          "Stroma_target", 5, 0.001, with_class_weights = TRUE)
-  ),
-  tar_target(
-    N_stroma_CV_2,
-    do_cv(ngram_matrix[which(target_df[["Nuclear_target"]] == TRUE), ], 
-          data_df[which(target_df[["Nuclear_target"]] == TRUE), ],
-          "Stroma_target", 5, 0.01)
-  ),
-  tar_target(
-    N_stroma_cw_CV_2,
-    do_cv(ngram_matrix[which(target_df[["Nuclear_target"]] == TRUE), ], 
-          data_df[which(target_df[["Nuclear_target"]] == TRUE), ],
-          "Stroma_target", 5, 0.01, with_class_weights = TRUE)
-  ),
-  tar_target(
-    N_stroma_CV_res_stats,
-    get_cv_res_summary(N_stroma_CV, "TRUE")
-  ),
-  tar_target(
-    N_stroma_CV_2_res_stats,
-    get_cv_res_summary(N_stroma_CV_2, "TRUE")
-  ),
-  tar_target(
-    N_stroma_cw_CV_res_stats,
-    get_cv_res_summary(N_stroma_cw_CV, "TRUE")
-  ),
-  tar_target(
-    N_stroma_cw_CV_2_res_stats,
-    get_cv_res_summary(N_stroma_cw_CV_2, "TRUE")
-  ),
-  tar_target(
-    OM_other_membrane_CV,
-    do_cv(ngram_matrix_membrane_nuclear, 
-          data_df[which(target_df[["Membrane_target"]] == TRUE & target_df[["Nuclear_target"]] == TRUE), ], "OM_target",
-          5, 0.001)
-  ),
-  tar_target(
-    OM_other_membrane_cw_CV,
-    do_cv(ngram_matrix_membrane_nuclear, 
-          data_df[which(target_df[["Membrane_target"]] == TRUE & target_df[["Nuclear_target"]] == TRUE), ], "OM_target",
-          5, 0.001, with_class_weights = TRUE)
-  ),
-  tar_target(
-    OM_other_membrane_CV_res_stats,
-    get_cv_res_summary(OM_other_membrane_CV, "TRUE")
-  ),
-  tar_target(
-    OM_other_membrane_cw_CV_res_stats,
-    get_cv_res_summary(OM_other_membrane_cw_CV, "TRUE")
-  ),
-  tar_target(
-    OM_other_membrane_CV_2,
-    do_cv(ngram_matrix_membrane_nuclear, 
-          data_df[which(target_df[["Membrane_target"]] == TRUE & target_df[["Nuclear_target"]] == TRUE), ], "OM_target",
-          5, 0.01)
-  ),
-  tar_target(
-    OM_other_membrane_cw_CV_2,
-    do_cv(ngram_matrix_membrane_nuclear, 
-          data_df[which(target_df[["Membrane_target"]] == TRUE & target_df[["Nuclear_target"]] == TRUE), ], "OM_target",
-          5, 0.01, with_class_weights = TRUE)
-  ),
-  tar_target(
-    OM_other_membrane_CV_2_res_stats,
-    get_cv_res_summary(OM_other_membrane_CV_2, "TRUE")
-  ),
-  tar_target(
-    OM_other_membrane_cw_CV_2_res_stats,
-    get_cv_res_summary(OM_other_membrane_cw_CV_2, "TRUE")
-  ),
-  tar_target(
-    IM_other_membrane_CV,
-    do_cv(ngram_matrix_membrane_nuclear, 
-          data_df[which(target_df[["Membrane_target"]] == TRUE & target_df[["Nuclear_target"]] == TRUE), ], "IM_target",
-          5, 0.001)
-  ),
-  tar_target(
-    IM_other_membrane_cw_CV,
-    do_cv(ngram_matrix_membrane_nuclear, 
-          data_df[which(target_df[["Membrane_target"]] == TRUE & target_df[["Nuclear_target"]] == TRUE),], "IM_target",
-          5, 0.001, with_class_weights = TRUE)
-  ),
-  tar_target(
-    IM_other_membrane_CV_res_stats,
-    get_cv_res_summary(IM_other_membrane_CV, "TRUE")
-  ),
-  tar_target(
-    IM_other_membrane_cw_CV_res_stats,
-    get_cv_res_summary(IM_other_membrane_cw_CV, "TRUE")
-  ),
-  tar_target(
-    IM_other_membrane_CV_2,
-    do_cv(ngram_matrix_membrane_nuclear, 
-          data_df[which(target_df[["Membrane_target"]] == TRUE & target_df[["Nuclear_target"]] == TRUE),], "IM_target",
-          5, 0.01)
-  ),
-  tar_target(
-    IM_other_membrane_CV_2_res_stats,
-    get_cv_res_summary(IM_other_membrane_CV_2, "TRUE")
-  ),
-  tar_target(
-    TM_other_membrane_CV,
-    do_cv(ngram_matrix_membrane_nuclear, 
-          data_df[which(target_df[["Membrane_target"]] == TRUE & target_df[["Nuclear_target"]] == TRUE),], "TM_target",
-          5, 0.001)
-  ),
-  tar_target(
-    TM_other_membrane_cw_CV,
-    do_cv(ngram_matrix_membrane_nuclear, 
-          data_df[which(target_df[["Membrane_target"]] == TRUE & target_df[["Nuclear_target"]] == TRUE),], "TM_target",
-          5, 0.001, with_class_weights = TRUE)
-  ),
-  tar_target(
-    TM_other_membrane_CV_res_stats,
-    get_cv_res_summary(TM_other_membrane_CV, "TRUE")
-  ),
-  tar_target(
-    TM_other_membrane_cw_CV_res_stats,
-    get_cv_res_summary(TM_other_membrane_cw_CV, "TRUE")
-  ),
-  tar_target(
-    TM_other_membrane_CV_2,
-    do_cv(ngram_matrix_membrane_nuclear, 
-          data_df[which(target_df[["Membrane_target"]] == TRUE & target_df[["Nuclear_target"]] == TRUE),], "TM_target",
-          5, 0.01)
-  ),
-  tar_target(
-    TM_other_membrane_cw_CV_2,
-    do_cv(ngram_matrix_membrane_nuclear, 
-          data_df[which(target_df[["Membrane_target"]] == TRUE & target_df[["Nuclear_target"]] == TRUE),],  "TM_target",
-          5, 0.01, with_class_weights = TRUE)
-  ),
-  tar_target(
-    TM_other_membrane_CV_2_res_stats,
-    get_cv_res_summary(TM_other_membrane_CV_2, "TRUE")
-  ),
-  tar_target(
-    TM_other_membrane_cw_CV_2_res_stats,
-    get_cv_res_summary(TM_other_membrane_cw_CV_2, "TRUE")
-  ),
-  tar_target(
-    TL_CV,
-    do_hmmer_cv(N_TL_TAT_seqs, N_TL_SEC_seqs)
-  ),
-  tar_target(
-    TL_TAT_CV_res_stats,
-    summarise_hmmer_results(TL_CV, 'Tat')
-  ),
-  tar_target(
-    TL_SEC_CV_res_stats,
-    summarise_hmmer_results(TL_CV, 'Sec')
-  ),
-  tar_target(
-    data_df,
-    create_folds(target_df, 5)
   ),
   tar_target(
     model_variants,
@@ -527,73 +153,9 @@ list(
     filtering_df,
     read.csv(test_filtering_options_file)
   ),
-  tar_target(  
-    Plastid_Nuclear_FCBF_CV_res,
-    test_fcbf(ngram_matrix, data_df, c(0.05, 0.025, 0.01, 0.005, 0.001), "Nuclear_target")
-  ),
-  tar_target(
-    Membrane_Notmembrane_FCBF_CV_res,
-    test_fcbf(ngram_matrix, data_df, c(0.05, 0.025, 0.01, 0.005, 0.001), "Membrane_target")
-  ),
-  tar_target(
-    Nuclear_Membrane_FCBF_CV_res,
-    test_fcbf(ngram_matrix_membrane_nuclear, 
-              data_df[which(target_df[["Membrane_target"]] == TRUE & target_df[["Nuclear_target"]] == TRUE),], 
-              c(0.05, 0.025, 0.01, 0.005, 0.001), "Membrane_mc_target", mc = TRUE)
-  ),
-  tar_target(
-    Plastid_Membrane_FCBF_CV_res,
-    test_fcbf(ngram_matrix_membrane_plastid, 
-              data_df[which(target_df[["Membrane_target"]] == TRUE & target_df[["Nuclear_target"]] == FALSE),], 
-              c(0.05, 0.025, 0.01, 0.005, 0.001), "IM_target")
-  ),
-  tar_target(
-    Stroma_FCBF_CV_res,
-    test_fcbf(ngram_matrix, data_df, c(0.05, 0.025, 0.01, 0.005, 0.001), "Stroma_target")
-  ),
-  tar_target(
-    OM_Stroma_FCBF_CV_res,
-    test_fcbf(ngram_matrix[which(target_df[["Nuclear_target"]] == TRUE & (target_df[["Membrane_mc_target"]] == "OM" | target_df[["Stroma_target"]] == TRUE)),], 
-              data_df[which(target_df[["Nuclear_target"]] == TRUE & (target_df[["Membrane_mc_target"]] == "OM" | target_df[["Stroma_target"]] == TRUE)),],
-              c(0.05, 0.025, 0.01, 0.005, 0.001), "OM_target")
-  ),
-  tar_target(
-    P_Stroma_FCBF_CV_res,
-    test_fcbf(ngram_matrix[which(target_df[["Nuclear_target"]] == FALSE), ], 
-              data_df[which(target_df[["Nuclear_target"]] == FALSE), ],
-              c(0.05, 0.025, 0.01, 0.005, 0.001), "Stroma_target")
-  ),
-  tar_target(
-    N_Stroma_FCBF_CV_res,
-    test_fcbf(ngram_matrix[which(target_df[["Nuclear_target"]] == TRUE), ], 
-              data_df[which(target_df[["Nuclear_target"]] == TRUE), ],
-              c(0.05, 0.025, 0.01, 0.005, 0.001), "Stroma_target")
-  ),
-  tar_target(
-    OM_other_membrane_FCBF_CV_res,
-    test_fcbf(ngram_matrix_membrane_nuclear, 
-              data_df[which(target_df[["Membrane_target"]] == TRUE & target_df[["Nuclear_target"]] == TRUE), ], 
-              c(0.05, 0.025, 0.01, 0.005, 0.001), "OM_target")
-  ),
-  tar_target(
-    IM_other_membrane_FCBF_CV_res,
-    test_fcbf(ngram_matrix_membrane_nuclear, 
-              data_df[which(target_df[["Membrane_target"]] == TRUE & target_df[["Nuclear_target"]] == TRUE), ], 
-              c(0.05, 0.025, 0.01, 0.005, 0.001), "IM_target")
-  ),
-  tar_target(
-    TM_other_membrane_FCBF_CV_res,
-    test_fcbf(ngram_matrix_membrane_nuclear, 
-              data_df[which(target_df[["Membrane_target"]] == TRUE & target_df[["Nuclear_target"]] == TRUE), ], 
-              c(0.05, 0.025, 0.01, 0.005, 0.001), "TM_target")
-  ),
-  tar_target(
-    data_df_final,
-    create_folds(target_df, 10)
-  ),
   tar_target(
     all_models_predictions,
-    get_all_models_predictions(ngram_matrix, c(N_seqs, P_seqs), data_df_final, model_dat, data_path, remove_hmm_files = TRUE)
+    get_all_models_predictions(ngram_matrix, c(N_seqs, P_seqs), data_df, model_dat, data_path, remove_hmm_files = TRUE)
   ),
   tar_target(
     architectures_performance,

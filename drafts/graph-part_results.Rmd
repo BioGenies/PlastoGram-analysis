@@ -13,8 +13,7 @@ library(ggplot2)
 library(tidyr)
 library(DT)
 
-#data_path <- "~/Dropbox/Projekty/BioNgramProjects/PlastoGram/"
-data_path <- "./"
+data_path <- "~/Dropbox/Projekty/BioNgramProjects/PlastoGram/"
 datasets <- c("N_OM", "N_IM", "P_IM", "N_S", "P_S", "N_TM", "P_TM", "N_TL_SEC", "N_TL_TAT")
 
 options(DT.options = list(dom = "Brtip",

@@ -1,7 +1,6 @@
-create_datasets <- function(sequence_file, annotation_file, output_dir) {
+create_datasets <- function(sequence_file, annotation_file, output_dir, datasets) {
   seqs <- read_fasta(sequence_file)
   dat <- read_xlsx(annotation_file)
-  datasets <- c("N_OM", "N_IM", "P_IM", "N_S", "P_S", "N_TM", "P_TM", "N_TL_SEC", "N_TL_TAT")
   
   lapply(datasets, function(ith_dataset) {
     selected <- unique(filter(dat, Final_dataset == ith_dataset)[["Entry"]])
@@ -10,3 +9,24 @@ create_datasets <- function(sequence_file, annotation_file, output_dir) {
     selected_seqs
   }) %>% setNames(datasets)
 }
+
+
+process_for_graphpart <- function(sequence_dataset_list) {
+  labelled_seqs <- lapply(names(sequence_dataset_list), function(ith_set) {
+    seqs <- sequence_dataset_list[[ith_set]]
+    names(seqs) <- paste0(names(seqs), "|label=", ith_set)
+    seqs
+  }) %>% unlist(recursive = FALSE)
+  labelled_seqs
+}
+
+run_graphpart <- function(graphpart_input, n_threads = 24) {
+  write_fasta(labelled_seqs, paste0(sequence_dir, "Datasets_for_graph-part_cdhit_0.9.fa"))
+  system(paste0("graphpart needle --fasta-file ", sequence_dir, "Datasets_for_graph-part_cdhit_0.90.fa --threshold 0.5 --out-file ", 
+                sequence_dir, "Graph-part_results.csv --labels-name label --partitions 4 --threads 24 --no-moving"))
+  label_df <- data.frame(dataset = unique(sapply(names(graphpart_input), function(i) gsub("label=", "", strsplit(i, "|", fixed = TRUE)[[1]][2]))),
+                         `label.val` = 0:3)
+  res <- read.csv(paste0(sequence_dir, "Graph-part_results.csv")) 
+  left_join(res, label_df)
+}
+
