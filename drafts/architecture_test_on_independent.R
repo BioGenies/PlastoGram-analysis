@@ -13,6 +13,7 @@ library(FCBF)
 library(UBL)
 library(nnet)
 library(rel)
+library(tidyr)
 
 
 source("./functions/create_datasets.R")
@@ -217,3 +218,105 @@ lapply(names(seqlists), function(ith_seqlist) {
   
 })
 
+
+
+### Results
+
+all_res_files <- list.files("~/RProjects/PlastoGram-analysis/drafts/", pattern = "Architectures_evaluation",
+                            full.names = TRUE)
+
+all_res_independent <- lapply(all_res_files, function(i) {
+  name <- last(strsplit(gsub(".csv", "", last(strsplit(i, "/")[[1]])), "_")[[1]])
+  read.csv(i) %>% 
+    mutate(type = name,
+           reduction = gsub("cd", "cdhit", gsub("s.-", "", name)),
+           rep = gsub("s", "", strsplit(name, "-")[[1]][1]),
+           cdhit = ifelse(grepl("cd", name), TRUE, FALSE),
+           graphpart = ifelse(grepl("graphpart", name), TRUE, FALSE))
+}) %>% bind_rows() %>% 
+  mutate(arch_variant = sapply(.[["model"]], function(i) gsub("-Sec|-Tat", "", strsplit(i, "_")[[1]][2])),
+         hierarchical = grepl(pattern = "Filtering", x = model, ignore.case = FALSE),
+         algorithm = sapply(.[["model"]], function(i) last(strsplit(i, "_")[[1]])),
+         sec = !grepl(pattern = "-Sec", x = model, ignore.case = FALSE),
+         tat = !grepl(pattern = "-Tat", x = model, ignore.case = FALSE),
+         smote = !grepl(pattern = "0-1", x = model),
+         smote_variant = sapply(.[["model"]], function(i) strsplit(i, "_")[[1]][3])) %>% 
+  pivot_longer(cols = !c(type, reduction, rep, cdhit, graphpart, model, arch_variant, hierarchical, algorithm, sec, tat, smote, smote_variant), names_to = "measure") 
+
+library(ggplot2)
+library(ggbeeswarm)
+
+all_res_independent %>% 
+  filter(measure == "kappa") %>% 
+  ggplot(aes(x = rep, y = value)) +
+  geom_quasirandom() +
+  facet_wrap(~reduction, scales = "free_x") +
+  theme_bw(base_size = 6)
+
+p1 <- all_res_independent %>% 
+  filter(measure %in% c("kappa", "AU1U")) %>% 
+  ggplot(aes(x = rep, y = value)) +
+  geom_quasirandom(size = 0.2) +
+  facet_grid(measure~reduction, scales = "free") +
+  ggtitle("Performance of all architectures on the independent dataset") +
+  theme_bw(base_size = 8)
+
+p2 <- all_res_independent %>% 
+  filter(measure %in% c("kappa", "AU1U")) %>% 
+  ggplot(aes(x = rep, y = value, color = hierarchical)) +
+  geom_quasirandom(size = 0.2) +
+  facet_grid(measure~reduction, scales = "free") +
+  ggtitle("Performance of all architectures on the independent dataset (hierarchy)") +
+  theme_bw(base_size = 8)
+
+p3 <- all_res_independent %>% 
+  filter(measure %in% c("kappa", "AU1U")) %>% 
+  mutate(higher_level_model = ifelse(grepl("GLM", model), "GLM", "RF")) %>% 
+  ggplot(aes(x = rep, y = value, color = higher_level_model)) +
+  geom_quasirandom(size = 0.2) +
+  facet_grid(measure~reduction, scales = "free") +
+  ggtitle("Performance of all architectures on the independent dataset (higher-level model)") +
+  theme_bw(base_size = 8)
+
+p4 <- all_res_independent %>%
+  filter(measure %in% c("kappa", "AU1U")) %>% 
+  filter(grepl("GLM", model)) %>% 
+  ggplot(aes(x = rep, y = value, color = hierarchical)) +
+  geom_quasirandom(size = 0.2) +
+  facet_grid(measure~reduction, scales = "free") +
+  ggtitle("Performance of architectures with GLM higher-level model on the independent dataset") +
+  theme_bw(base_size = 8)
+
+p5 <- all_res_independent %>%
+  filter(measure %in% c("kappa", "AU1U")) %>% 
+  filter(grepl("RF", model)) %>% 
+  ggplot(aes(x = rep, y = value, color = hierarchical)) +
+  geom_quasirandom(size = 0.2) +
+  facet_grid(measure~reduction, scales = "free") +
+  ggtitle("Performance of architectures with RF higher-level model on the independent dataset") +
+  theme_bw(base_size = 8)
+
+library(patchwork)
+full_plot_of_results <- p1/p2/p3/p4/p5 
+ggsave("Independent_dataset_results.png", full_plot_of_results, width = 9, height = 25)
+
+p6 <- all_res_independent %>% 
+  filter(measure %in% c("N_OM_sensitivity", "N_IM_sensitivity", "N_TL_SEC_sensitivity")) %>% 
+  ggplot(aes(x = rep, y = value, color = hierarchical)) +
+  geom_quasirandom(size = 0.2) +
+  facet_grid(measure~reduction, scales = "free") +
+  ggtitle("Performance for most difficult classes on the independent dataset (hierarchy)") +
+  theme_bw(base_size = 8)
+
+p7 <- all_res_independent %>% 
+  filter(measure %in% c("N_OM_sensitivity", "N_IM_sensitivity", "N_TL_SEC_sensitivity")) %>% 
+  mutate(higher_level_model = ifelse(grepl("GLM", model), "GLM", "RF")) %>% 
+  ggplot(aes(x = rep, y = value, color = higher_level_model)) +
+  geom_quasirandom(size = 0.2) +
+  facet_grid(measure~reduction, scales = "free") +
+  ggtitle("Performance for most difficult classes on the independent dataset (higher-level model)") +
+  theme_bw(base_size = 8)
+
+difficult_classes <- p6/p7
+
+ggsave("Independent_dataset_results_difficult_classes.png", difficult_classes, width = 9, height = 12)
