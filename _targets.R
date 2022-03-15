@@ -130,15 +130,19 @@ list(
                      graphpart_res)),
   tar_target(
     data_df,
-    filter(target_df, fold != 3)
+    filter(target_df, fold != 1)
   ),
   tar_target(
     data_df_independent,
-    filter(target_df, fold == 3)
+    filter(target_df, fold == 1)
   ),
   tar_target(
     ngram_matrix, 
-    create_ngram_matrix(all_sequences, target_df)
+    create_ngram_matrix(all_sequences, data_df)
+  ),
+  tar_target(
+    ngram_matrix_independent, 
+    create_ngram_matrix(all_sequences, data_df_independent)
   ),
   tar_target(
     model_variants,
@@ -163,8 +167,12 @@ list(
     read.csv(test_filtering_options_file)
   ),
   tar_target(
+    target_dfs_cv,
+    create_cv_folds(data_df, 5, c(427244, 58713042, 6513, 901374, 388123648, 43671, 71234, 209147, 1847820, 248114))
+  ),
+  tar_target(
     all_models_predictions,
-    get_all_models_predictions(ngram_matrix, all_sequences, data_df, model_dat, data_path, remove_hmm_files = TRUE)
+    get_all_models_predictions_cv(ngram_matrix, all_sequences, data_dfs_cv, model_dat, data_path, remove_hmm_files = TRUE)
   ),
   tar_target(
     architectures_performance,
@@ -177,7 +185,7 @@ list(
                                     architectures_output_dir = paste0(data_path, "Model_architectures/"),
                                     all_models_predictions = all_models_predictions, 
                                     architecture_res_output_dir = paste0(data_path, "Model_architectures_results/"), 
-                                    data_df_final = data_df_final,
+                                    data_df_final = data_df,
                                     performance_outfile = paste0(data_path, "Architectures_performance.csv"))
     
   ),

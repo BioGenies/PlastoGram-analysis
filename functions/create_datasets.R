@@ -22,8 +22,8 @@ process_for_graphpart <- function(sequence_dataset_list) {
 
 run_graphpart <- function(graphpart_input, sequence_dir, n_threads = 24) {
   write_fasta(graphpart_input, paste0(sequence_dir, "Datasets_for_graph-part_cdhit_0.9.fa"))
-  system(paste0("graphpart needle --fasta-file ", sequence_dir, "Datasets_for_graph-part_cdhit_0.90.fa --threshold 0.5 --out-file ", 
-                sequence_dir, "Graph-part_results.csv --labels-name label --partitions 4 --threads 24 --no-moving"))
+  system(paste0("graphpart needle --fasta-file ", sequence_dir, "Datasets_for_graph-part_cdhit_0.9.fa --threshold 0.4 --out-file ", 
+                sequence_dir, "Graph-part_results.csv --labels-name label --test-ratio 0 --val-ratio 0.15 --threads 24 --no-moving"))
   label_df <- data.frame(dataset = unique(sapply(names(graphpart_input), function(i) gsub("label=", "", strsplit(i, "|", fixed = TRUE)[[1]][2]))),
                          `label.val` = 0:8)
   res <- read.csv(paste0(sequence_dir, "Graph-part_results.csv")) 

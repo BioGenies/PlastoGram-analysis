@@ -9,6 +9,13 @@ create_folds <- function(target_df, n_fold) {
   left_join(target_df, folds, by = "seq_name")
 }
 
+create_cv_folds <- function(target_df, n_fold, seeds) {
+  lapply(seeds, function(ith_seed) {
+    set.seed(ith_seed)
+    create_folds(target_df, n_fold)
+  })
+}
+
 train_ngram_models <- function(model_df, ngram_matrix, data_df, filtering_colname, filtering_term) {
   df <- filter(model_df, Input_data == "ngrams")
   lapply(1:nrow(df), function(i) {
@@ -147,9 +154,16 @@ get_all_models_predictions <- function(ngram_matrix, sequences, data_df, model_d
     
     predict_with_all_models(model_df, test_dat, test_df, test_seqs, ngram_models, hmm_models, ith_fold, remove_hmm_files = remove_hmm_files)
   }) %>% bind_rows()
-  write.csv(res, paste0(data_path, "All_models_predictions.csv"), row.names = FALSE)
   res
 } 
+
+get_all_models_predictions_cv <- function(ngram_matrix, sequences, data_dfs_cv, model_df, data_path, remove_hmm_files = FALSE) {
+  lapply(1:length(data_dfs_cv), function(i) {
+    res <- get_all_models_predictions_cv(ngram_matrix, sequences, data_dfs_cv[[i]], model_df, data_path, remove_hmm_files)
+    write.csv(res, paste0(data_path, "All_models_predictions_rep", i, ".csv"), row.names = FALSE)
+    res
+  })
+}
 
 
 filter_results_for_single_architecture <- function(architecture_file, all_models_results) {
@@ -203,39 +217,40 @@ filter_results_for_single_architecture <- function(architecture_file, all_models
 
 
 generate_results_for_architectures <- function(architecture_file_list, all_models_results, outdir, data_df, higher_level_models = c("RF", "GLM")) {
-  lapply(higher_level_models, function(ith_hl_model) {
-    lapply(architecture_file_list, function(ith_file) {
-      model <- gsub(".csv", "", last(strsplit(ith_file, "/")[[1]]))
-      res <- left_join(data_df[, c("seq_name", "dataset")], 
-                       filter_results_for_single_architecture(ith_file, all_models_results),
-                       by = "seq_name")
-      full_results <- lapply(unique(res[["fold"]]), function(ith_fold) {
-        train_dat <- select(filter(res, fold != ith_fold), -c(seq_name, fold))
-        test_dat <- filter(res, fold == ith_fold)
-        if(ith_hl_model == "GLM") {
-          lm_model <- multinom(dataset ~ ., train_dat, model = TRUE)
-          preds <- test_dat %>%
-            select(c("dataset", "fold")) %>%
-            mutate(Prediction = predict(lm_model, test_dat))
-          probs <- predict(lm_model, test_dat, type = "probs") %>% 
-            as.data.frame() %>% 
-            mutate(Probability = sapply(1:nrow(.), function(i) max(.[i,])))
-          cbind(preds, probs)
-        } else {
-          rf_model <- ranger(dataset ~ ., data = mutate(train_dat, dataset = as.factor(dataset)),
-                             write.forest = TRUE, probability = TRUE, num.trees = 500, 
-                             verbose = FALSE, seed = 427244)
-          preds <- predict(rf_model, test_dat)[["predictions"]]
-          cbind(select(test_dat, c("dataset", "fold")),
-                Prediction = c(colnames(preds)[max.col(preds[, c(colnames(preds))])]),
-                preds,
-                Probability = sapply(1:nrow(preds), function(i) max(preds[i,])))
-        }
-      }) %>% bind_rows()
-      write.csv(full_results, paste0(outdir, model, "_", ith_hl_model, "_results.csv"), row.names = FALSE)
+  lapply(1:length(all_models_results), function(ith_rep) {
+    lapply(higher_level_models, function(ith_hl_model) {
+      lapply(architecture_file_list, function(ith_file) {
+        model <- gsub(".csv", "", last(strsplit(ith_file, "/")[[1]]))
+        res <- left_join(data_df[, c("seq_name", "dataset")], 
+                         filter_results_for_single_architecture(ith_file, all_models_results[[ith_rep]]),
+                         by = "seq_name")
+        full_results <- lapply(unique(res[["fold"]]), function(ith_fold) {
+          train_dat <- select(filter(res, fold != ith_fold), -c(seq_name, fold))
+          test_dat <- filter(res, fold == ith_fold)
+          if(ith_hl_model == "GLM") {
+            lm_model <- multinom(dataset ~ ., train_dat, model = TRUE)
+            preds <- test_dat %>%
+              select(c("dataset", "fold")) %>%
+              mutate(Prediction = predict(lm_model, test_dat))
+            probs <- predict(lm_model, test_dat, type = "probs") %>% 
+              as.data.frame() %>% 
+              mutate(Probability = sapply(1:nrow(.), function(i) max(.[i,])))
+            cbind(preds, probs)
+          } else {
+            rf_model <- ranger(dataset ~ ., data = mutate(train_dat, dataset = as.factor(dataset)),
+                               write.forest = TRUE, probability = TRUE, num.trees = 500, 
+                               verbose = FALSE, seed = 427244)
+            preds <- predict(rf_model, test_dat)[["predictions"]]
+            cbind(select(test_dat, c("dataset", "fold")),
+                  Prediction = c(colnames(preds)[max.col(preds[, c(colnames(preds))])]),
+                  preds,
+                  Probability = sapply(1:nrow(preds), function(i) max(preds[i,])))
+          }
+        }) %>% bind_rows()
+        write.csv(full_results, paste0(outdir, model, "_", ith_hl_model, "rep", ith_rep, "_results.csv"), row.names = FALSE)
+      })
     })
   })
-  
 }
 
 evaluate_all_architectures <- function(res_files, outfile, data_df) {
