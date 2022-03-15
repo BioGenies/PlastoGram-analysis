@@ -8,7 +8,7 @@ create_target_df <- function(annotations_file, sequences, graphpart_res) {
   
   graphpart_res %>% 
     select(c(AC, dataset, cluster)) %>% 
-    setNames(c("seq_name", "dataset", "fold")) %>% 
+    setNames(c("seq_name", "dataset", "cluster")) %>% 
     left_join(annot) %>% 
     mutate(Nuclear_target = ifelse(grepl("N_", dataset), TRUE, FALSE),
            Sec_target = ifelse(dataset == "N_TL_SEC", TRUE, FALSE),

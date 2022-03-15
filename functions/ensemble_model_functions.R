@@ -159,7 +159,7 @@ get_all_models_predictions <- function(ngram_matrix, sequences, data_df, model_d
 
 get_all_models_predictions_cv <- function(ngram_matrix, sequences, data_dfs_cv, model_df, data_path, remove_hmm_files = FALSE) {
   lapply(1:length(data_dfs_cv), function(i) {
-    res <- get_all_models_predictions_cv(ngram_matrix, sequences, data_dfs_cv[[i]], model_df, data_path, remove_hmm_files)
+    res <- get_all_models_predictions(ngram_matrix, sequences, data_dfs_cv[[i]], model_df, data_path, remove_hmm_files)
     write.csv(res, paste0(data_path, "All_models_predictions_rep", i, ".csv"), row.names = FALSE)
     res
   })
@@ -230,7 +230,7 @@ generate_results_for_architectures <- function(architecture_file_list, all_model
           if(ith_hl_model == "GLM") {
             lm_model <- multinom(dataset ~ ., train_dat, model = TRUE)
             preds <- test_dat %>%
-              select(c("dataset", "fold")) %>%
+              select(c("seq_name", "dataset", "fold")) %>%
               mutate(Prediction = predict(lm_model, test_dat))
             probs <- predict(lm_model, test_dat, type = "probs") %>% 
               as.data.frame() %>% 
@@ -241,13 +241,13 @@ generate_results_for_architectures <- function(architecture_file_list, all_model
                                write.forest = TRUE, probability = TRUE, num.trees = 500, 
                                verbose = FALSE, seed = 427244)
             preds <- predict(rf_model, test_dat)[["predictions"]]
-            cbind(select(test_dat, c("dataset", "fold")),
+            cbind(select(test_dat, c("seq_name", "dataset", "fold")),
                   Prediction = c(colnames(preds)[max.col(preds[, c(colnames(preds))])]),
                   preds,
                   Probability = sapply(1:nrow(preds), function(i) max(preds[i,])))
           }
         }) %>% bind_rows()
-        write.csv(full_results, paste0(outdir, model, "_", ith_hl_model, "rep", ith_rep, "_results.csv"), row.names = FALSE)
+        write.csv(full_results, paste0(outdir, model, "_", ith_hl_model, "_rep", ith_rep, "_results.csv"), row.names = FALSE)
       })
     })
   })
@@ -262,7 +262,7 @@ evaluate_all_architectures <- function(res_files, outfile, data_df) {
       data.frame(
         model = gsub("_results.csv", "", last(strsplit(ith_file, "/")[[1]])),
         fold = ith_fold,
-        AU1U = multiclass.AU1U(dat[, 4:(ncol(dat)-1)], dat[["dataset"]]),
+        AU1U = multiclass.AU1U(dat[, 5:(ncol(dat)-1)], dat[["dataset"]]),
         kappa = KAPPA(dat[["dataset"]], dat[["Prediction"]]),
         weighted_kappa = ckap(dat[, c("dataset", "Prediction")], 
                               weight = as.matrix(bind_rows(lapply(x, function(i) ifelse(i == x, as.vector(sum(x)/(i+x)), 1)))))[["est"]],

@@ -130,11 +130,11 @@ list(
                      graphpart_res)),
   tar_target(
     data_df,
-    filter(target_df, fold != 1)
+    filter(target_df, cluster != 1)
   ),
   tar_target(
     data_df_independent,
-    filter(target_df, fold == 1)
+    filter(target_df, cluster == 1)
   ),
   tar_target(
     ngram_matrix, 
@@ -143,6 +143,14 @@ list(
   tar_target(
     ngram_matrix_independent, 
     create_ngram_matrix(all_sequences, data_df_independent)
+  ),
+  tar_target(
+    sequences_cv,
+    all_sequences[which(names(all_sequences) %in% data_df[["seq_name"]])]
+  ),
+  tar_target(
+    sequences_independent,
+    all_sequences[which(names(all_sequences) %in% data_df_independent[["seq_name"]])]
   ),
   tar_target(
     model_variants,
@@ -172,7 +180,7 @@ list(
   ),
   tar_target(
     all_models_predictions,
-    get_all_models_predictions_cv(ngram_matrix, all_sequences, data_dfs_cv, model_dat, data_path, remove_hmm_files = TRUE)
+    get_all_models_predictions_cv(ngram_matrix, sequences_cv, target_dfs_cv, model_dat, data_path, remove_hmm_files = TRUE)
   ),
   tar_target(
     architectures_performance,
@@ -187,7 +195,6 @@ list(
                                     architecture_res_output_dir = paste0(data_path, "Model_architectures_results/"), 
                                     data_df_final = data_df,
                                     performance_outfile = paste0(data_path, "Architectures_performance.csv"))
-    
   ),
   tar_target(
     mean_architecture_performance,
@@ -225,10 +232,10 @@ list(
   # tar_target(
   #   PlastoGram_multinom_model,
   #   train_multinom(PlastoGram_predictions, data_df_final)
-  # ),
-  # tar_target(
-  #   baseline_model_cv_res,
-  #   do_baseline_cv(ngram_matrix, data_df_final)
+  ),
+  tar_target(
+    baseline_model_cv_res,
+    do_baseline_cv(ngram_matrix, target_dfs_cv)
   # ),
   # tar_target(
   #   jackknife_results_glm,
