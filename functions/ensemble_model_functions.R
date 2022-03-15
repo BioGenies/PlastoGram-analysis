@@ -260,7 +260,8 @@ evaluate_all_architectures <- function(res_files, outfile, data_df) {
     lapply(unique(res[["fold"]]), function(ith_fold) {
       dat <- filter(res, fold == ith_fold)
       data.frame(
-        model = gsub("_results.csv", "", last(strsplit(ith_file, "/")[[1]])),
+        model = gsub("_rep._results.csv|_rep.._results.csv", "", last(strsplit(ith_file, "/")[[1]])),
+        rep = last(strsplit(gsub("_results.csv", "", last(strsplit(ith_file, "/")[[1]])), "_")[[1]]),
         fold = ith_fold,
         AU1U = multiclass.AU1U(dat[, 5:(ncol(dat)-1)], dat[["dataset"]]),
         kappa = KAPPA(dat[["dataset"]], dat[["Prediction"]]),
