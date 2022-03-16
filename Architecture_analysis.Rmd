@@ -218,7 +218,7 @@ best_6_glm <- mean_architecture_performance %>%
 change_variant_names(architectures_performance, "model") %>% 
   filter(model %in% best_6_glm[["model"]])  %>% 
   mutate(model = factor(model, levels = rev(best_6_glm[["model"]]))) %>% 
-  pivot_longer(cols = !c(model, fold)) %>% 
+  pivot_longer(cols = !c(model, fold, rep)) %>% 
   ggplot(aes(y = model, x = value)) +
   geom_boxplot() +
   facet_wrap(~name, scales = "free_x") +
@@ -236,7 +236,7 @@ best_6_rf <- mean_architecture_performance %>%
 change_variant_names(architectures_performance, "model") %>% 
   filter(model %in% best_6_rf[["model"]])  %>% 
   mutate(model = factor(model, levels = rev(best_6_rf[["model"]]))) %>% 
-  pivot_longer(cols = !c(model, fold)) %>% 
+  pivot_longer(cols = !c(model, fold, rep)) %>% 
   ggplot(aes(y = model, x = value)) +
   geom_boxplot() +
   facet_wrap(~name, scales = "free_x") +

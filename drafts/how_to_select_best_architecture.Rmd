@@ -1,0 +1,177 @@
+---
+title: "How to select the best architecture?"
+author: "Katarzyna Sidorczuk"
+date: "3/16/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, fig.width = 12)
+
+library(dplyr)
+library(ggplot2)
+library(tidyr)
+library(ggrepel)
+library(targets)
+library(DT)
+
+withr::with_dir("../",
+                tar_load(c(architectures_performance, mean_architecture_performance, model_variants)))
+
+options(DT.options = list(dom = "Brtip",
+                          buttons = c("copy", "csv", "excel", "print"),
+                          pageLength = 20
+))
+
+my_DT <- function(x, ...)
+  datatable(x, ..., escape = FALSE, filter = "top", rownames = FALSE,
+            style = "bootstrap")
+
+change_variant_names <- function(df, colname) {
+  df[[colname]] <- sapply(df[[colname]], function(i) case_when(grepl("v1", i) ~ gsub("v1", "NMmc", i),
+                                                               grepl("v2", i) ~ gsub("v2", "NMmc_S", i),
+                                                               grepl("v3", i) ~ gsub("v3", "NMmc_OMS", i),
+                                                               grepl("v4", i) ~ gsub("v4", "NMbin", i),
+                                                               grepl("v5", i) ~ gsub("v5", "NMbin_S", i),
+                                                               grepl("v6", i) ~ gsub("v6", "NMbin_OMS", i),
+                                                               grepl("v7", i) ~ gsub("v7", "NMmc_PS_NS", i),
+                                                               grepl("v8", i) ~ gsub("v8", "NMbin_PS_NS", i)),
+                          USE.NAMES = FALSE)
+  df
+} 
+arch_dat <- mutate(mean_architecture_performance,
+                   arch_variant = sapply(mean_architecture_performance[["model"]], function(i) gsub("-Sec|-Tat", "", strsplit(i, "_")[[1]][2])),
+                   hierarchical = grepl(pattern = "Filtering", x = model, ignore.case = FALSE),
+                   algorithm = sapply(mean_architecture_performance[["model"]], function(i) last(strsplit(i, "_")[[1]])),
+                   sec = !grepl(pattern = "-Sec", x = model, ignore.case = FALSE),
+                   tat = !grepl(pattern = "-Tat", x = model, ignore.case = FALSE),
+                   smote = !grepl(pattern = "0-1", x = model),
+                   smote_variant = sapply(mean_architecture_performance[["model"]], function(i) strsplit(i, "_")[[1]][3])) %>% 
+  pivot_longer(cols = !c(model, arch_variant, hierarchical, algorithm, sec, tat, smote, smote_variant), names_to = "measure") 
+
+
+plot_sd_vs_kappa <- function(arch_res, localization) {
+  col <- paste0("sd_", localization, "_sensitivity")
+  ggplot(plot_dat, aes(x = get(col), y = mean_kappa)) +
+    geom_point() +
+    xlab(paste0("Standard deviation of ", localization, " sensitivity")) +
+    ylab("Mean value of kappa")
+}
+
+```
+
+### Datasets
+
+1. CD-HIT reduction using 0.9 threshold
+2. Graph-part partitioning to create independent and train-test datasets. Parameters: 0.4 threshold, 0.15 ratio of validation dataset, no moving between clusters.
+
+| Dataset | Before filtering | After CD-HIT | After partitioning<br>(train-test) | After partitioning<br>(independent) |
+|:---:|:---:|:---:|:---:|:---:|
+| N_IM | 59 | 59 | 50 | 6 |
+| N_OM | 59 | 56 | 46 | 4 |
+| N_TM | 276 | 222 | 192 | 30 |
+| N_S | 357 | 340 | 287 | 53 |
+| N_TL_SEC | 49 | 43 | 37 | 4 |
+| N_TL_TAT | 84 | 89 | 67 | 6 |
+| P_IM | 187 | 128 | 106 | 11 |
+| P_TM | 4456 | 1237 | 1073 | 156 |
+| P_S | 1417 | 419 | 360 | 42 |
+
+
+### Architecture variants
+
+```{r}
+data.frame(arch_variant = names(model_variants)[1:8], 
+           shortcut = c("NMmc", "NMmc_S", "NMmc_OMS", "NMbin", "NMbin_S", "NMbin_OMS", "NMmc_PS_NS", "NMbin_PS_NS"),
+           models = sapply(model_variants[1:8], function(i) paste0(i, collapse = ", "))) %>% 
+  knitr::kable(., row.names = FALSE)
+```
+
+
+### Choosing the best architecture
+
+We use train-test dataset obtained after homology partitioning to perform 5-fold CV repeated 10 times.
+Based on the CV results we want to select the optimal architecture (highest mean kappa). 
+We use repeated CV to reduce variance of performance measures and check architecture stability.
+
+#### Problem 1: Differences between the models with highest mean kappa values are very small 
+
+```{r}
+mean_architecture_performance %>% 
+  change_variant_names("model") %>% 
+  arrange(desc(mean_kappa)) %>% 
+  my_DT() %>%
+  formatRound(columns = colnames(mean_architecture_performance)[2:length(colnames(mean_architecture_performance))],
+              digits=4)
+```
+
+#### Problem 2: Architectures with highest kappa values tend to have higher standard deviations of performance especially for the most problematic localizations (N_OM, N_IM)
+```{r}
+best_5 <- mean_architecture_performance %>% 
+  change_variant_names("model") %>% 
+  arrange(desc(mean_kappa)) %>%
+  head(n = 5) %>% 
+  .[["model"]]
+architectures_performance %>% 
+  change_variant_names("model") %>% 
+  filter(model %in% best_5) %>% 
+  my_DT() %>%
+  formatRound(columns = colnames(architectures_performance)[4:length(colnames(architectures_performance))],
+              digits=4)
+```
+
+```{r}
+plot_dat <- architectures_performance %>% 
+  change_variant_names("model") %>% 
+  group_by(model) %>% 
+  summarise(mean_AU1U = mean(AU1U),
+            mean_kappa = mean(kappa),
+            mean_weighted_kappa = mean(weighted_kappa),
+            mean_N_IM_sensitivity = mean(N_IM_sensitivity),
+            sd_N_IM_sensitivity = sd(N_IM_sensitivity),
+            mean_N_OM_sensitivity = mean(N_OM_sensitivity),
+            sd_N_OM_sensitivity = sd(N_OM_sensitivity),
+            mean_N_TM_sensitivity = mean(N_TM_sensitivity),
+            sd_N_TM_sensitivity = sd(N_TM_sensitivity),
+            mean_N_S_sensitivity = mean(N_S_sensitivity),
+            sd_N_S_sensitivity = sd(N_S_sensitivity),
+            mean_N_TL_SEC_sensitivity = mean(N_TL_SEC_sensitivity),
+            sd_N_TL_SEC_sensitivity = sd(N_TL_SEC_sensitivity),
+            mean_N_TL_TAT_sensitivity = mean(N_TL_TAT_sensitivity),
+            sd_N_TL_TAT_sensitivity = sd(N_TL_TAT_sensitivity),
+            mean_P_IM_sensitivity = mean(P_IM_sensitivity),
+            sd_P_IM_sensitivity = sd(P_IM_sensitivity),
+            mean_P_TM_sensitivity = mean(P_TM_sensitivity),
+            sd_P_TM_sensitivity = sd(P_TM_sensitivity),
+            mean_P_S_sensitivity = mean(P_S_sensitivity),
+            sd_P_S_sensitivity = sd(P_S_sensitivity))
+
+datasets <- c("N_IM", "N_OM", "N_TM", "N_S", "N_TL_SEC", "N_TL_SEC", "P_IM", "P_TM", "P_S")
+
+plot_sd_vs_kappa(plot_dat, "N_IM") +
+  ggtitle("Number of N_IM sequences = 50")
+plot_sd_vs_kappa(plot_dat, "N_OM") +
+  ggtitle("Number of N_OM sequences = 46")
+plot_sd_vs_kappa(plot_dat, "N_TM") +
+  ggtitle("Number of N_TM sequences = 192")
+plot_sd_vs_kappa(plot_dat, "N_S") +
+  ggtitle("Number of N_S sequences = 287")
+plot_sd_vs_kappa(plot_dat, "N_TL_SEC") +
+  ggtitle("Number of N_TL_SEC sequences = 37")
+plot_sd_vs_kappa(plot_dat, "N_TL_TAT") +
+  ggtitle("Number of N_TL_TAT sequences = 67")
+plot_sd_vs_kappa(plot_dat, "P_IM") +
+  ggtitle("Number of P_IM sequences = 106")
+plot_sd_vs_kappa(plot_dat, "P_TM") +
+  ggtitle("Number of P_TM sequences = 1073")
+plot_sd_vs_kappa(plot_dat, "P_S") +
+  ggtitle("Number of P_S sequences = 360")
+```
+
+### Questions
+
+**How to select the best architecture?** - select the one with the highest kappa regardless of standard deviations? Include standard deviations in the decision (how?)? use some other method?
+
+**Independent dataset** - is that enough? Test it on proteins from other organisms not possesing 'typical' chloroplasts, such as *Paulinella* or *Plasmodium* (problem with data availability - will have to check the literature).
+
+**Jackknife** - everyone else is doing that but it has its problems (tends to overestimate model performance, doesn't work well with GLMs)
