@@ -1,4 +1,21 @@
-predict_with_PlastoGram <- function(ngram_models, hmm_models, higher_level_model, test_ngrams, test_sequences, test_df) {
+get_all_imp_ngrams <- function(ngram_models) {
+  sapply(names(ngram_models), function(i) ngram_models[[i]][["forest"]][["independent.variable.names"]]) %>% 
+    unname() %>% 
+    unlist() %>% 
+    unique()
+}
+
+add_missing_ngrams <- function(ngrams, imp_ngrams) {
+  missing <- imp_ngrams[which(!(imp_ngrams %in% colnames(ngrams)))]
+  if(length(missing) > 0) {
+    cbind(ngrams, setNames(lapply(missing, function(x) x = 0), missing))
+  } else {
+    ngrams
+  }
+}
+
+predict_with_PlastoGram <- function(ngram_models, hmm_models, higher_level_model, test_ngrams, test_sequences, test_df, informative_ngrams) {
+  test_ngrams <- add_missing_ngrams(test_ngrams, informative_ngrams)
   ngram_preds_list <- lapply(names(ngram_models), function(ith_model) {
     df <- data.frame(seq_name = test_df[["seq_name"]],
                      pred = predict(ngram_models[[ith_model]], test_ngrams)[["predictions"]][, "TRUE"])
