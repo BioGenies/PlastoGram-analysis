@@ -203,7 +203,7 @@ list(
   ),
   tar_target(
     ranked_architecture_performance,
-    filter_performance_with_sd_medians(mean_architecture_performance, dataset_names)
+    rank_architectures(mean_architecture_performance)
   ),
   tar_target(
     PlastoGram_best_architecture_name,
@@ -211,43 +211,43 @@ list(
   ),
   tar_target(
     PlastoGram_best_architecture,
-    read.csv(paste0(data_path, "Model_architectures/", PlastoGram_best_architecture_name))
+    read.csv(paste0(data_path, "Model_architectures/", gsub("_GLM|_RF", ".csv", PlastoGram_best_architecture_name)))
+  ),
+  tar_target(
+    PlastoGram_ngram_models,
+    train_ngram_models(PlastoGram_best_architecture, ngram_matrix, data_df, filtering_colname = NULL, filtering_term = NULL)
+  ),
+  tar_target(
+    PlastoGram_hmm_Sec,
+    paste0(train_profileHMM(sequences_cv[which(names(sequences_cv) %in% filter(data_df, dataset == "N_TL_SEC")[["seq_name"]])], 
+                            "PlastoGram_Sec_model", remove_files = TRUE), ".hmm"),
+    format = "file"
+  ),
+  tar_target(
+    PlastoGram_hmm_Tat,
+    paste0(train_profileHMM(sequences_cv[which(names(sequences_cv) %in% filter(data_df, dataset == "N_TL_TAT")[["seq_name"]])], 
+                            "PlastoGram_Tat_model", remove_files = TRUE), ".hmm"),
+    format = "file"
+  ),
+  tar_target(
+    PlastoGram_predictions,
+    predict_with_all_models(PlastoGram_final_architecture, ngram_matrix, data_df, sequences_cv, PlastoGram_ngram_models,
+                            list("Sec_model" = gsub(".hmm", "", PlastoGram_hmm_Sec), "Tat_model" = gsub(".hmm", "", PlastoGram_hmm_Tat)),
+                            ith_fold = NULL, remove_hmm_files = FALSE)
+  ),
+  tar_target(
+    PlastoGram_multinom_model,
+    train_multinom(PlastoGram_predictions, data_df)
+  ),
+  tar_target(
+    PlastoGram_evaluation,
+    predict_with_PlastoGram(PlastoGram_ngram_models, 
+                            list("Sec_model" = gsub(".hmm", "", PlastoGram_hmm_Sec), "Tat_model" = gsub(".hmm", "", PlastoGram_hmm_Tat)), 
+                            PlastoGram_multinom_model, ngram_matrix_independent, sequences_independent, data_df_independent)
   # ),
   # tar_target(
-  #   PlastoGram_ngram_models,
-  #   train_ngram_models(PlastoGram_final_architecture, ngram_matrix, data_df_final, filtering_colname = NULL, filtering_term = NULL)
-  # ),
-  # tar_target(
-  #   PlastoGram_hmm_Sec,
-  #   paste0(train_profileHMM(N_TL_SEC_seqs, "PlastoGram_Sec_model", remove_files = TRUE), ".hmm"),
-  #   format = "file"
-  # ),
-  # tar_target(
-  #   PlastoGram_hmm_Tat,
-  #   paste0(train_profileHMM(N_TL_TAT_seqs, "PlastoGram_Tat_model", remove_files = TRUE), ".hmm"),
-  #   format = "file"
-  # ),
-  # tar_target(
-  #   PlastoGram_predictions,
-  #   predict_with_all_models(PlastoGram_final_architecture, ngram_matrix, data_df_final, c(N_seqs, P_seqs), PlastoGram_ngram_models, 
-  #                           list("Sec_model" = gsub(".hmm", "", PlastoGram_hmm_Sec), "Tat_model" = gsub(".hmm", "", PlastoGram_hmm_Tat)), 
-  #                           ith_fold = NULL, remove_hmm_files = FALSE)
-  # ),
-  # tar_target(
-  #   PlastoGram_multinom_model,
-  #   train_multinom(PlastoGram_predictions, data_df_final)
-  # ),
-  # tar_target(
-  #   baseline_model_cv_res,
+  #   baseline_model_res,
   #   do_baseline_cv(ngram_matrix, target_dfs_cv)
-  # ),
-  # tar_target(
-  #   jackknife_results_glm,
-  #   do_jackknife(ngram_matrix, c(N_seqs, P_seqs), data_df_final, PlastoGram_best_architecture_glm, data_path, higher_level_model = "GLM")
-  # ),
-  # tar_target(
-  #   jackknife_results_rf,
-  #   do_jackknife(ngram_matrix, c(N_seqs, P_seqs), data_df_final, PlastoGram_best_architecture_rf, data_path, higher_level_model = "RF")
   )
 )
 
