@@ -336,6 +336,21 @@ train_multinom <- function(prediction_results, data_df) {
   multinom(dataset ~ ., data = train_dat, model = TRUE)
 }
 
+scaled_train_multinom <- function(train_df, data_df) {
+  train_df[is.na(train_df)] <- 0
+  scaled_train_df <- scale(select(train_df, -seq_name))
+  glm_scale_scale <- attr(scaled_train_df, "scaled:scale")
+  glm_scale_center <- attr(scaled_train_df, "scaled:center")
+  scaled_train_df <- data.frame(scaled_train_df)
+  scaled_train_df[["dataset"]] <- data_df[["dataset"]]
+  
+  hl_model <- invisible(multinom(dataset ~ ., data = scaled_train_df, model = TRUE))
+  
+  list("model" = hl_model,
+       "scale" = glm_scale_scale,
+       "center" = glm_scale_center)
+ 
+}
 
 generate_and_test_architectures <- function(model_variants, smote_models, sequence_models, model_dat, filtering_df, architectures_output_dir,
                                             all_models_predictions, architecture_res_output_dir, data_df_final, performance_outfile) {
