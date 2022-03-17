@@ -79,36 +79,6 @@ train_profile_HMM_models <- function(model_df, sequences, data_df, filtering_col
   }) %>% setNames(df[["Model_name"]])
 }
 
-is_empty <- function(x) {
-  x == "" | is.na(x)
-}
-
-calculate_evaluation_order <- function(model_df) {
-  model_names <- model_df[["model.name"]]
-  target_names <- filter(df, multiclass %in% c(FALSE, NA))[["target.name"]]
-  res_names <- sapply(target_names, function(i) gsub("_target", "", i), USE.NAMES = FALSE)
-  
-  orders <- rep(NA, length(model_names))
-  for (i in seq_along(model_names)) {
-    if(!(any(sapply(res_names, function(j) grepl(j, model_df[["test.filtering"]][i]))))) {
-      orders[i] <- 1
-    } 
-  }
-  calculated_res <- res_names[which(!(is.na(orders)))]
-  current_order <- 2
-  while(!(all(res_names %in% calculated_res))) {
-    for (i in which(is.na(orders))) {
-      needed_res <- res_names[sapply(res_names, function(j) grepl(j, model_df[["test.filtering"]][i]))]
-      if(all(needed_res %in% calculated_res)) {
-        orders[i] <- current_order
-      } 
-    }
-    current_order <- current_order + 1
-    calculated_res <- res_names[which(!(is.na(orders)))]
-  }
-  orders
-}
-
 
 predict_with_all_models <- function(model_df, test_ngram_matrix, test_df, test_sequences, ngram_models, 
                                     hmm_models = list("Sec_model" = "Sec_model", "Tat_model" = "Tat_model"), ith_fold, remove_hmm_files = TRUE) {
@@ -295,23 +265,69 @@ evaluate_all_architectures <- function(res_files, outfile, data_df) {
 
 get_mean_performance_of_architectures <- function(performance_results, outfile) {
   summ <- performance_results %>% 
+    group_by(model, rep) %>% 
+    summarise(mean_rep_kappa = mean(kappa),
+              mean_rep_AU1U = mean(AU1U),
+              mean_rep_N_IM_sens = mean(N_IM_sensitivity),
+              mean_rep_N_OM_sens = mean(N_OM_sensitivity),
+              mean_rep_N_TM_sens = mean(N_TM_sensitivity),
+              mean_rep_N_S_sens = mean(N_S_sensitivity),
+              mean_rep_N_TL_SEC_sens = mean(N_TL_SEC_sensitivity),
+              mean_rep_N_TL_TAT_sens = mean(N_TL_TAT_sensitivity),
+              mean_rep_P_IM_sens = mean(P_IM_sensitivity),
+              mean_rep_P_TM_sens = mean(P_TM_sensitivity),
+              mean_rep_P_S_sens = mean(P_S_sensitivity),
+              sd_rep_N_IM_sens = sd(N_IM_sensitivity),
+              sd_rep_N_OM_sens = sd(N_OM_sensitivity),
+              sd_rep_N_TM_sens = sd(N_TM_sensitivity),
+              sd_rep_N_S_sens = sd(N_S_sensitivity),
+              sd_rep_N_TL_SEC_sens = sd(N_TL_SEC_sensitivity),
+              sd_rep_N_TL_TAT_sens = sd(N_TL_TAT_sensitivity),
+              sd_rep_P_IM_sens = sd(P_IM_sensitivity),
+              sd_rep_P_TM_sens = sd(P_TM_sensitivity),
+              sd_rep_P_S_sens = sd(P_S_sensitivity)) %>% 
+    ungroup() %>% 
     group_by(model) %>% 
-    summarise(mean_AU1U = mean(AU1U),
-              mean_kappa = mean(kappa),
-              mean_weighted_kappa = mean(weighted_kappa),
-              mean_N_IM_sensitivity = mean(N_IM_sensitivity),
-              mean_N_OM_sensitivity = mean(N_OM_sensitivity),
-              mean_N_TM_sensitivity = mean(N_TM_sensitivity),
-              mean_N_S_sensitivity = mean(N_S_sensitivity),
-              mean_N_TL_SEC_sensitivity = mean(N_TL_SEC_sensitivity),
-              mean_N_TL_TAT_sensitivity = mean(N_TL_TAT_sensitivity),
-              mean_P_IM_sensitivity = mean(P_IM_sensitivity),
-              mean_P_TM_sensitivity = mean(P_TM_sensitivity),
-              mean_P_S_sensitivity = mean(P_S_sensitivity))
+    summarise(mean_kappa = mean(mean_rep_kappa),
+              mean_AU1U = mean(mean_rep_AU1U),
+              mean_N_IM_sens = mean(mean_rep_N_IM_sens),
+              mean_N_OM_sens = mean(mean_rep_N_OM_sens),
+              mean_N_TM_sens = mean(mean_rep_N_TM_sens),
+              mean_N_S_sens = mean(mean_rep_N_S_sens),
+              mean_N_TL_SEC_sens = mean(mean_rep_N_TL_SEC_sens),
+              mean_N_TL_TAT_sens = mean(mean_rep_N_TL_TAT_sens),
+              mean_P_IM_sens = mean(mean_rep_P_IM_sens),
+              mean_P_TM_sens = mean(mean_rep_P_TM_sens),
+              mean_P_S_sens = mean(mean_rep_P_S_sens),
+              sd_N_IM_sens = mean(sd_rep_N_IM_sens),
+              sd_N_OM_sens = mean(sd_rep_N_OM_sens),
+              sd_N_TM_sens = mean(sd_rep_N_TM_sens),
+              sd_N_S_sens = mean(sd_rep_N_S_sens),
+              sd_N_TL_SEC_sens = mean(sd_rep_N_TL_SEC_sens),
+              sd_N_TL_TAT_sens = mean(sd_rep_N_TL_TAT_sens),
+              sd_P_IM_sens = mean(sd_rep_P_IM_sens),
+              sd_P_TM_sens = mean(sd_rep_P_TM_sens),
+              sd_P_S_sens = mean(sd_rep_P_S_sens)) 
   write.csv(summ, outfile, row.names = FALSE)
   summ
 }
 
+rank_architectures <- function(mean_architecture_performance) {
+  ranking_columns <- colnames(mean_architecture_performance)[which(!(colnames(mean_architecture_performance) %in% c("model", "mean_AU1U")))]
+  ranks_df <- lapply(ranking_columns, function(ith_col) {
+    ranks <- if(grepl("mean", ith_col)) {
+      rank(-mean_architecture_performance[[ith_col]], ties.method = "min")
+    } else {
+      rank(mean_architecture_performance[[ith_col]], ties.method = "min")
+    } 
+    df <- data.frame("ranks" = ranks)
+    colnames(df) <- paste0(ith_col, "_ranks")
+    df
+  }) %>% bind_cols() 
+  cbind(data.frame(model = mean_architecture_performance[["model"]]), 
+        ranks_df) %>% 
+    mutate(rank_sum = rowSums(ranks_df))
+}
 
 train_multinom <- function(prediction_results, data_df) {
   train_dat <- left_join(prediction_results, data_df[, c("seq_name", "dataset")], by = "seq_name") %>% 
@@ -344,80 +360,3 @@ generate_and_test_architectures <- function(model_variants, smote_models, sequen
                              performance_outfile,
                              data_df_final)
 }
-
-scaled_train_model <- function(train_df, test_df) {
-  scaled_train_df <- scale(select(train_df, -dataset))
-  scaled_test_df <- scale(select(test_df, -seq_name), center=attr(scaled_train_df, "scaled:center"),
-                          scale=attr(scaled_train_df, "scaled:scale"))
-  scaled_train_df <- data.frame(scaled_train_df)
-  scaled_train_df[["dataset"]] <- train_df[["dataset"]]
-  
-  hl_model <- invisible(multinom(dataset ~ ., data = scaled_train_df, model = TRUE))
-  
-  cbind(data.frame(seq_name = test_df[["seq_name"]]), scaled_test_df,
-        t(predict(hl_model, scaled_test_df, type = "probs"))) %>% 
-    mutate(Localization = predict(hl_model, scaled_test_df),
-           dataset = test_df[["dataset"]])
-}
-
-do_jackknife <- function(ngram_matrix, sequences, data_df, model_df, data_path, remove_hmm_files = TRUE, higher_level_model = "RF") {
-  
-  res <- lapply(unique(data_df[["seq_name"]]), function(ith_seq) {
-    print(paste0("Starting round ", which(data_df[["seq_name"]] == ith_seq), " of ", nrow(data_df)))
-    dat <- ngram_matrix[data_df[["seq_name"]] != ith_seq, ]
-    test_dat <- ngram_matrix[data_df[["seq_name"]] == ith_seq, ]
-    test_df <- filter(data_df, seq_name == ith_seq)
-    test_seqs <- sequences[which(names(sequences) %in% test_df[["seq_name"]])]
-    
-    ngram_models <- train_ngram_models(model_df, ngram_matrix, data_df, filtering_colname = "seq_name", filtering_term = paste0("'", ith_seq, "'"))
-    hmm_models <- train_profile_HMM_models(model_df, sequences, data_df, filtering_colname = "seq_name", filtering_term = paste0("'", ith_seq, "'"))
-    train_preds <- predict_with_all_models(model_df, dat, filter(data_df, seq_name != ith_seq),  sequences[which(!(names(sequences) %in% test_df[["seq_name"]]))], ngram_models, hmm_models, ith_seq, remove_hmm_files = FALSE)
-    train_preds[is.na(train_preds)] <- 0
-    test_preds <- predict_with_all_models(model_df, test_dat, test_df, test_seqs, ngram_models, hmm_models, ith_seq, remove_hmm_files = TRUE)
-    test_preds[is.na(test_preds)] <- 0
-    
-    train_dat <- left_join(train_preds, data_df[, c("seq_name", "dataset")], by = "seq_name") %>% 
-      select(-c(seq_name, fold)) %>% 
-      mutate(dataset = as.factor(dataset))
-    
-    preds <- if(higher_level_model == "GLM") {
-      # GLM
-      hl_model <- train_multinom(select(train_preds, -fold), filter(data_df, seq_name != ith_seq))
-      glm_preds <- cbind(test_preds,
-            t(predict(hl_model, test_preds, type = "probs"))) %>% 
-        mutate(Localization = predict(hl_model, test_preds),
-               dataset = test_df[["dataset"]])
-      # Scaled GLM
-      glm_scaled_preds <- scaled_train_model(train_dat, select(test_preds, -fold))
-      
-      list("GLM" = glm_preds,
-           "GLM_scaled" = glm_scaled_preds)
-      
-    } else {
-      hl_model <- ranger(dataset ~ ., data = train_dat,
-                         write.forest = TRUE, probability = TRUE, num.trees = 500, 
-                         verbose = FALSE, seed = 427244)
-      
-      rf_preds <- cbind(test_preds,
-            predict(hl_model, test_preds)[["predictions"]]) %>% 
-        mutate(Localization = c(colnames(.)[12:20][max.col(.[, c(colnames(.)[12:20])])]),
-               dataset = test_df[["dataset"]])
-      
-      list("RF" = rf_preds)
-    }
-    
-    list("train_preds" = train_preds,
-         "results" = preds)
-  })
-  
-  full_res <- lapply(names(res[[1]][["results"]]), function(ith_res) {
-    merged_res <- bind_rows(lapply(1:length(res), function(i) res[[i]][["results"]][[ith_res]]))
-    write.csv(merged_res, paste0(data_path, "Jackknife_results_", ith_res, ".csv"), row.names = FALSE)
-    merged_res
-  }) %>% setNames(names(res[[1]][["results"]]))
-  
-  lower_level_preds <- bind_rows(lapply(1:length(res), function(i) res[[i]][["train_preds"]]))
-  
-  list("results" = full_res,
-       "lower_level_train_preds" = lower_level_preds)
-} 

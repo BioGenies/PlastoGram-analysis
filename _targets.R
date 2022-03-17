@@ -200,14 +200,18 @@ list(
     mean_architecture_performance,
     get_mean_performance_of_architectures(architectures_performance,
                                           paste0(data_path, "Architectures_mean_performance.csv"))
-  # ),
-  # tar_target(
-  #   PlastoGram_best_architecture_glm,
-  #   read.csv(paste0(data_path, "Model_architectures/Architecture_v8_0-1_No_filtering.csv"))
-  # ),
-  # tar_target(
-  #   PlastoGram_best_architecture_rf,
-  #   read.csv(paste0(data_path, "Model_architectures/Architecture_v8_1-2_No_filtering.csv"))
+  ),
+  tar_target(
+    ranked_architecture_performance,
+    filter_performance_with_sd_medians(mean_architecture_performance, dataset_names)
+  ),
+  tar_target(
+    PlastoGram_best_architecture_name,
+    ranked_architecture_performance[["model"]][which.min(ranked_architecture_performance[["rank_sum"]])]
+  ),
+  tar_target(
+    PlastoGram_best_architecture,
+    read.csv(paste0(data_path, "Model_architectures/", PlastoGram_best_architecture_name))
   # ),
   # tar_target(
   #   PlastoGram_ngram_models,
@@ -232,10 +236,10 @@ list(
   # tar_target(
   #   PlastoGram_multinom_model,
   #   train_multinom(PlastoGram_predictions, data_df_final)
-  ),
-  tar_target(
-    baseline_model_cv_res,
-    do_baseline_cv(ngram_matrix, target_dfs_cv)
+  # ),
+  # tar_target(
+  #   baseline_model_cv_res,
+  #   do_baseline_cv(ngram_matrix, target_dfs_cv)
   # ),
   # tar_target(
   #   jackknife_results_glm,
