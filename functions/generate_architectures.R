@@ -39,13 +39,13 @@ get_updated_model_variants <- function() {
       c(get(paste0("base", i)), "Nuclear_TL_model", "Nuclear_membrane_model")
     }) %>% setNames(paste0("v", 13:24)),
     lapply(1:12, function(i) {
-      c(get(paste0("base", i)), "TL_model", "Nuclear_envelope_model", "Nuclear_IM_OM_model")
+      c(get(paste0("base", i)), "TL_model", "Nuclear_envelope_model")
     }) %>% setNames(paste0("v", 25:36)),
     lapply(1:12, function(i) {
       c(get(paste0("base", i)), "TL_model", "IM_all_model", "TM_all_model")
     }) %>% setNames(paste0("v", 37:48)),
-    list("v49" = c(get("base7"), "Nuclear_membrane_model", "Nuclear_envelope_model", "TL_model", "IM_all_model", "TM_all_model", "Nuclear_IM_OM_model"),
-    "v50" = c(get("base8"), "Nuclear_membrane_model", "Nuclear_envelope_model", "TL_model", "IM_all_model", "TM_all_model", "Nuclear_IM_OM_model"))
+    list("v49" = c(get("base7"), "Nuclear_membrane_model", "Nuclear_envelope_model", "TL_model", "IM_all_model", "TM_all_model"),
+    "v50" = c(get("base8"), "Nuclear_membrane_model", "Nuclear_envelope_model", "TL_model", "IM_all_model", "TM_all_model"))
   ) %>% 
     unlist(recursive = FALSE)
   without_sec <- lapply(all_models, function(i) i[which(i != "Sec_model")]) %>% 

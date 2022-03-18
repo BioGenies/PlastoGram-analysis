@@ -27,4 +27,3 @@
 "N_TM_all_model","ngrams","FALSE","N_TM_target",
 "IM_all_model","ngrams","FALSE","IM_target",
 "TM_all_model","ngrams","FALSE","TM_target",
-"Nuclear_IM_OM_model","ngrams","FALSE","IM_target","Nuclear_target == TRUE & (Membrane_mc_target %in% c('IM', 'OM'))"

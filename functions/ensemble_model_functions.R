@@ -36,17 +36,18 @@ train_ngram_models <- function(model_df, ngram_matrix, data_df, filtering_colnam
     }
     target <- data_df[[df[["Target_name"]][i]]][which(data_df[["seq_name"]] %in% selected)]
     train_dat <- ngram_matrix[which(data_df[["seq_name"]] %in% selected), ]
-    cutoff <- ifelse(df[["Model_name"]][[i]] == "Nuclear_IM_OM_model", 0.1, 0.01)
+    print(paste0("Now training ", df[["Model_name"]][[i]]))
     imp_ngrams <- if(df[["Multiclass"]][i] == TRUE) {
       unique(
         unlist(
           unname(
             get_imp_ngrams_mc(train_dat, 
                               data_df[which(data_df[["seq_name"]] %in% selected), ],
-                              df[["Target_name"]][i], cutoff = cutoff))))
+                              df[["Target_name"]][i], cutoff = 0.01))))
     } else {
-      calc_imp_ngrams(train_dat, as.logical(target), cutoff = cutoff)
+      calc_imp_ngrams(train_dat, as.logical(target), cutoff = 0.01)
     }
+    print(paste0("Number of informative ngrams for ", df[["Model_name"]][[i]], ": ", length(imp_ngrams)))
     if(grepl("SMOTE", df[["Model_name"]][i])) {
       train_rf(train_dat, target, imp_ngrams, with_class_weights = FALSE, smote = TRUE)
     } else {
@@ -119,10 +120,10 @@ get_all_models_predictions <- function(ngram_matrix, sequences, data_df, model_d
     test_dat <- ngram_matrix[data_df[["fold"]] == ith_fold, ]
     test_df <- filter(data_df, fold == ith_fold)
     test_seqs <- sequences[which(names(sequences) %in% test_df[["seq_name"]])]
-    
+    print(paste0("Training models for fold ", ith_fold))
     ngram_models <- train_ngram_models(model_df, ngram_matrix, data_df, filtering_colname = "fold", filtering_term =  ith_fold)
     hmm_models <- train_profile_HMM_models(model_df, sequences, data_df, filtering_colname = "fold", filtering_term = ith_fold)
-    
+    print(paste0("Finished training models for fold ", ith_fold))
     predict_with_all_models(model_df, test_dat, test_df, test_seqs, ngram_models, hmm_models, ith_fold, remove_hmm_files = remove_hmm_files)
   }) %>% bind_rows()
   res
