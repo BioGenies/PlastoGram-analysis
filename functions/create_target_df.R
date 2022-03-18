@@ -11,8 +11,13 @@ create_target_df <- function(annotations_file, sequences, graphpart_res) {
     setNames(c("seq_name", "dataset", "cluster")) %>% 
     left_join(annot) %>% 
     mutate(Nuclear_target = ifelse(grepl("N_", dataset), TRUE, FALSE),
+           Nuclear_membrane_target = ifelse(dataset %in% c("N_OM", "N_IM", "N_TM"), TRUE, FALSE),
+           Nuclear_envelope_target = ifelse(dataset %in% c("N_OM", "N_IM"), TRUE, FALSE),
            Sec_target = ifelse(dataset == "N_TL_SEC", TRUE, FALSE),
            Tat_target = ifelse(dataset == "N_TL_TAT", TRUE, FALSE),
+           TL_target = ifelse(dataset %in% c("N_TL_SEC", "N_TL_TAT"), TRUE, FALSE),
+           N_IM_target = ifelse(dataset == "N_IM", TRUE, FALSE),
+           N_TM_target = ifelse(dataset == "N_TM", TRUE, FALSE),
            Membrane_mc_target = case_when(dataset == "N_OM" ~ "OM",
                                           dataset %in% c("N_IM", "P_IM") ~ "IM",
                                           dataset %in% c("N_TM", "P_TM") ~ "TM",

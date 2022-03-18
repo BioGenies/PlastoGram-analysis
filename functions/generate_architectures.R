@@ -17,6 +17,44 @@ get_model_variants <- function() {
   c(base_models, without_sec, without_tat)
 }
 
+get_updated_model_variants <- function() {
+  base1 <- c("Nuclear_model", "Membrane_model", "Nuclear_membrane_model", "Plastid_membrane_model", "Tat_model", "Sec_model")
+  base2 <- c("Nuclear_model", "Membrane_model", "Nuclear_membrane_model", "Plastid_membrane_model", "Tat_model", "Sec_model", "Stroma_model")
+  base3 <- c("Nuclear_model", "Membrane_model", "Nuclear_membrane_model", "Plastid_membrane_model", "Tat_model", "Sec_model", "OM_Stroma_model")
+  base4 <- c("Nuclear_model", "Membrane_model", "N_OM_model", "N_IM_model", "N_TM_model", "Plastid_membrane_model", "Tat_model", "Sec_model")
+  base5 <- c("Nuclear_model", "Membrane_model", "N_OM_model", "N_IM_model", "N_TM_model", "Plastid_membrane_model", "Tat_model", "Sec_model", "Stroma_model")
+  base6 <- c("Nuclear_model", "Membrane_model", "N_OM_model", "N_IM_model", "N_TM_model", "Plastid_membrane_model", "Tat_model", "Sec_model", "OM_Stroma_model")
+  base7 <- c("Nuclear_model", "Membrane_model", "Nuclear_membrane_model", "Plastid_membrane_model", "Tat_model", "Sec_model", "P_stroma_model", "N_stroma_model")
+  base8 <- c("Nuclear_model", "Membrane_model", "N_OM_model", "N_IM_model", "N_TM_model", "Plastid_membrane_model", "Tat_model", "Sec_model", "P_stroma_model", "N_stroma_model")
+  base9 <- c("Nuclear_model", "Membrane_model", "N_OM_all_model", "N_IM_all_model", "N_TM_all_model", "Plastid_membrane_model", "Tat_model", "Sec_model")
+  base10 <- c("Nuclear_model", "Membrane_model", "N_OM_all_model", "N_IM_all_model", "N_TM_all_model", "Plastid_membrane_model", "Tat_model", "Sec_model", "Stroma_model")
+  base11 <- c("Nuclear_model", "Membrane_model", "N_OM_all_model", "N_IM_all_model", "N_TM_all_model", "Plastid_membrane_model", "Tat_model", "Sec_model", "OM_Stroma_model")
+  base12 <- c("Nuclear_model", "Membrane_model", "N_OM_all_model", "N_IM_all_model", "N_TM_all_model", "Plastid_membrane_model", "Tat_model", "Sec_model", "P_stroma_model", "N_stroma_model")
+  
+  all_models <- list(
+    lapply(1:12, function(i) {
+      c(get(paste0("base", i)), "TL_model")
+    }) %>% setNames(paste0("v", 1:12)),
+    lapply(1:12, function(i) {
+      c(get(paste0("base", i)), "Nuclear_TL_model", "Nuclear_membrane_model")
+    }) %>% setNames(paste0("v", 13:24)),
+    lapply(1:12, function(i) {
+      c(get(paste0("base", i)), "TL_model", "Nuclear_envelope_model", "Nuclear_IM_OM_model")
+    }) %>% setNames(paste0("v", 25:36)),
+    lapply(1:12, function(i) {
+      c(get(paste0("base", i)), "TL_model", "IM_all_model", "TM_all_model")
+    }) %>% setNames(paste0("v", 37:48)),
+    list("v49" = c(get("base7"), "Nuclear_membrane_model", "Nuclear_envelope_model", "TL_model", "IM_all_model", "TM_all_model", "Nuclear_IM_OM_model"),
+    "v50" = c(get("base8"), "Nuclear_membrane_model", "Nuclear_envelope_model", "TL_model", "IM_all_model", "TM_all_model", "Nuclear_IM_OM_model"))
+  ) %>% 
+    unlist(recursive = FALSE)
+  without_sec <- lapply(all_models, function(i) i[which(i != "Sec_model")]) %>% 
+    setNames(paste0(names(all_models), "-Sec"))
+  without_tat <- lapply(all_models, function(i) i[which(i != "Tat_model")]) %>% 
+    setNames(paste0(names(all_models), "-Tat"))
+  
+  c(all_models, without_sec, without_tat)
+}
 
 generate_all_architectures <- function(model_variants, smote_models, sequence_models, model_dat, filtering_df, output_dir) {
   model_dat <- model_dat[which(!(grepl("SMOTE", model_dat[["Model_name"]]))), ]

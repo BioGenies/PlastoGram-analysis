@@ -1,7 +1,7 @@
 "Model_name","No_filtering","Filtering_0.5"
 "Nuclear_model",,
 "Membrane_model",,
-"Nuclear_membrane_model",,"Nuclear_model > 0.5 & Membrane_model > 0.5"
+"Nuclear_membrane_mc_model",,"Nuclear_model > 0.5 & Membrane_model > 0.5"
 "Plastid_membrane_model",,"Nuclear_model <= 0.5 & Membrane_model > 0.5"
 "Tat_model",,"Nuclear_model > 0.5 & Membrane_model <= 0.5"
 "Sec_model",,"Nuclear_model > 0.5 & Membrane_model <= 0.5"
@@ -12,3 +12,13 @@
 "N_TM_model",,"Nuclear_model > 0.5 & Membrane_model > 0.5"
 "P_stroma_model",,"Nuclear_model <= 0.5"
 "N_stroma_model",,"Nuclear_model > 0.5"
+"Nuclear_membrane_model",,
+"Nuclear_envelope_model",,
+"Nuclear_TL_model",,"Nuclear_model > 0.5"
+"TL_model",,
+"N_OM_all_model",,
+"N_IM_all_model",,
+"N_TM_all_model",,
+"IM_all_model",,
+"TM_all_model",,
+"Nuclear_IM_OM_model",,"Nuclear_model > 0.5"

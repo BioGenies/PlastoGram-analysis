@@ -140,7 +140,7 @@ filter_results_for_single_architecture <- function(architecture_file, all_models
   all_models_results[is.na(all_models_results)] <- 0
   arch <- read.csv(architecture_file)
   res_colnames <- unlist(sapply(arch[["Model_name"]], function(ith_name) {
-    if(grepl("Nuclear_membrane_model", ith_name)) 
+    if(grepl("Nuclear_membrane_mc_model", ith_name)) 
     {paste0(ith_name, c("_OM", "_IM", "_TM"))
     } else {
       ith_name

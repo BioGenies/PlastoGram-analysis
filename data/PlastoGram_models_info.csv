@@ -1,7 +1,7 @@
 "Model_name","Input_data","Multiclass","Target_name","Input_filtering"
 "Nuclear_model","ngrams","FALSE","Nuclear_target",
 "Membrane_model","ngrams","FALSE","Membrane_target",
-"Nuclear_membrane_model","ngrams","TRUE","Membrane_mc_target","Nuclear_target == TRUE & Membrane_mc_target != 'other'"
+"Nuclear_membrane_mc_model","ngrams","TRUE","Membrane_mc_target","Nuclear_target == TRUE & Membrane_mc_target != 'other'"
 "Plastid_membrane_model","ngrams","FALSE","IM_target","Nuclear_target == FALSE & Membrane_mc_target %in% c('IM', 'TM')"
 "Tat_model","sequences","FALSE","Tat_target","Tat_target == TRUE"
 "Sec_model","sequences","FALSE","Sec_target","Sec_target == TRUE"
@@ -13,7 +13,18 @@
 "P_stroma_model","ngrams","FALSE","Stroma_target","Nuclear_target == FALSE"
 "N_stroma_model","ngrams","FALSE","Stroma_target","Nuclear_target == TRUE"
 "OM_Stroma_model_SMOTE","ngrams","FALSE","OM_target","Nuclear_target == TRUE & (Membrane_mc_target == 'OM' | Stroma_target == TRUE)"
-"Nuclear_membrane_model_SMOTE","ngrams","TRUE","Membrane_mc_target","Nuclear_target == TRUE & Membrane_mc_target != 'other'"
+"Nuclear_membrane_mc_model_SMOTE","ngrams","TRUE","Membrane_mc_target","Nuclear_target == TRUE & Membrane_mc_target != 'other'"
 "N_OM_model_SMOTE","ngrams","FALSE","OM_target","Nuclear_target == TRUE & Membrane_mc_target != 'other'"
 "N_IM_model_SMOTE","ngrams","FALSE","IM_target","Nuclear_target == TRUE & Membrane_mc_target != 'other'"
 "N_TM_model_SMOTE","ngrams","FALSE","TM_target","Nuclear_target == TRUE & Membrane_mc_target != 'other'"
+"Nuclear_membrane_model","ngrams","FALSE","Nuclear_membrane_target",
+"Nuclear_membrane_model_SMOTE","ngrams","FALSE","Nuclear_membrane_target",
+"Nuclear_envelope_model","ngrams","FALSE","Nuclear_envelope_target",
+"Nuclear_TL_model","ngrams","FALSE","TL_target","Nuclear_target == TRUE"
+"TL_model","ngrams","FALSE","TL_target",
+"N_OM_all_model","ngrams","FALSE","OM_target",
+"N_IM_all_model","ngrams","FALSE","N_IM_target",
+"N_TM_all_model","ngrams","FALSE","N_TM_target",
+"IM_all_model","ngrams","FALSE","IM_target",
+"TM_all_model","ngrams","FALSE","TM_target",
+"Nuclear_IM_OM_model","ngrams",FALSE,"IM_target","Nuclear_target == TRUE & Membrane_mc_target %in% c('IM', ‘OM')"

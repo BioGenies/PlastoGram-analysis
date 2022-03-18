@@ -154,7 +154,7 @@ list(
   ),
   tar_target(
     model_variants,
-    get_model_variants()
+    get_updated_model_variants()
   ),
   tar_target(
     model_dat_file,
@@ -176,7 +176,7 @@ list(
   ),
   tar_target(
     target_dfs_cv,
-    create_cv_folds(data_df, 5, c(427244, 58713042, 6513, 901374, 388123648, 43671, 71234, 209147, 1847820, 248114))
+    create_cv_folds(data_df, 5, c(427244, 58713042, 6513, 901374, 388123648)),#, 43671, 71234, 209147, 1847820, 248114))
   ),
   tar_target(
     all_models_predictions,
@@ -190,9 +190,9 @@ list(
                                     sequence_models = c("Sec_model", "Tat_model"),
                                     model_dat = model_dat,
                                     filtering_df = filtering_df,
-                                    architectures_output_dir = paste0(data_path, "Model_architectures/"),
+                                    architectures_output_dir = paste0(data_path, "Model_architectures_new/"),
                                     all_models_predictions = all_models_predictions, 
-                                    architecture_res_output_dir = paste0(data_path, "Model_architectures_results/"), 
+                                    architecture_res_output_dir = paste0(data_path, "Model_architectures_new_results/"), 
                                     data_df_final = data_df,
                                     performance_outfile = paste0(data_path, "Architectures_performance.csv"))
   ),
@@ -211,7 +211,7 @@ list(
   ),
   tar_target(
     PlastoGram_best_architecture,
-    read.csv(paste0(data_path, "Model_architectures/", gsub("_GLM|_RF", ".csv", PlastoGram_best_architecture_name)))
+    read.csv(paste0(data_path, "Model_architectures_new/", gsub("_GLM|_RF", ".csv", PlastoGram_best_architecture_name)))
   ),
   tar_target(
     PlastoGram_ngram_models,
