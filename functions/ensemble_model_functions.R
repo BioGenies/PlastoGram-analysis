@@ -36,15 +36,16 @@ train_ngram_models <- function(model_df, ngram_matrix, data_df, filtering_colnam
     }
     target <- data_df[[df[["Target_name"]][i]]][which(data_df[["seq_name"]] %in% selected)]
     train_dat <- ngram_matrix[which(data_df[["seq_name"]] %in% selected), ]
+    cutoff <- ifelse(df[["Model_name"]][[i]] == "Nuclear_IM_OM_model", 0.1, 0.01)
     imp_ngrams <- if(df[["Multiclass"]][i] == TRUE) {
       unique(
         unlist(
           unname(
             get_imp_ngrams_mc(train_dat, 
                               data_df[which(data_df[["seq_name"]] %in% selected), ],
-                              df[["Target_name"]][i], cutoff = 0.01))))
+                              df[["Target_name"]][i], cutoff = cutoff))))
     } else {
-      calc_imp_ngrams(train_dat, as.logical(target), cutoff = 0.01)
+      calc_imp_ngrams(train_dat, as.logical(target), cutoff = cutoff)
     }
     if(grepl("SMOTE", df[["Model_name"]][i])) {
       train_rf(train_dat, target, imp_ngrams, with_class_weights = FALSE, smote = TRUE)
