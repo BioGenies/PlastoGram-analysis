@@ -142,8 +142,8 @@ filter_results_for_single_architecture <- function(architecture_file, all_models
   all_models_results[is.na(all_models_results)] <- 0
   arch <- read.csv(architecture_file)
   res_colnames <- unlist(sapply(arch[["Model_name"]], function(ith_name) {
-    if(grepl("Nuclear_membrane_mc_model", ith_name)) 
-    {paste0(ith_name, c("_OM", "_IM", "_TM"))
+    if(grepl("Nuclear_membrane_mc_model", ith_name)) {
+      paste0(ith_name, c("_OM", "_IM", "_TM"))
     } else {
       ith_name
     }
@@ -167,18 +167,18 @@ filter_results_for_single_architecture <- function(architecture_file, all_models
     } else {
       if(is.na(arch[["Test_filtering"]][i]) | arch[["Test_filtering"]][i] == "") {
         if(arch[["SMOTE"]][i] == FALSE) {
-          select(all_models_results, c(seq_name, fold, Nuclear_membrane_model_OM, Nuclear_membrane_model_IM, Nuclear_membrane_model_TM))
+          select(all_models_results, c(seq_name, fold, Nuclear_membrane_mc_model_OM, Nuclear_membrane_mc_model_IM, Nuclear_membrane_mc_model_TM))
         } else {
-          select(all_models_results, c(seq_name, fold, Nuclear_membrane_model_SMOTE_OM, Nuclear_membrane_model_SMOTE_IM, Nuclear_membrane_model_SMOTE_TM))
+          select(all_models_results, c(seq_name, fold, Nuclear_membrane_mc_model_SMOTE_OM, Nuclear_membrane_mc_model_SMOTE_IM, Nuclear_membrane_mc_model_SMOTE_TM))
         }
       } else {
         filtering <- arch[["Test_filtering"]][i]
         if(arch[["SMOTE"]][i] == FALSE) {
           select(filter(all_models_results, eval(parse(text = filtering))), 
-                 c(seq_name, fold, Nuclear_membrane_model_OM, Nuclear_membrane_model_IM, Nuclear_membrane_model_TM))
+                 c(seq_name, fold, Nuclear_membrane_mc_model_OM, Nuclear_membrane_mc_model_IM, Nuclear_membrane_mc_model_TM))
         } else {
           select(filter(all_models_results, eval(parse(text = filtering))),  
-                 c(seq_name, fold, Nuclear_membrane_model_SMOTE_OM, Nuclear_membrane_model_SMOTE_IM, Nuclear_membrane_model_SMOTE_TM))
+                 c(seq_name, fold, Nuclear_membrane_mc_model_SMOTE_OM, Nuclear_membrane_mc_model_SMOTE_IM, Nuclear_membrane_mc_model_SMOTE_TM))
         }
       }
     }

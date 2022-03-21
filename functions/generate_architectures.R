@@ -24,7 +24,7 @@ get_updated_model_variants <- function() {
   base4 <- c("Nuclear_model", "Membrane_model", "N_OM_model", "N_IM_model", "N_TM_model", "Plastid_membrane_model", "Tat_model", "Sec_model")
   base5 <- c("Nuclear_model", "Membrane_model", "N_OM_model", "N_IM_model", "N_TM_model", "Plastid_membrane_model", "Tat_model", "Sec_model", "Stroma_model")
   base6 <- c("Nuclear_model", "Membrane_model", "N_OM_model", "N_IM_model", "N_TM_model", "Plastid_membrane_model", "Tat_model", "Sec_model", "OM_Stroma_model")
-  base7 <- c("Nuclear_model", "Membrane_model", "Nuclear_membrane_model", "Plastid_membrane_model", "Tat_model", "Sec_model", "P_stroma_model", "N_stroma_model")
+  base7 <- c("Nuclear_model", "Membrane_model", "Nuclear_membrane_mc_model", "Plastid_membrane_model", "Tat_model", "Sec_model", "P_stroma_model", "N_stroma_model")
   base8 <- c("Nuclear_model", "Membrane_model", "N_OM_model", "N_IM_model", "N_TM_model", "Plastid_membrane_model", "Tat_model", "Sec_model", "P_stroma_model", "N_stroma_model")
   base9 <- c("Nuclear_model", "Membrane_model", "N_OM_all_model", "N_IM_all_model", "N_TM_all_model", "Plastid_membrane_model", "Tat_model", "Sec_model")
   base10 <- c("Nuclear_model", "Membrane_model", "N_OM_all_model", "N_IM_all_model", "N_TM_all_model", "Plastid_membrane_model", "Tat_model", "Sec_model", "Stroma_model")
