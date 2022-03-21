@@ -73,7 +73,7 @@ generate_all_architectures <- function(model_variants, smote_models, sequence_mo
         model_dat)
       if(n_smote_models == 0) {
         architecture <- mutate(df, SMOTE = FALSE)
-        write.csv(architecture, file = paste0(output_dir, "Architecture_", names(model_variants)[ith_variant], ".csv"), row.names = FALSE)
+        write.csv(architecture, file = paste0(output_dir, "Architecture_", names(model_variants)[ith_variant], "_0-1_", ith_filtering, ".csv"), row.names = FALSE)
       } else {
         lapply(0:n_smote_models, function(i) {
           smote_permutations <- unique(permn(c(rep(TRUE, i), rep(FALSE, n_smote_models-i))))
