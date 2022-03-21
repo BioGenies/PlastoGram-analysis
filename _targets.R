@@ -252,8 +252,7 @@ list(
     predict_with_PlastoGram(PlastoGram_ngram_models, 
                             list("Sec_model" = gsub(".hmm", "", PlastoGram_hmm_Sec), "Tat_model" = gsub(".hmm", "", PlastoGram_hmm_Tat)), 
                             PlastoGram_multinom_model, ngram_matrix_independent, sequences_independent, data_df_independent,
-                            PlastoGram_informative_ngrams,
-                            PlastoGram_best_architecture_name),
+                            PlastoGram_informative_ngrams),
   # ),
   # tar_target(
   #   PlastoGram_scaled_evaluation,

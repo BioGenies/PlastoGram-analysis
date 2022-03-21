@@ -117,14 +117,15 @@ get_all_models_predictions <- function(ngram_matrix, sequences, data_df, model_d
   
   res <- lapply(unique(data_df[["fold"]]), function(ith_fold) {
     dat <- ngram_matrix[data_df[["fold"]] != ith_fold, ]
-    test_dat <- ngram_matrix[data_df[["fold"]] == ith_fold, ]
-    test_df <- filter(data_df, fold == ith_fold)
-    test_seqs <- sequences[which(names(sequences) %in% test_df[["seq_name"]])]
+    #test_dat <- ngram_matrix[data_df[["fold"]] == ith_fold, ]
+    #test_df <- filter(data_df, fold == ith_fold)
+    #test_seqs <- sequences[which(names(sequences) %in% test_df[["seq_name"]])]
     print(paste0("Training models for fold ", ith_fold))
     ngram_models <- train_ngram_models(model_df, ngram_matrix, data_df, filtering_colname = "fold", filtering_term =  ith_fold)
     hmm_models <- train_profile_HMM_models(model_df, sequences, data_df, filtering_colname = "fold", filtering_term = ith_fold)
     print(paste0("Finished training models for fold ", ith_fold))
-    predict_with_all_models(model_df, test_dat, test_df, test_seqs, ngram_models, hmm_models, ith_fold, remove_hmm_files = remove_hmm_files)
+    predict_with_all_models(model_df, dat, data_df, sequences, ngram_models, hmm_models, ith_fold, remove_hmm_files = remove_hmm_files) %>% 
+      mutate(train_fold == ith_fold)
   }) %>% bind_rows()
   res
 } 
@@ -152,37 +153,37 @@ filter_results_for_single_architecture <- function(architecture_file, all_models
     if(arch[["Multiclass"]][i] == FALSE) {
       if(is.na(arch[["Test_filtering"]][i]) | arch[["Test_filtering"]][i] == "") {
         if(arch[["SMOTE"]][i] == FALSE) {
-          select(all_models_results, c(seq_name, fold, arch[["Model_name"]][i]))
+          select(all_models_results, c(seq_name, fold, train_fold, arch[["Model_name"]][i]))
         } else {
-          select(all_models_results, c(seq_name, fold, paste0(arch[["Model_name"]][i], "_SMOTE")))
+          select(all_models_results, c(seq_name, fold, train_fold, paste0(arch[["Model_name"]][i], "_SMOTE")))
         }
       } else {
         filtering <- arch[["Test_filtering"]][i]
         if(arch[["SMOTE"]][i] == FALSE) {
-          select(filter(all_models_results, eval(parse(text = filtering))), c(seq_name, fold, arch[["Model_name"]][i]))
+          select(filter(all_models_results, eval(parse(text = filtering))), c(seq_name, fold, train_fold, arch[["Model_name"]][i]))
         } else {
-          select(filter(all_models_results, eval(parse(text = filtering))), c(seq_name, fold, paste0(arch[["Model_name"]][i], "_SMOTE")))
+          select(filter(all_models_results, eval(parse(text = filtering))), c(seq_name, fold, train_fold, paste0(arch[["Model_name"]][i], "_SMOTE")))
         }
       }
     } else {
       if(is.na(arch[["Test_filtering"]][i]) | arch[["Test_filtering"]][i] == "") {
         if(arch[["SMOTE"]][i] == FALSE) {
-          select(all_models_results, c(seq_name, fold, Nuclear_membrane_mc_model_OM, Nuclear_membrane_mc_model_IM, Nuclear_membrane_mc_model_TM))
+          select(all_models_results, c(seq_name, fold, train_fold, Nuclear_membrane_mc_model_OM, Nuclear_membrane_mc_model_IM, Nuclear_membrane_mc_model_TM))
         } else {
-          select(all_models_results, c(seq_name, fold, Nuclear_membrane_mc_model_SMOTE_OM, Nuclear_membrane_mc_model_SMOTE_IM, Nuclear_membrane_mc_model_SMOTE_TM))
+          select(all_models_results, c(seq_name, fold, train_fold, Nuclear_membrane_mc_model_SMOTE_OM, Nuclear_membrane_mc_model_SMOTE_IM, Nuclear_membrane_mc_model_SMOTE_TM))
         }
       } else {
         filtering <- arch[["Test_filtering"]][i]
         if(arch[["SMOTE"]][i] == FALSE) {
           select(filter(all_models_results, eval(parse(text = filtering))), 
-                 c(seq_name, fold, Nuclear_membrane_mc_model_OM, Nuclear_membrane_mc_model_IM, Nuclear_membrane_mc_model_TM))
+                 c(seq_name, fold, train_fold, Nuclear_membrane_mc_model_OM, Nuclear_membrane_mc_model_IM, Nuclear_membrane_mc_model_TM))
         } else {
           select(filter(all_models_results, eval(parse(text = filtering))),  
-                 c(seq_name, fold, Nuclear_membrane_mc_model_SMOTE_OM, Nuclear_membrane_mc_model_SMOTE_IM, Nuclear_membrane_mc_model_SMOTE_TM))
+                 c(seq_name, fold, train_fold, Nuclear_membrane_mc_model_SMOTE_OM, Nuclear_membrane_mc_model_SMOTE_IM, Nuclear_membrane_mc_model_SMOTE_TM))
         }
       }
     }
-  }) %>% reduce(., left_join, by = c("seq_name", "fold"))
+  }) %>% reduce(., left_join, by = c("seq_name", "fold", "train_fold"))
   res[is.na(res)] <- 0
   res
 }
@@ -196,9 +197,9 @@ generate_results_for_architectures <- function(architecture_file_list, all_model
         res <- left_join(data_df[, c("seq_name", "dataset")], 
                          filter_results_for_single_architecture(ith_file, all_models_results[[ith_rep]]),
                          by = "seq_name")
-        full_results <- lapply(unique(res[["fold"]]), function(ith_fold) {
-          train_dat <- select(filter(res, fold != ith_fold), -c(seq_name, fold))
-          test_dat <- filter(res, fold == ith_fold)
+        full_results <- lapply(unique(res[["train_fold"]]), function(ith_train_fold) {
+          train_dat <- select(filter(res, train_fold == ith_fold & fold != ith_fold), -c(seq_name, fold, train_fold))
+          test_dat <- filter(res, train_fold == ith_fold & fold == ith_fold)
           if(ith_hl_model == "GLM") {
             lm_model <- multinom(dataset ~ ., train_dat, model = TRUE)
             preds <- test_dat %>%
