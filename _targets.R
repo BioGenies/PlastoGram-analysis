@@ -236,13 +236,13 @@ list(
                             ith_fold = NULL, remove_hmm_files = FALSE)
   ),
   tar_target(
-    PlastoGram_multinom_model,
-    train_multinom(PlastoGram_predictions, data_df)
+    PlastoGram_higher_level_model,
+    train_higher_level_model(PlastoGram_predictions, data_df, PlastoGram_best_architecture_name)
   ),
-  tar_target(
-    PlastoGram_scaled_multinom_model,
-    scaled_train_multinom(PlastoGram_predictions, data_df)
-  ),
+  # tar_target(
+  #   PlastoGram_scaled_multinom_model,
+  #   scaled_train_multinom(PlastoGram_predictions, data_df)
+  # ),
   tar_target(
     PlastoGram_informative_ngrams,
     get_all_imp_ngrams(PlastoGram_ngram_models)
@@ -252,14 +252,15 @@ list(
     predict_with_PlastoGram(PlastoGram_ngram_models, 
                             list("Sec_model" = gsub(".hmm", "", PlastoGram_hmm_Sec), "Tat_model" = gsub(".hmm", "", PlastoGram_hmm_Tat)), 
                             PlastoGram_multinom_model, ngram_matrix_independent, sequences_independent, data_df_independent,
-                            PlastoGram_informative_ngrams),
-  ),
-  tar_target(
-    PlastoGram_scaled_evaluation,
-    predict_scaled_with_PlastoGram(PlastoGram_ngram_models, 
-                                   list("Sec_model" = gsub(".hmm", "", PlastoGram_hmm_Sec), "Tat_model" = gsub(".hmm", "", PlastoGram_hmm_Tat)), 
-                                   PlastoGram_scaled_multinom_model, ngram_matrix_independent, sequences_independent, data_df_independent,
-                                   PlastoGram_informative_ngrams)
+                            PlastoGram_informative_ngrams,
+                            PlastoGram_best_architecture_name),
+  # ),
+  # tar_target(
+  #   PlastoGram_scaled_evaluation,
+  #   predict_scaled_with_PlastoGram(PlastoGram_ngram_models, 
+  #                                  list("Sec_model" = gsub(".hmm", "", PlastoGram_hmm_Sec), "Tat_model" = gsub(".hmm", "", PlastoGram_hmm_Tat)), 
+  #                                  PlastoGram_scaled_multinom_model, ngram_matrix_independent, sequences_independent, data_df_independent,
+  #                                  PlastoGram_informative_ngrams)
     # ),
     # tar_target(
     #   baseline_model_res,

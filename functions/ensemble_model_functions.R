@@ -354,6 +354,20 @@ scaled_train_multinom <- function(train_df, data_df) {
  
 }
 
+train_higher_level_model <- function(PlastoGram_predictions, data_df, best_architecture_name) {
+  if(grepl("GLM", best_architecture_name)) {
+    train_multinom(PlastoGram_predictions, data_df)
+  } else {
+    train_dat <- left_join(PlastoGram_predictions, data_df[, c("seq_name", "dataset")], by = "seq_name") %>% 
+      select(-seq_name)
+    train_dat[is.na(train_dat)] <- 0
+    ranger(dataset ~ ., data = mutate(train_dat, dataset = as.factor(dataset)),
+           write.forest = TRUE, probability = TRUE, num.trees = 500, 
+           verbose = FALSE, seed = 427244)
+  }
+}
+
+
 generate_and_test_architectures <- function(model_variants, smote_models, sequence_models, model_dat, filtering_df, architectures_output_dir,
                                             all_models_predictions, architecture_res_output_dir, data_df_final, performance_outfile) {
   
