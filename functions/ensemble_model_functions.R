@@ -125,7 +125,7 @@ get_all_models_predictions <- function(ngram_matrix, sequences, data_df, model_d
     hmm_models <- train_profile_HMM_models(model_df, sequences, data_df, filtering_colname = "fold", filtering_term = ith_fold)
     print(paste0("Finished training models for fold ", ith_fold))
     predict_with_all_models(model_df, ngram_matrix, data_df, sequences, ngram_models, hmm_models, ith_fold, remove_hmm_files = remove_hmm_files) %>% 
-      mutate(train_fold == ith_fold)
+      mutate(train_fold = ith_fold)
   }) %>% bind_rows()
   res
 } 
