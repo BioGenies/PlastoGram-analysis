@@ -6,7 +6,7 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE, fig.width = 12)
+knitr::opts_chunk$set(echo = FALSE, fig.width = 12, fig.height = 9)
 
 library(dplyr)
 library(ggplot2)
@@ -51,11 +51,13 @@ arch_dat <- mutate(mean_architecture_performance,
 
 
 plot_sd_vs_kappa <- function(arch_res, localization) {
-  col <- paste0("sd_", localization, "_sensitivity")
-  ggplot(plot_dat, aes(x = get(col), y = mean_kappa)) +
+  col <- paste0("sd_", localization, "_sens")
+  colsens <- paste0("mean_", localization, "_sens")
+  ggplot(arch_res, aes(x = get(col), y = mean_kappa, color = get(colsens))) +
     geom_point() +
     xlab(paste0("Standard deviation of ", localization, " sensitivity")) +
-    ylab("Mean value of kappa")
+    ylab("Mean value of kappa") +
+    scale_color_gradientn("Mean sensitivity", colors = c("#ffe96b", "#ff4242", "#630000"))
 }
 
 ```
@@ -78,19 +80,10 @@ plot_sd_vs_kappa <- function(arch_res, localization) {
 | P_S | 1417 | 419 | 360 | 42 |
 
 
-<!-- ### Architecture variants -->
-
-<!-- ```{r} -->
-<!-- data.frame(arch_variant = names(model_variants)[1:8],  -->
-<!--            shortcut = c("NMmc", "NMmc_S", "NMmc_OMS", "NMbin", "NMbin_S", "NMbin_OMS", "NMmc_PS_NS", "NMbin_PS_NS"), -->
-<!--            models = sapply(model_variants[1:8], function(i) paste0(i, collapse = ", "))) %>%  -->
-<!--   knitr::kable(., row.names = FALSE) -->
-<!-- ``` -->
-
 
 ### Choosing the best architecture
 
-We use train-test dataset obtained after homology partitioning to perform 5-fold CV repeated 10 times.
+We use train-test dataset obtained after homology partitioning to perform 5-fold CV repeated 5 times.
 Based on the CV results we want to select the optimal architecture (highest mean kappa). 
 We use repeated CV to reduce variance of performance measures and check architecture stability.
 
@@ -98,7 +91,6 @@ We use repeated CV to reduce variance of performance measures and check architec
 
 ```{r}
 mean_architecture_performance %>% 
- # change_variant_names("model") %>% 
   arrange(desc(mean_kappa)) %>% 
   my_DT() %>%
   formatRound(columns = colnames(mean_architecture_performance)[2:length(colnames(mean_architecture_performance))],
@@ -108,63 +100,36 @@ mean_architecture_performance %>%
 #### Problem 2: Architectures with highest kappa values tend to have higher standard deviations of performance especially for the most problematic localizations (N_OM, N_IM)
 ```{r}
 best_5 <- mean_architecture_performance %>% 
- # change_variant_names("model") %>% 
   arrange(desc(mean_kappa)) %>%
   head(n = 5) %>% 
   .[["model"]]
 architectures_performance %>% 
- # change_variant_names("model") %>% 
   filter(model %in% best_5) %>% 
   my_DT() %>%
   formatRound(columns = colnames(architectures_performance)[4:length(colnames(architectures_performance))],
               digits=4)
 ```
-
 ```{r}
-plot_dat <- architectures_performance %>% 
- # change_variant_names("model") %>% 
-  group_by(model) %>% 
-  summarise(mean_AU1U = mean(AU1U),
-            mean_kappa = mean(kappa),
-            mean_weighted_kappa = mean(weighted_kappa),
-            mean_N_IM_sensitivity = mean(N_IM_sensitivity),
-            sd_N_IM_sensitivity = sd(N_IM_sensitivity),
-            mean_N_OM_sensitivity = mean(N_OM_sensitivity),
-            sd_N_OM_sensitivity = sd(N_OM_sensitivity),
-            mean_N_TM_sensitivity = mean(N_TM_sensitivity),
-            sd_N_TM_sensitivity = sd(N_TM_sensitivity),
-            mean_N_S_sensitivity = mean(N_S_sensitivity),
-            sd_N_S_sensitivity = sd(N_S_sensitivity),
-            mean_N_TL_SEC_sensitivity = mean(N_TL_SEC_sensitivity),
-            sd_N_TL_SEC_sensitivity = sd(N_TL_SEC_sensitivity),
-            mean_N_TL_TAT_sensitivity = mean(N_TL_TAT_sensitivity),
-            sd_N_TL_TAT_sensitivity = sd(N_TL_TAT_sensitivity),
-            mean_P_IM_sensitivity = mean(P_IM_sensitivity),
-            sd_P_IM_sensitivity = sd(P_IM_sensitivity),
-            mean_P_TM_sensitivity = mean(P_TM_sensitivity),
-            sd_P_TM_sensitivity = sd(P_TM_sensitivity),
-            mean_P_S_sensitivity = mean(P_S_sensitivity),
-            sd_P_S_sensitivity = sd(P_S_sensitivity))
 
 datasets <- c("N_IM", "N_OM", "N_TM", "N_S", "N_TL_SEC", "N_TL_SEC", "P_IM", "P_TM", "P_S")
 
-plot_sd_vs_kappa(plot_dat, "N_IM") +
+plot_sd_vs_kappa(mean_architecture_performance, "N_IM") +
   ggtitle("Number of N_IM sequences = 50")
-plot_sd_vs_kappa(plot_dat, "N_OM") +
+plot_sd_vs_kappa(mean_architecture_performance, "N_OM") +
   ggtitle("Number of N_OM sequences = 46")
-plot_sd_vs_kappa(plot_dat, "N_TM") +
+plot_sd_vs_kappa(mean_architecture_performance, "N_TM") +
   ggtitle("Number of N_TM sequences = 192")
-plot_sd_vs_kappa(plot_dat, "N_S") +
+plot_sd_vs_kappa(mean_architecture_performance, "N_S") +
   ggtitle("Number of N_S sequences = 287")
-plot_sd_vs_kappa(plot_dat, "N_TL_SEC") +
+plot_sd_vs_kappa(mean_architecture_performance, "N_TL_SEC") +
   ggtitle("Number of N_TL_SEC sequences = 37")
-plot_sd_vs_kappa(plot_dat, "N_TL_TAT") +
+plot_sd_vs_kappa(mean_architecture_performance, "N_TL_TAT") +
   ggtitle("Number of N_TL_TAT sequences = 67")
-plot_sd_vs_kappa(plot_dat, "P_IM") +
+plot_sd_vs_kappa(mean_architecture_performance, "P_IM") +
   ggtitle("Number of P_IM sequences = 106")
-plot_sd_vs_kappa(plot_dat, "P_TM") +
+plot_sd_vs_kappa(mean_architecture_performance, "P_TM") +
   ggtitle("Number of P_TM sequences = 1073")
-plot_sd_vs_kappa(plot_dat, "P_S") +
+plot_sd_vs_kappa(mean_architecture_performance, "P_S") +
   ggtitle("Number of P_S sequences = 360")
 ```
 
