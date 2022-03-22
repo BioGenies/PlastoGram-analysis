@@ -199,8 +199,8 @@ generate_results_for_architectures <- function(architecture_file_list, all_model
                          filter_results_for_single_architecture(ith_file, all_models_results[[ith_rep]]),
                          by = "seq_name")
         full_results <- lapply(unique(res[["train_fold"]]), function(ith_train_fold) {
-          train_dat <- select(filter(res, train_fold == ith_fold & fold != ith_fold), -c(seq_name, fold, train_fold))
-          test_dat <- filter(res, train_fold == ith_fold & fold == ith_fold)
+          train_dat <- select(filter(res, train_fold == ith_train_fold & fold != ith_train_fold), -c(seq_name, fold, train_fold))
+          test_dat <- filter(res, train_fold == ith_train_fold & fold == ith_train_fold)
           if(ith_hl_model == "GLM") {
             lm_model <- multinom(dataset ~ ., train_dat, model = TRUE)
             preds <- test_dat %>%
