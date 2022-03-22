@@ -78,14 +78,14 @@ plot_sd_vs_kappa <- function(arch_res, localization) {
 | P_S | 1417 | 419 | 360 | 42 |
 
 
-### Architecture variants
+<!-- ### Architecture variants -->
 
-```{r}
-data.frame(arch_variant = names(model_variants)[1:8], 
-           shortcut = c("NMmc", "NMmc_S", "NMmc_OMS", "NMbin", "NMbin_S", "NMbin_OMS", "NMmc_PS_NS", "NMbin_PS_NS"),
-           models = sapply(model_variants[1:8], function(i) paste0(i, collapse = ", "))) %>% 
-  knitr::kable(., row.names = FALSE)
-```
+<!-- ```{r} -->
+<!-- data.frame(arch_variant = names(model_variants)[1:8],  -->
+<!--            shortcut = c("NMmc", "NMmc_S", "NMmc_OMS", "NMbin", "NMbin_S", "NMbin_OMS", "NMmc_PS_NS", "NMbin_PS_NS"), -->
+<!--            models = sapply(model_variants[1:8], function(i) paste0(i, collapse = ", "))) %>%  -->
+<!--   knitr::kable(., row.names = FALSE) -->
+<!-- ``` -->
 
 
 ### Choosing the best architecture
@@ -98,7 +98,7 @@ We use repeated CV to reduce variance of performance measures and check architec
 
 ```{r}
 mean_architecture_performance %>% 
-  change_variant_names("model") %>% 
+ # change_variant_names("model") %>% 
   arrange(desc(mean_kappa)) %>% 
   my_DT() %>%
   formatRound(columns = colnames(mean_architecture_performance)[2:length(colnames(mean_architecture_performance))],
@@ -108,12 +108,12 @@ mean_architecture_performance %>%
 #### Problem 2: Architectures with highest kappa values tend to have higher standard deviations of performance especially for the most problematic localizations (N_OM, N_IM)
 ```{r}
 best_5 <- mean_architecture_performance %>% 
-  change_variant_names("model") %>% 
+ # change_variant_names("model") %>% 
   arrange(desc(mean_kappa)) %>%
   head(n = 5) %>% 
   .[["model"]]
 architectures_performance %>% 
-  change_variant_names("model") %>% 
+ # change_variant_names("model") %>% 
   filter(model %in% best_5) %>% 
   my_DT() %>%
   formatRound(columns = colnames(architectures_performance)[4:length(colnames(architectures_performance))],
@@ -122,7 +122,7 @@ architectures_performance %>%
 
 ```{r}
 plot_dat <- architectures_performance %>% 
-  change_variant_names("model") %>% 
+ # change_variant_names("model") %>% 
   group_by(model) %>% 
   summarise(mean_AU1U = mean(AU1U),
             mean_kappa = mean(kappa),
