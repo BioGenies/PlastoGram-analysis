@@ -1,0 +1,87 @@
+---
+title: "SChloro results"
+author: "Katarzyna Sidorczuk"
+date: "3/22/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, fig.width = 6, message = FALSE)
+
+library(ggbiplot)
+library(dplyr)
+library(ggplot2)
+library(tidyr)
+library(measures)
+```
+
+## SChloro
+
+- Currently the only available software that is able to differentiate between OM and IM.
+- It employs homology partitioning (using PSI-BLAST)!
+- Multilabel algorithm
+- Needs to generate PSSMs to run predictions (so standalone version predictions probably may vary depending on the database used to create PSSMs)
+- Web server handles only one sequence at the time
+- They do 10-fold CV while having only 24 proteins in OM class
+
+
+### SChloro dataset 
+
+I analyzed OM sequences from SChloro training dataset using their web server (24 sequences, 4 of which dually targeted to OM and TM). None of the analyzed sequences was predicted as dually targeted. 
+
+```{r fig.height=4}
+schloro_dat <- read.csv("Combined_OM_datasets.csv")
+
+schloro_dataset <- schloro_dat %>% 
+  filter(!is.na(schloro_dataset))
+
+print(paste0("Number of sequences from SChloro dataset present also in our training cluster: ", nrow(filter(schloro_dataset, cluster == 0))))
+
+schloro_dataset %>% 
+  group_by(schloro_prediction) %>% 
+  summarise(n = n()) %>% 
+  ggplot(aes(x = schloro_prediction, y = n)) +
+  geom_col() +
+  geom_text(aes(label = n), vjust = -0.2, size = 3) +
+  theme_bw(base_size = 9) +
+  ggtitle("SChloro predictions for OM proteins from its training dataset (20 OM, 4 OM+TM)")
+
+schloro_dataset %>% 
+  filter(schloro_dataset == "outer_membrane,thylakoid_membrane") %>% 
+  group_by(schloro_prediction) %>% 
+  summarise(n = n()) %>% 
+  ggplot(aes(x = schloro_prediction, y = n)) +
+  geom_col() +
+  geom_text(aes(label = n), vjust = -0.2, size = 3) +
+  theme_bw(base_size = 9) +
+  ggtitle("SChloro predictions for OM proteins also targeted to TM")
+
+perf_dat <- schloro_dataset %>% 
+  mutate(schloro_dataset = "outer_membrane")
+print(paste0("Accuracy of SChloro OM predictions: ", ACC(perf_dat[["schloro_dataset"]], perf_dat[["schloro_prediction"]])))
+```
+
+### Our datasets
+
+I also used SChloro to analyze OM sequences from our datasets (excluding those also present in SChloro dataset).
+After filtering out the sequences present in SChloro dataset we have 31 OM sequences (27 in training dataset and 4 in independent).
+
+```{r fig.width=12}
+our_dataset <- schloro_dat %>% 
+  filter(is.na(schloro_dataset))
+
+our_dataset %>% 
+  mutate(dataset = ifelse(cluster == 0, "train-test", "independent")) %>% 
+  group_by(dataset, schloro_prediction) %>% 
+  summarise(n = n()) %>% 
+  ggplot(aes(x = schloro_prediction, y = n)) +
+  geom_col() +
+  geom_text(aes(label = n), vjust = -0.5) +
+  theme_bw() +
+  ggtitle("SChloro predictions on our OM datasets after excluding sequences present in SChloro training set") +
+  facet_wrap(~dataset, scales = "free_x")
+```
+
+There were also some quite strange predictions, e.g. protein predicted as TL but cTP with 0.43 probability and no thylakoid signal peptide, or protein predicted as TM even though no membrane spanning/interaction was detected.
+
+
