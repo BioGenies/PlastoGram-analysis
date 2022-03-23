@@ -30,3 +30,20 @@ run_graphpart <- function(graphpart_input, sequence_dir, n_threads = 24) {
   left_join(res, label_df)
 }
 
+
+generate_holdout <- function(sequence_list) {
+  divided <- lapply(names(sequence_list), function(ith_dataset) {
+    ds <- sequence_list[[ith_dataset]]
+    holdout <- sample(names(ds), round(length(ds)*0.15))
+    list(traintest = ds[!(names(ds) %in% holdout)],
+         benchmark = ds[names(ds) %in% holdout])
+  }) %>% setNames(names(sequence_list))
+  cv <- lapply(names(sequence_list), function(ith_dataset) {
+    divided[[ith_dataset]][["traintest"]]
+  }) %>% setNames(names(sequence_list))
+  benchmark <- lapply(names(sequence_list), function(ith_dataset) {
+    divided[[ith_dataset]][["benchmark"]]
+  }) %>% setNames(names(sequence_list))
+  list(traintest = cv,
+       benchmark = benchmark)
+}

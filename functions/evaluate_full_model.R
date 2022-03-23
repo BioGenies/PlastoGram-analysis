@@ -42,10 +42,18 @@ predict_with_PlastoGram <- function(ngram_models, hmm_models, higher_level_model
   all_res <- left_join(ngram_models_res, hmm_models_res, by = "seq_name")
   all_res[is.na(all_res)] <- 0
   
-  glm_preds <- data.frame(seq_name = test_df[["seq_name"]],
-                          dataset = test_df[["dataset"]],
-                          predict(higher_level_model, all_res, type = "probs"),
-                          Localization = predict(higher_level_model, all_res))
+  glm_preds <- if(class(higher_level_model) == "ranger") {
+    data.frame(seq_name = test_df[["seq_name"]],
+               dataset = test_df[["dataset"]],
+               predict(higher_level_model, all_res)[["predictions"]])  %>% 
+      mutate(Localization = colnames(.)[3:ncol(.)][max.col(.[, colnames(.)[3:ncol(.)]])])
+               
+  } else {
+    data.frame(seq_name = test_df[["seq_name"]],
+               dataset = test_df[["dataset"]],
+               predict(higher_level_model, all_res, type = "probs"),
+               Localization = predict(higher_level_model, all_res))
+  }
   
   list("Lower-order_models_preds" = all_res,
        "Higher-order_model_preds" = glm_preds,
