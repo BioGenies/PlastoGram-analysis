@@ -212,11 +212,11 @@ list(
   ),
   tar_target(
     traintest,
-    holdouts[["traintest"]]
+    unlist(unname(holdouts[["traintest"]]), recursive = FALSE)
   ),
   tar_target(
     benchmark,
-    holdouts[["benchmark"]]
+    unlist(unname(holdouts[["benchmark"]]), recursive = FALSE)
   ),
   tar_target(
     holdout_target_df,
@@ -225,11 +225,11 @@ list(
   ),
   tar_target(
     traintest_data_df,
-    filter(holdout_target_df, seq_name %in% names(unlist(unname(traintest), recursive = FALSE)))
+    filter(holdout_target_df, seq_name %in% names(traintest))
   ),
   tar_target(
     benchmark_data_df,
-    filter(holdout_target_df, seq_name %in% names(unlist(unname(benchmark), recursive = FALSE)))
+    filter(holdout_target_df, seq_name %in% names(benchmark))
   ),
   tar_target(
     traintest_ngram_matrix, 
@@ -287,14 +287,14 @@ list(
   ),
   tar_target(
     PlastoGram_hmm_Sec,
-    paste0(train_profileHMM(holdouts[["N_TL_SEC"]][["traintest"]], "PlastoGram_Sec_model", remove_files = TRUE), ".hmm"),
+    paste0(train_profileHMM(holdouts[["traintest"]][["N_TL_SEC"]], "PlastoGram_Sec_model", remove_files = TRUE), ".hmm"),
     #paste0(train_profileHMM(sequences_cv[which(names(sequences_cv) %in% filter(data_df, dataset == "N_TL_SEC")[["seq_name"]])], 
     #                        "PlastoGram_Sec_model", remove_files = TRUE), ".hmm"),
     format = "file"
   ),
   tar_target(
     PlastoGram_hmm_Tat,
-    paste0(train_profileHMM(holdouts[["N_TL_TAT"]][["traintest"]], "PlastoGram_Tat_model", remove_files = TRUE), ".hmm"),
+    paste0(train_profileHMM(holdouts[["traintest"]][["N_TL_TAT"]], "PlastoGram_Tat_model", remove_files = TRUE), ".hmm"),
     #paste0(train_profileHMM(sequences_cv[which(names(sequences_cv) %in% filter(data_df, dataset == "N_TL_TAT")[["seq_name"]])], 
     #                        "PlastoGram_Tat_model", remove_files = TRUE), ".hmm"),
     format = "file"
