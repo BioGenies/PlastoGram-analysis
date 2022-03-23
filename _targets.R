@@ -252,6 +252,7 @@ list(
     holdout_architectures_performance,
     generate_and_test_architectures(model_variants = model_variants,
                                     smote_models = c("OM_Stroma_model", "Nuclear_membrane_model",
+                                                     "Nuclear_membrane_mc_model",
                                                      "N_OM_model", "N_IM_model", "N_TM_model"),
                                     sequence_models = c("Sec_model", "Tat_model"),
                                     model_dat = model_dat,
