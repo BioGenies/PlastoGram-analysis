@@ -308,7 +308,7 @@ list(
   ),
   tar_target(
     PlastoGram_higher_level_model,
-    train_higher_level_model(PlastoGram_predictions, traintest_data_df, PlastoGram_best_architecture_name)
+    train_higher_level_model(PlastoGram_predictions, traintest_data_df, PlastoGram_best_architecture_name, PlastoGram_best_architecture)
   ),
   # tar_target(
   #   PlastoGram_scaled_multinom_model,
@@ -323,7 +323,7 @@ list(
     predict_with_PlastoGram(PlastoGram_ngram_models, 
                             list("Sec_model" = gsub(".hmm", "", PlastoGram_hmm_Sec), "Tat_model" = gsub(".hmm", "", PlastoGram_hmm_Tat)), 
                             PlastoGram_higher_level_model, benchmark_ngram_matrix, benchmark, benchmark_data_df,
-                            PlastoGram_informative_ngrams)
+                            PlastoGram_informative_ngrams, PlastoGram_best_architecture, PlastoGram_best_architecture_name)
   # ),
   # tar_target(
   #   PlastoGram_scaled_evaluation,

@@ -113,6 +113,15 @@ predict_with_all_models <- function(model_df, test_ngram_matrix, test_df, test_s
   }
 }
 
+
+filter_predictions_according_to_hierarchy <- function(all_models_predictions, model_df) {
+  filtered_res <- lapply(1:length(model_df[["Model_name"]]), function(i) {
+    filtering <- model_df[["Test_filtering"]][i]
+    select(filter(all_models_predictions, eval(parse(text = filtering))), c(seq_name, model_df[["Model_name"]][i]))
+  }) %>% reduce(., full_join, by = "seq_name")
+}
+
+
 get_all_models_predictions <- function(ngram_matrix, sequences, data_df, model_df, data_path, remove_hmm_files = FALSE) {
   
   res <- lapply(unique(data_df[["fold"]]), function(ith_fold) {
@@ -356,7 +365,10 @@ scaled_train_multinom <- function(train_df, data_df) {
  
 }
 
-train_higher_level_model <- function(PlastoGram_predictions, data_df, best_architecture_name) {
+train_higher_level_model <- function(PlastoGram_predictions, data_df, best_architecture_name, best_architecture) {
+  if(grepl("Filtering_0.5", best_architecture_name) {
+    PlastoGram_predictions <- filter_predictions_according_to_hierarchy(PlastoGram_predictions, best_architecture)
+  })
   if(grepl("GLM", best_architecture_name)) {
     train_multinom(PlastoGram_predictions, data_df)
   } else {
