@@ -56,6 +56,92 @@ get_updated_model_variants <- function() {
   c(all_models, without_sec, without_tat)
 }
 
+get_envelope_model_variants <- function() {
+  base_models <- list(
+    base1 = c("Nuclear_model", "Membrane_model", "Nuclear_membrane_model", "Plastid_membrane_model", "Tat_model", "Sec_model"),
+    base2 = c("Nuclear_model", "Membrane_model", "Nuclear_membrane_model", "Plastid_membrane_model", "Tat_model", "Sec_model", "Stroma_model"),
+    base3 = c("Nuclear_model", "Membrane_model", "N_E_all_model", "N_TM_all_model", "Plastid_membrane_model", "Tat_model", "Sec_model"),
+    base4 = c("Nuclear_model", "Membrane_model", "N_E_all_model", "N_TM_all_model", "Plastid_membrane_model", "Tat_model", "Sec_model", "Stroma_model"),
+    base5 = c("Nuclear_model", "Membrane_model", "Nuclear_membrane_model", "Plastid_membrane_model", "Tat_model", "Sec_model", "P_stroma_model", "N_stroma_model"),
+    base6 = c("Nuclear_model", "Membrane_model", "N_E_all_model", "N_TM_all_model", "Plastid_membrane_model", "Tat_model", "Sec_model", "P_stroma_model", "N_stroma_model")
+  )
+  all_models <- list(
+    lapply(1:6, function(i) {
+      c(get(paste0("base", i)), "TL_model")
+    }) %>% setNames(paste0("v", 1:6)),
+    lapply(1:6, function(i) {
+      c(get(paste0("base", i)), "N_TL_model")
+    }) %>% setNames(paste0("v", 7:12)),
+    lapply(1:6, function(i) {
+      c(get(paste0("base", i)), "TL_model", "Nuclear_membrane_all_model")
+    }) %>% setNames(paste0("v", 13:18)),
+    lapply(1:6, function(i) {
+      c(get(paste0("base", i)), "N_TL_model", "Nuclear_membrane_all_model")
+    }) %>% setNames(paste0("v", 19:24)),
+    lapply(1:6, function(i) {
+      c(get(paste0("base", i)), "TL_model", "Envelope_model")
+    }) %>% setNames(paste0("v", 25:30)),
+    lapply(1:6, function(i) {
+      c(get(paste0("base", i)), "N_TL_model", "Envelope_model")
+    }) %>% setNames(paste0("v", 31:36)),
+    lapply(1:6, function(i) {
+      c(get(paste0("base", i)), "TL_model", "TM_all_model")
+    }) %>% setNames(paste0("v", 37:42)),
+    lapply(1:6, function(i) {
+      c(get(paste0("base", i)), "N_TL_model", "TM_all_model")
+    }) %>% setNames(paste0("v", 43:48)),
+    lapply(1:6, function(i) {
+      c(get(paste0("base", i)), "Nuclear_membrane_all_model")
+    }) %>% setNames(paste0("v", 49:54)),
+    lapply(1:6, function(i) {
+      c(get(paste0("base", i)), "Envelope_model")
+    }) %>% setNames(paste0("v", 55:60)),
+    lapply(1:6, function(i) {
+      c(get(paste0("base", i)), "TM_all_model")
+    }) %>% setNames(paste0("v", 61:66)),
+    lapply(1:6, function(i) {
+      c(get(paste0("base", i)), "Nuclear_membrane_all_model", "Envelope_model")
+    }) %>% setNames(paste0("v", 67:72)),
+    lapply(1:6, function(i) {
+      c(get(paste0("base", i)), "Nuclear_membrane_all_model", "TM_all_model")
+    }) %>% setNames(paste0("v", 73:78)),
+    lapply(1:6, function(i) {
+      c(get(paste0("base", i)), "Envelope_model", "TM_all_model")
+    }) %>% setNames(paste0("v", 79:84)),
+    lapply(1:6, function(i) {
+      c(get(paste0("base", i)), "TL_model", "Nuclear_membrane_all_model", "Envelope_model")
+    }) %>% setNames(paste0("v", 85:90)),
+    lapply(1:6, function(i) {
+      c(get(paste0("base", i)), "TL_model", "Nuclear_membrane_all_model", "TM_all_model")
+    }) %>% setNames(paste0("v", 91:96)),
+    lapply(1:6, function(i) {
+      c(get(paste0("base", i)), "TL_model", "TM_all_model", "Envelope_model")
+    }) %>% setNames(paste0("v", 97:102)),
+    lapply(1:6, function(i) {
+      c(get(paste0("base", i)), "N_TL_model", "Nuclear_membrane_all_model", "Envelope_model")
+    }) %>% setNames(paste0("v", 103:108)),
+    lapply(1:6, function(i) {
+      c(get(paste0("base", i)), "N_TL_model", "Nuclear_membrane_all_model", "TM_all_model")
+    }) %>% setNames(paste0("v", 109:114)),
+    lapply(1:6, function(i) {
+      c(get(paste0("base", i)), "N_TL_model", "TM_all_model", "Envelope_model")
+    }) %>% setNames(paste0("v", 115:120)),
+    lapply(1:6, function(i) {
+      c(get(paste0("base", i)), "TL_model", "Nuclear_membrane_all_model", "Envelope_model", "TM_all_model")
+    }) %>% setNames(paste0("v", 121:126)),
+    lapply(1:6, function(i) {
+      c(get(paste0("base", i)), "N_TL_model", "Nuclear_membrane_all_model", "Envelope_model", "TM_all_model")
+    }) %>% setNames(paste0("v", 127:132)),
+  ) %>% 
+    unlist(recursive = FALSE)
+  without_sec <- lapply(all_models, function(i) i[which(i != "Sec_model")]) %>% 
+    setNames(paste0(names(all_models), "-Sec"))
+  without_tat <- lapply(all_models, function(i) i[which(i != "Tat_model")]) %>% 
+    setNames(paste0(names(all_models), "-Tat"))
+  
+  c(all_models, without_sec, without_tat)
+}
+ 
 generate_all_architectures <- function(model_variants, smote_models, sequence_models, model_dat, filtering_df, output_dir) {
   model_dat <- model_dat[which(!(grepl("SMOTE", model_dat[["Model_name"]]))), ]
   filtering_options <- colnames(filtering_df)[2:ncol(filtering_df)]

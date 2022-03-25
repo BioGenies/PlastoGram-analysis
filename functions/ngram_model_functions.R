@@ -93,12 +93,13 @@ get_cv_res_summary <- function(cv_res, positive, ngrams = TRUE) {
     cv_res %>% 
       group_by(fold, imp_ngrams) 
   } %>% 
-    summarise(TP = mlr3measures::tp(factor(target), factor(pred), positive),
-              TN = mlr3measures::tn(factor(target), factor(pred), positive),
-              FP = mlr3measures::fp(factor(target), factor(pred), positive),
-              FN = mlr3measures::fn(factor(target), factor(pred), positive),
+    summarise(TP = tryCatch({mlr3measures::tp(factor(target), factor(pred), positive)}, error = function(e) NA),
+              TN = tryCatch({mlr3measures::tn(factor(target), factor(pred), positive)}, error = function(e) NA),
+              FP = tryCatch({mlr3measures::fp(factor(target), factor(pred), positive)}, error = function(e) NA),
+              FN = tryCatch({mlr3measures::fn(factor(target), factor(pred), positive)}, error = function(e) NA),
+              sensitivity = mlr3measures::sensitivity(factor(target), factor(pred), positive),
               AUC = mlr3measures::auc(factor(target), prob, positive), 
-              ACC = mlr3measures::acc(factor(target), factor(pred)))
+              ACC = tryCatch({mlr3measures::acc(factor(target), factor(pred))}, error = function(e) NA))
 } 
 
 

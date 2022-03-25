@@ -115,44 +115,6 @@ list(
     unlist(unname(sequence_list), recursive = FALSE)
   ),
   tar_target(
-    graphpart_input,
-    process_for_graphpart(sequence_list)
-  ),
-  tar_target(
-    graphpart_res,
-    run_graphpart(graphpart_input, 
-                  paste0(data_path, "Sequences/"))
-  ),
-  tar_target(
-    target_df, 
-    create_target_df(annotations_file,
-                     all_sequences,
-                     graphpart_res)),
-  tar_target(
-    data_df,
-    filter(target_df, cluster != 1)
-  ),
-  tar_target(
-    data_df_independent,
-    filter(target_df, cluster == 1)
-  ),
-  tar_target(
-    ngram_matrix, 
-    create_ngram_matrix(all_sequences, data_df)
-  ),
-  tar_target(
-    ngram_matrix_independent, 
-    create_ngram_matrix(all_sequences, data_df_independent)
-  ),
-  tar_target(
-    sequences_cv,
-    all_sequences[which(names(all_sequences) %in% data_df[["seq_name"]])]
-  ),
-  tar_target(
-    sequences_independent,
-    all_sequences[which(names(all_sequences) %in% data_df_independent[["seq_name"]])]
-  ),
-  tar_target(
     model_variants,
     get_updated_model_variants()
   ),
@@ -174,38 +136,7 @@ list(
     filtering_df,
     read.csv(test_filtering_options_file)
   ),
-  tar_target(
-    target_dfs_cv,
-    create_cv_folds(data_df, 5, c(427244, 58713042, 6513, 901374, 388123648)),#, 43671, 71234, 209147, 1847820, 248114))
-  ),
-  tar_target(
-    all_models_predictions,
-    get_all_models_predictions_cv(ngram_matrix, sequences_cv, target_dfs_cv, model_dat, data_path, remove_hmm_files = TRUE)
-  ),
-  tar_target(
-    architectures_performance,
-    generate_and_test_architectures(model_variants = model_variants,
-                                    smote_models = c("OM_Stroma_model", "Nuclear_membrane_model",
-                                                     "N_OM_model", "N_IM_model", "N_TM_model"),
-                                    sequence_models = c("Sec_model", "Tat_model"),
-                                    model_dat = model_dat,
-                                    filtering_df = filtering_df,
-                                    architectures_output_dir = paste0(data_path, "Model_architectures_new/"),
-                                    all_models_predictions = all_models_predictions, 
-                                    architecture_res_output_dir = paste0(data_path, "Model_architectures_new_results/"), 
-                                    data_df_final = data_df,
-                                    performance_outfile = paste0(data_path, "Architectures_performance.csv"))
-  ),
-  tar_target(
-    mean_architecture_performance,
-    get_mean_performance_of_architectures(architectures_performance,
-                                          paste0(data_path, "Architectures_mean_performance.csv"))
-  ),
-  tar_target(
-    ranked_architecture_performance,
-    rank_architectures(mean_architecture_performance)
-  ),
-  ### Holdout approach
+  ### Holdout approach with OM and IM 
   tar_target(
     holdouts,
     generate_holdout(sequence_list)
@@ -272,14 +203,91 @@ list(
     holdout_ranked_architecture_performance,
     rank_architectures(holdout_mean_architecture_performance)
   ),
+  ### OM and IM together as envelope
+  tar_target(
+    envelope_target_df,
+    create_envelope_target_df(annotations_file,
+                              all_sequences)
+  ),
+  tar_target(
+    envelope_traintest_data_df,
+    filter(envelope_target_df, seq_name %in% names(traintest))
+  ),
+  tar_target(
+    envelope_benchmark_data_df,
+    filter(envelope_target_df, seq_name %in% names(benchmark))
+  ),
+  tar_target(
+    envelope_traintest_ngram_matrix, 
+    create_ngram_matrix(traintest, envelope_traintest_data_df)
+  ),
+  tar_target(
+    envelope_benchmark_ngram_matrix, 
+    create_ngram_matrix(benchmark, envelope_benchmark_data_df)
+  ),
+  tar_target(
+    envelope_target_dfs_cv,
+    create_cv_folds(envelope_traintest_data_df, 5, c(427244, 58713042, 6513, 901374, 388123648)),
+  ),
+  tar_target(
+    envelope_model_variants,
+    get_envelope_model_variants()
+  ),
+  tar_target(
+    envelope_model_dat_file,
+    "./data/PlastoGram_envelope_models_info.csv",
+    format = "file"
+  ),
+  tar_target(
+    envelope_model_dat,
+    read.csv(envelope_model_dat_file)
+  ),
+  tar_target(
+    envelope_test_filtering_options_file,
+    "./data/PlastoGram_envelope_models_results_filtering.csv",
+    format = "file"
+  ),
+  tar_target(
+    envelope_filtering_df,
+    read.csv(envelope_test_filtering_options_file)
+  ),
+  tar_target(
+    envelope_all_models_predictions,
+    get_all_models_predictions_cv(envelope_traintest_ngram_matrix, traintest, envelope_target_dfs_cv, 
+                                  envelope_model_dat, data_path, remove_hmm_files = TRUE)
+  ),
+  tar_target(
+    envelope_architectures_performance,
+    generate_and_test_architectures(model_variants = envelope_model_variants,
+                                    smote_models = c("N_E_all_model", "N_TM_all_model", "TM_all_model"),
+                                    sequence_models = c("Sec_model", "Tat_model"),
+                                    model_dat = envelope_model_dat,
+                                    filtering_df = envelope_filtering_df,
+                                    architectures_output_dir = paste0(data_path, "Model_architectures_envelope/"),
+                                    all_models_predictions = envelope_all_models_predictions, 
+                                    architecture_res_output_dir = paste0(data_path, "Model_architectures_envelope_results/"), 
+                                    data_df_final = envelope_traintest_data_df,
+                                    performance_outfile = paste0(data_path, "Architectures_envelope_performance.csv"))
+  ),
+  tar_target(
+    envelope_mean_architecture_performance,
+    get_mean_performance_of_architectures(envelope_architectures_performance,
+                                          paste0(data_path, "Architectures_envelope_mean_performance.csv"))
+  ),
+  tar_target(
+    envelope_ranked_architecture_performance,
+    rank_architectures(envelope_mean_architecture_performance)
+  ),
+  # Results and final models
   tar_target(
     PlastoGram_best_architecture_name,
-    holdout_ranked_architecture_performance[["model"]][which.min(holdout_ranked_architecture_performance[["rank_sum"]])]
+    envelope_ranked_architecture_performance[["model"]][which.min(envelope_ranked_architecture_performance[["rank_sum"]])]
+    #holdout_ranked_architecture_performance[["model"]][which.min(holdout_ranked_architecture_performance[["rank_sum"]])]
     #ranked_architecture_performance[["model"]][which.min(ranked_architecture_performance[["rank_sum"]])]
   ),
   tar_target(
     PlastoGram_best_architecture,
-    read.csv(paste0(data_path, "Model_architectures_new/", gsub("_GLM|_RF", ".csv", PlastoGram_best_architecture_name)))
+    read.csv(paste0(data_path, "Model_architectures_envelope/", gsub("_GLM|_RF", ".csv", PlastoGram_best_architecture_name)))
   ),
   tar_target(
     PlastoGram_ngram_models,
@@ -324,13 +332,13 @@ list(
                             list("Sec_model" = gsub(".hmm", "", PlastoGram_hmm_Sec), "Tat_model" = gsub(".hmm", "", PlastoGram_hmm_Tat)), 
                             PlastoGram_higher_level_model, benchmark_ngram_matrix, benchmark, benchmark_data_df,
                             PlastoGram_informative_ngrams, PlastoGram_best_architecture, PlastoGram_best_architecture_name)
-  # ),
-  # tar_target(
-  #   PlastoGram_scaled_evaluation,
-  #   predict_scaled_with_PlastoGram(PlastoGram_ngram_models, 
-  #                                  list("Sec_model" = gsub(".hmm", "", PlastoGram_hmm_Sec), "Tat_model" = gsub(".hmm", "", PlastoGram_hmm_Tat)), 
-  #                                  PlastoGram_scaled_multinom_model, ngram_matrix_independent, sequences_independent, data_df_independent,
-  #                                  PlastoGram_informative_ngrams)
+    # ),
+    # tar_target(
+    #   PlastoGram_scaled_evaluation,
+    #   predict_scaled_with_PlastoGram(PlastoGram_ngram_models, 
+    #                                  list("Sec_model" = gsub(".hmm", "", PlastoGram_hmm_Sec), "Tat_model" = gsub(".hmm", "", PlastoGram_hmm_Tat)), 
+    #                                  PlastoGram_scaled_multinom_model, ngram_matrix_independent, sequences_independent, data_df_independent,
+    #                                  PlastoGram_informative_ngrams)
     # ),
     # tar_target(
     #   baseline_model_res,
