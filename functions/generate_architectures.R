@@ -57,14 +57,13 @@ get_updated_model_variants <- function() {
 }
 
 get_envelope_model_variants <- function() {
-  base_models <- list(
-    base1 = c("Nuclear_model", "Membrane_model", "Nuclear_membrane_model", "Plastid_membrane_model", "Tat_model", "Sec_model"),
-    base2 = c("Nuclear_model", "Membrane_model", "Nuclear_membrane_model", "Plastid_membrane_model", "Tat_model", "Sec_model", "Stroma_model"),
-    base3 = c("Nuclear_model", "Membrane_model", "N_E_all_model", "N_TM_all_model", "Plastid_membrane_model", "Tat_model", "Sec_model"),
-    base4 = c("Nuclear_model", "Membrane_model", "N_E_all_model", "N_TM_all_model", "Plastid_membrane_model", "Tat_model", "Sec_model", "Stroma_model"),
-    base5 = c("Nuclear_model", "Membrane_model", "Nuclear_membrane_model", "Plastid_membrane_model", "Tat_model", "Sec_model", "P_stroma_model", "N_stroma_model"),
-    base6 = c("Nuclear_model", "Membrane_model", "N_E_all_model", "N_TM_all_model", "Plastid_membrane_model", "Tat_model", "Sec_model", "P_stroma_model", "N_stroma_model")
-  )
+    base1 <- c("Nuclear_model", "Membrane_model", "Nuclear_membrane_model", "Plastid_membrane_model", "Tat_model", "Sec_model")
+    base2 <- c("Nuclear_model", "Membrane_model", "Nuclear_membrane_model", "Plastid_membrane_model", "Tat_model", "Sec_model", "Stroma_model")
+    base3 <- c("Nuclear_model", "Membrane_model", "N_E_all_model", "N_TM_all_model", "Plastid_membrane_model", "Tat_model", "Sec_model")
+    base4 <- c("Nuclear_model", "Membrane_model", "N_E_all_model", "N_TM_all_model", "Plastid_membrane_model", "Tat_model", "Sec_model", "Stroma_model")
+    base5 <- c("Nuclear_model", "Membrane_model", "Nuclear_membrane_model", "Plastid_membrane_model", "Tat_model", "Sec_model", "P_stroma_model", "N_stroma_model")
+    base6 <- c("Nuclear_model", "Membrane_model", "N_E_all_model", "N_TM_all_model", "Plastid_membrane_model", "Tat_model", "Sec_model", "P_stroma_model", "N_stroma_model")
+    
   all_models <- list(
     lapply(1:6, function(i) {
       c(get(paste0("base", i)), "TL_model")
@@ -131,7 +130,7 @@ get_envelope_model_variants <- function() {
     }) %>% setNames(paste0("v", 121:126)),
     lapply(1:6, function(i) {
       c(get(paste0("base", i)), "N_TL_model", "Nuclear_membrane_all_model", "Envelope_model", "TM_all_model")
-    }) %>% setNames(paste0("v", 127:132)),
+    }) %>% setNames(paste0("v", 127:132))
   ) %>% 
     unlist(recursive = FALSE)
   without_sec <- lapply(all_models, function(i) i[which(i != "Sec_model")]) %>% 
