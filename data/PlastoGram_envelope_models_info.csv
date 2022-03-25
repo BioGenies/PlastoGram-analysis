@@ -1,0 +1,20 @@
+Model_name,Input_data,Multiclass,Target_name,Input_filtering
+Nuclear_model,ngrams,FALSE,Nuclear_target,
+Membrane_model,ngrams,FALSE,Membrane_target,
+Plastid_membrane_model,ngrams,FALSE,IM_target,"Nuclear_target == FALSE & Membrane_mc_target %in% c('IM', 'TM')"
+Tat_model,sequences,FALSE,Tat_target,Tat_target == TRUE
+Sec_model,sequences,FALSE,Sec_target,Sec_target == TRUE
+Stroma_model,ngrams,FALSE,Stroma_target,
+Nuclear_membrane_model,ngrams,FALSE,Nuclear_envelope_target,Nuclear_target == TRUE & Membrane_mc_target != 'other'
+N_E_all_model,ngrams,FALSE,Nuclear_envelope_target,
+N_TM_all_model,ngrams,FALSE,N_TM_target,
+P_stroma_model,ngrams,FALSE,Stroma_target,Nuclear_target == FALSE
+N_stroma_model,ngrams,FALSE,Stroma_target,Nuclear_target == TRUE
+N_E_all_model_SMOTE,ngrams,FALSE,Nuclear_envelope_target,
+N_TM_all_model_SMOTE,ngrams,FALSE,TM_target,
+Nuclear_membrane_all_model,ngrams,FALSE,Nuclear_membrane_target,
+Envelope_model,ngrams,FALSE,Envelope_target,
+N_TL_model,ngrams,FALSE,TL_target,Nuclear_target == TRUE
+TL_model,ngrams,FALSE,TL_target,
+TM_all_model,ngrams,FALSE,TM_target,
+TM_all_model_SMOTE,ngrams,FALSE,TM_target,
