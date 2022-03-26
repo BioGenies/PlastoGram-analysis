@@ -192,7 +192,8 @@ list(
                                     all_models_predictions = holdout_all_models_predictions, 
                                     architecture_res_output_dir = paste0(data_path, "Model_architectures_holdout_results/"), 
                                     data_df_final = traintest_data_df,
-                                    performance_outfile = paste0(data_path, "Architectures_performance_holdout.csv"))
+                                    performance_outfile = paste0(data_path, "Architectures_performance_holdout.csv"),
+                                    type = "holdout")
   ),
   tar_target(
     holdout_mean_architecture_performance,
@@ -267,11 +268,12 @@ list(
                                     all_models_predictions = envelope_all_models_predictions, 
                                     architecture_res_output_dir = paste0(data_path, "Model_architectures_envelope_results/"), 
                                     data_df_final = envelope_traintest_data_df,
-                                    performance_outfile = paste0(data_path, "Architectures_envelope_performance.csv"))
+                                    performance_outfile = paste0(data_path, "Architectures_envelope_performance.csv"),
+                                    type = "envelope")
   ),
   tar_target(
     envelope_mean_architecture_performance,
-    get_mean_performance_of_architectures(envelope_architectures_performance,
+    get_mean_performance_of_envelope_architectures(envelope_architectures_performance,
                                           paste0(data_path, "Architectures_envelope_mean_performance.csv"))
   ),
   tar_target(
@@ -291,7 +293,8 @@ list(
   ),
   tar_target(
     PlastoGram_ngram_models,
-    train_ngram_models(PlastoGram_best_architecture, traintest_ngram_matrix, traintest_data_df, filtering_colname = NULL, filtering_term = NULL)
+    train_ngram_models(PlastoGram_best_architecture, envelope_traintest_ngram_matrix, envelope_traintest_data_df, filtering_colname = NULL, filtering_term = NULL)
+    #train_ngram_models(PlastoGram_best_architecture, traintest_ngram_matrix, traintest_data_df, filtering_colname = NULL, filtering_term = NULL)
     #train_ngram_models(PlastoGram_best_architecture, ngram_matrix, data_df, filtering_colname = NULL, filtering_term = NULL)
   ),
   tar_target(
@@ -310,13 +313,13 @@ list(
   ),
   tar_target(
     PlastoGram_predictions,
-    predict_with_all_models(PlastoGram_best_architecture, traintest_ngram_matrix, traintest_data_df, traintest, PlastoGram_ngram_models,
+    predict_with_all_models(PlastoGram_best_architecture, envelope_traintest_ngram_matrix, envelope_traintest_data_df, traintest, PlastoGram_ngram_models,
                             list("Sec_model" = gsub(".hmm", "", PlastoGram_hmm_Sec), "Tat_model" = gsub(".hmm", "", PlastoGram_hmm_Tat)),
                             ith_fold = NULL, remove_hmm_files = FALSE)
   ),
   tar_target(
     PlastoGram_higher_level_model,
-    train_higher_level_model(PlastoGram_predictions, traintest_data_df, PlastoGram_best_architecture_name, PlastoGram_best_architecture)
+    train_higher_level_model(PlastoGram_predictions, envelope_traintest_data_df, PlastoGram_best_architecture_name, PlastoGram_best_architecture)
   ),
   # tar_target(
   #   PlastoGram_scaled_multinom_model,
@@ -330,7 +333,7 @@ list(
     PlastoGram_evaluation,
     predict_with_PlastoGram(PlastoGram_ngram_models, 
                             list("Sec_model" = gsub(".hmm", "", PlastoGram_hmm_Sec), "Tat_model" = gsub(".hmm", "", PlastoGram_hmm_Tat)), 
-                            PlastoGram_higher_level_model, benchmark_ngram_matrix, benchmark, benchmark_data_df,
+                            PlastoGram_higher_level_model, envelope_benchmark_ngram_matrix, benchmark, envelope_benchmark_data_df,
                             PlastoGram_informative_ngrams, PlastoGram_best_architecture, PlastoGram_best_architecture_name)
     # ),
     # tar_target(

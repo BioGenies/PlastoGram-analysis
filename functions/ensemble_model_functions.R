@@ -117,7 +117,7 @@ predict_with_all_models <- function(model_df, test_ngram_matrix, test_df, test_s
 filter_predictions_according_to_hierarchy <- function(all_models_predictions, model_df) {
   lapply(1:length(model_df[["Model_name"]]), function(i) {
     if(is.na(model_df[["Test_filtering"]][i]) | model_df[["Test_filtering"]][i] == "") {
-        select(all_models_predictions, c(seq_name, model_df[["Model_name"]][i]))
+      select(all_models_predictions, c(seq_name, model_df[["Model_name"]][i]))
     } else {
       filtering <- model_df[["Test_filtering"]][i]
       select(filter(all_models_predictions, eval(parse(text = filtering))), c(seq_name, model_df[["Model_name"]][i]))
@@ -279,6 +279,42 @@ evaluate_all_architectures <- function(res_files, outfile, data_df) {
   performance_results
 }
 
+evaluate_all_envelope_architectures <- function(res_files, outfile, data_df) {
+  performance_results <- lapply(res_files, function(ith_file) {
+    res <- read.csv(ith_file)
+    x <- table(data_df[["dataset"]])
+    lapply(unique(res[["fold"]]), function(ith_fold) {
+      dat <- filter(res, fold == ith_fold)
+      data.frame(
+        model = gsub("_rep._results.csv|_rep.._results.csv", "", last(strsplit(ith_file, "/")[[1]])),
+        rep = last(strsplit(gsub("_results.csv", "", last(strsplit(ith_file, "/")[[1]])), "_")[[1]]),
+        fold = ith_fold,
+        AU1U = multiclass.AU1U(dat[, 5:(ncol(dat)-1)], dat[["dataset"]]),
+        kappa = KAPPA(dat[["dataset"]], dat[["Prediction"]]),
+        weighted_kappa = ckap(dat[, c("dataset", "Prediction")], 
+                              weight = as.matrix(bind_rows(lapply(x, function(i) ifelse(i == x, as.vector(sum(x)/(i+x)), 1)))))[["est"]],
+        N_E_sensitivity = TPR(ifelse(dat[["dataset"]] == "N_E", TRUE, FALSE),
+                              ifelse(dat[["Prediction"]] == "N_E", TRUE, FALSE), TRUE),
+        N_TM_sensitivity = TPR(ifelse(dat[["dataset"]] == "N_TM", TRUE, FALSE),
+                               ifelse(dat[["Prediction"]] == "N_TM", TRUE, FALSE), TRUE),
+        N_S_sensitivity = TPR(ifelse(dat[["dataset"]] == "N_S", TRUE, FALSE),
+                              ifelse(dat[["Prediction"]] == "N_S", TRUE, FALSE), TRUE),
+        N_TL_SEC_sensitivity = TPR(ifelse(dat[["dataset"]] == "N_TL_SEC", TRUE, FALSE),
+                                   ifelse(dat[["Prediction"]] == "N_TL_SEC", TRUE, FALSE), TRUE),
+        N_TL_TAT_sensitivity = TPR(ifelse(dat[["dataset"]] == "N_TL_TAT", TRUE, FALSE),
+                                   ifelse(dat[["Prediction"]] == "N_TL_TAT", TRUE, FALSE), TRUE),
+        P_IM_sensitivity = TPR(ifelse(dat[["dataset"]] == "P_IM", TRUE, FALSE),
+                               ifelse(dat[["Prediction"]] == "P_IM", TRUE, FALSE), TRUE),
+        P_TM_sensitivity = TPR(ifelse(dat[["dataset"]] == "P_TM", TRUE, FALSE),
+                               ifelse(dat[["Prediction"]] == "P_TM", TRUE, FALSE), TRUE),
+        P_S_sensitivity = TPR(ifelse(dat[["dataset"]] == "P_S", TRUE, FALSE),
+                              ifelse(dat[["Prediction"]] == "P_S", TRUE, FALSE), TRUE)
+      )
+    }) %>% bind_rows()
+  }) %>% bind_rows()
+  write.csv(performance_results, outfile, row.names = FALSE)
+  performance_results
+}
 
 get_mean_performance_of_architectures <- function(performance_results, outfile) {
   summ <- performance_results %>% 
@@ -329,6 +365,51 @@ get_mean_performance_of_architectures <- function(performance_results, outfile) 
   summ
 }
 
+get_mean_performance_of_envelope_architectures <- function(performance_results, outfile) {
+  summ <- performance_results %>% 
+    group_by(model, rep) %>% 
+    summarise(mean_rep_kappa = mean(kappa),
+              mean_rep_AU1U = mean(AU1U),
+              mean_rep_N_E_sens = mean(N_E_sensitivity),
+              mean_rep_N_TM_sens = mean(N_TM_sensitivity),
+              mean_rep_N_S_sens = mean(N_S_sensitivity),
+              mean_rep_N_TL_SEC_sens = mean(N_TL_SEC_sensitivity),
+              mean_rep_N_TL_TAT_sens = mean(N_TL_TAT_sensitivity),
+              mean_rep_P_IM_sens = mean(P_IM_sensitivity),
+              mean_rep_P_TM_sens = mean(P_TM_sensitivity),
+              mean_rep_P_S_sens = mean(P_S_sensitivity),
+              sd_rep_N_E_sens = sd(N_E_sensitivity),
+              sd_rep_N_TM_sens = sd(N_TM_sensitivity),
+              sd_rep_N_S_sens = sd(N_S_sensitivity),
+              sd_rep_N_TL_SEC_sens = sd(N_TL_SEC_sensitivity),
+              sd_rep_N_TL_TAT_sens = sd(N_TL_TAT_sensitivity),
+              sd_rep_P_IM_sens = sd(P_IM_sensitivity),
+              sd_rep_P_TM_sens = sd(P_TM_sensitivity),
+              sd_rep_P_S_sens = sd(P_S_sensitivity)) %>% 
+    ungroup() %>% 
+    group_by(model) %>% 
+    summarise(mean_kappa = mean(mean_rep_kappa),
+              mean_AU1U = mean(mean_rep_AU1U),
+              mean_N_E_sens = mean(mean_rep_N_E_sens),
+              mean_N_TM_sens = mean(mean_rep_N_TM_sens),
+              mean_N_S_sens = mean(mean_rep_N_S_sens),
+              mean_N_TL_SEC_sens = mean(mean_rep_N_TL_SEC_sens),
+              mean_N_TL_TAT_sens = mean(mean_rep_N_TL_TAT_sens),
+              mean_P_IM_sens = mean(mean_rep_P_IM_sens),
+              mean_P_TM_sens = mean(mean_rep_P_TM_sens),
+              mean_P_S_sens = mean(mean_rep_P_S_sens),
+              sd_N_E_sens = mean(sd_rep_N_E_sens),
+              sd_N_TM_sens = mean(sd_rep_N_TM_sens),
+              sd_N_S_sens = mean(sd_rep_N_S_sens),
+              sd_N_TL_SEC_sens = mean(sd_rep_N_TL_SEC_sens),
+              sd_N_TL_TAT_sens = mean(sd_rep_N_TL_TAT_sens),
+              sd_P_IM_sens = mean(sd_rep_P_IM_sens),
+              sd_P_TM_sens = mean(sd_rep_P_TM_sens),
+              sd_P_S_sens = mean(sd_rep_P_S_sens)) 
+  write.csv(summ, outfile, row.names = FALSE)
+  summ
+}
+
 rank_architectures <- function(mean_architecture_performance) {
   ranking_columns <- colnames(mean_architecture_performance)[which(!(colnames(mean_architecture_performance) %in% c("model", "mean_AU1U")))]
   ranks_df <- lapply(ranking_columns, function(ith_col) {
@@ -366,7 +447,7 @@ scaled_train_multinom <- function(train_df, data_df) {
   list("model" = hl_model,
        "scale" = glm_scale_scale,
        "center" = glm_scale_center)
- 
+  
 }
 
 train_higher_level_model <- function(PlastoGram_predictions, data_df, best_architecture_name, best_architecture) {
@@ -387,7 +468,7 @@ train_higher_level_model <- function(PlastoGram_predictions, data_df, best_archi
 
 
 generate_and_test_architectures <- function(model_variants, smote_models, sequence_models, model_dat, filtering_df, architectures_output_dir,
-                                            all_models_predictions, architecture_res_output_dir, data_df_final, performance_outfile) {
+                                            all_models_predictions, architecture_res_output_dir, data_df_final, performance_outfile, type = "envelope") {
   
   generate_all_architectures(model_variants = model_variants,
                              smote_models = smote_models,
@@ -405,7 +486,13 @@ generate_and_test_architectures <- function(model_variants, smote_models, sequen
   
   architecture_results_files <- list.files(architecture_res_output_dir, full.names = TRUE)
   
-  evaluate_all_architectures(architecture_results_files,
-                             performance_outfile,
-                             data_df_final)
+  if(type == "envelope") {
+    evaluate_all_envelope_architectures(architecture_results_files,
+                                        performance_outfile,
+                                        data_df_final)
+  } else {
+    evaluate_all_architectures(architecture_results_files,
+                               performance_outfile,
+                               data_df_final)
+  }
 }
