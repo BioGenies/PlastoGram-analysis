@@ -111,22 +111,22 @@ get_envelope_model_variants <- function() {
     }) %>% setNames(paste0("v", 105:112)),
     lapply(1:8, function(i) {
       c(get(paste0("base", i)), "TL_model", "Nuclear_membrane_all_model", "Envelope_model")
-    }) %>% setNames(paste0("v", 123:120)),
+    }) %>% setNames(paste0("v", 113:120)),
     lapply(1:8, function(i) {
       c(get(paste0("base", i)), "TL_model", "Nuclear_membrane_all_model", "TM_all_model")
-    }) %>% setNames(paste0("v", 131:128)),
+    }) %>% setNames(paste0("v", 121:128)),
     lapply(1:8, function(i) {
       c(get(paste0("base", i)), "TL_model", "TM_all_model", "Envelope_model")
-    }) %>% setNames(paste0("v", 139:136)),
+    }) %>% setNames(paste0("v", 129:136)),
     lapply(1:8, function(i) {
       c(get(paste0("base", i)), "N_TL_model", "Nuclear_membrane_all_model", "Envelope_model")
-    }) %>% setNames(paste0("v", 147:144)),
+    }) %>% setNames(paste0("v", 137:144)),
     lapply(1:8, function(i) {
       c(get(paste0("base", i)), "N_TL_model", "Nuclear_membrane_all_model", "TM_all_model")
-    }) %>% setNames(paste0("v", 155:152)),
+    }) %>% setNames(paste0("v", 145:152)),
     lapply(1:8, function(i) {
       c(get(paste0("base", i)), "N_TL_model", "TM_all_model", "Envelope_model")
-    }) %>% setNames(paste0("v", 163:160)),
+    }) %>% setNames(paste0("v", 153:160)),
     lapply(1:8, function(i) {
       c(get(paste0("base", i)), "TL_model", "Nuclear_membrane_all_model", "Envelope_model", "TM_all_model")
     }) %>% setNames(paste0("v", 161:168)),
@@ -189,7 +189,10 @@ get_envelope_model_variants <- function() {
     }) %>% setNames(paste0("v", 313:320)),
     lapply(1:8, function(i) {
       c(get(paste0("base", i)), "N_TL_model", "TM_all_model", "N_P_envelope_model", "Nuclear_membrane_all_model", "Envelope_model")
-    }) %>% setNames(paste0("v", 321:328))
+    }) %>% setNames(paste0("v", 321:328)),
+    lapply(1:8, function(i) {
+      c(get(paste0("base", i)), "N_P_envelope_model")
+    }) %>% setNames(paste0("v", 329:336))
   ) %>% 
     unlist(recursive = FALSE)
   without_sec <- lapply(all_models, function(i) i[which(i != "Sec_model")]) %>% 
