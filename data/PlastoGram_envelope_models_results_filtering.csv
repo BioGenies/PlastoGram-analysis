@@ -15,3 +15,5 @@
 "TL_model",,
 "N_TL_model",,"Nuclear_model > 0.5"
 "TM_all_model",,
+"E_stroma_model",,"Nuclear_model > 0.5"
+"N_P_envelope_model",,
