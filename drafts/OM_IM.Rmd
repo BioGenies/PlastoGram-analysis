@@ -1,0 +1,117 @@
+---
+title: "OM and IM prediction"
+author: "Katarzyna Sidorczuk"
+date: "3/24/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+
+library(dplyr)
+library(ggplot2)
+library(tidyr)
+library(ggrepel)
+library(targets)
+library(measures)
+library(biogram)
+library(ranger)
+
+source("../functions/ngram_model_functions.R")
+
+withr::with_dir("../",
+                tar_load(c(traintest, benchmark, traintest_data_df, benchmark_data_df, 
+                           traintest_ngram_matrix, benchmark_ngram_matrix, holdout_target_dfs_cv)))
+
+calculate_performance <- function(cv_res) {
+  lapply(unique(cv_res[["fold"]]), function(ith_fold) {
+    dat <- filter(cv_res, fold == ith_fold)
+    data.frame(
+      AUC = AUC(dat[["prob"]], dat[["target"]], FALSE, TRUE),
+      kappa = KAPPA(dat[["target"]], dat[["pred"]]),
+      sensitivity = TPR(dat[["target"]], dat[["pred"]], TRUE),
+      TP = TP(dat[["target"]], dat[["pred"]], TRUE),
+      TN = TN(dat[["target"]], dat[["pred"]], FALSE),
+      FP = FP(dat[["target"]], dat[["pred"]], TRUE),
+      FN = FN(dat[["target"]], dat[["pred"]], FALSE)
+    )
+  }) %>% bind_rows()
+}
+
+```
+
+## N_OM_all and N_IM_all models
+
+N_OM_all model
+```{r}
+data_df <- holdout_target_dfs_cv[[1]] %>% 
+  mutate(N_IM_target = ifelse(dataset == "N_IM", TRUE, FALSE))
+
+nomall_cv <- do_cv(traintest_ngram_matrix, data_df, "OM_target", 5, 0.1)
+knitr::kable(calculate_performance(nomall_cv))
+```
+
+N_IM_all model
+```{r}
+nimall_cv <- do_cv(traintest_ngram_matrix, data_df, "N_IM_target", 5, 0.1)
+knitr::kable(calculate_performance(nimall_cv))
+```
+
+
+## N_OM and N_IM vs all other nuclear membrane proteins
+
+N_OM_NM model
+```{r}
+dat <- traintest_ngram_matrix[which(data_df[["Nuclear_target"]] == TRUE & data_df[["Membrane_target"]] == TRUE),]
+dat_df <- filter(data_df, Nuclear_target == TRUE & Membrane_target == TRUE)
+nomnm_cv <- do_cv(dat, dat_df, "OM_target", 5, 0.1)
+knitr::kable(calculate_performance(nomnm_cv))
+```
+
+N_IM_NM model
+```{r}
+nimnm_cv <- do_cv(dat, dat_df, "N_IM_target", 5, 0.1)
+knitr::kable(calculate_performance(nimnm_cv))
+```
+
+## N_OM and N_IM vs all other nuclear proteins
+
+N_OM_N model
+```{r}
+dat <- traintest_ngram_matrix[which(data_df[["Nuclear_target"]] == TRUE),]
+dat_df <- filter(data_df, Nuclear_target == TRUE)
+nomn_cv <- do_cv(dat, dat_df, "OM_target", 5, 0.1)
+knitr::kable(calculate_performance(nomn_cv))
+```
+
+N_IM_N model
+```{r}
+nimn_cv <- do_cv(dat, dat_df, "N_IM_target", 5, 0.1)
+knitr::kable(calculate_performance(nimn_cv))
+```
+
+
+## N_OM and N_IM vs all other membrane proteins
+
+N_OM_M model
+```{r}
+dat <- traintest_ngram_matrix[which(data_df[["Membrane_target"]] == TRUE),]
+dat_df <- filter(data_df, Membrane_target == TRUE)
+nomm_cv <- do_cv(dat, dat_df, "OM_target", 5, 0.1)
+knitr::kable(calculate_performance(nomm_cv))
+```
+
+N_IM_M model
+```{r}
+nimm_cv <- do_cv(dat, dat_df, "N_IM_target", 5, 0.1)
+knitr::kable(calculate_performance(nimm_cv))
+```
+
+## N_OM vs. N_IM and P_IM
+
+```{r}
+dat <- traintest_ngram_matrix[which(data_df[["Membrane_mc_target"]] %in% c("OM", "IM")),]
+dat_df <- filter(data_df, Membrane_mc_target %in% c("OM", "IM"))
+nomnimpim_cv <- do_cv(dat, dat_df, "OM_target", 5, 0.1)
+knitr::kable(calculate_performance(nomnimpim_cv))
+```

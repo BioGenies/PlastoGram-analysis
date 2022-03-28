@@ -496,3 +496,23 @@ generate_and_test_architectures <- function(model_variants, smote_models, sequen
                                data_df_final)
   }
 }
+
+
+train_om_im_model <- function(ngrams, data_df) {
+  train_dat <- ngrams[which(data_df[["Membrane_mc_target"]] %in% c("OM", "IM")), ]
+  train_df <- filter(data_df, Membrane_mc_target %in% c("OM", "IM"))
+  imp_ngrams <- calc_imp_ngrams(train_dat, train_df[["OM_target"]], 0.01)
+  train_rf(train_dat, train_df[["OM_target"]], imp_ngrams)
+}
+
+
+evaluate_om_im_model <- function(om_im_model, ngram_matrix, data_df, plastogram_eval_res) {
+  predicted_as_envelope <- filter(plastogram_eval_res[["Final_results"]], Localization == "N_E")[["seq_name"]]
+  test_dat <- ngram_matrix[which(data_df[["seq_name"]] %in% predicted_as_envelope), ]
+  preds <- predict(om_im_model, td)[["predictions"]]
+  filter(data_df, seq_name %in% predicted_as_envelope) %>% 
+    select(c(seq_name, old_dataset)) %>% 
+    mutate(IM_prob = preds[,"FALSE"],
+           OM_prob = preds[,"TRUE"],
+           Localization = ifelse(OM_prob > IM_prob, "OM", "IM"))
+}

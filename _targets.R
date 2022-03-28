@@ -321,10 +321,6 @@ list(
     PlastoGram_higher_level_model,
     train_higher_level_model(PlastoGram_predictions, envelope_traintest_data_df, PlastoGram_best_architecture_name, PlastoGram_best_architecture)
   ),
-  # tar_target(
-  #   PlastoGram_scaled_multinom_model,
-  #   scaled_train_multinom(PlastoGram_predictions, data_df)
-  # ),
   tar_target(
     PlastoGram_informative_ngrams,
     get_all_imp_ngrams(PlastoGram_ngram_models)
@@ -335,6 +331,14 @@ list(
                             list("Sec_model" = gsub(".hmm", "", PlastoGram_hmm_Sec), "Tat_model" = gsub(".hmm", "", PlastoGram_hmm_Tat)), 
                             PlastoGram_higher_level_model, envelope_benchmark_ngram_matrix, benchmark, envelope_benchmark_data_df,
                             PlastoGram_informative_ngrams, PlastoGram_best_architecture, PlastoGram_best_architecture_name)
+  ),
+  tar_target(
+    PlastoGram_OM_IM_model,
+    train_om_im_model(envelope_traintest_ngram_matrix, envelope_traintest_data_df)
+  ),
+  tar_target(
+    PlastoGram_evaluation_OM_IM,
+    evaluate_om_im_model(PlastoGram_OM_IM_model, envelope_benchmark_ngram_matrix, envelope_benchmark_data_df, PlastoGram_evaluation)
     # ),
     # tar_target(
     #   PlastoGram_scaled_evaluation,
