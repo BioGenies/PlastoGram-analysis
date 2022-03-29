@@ -199,8 +199,10 @@ get_envelope_model_variants <- function() {
     setNames(paste0(names(all_models), "-Sec"))
   without_tat <- lapply(all_models, function(i) i[which(i != "Tat_model")]) %>% 
     setNames(paste0(names(all_models), "-Tat"))
+  without_membrane <- lapply(all_models, function(i) i[which(i != "Membrane_model")]) %>% 
+    setNames(paste0(names(all_models), "-Membrane"))
   
-  c(all_models, without_sec, without_tat)
+  c(all_models, without_sec, without_tat, without_membrane)
 }
  
 generate_all_architectures <- function(model_variants, smote_models, sequence_models, model_dat, filtering_df, output_dir) {
