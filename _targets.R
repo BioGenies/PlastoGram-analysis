@@ -177,7 +177,7 @@ list(
   tar_target(
     holdout_all_models_predictions,
     get_all_models_predictions_cv(traintest_ngram_matrix, traintest, holdout_target_dfs_cv, 
-                                  model_dat, data_path, remove_hmm_files = TRUE)
+                                  model_dat, data_path, type = "holdout", remove_hmm_files = TRUE)
   ),
   tar_target(
     holdout_architectures_performance,
@@ -255,7 +255,7 @@ list(
   tar_target(
     envelope_all_models_predictions,
     get_all_models_predictions_cv(envelope_traintest_ngram_matrix, traintest, envelope_target_dfs_cv, 
-                                  envelope_model_dat, data_path, remove_hmm_files = TRUE)
+                                  envelope_model_dat, data_path, type = "envelope", remove_hmm_files = TRUE)
   ),
   tar_target(
     envelope_architectures_performance,

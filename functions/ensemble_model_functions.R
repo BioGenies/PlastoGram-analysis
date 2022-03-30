@@ -144,10 +144,14 @@ get_all_models_predictions <- function(ngram_matrix, sequences, data_df, model_d
   res
 } 
 
-get_all_models_predictions_cv <- function(ngram_matrix, sequences, data_dfs_cv, model_df, data_path, remove_hmm_files = FALSE) {
+get_all_models_predictions_cv <- function(ngram_matrix, sequences, data_dfs_cv, model_df, data_path, type = "envelope", remove_hmm_files = FALSE) {
   lapply(1:length(data_dfs_cv), function(i) {
     res <- get_all_models_predictions(ngram_matrix, sequences, data_dfs_cv[[i]], model_df, data_path, remove_hmm_files)
-    write.csv(res, paste0(data_path, "All_models_predictions_rep", i, ".csv"), row.names = FALSE)
+    if(type == "envelope") {
+      write.csv(res, paste0(data_path, "All_models_predictions_envelope_rep", i, ".csv"), row.names = FALSE)
+    } else {
+      write.csv(res, paste0(data_path, "All_models_predictions_holdout_rep", i, ".csv"), row.names = FALSE)
+    }
     res
   })
 }
