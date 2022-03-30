@@ -274,7 +274,7 @@ list(
   tar_target(
     envelope_mean_architecture_performance,
     get_mean_performance_of_envelope_architectures(envelope_architectures_performance,
-                                          paste0(data_path, "Architectures_envelope_mean_performance.csv"))
+                                                   paste0(data_path, "Architectures_envelope_mean_performance.csv"))
   ),
   tar_target(
     envelope_ranked_architecture_performance,
@@ -283,9 +283,7 @@ list(
   # Results and final models
   tar_target(
     PlastoGram_best_architecture_name,
-    envelope_ranked_architecture_performance[["model"]][which.min(envelope_ranked_architecture_performance[["rank_sum"]])]
-    #holdout_ranked_architecture_performance[["model"]][which.min(holdout_ranked_architecture_performance[["rank_sum"]])]
-    #ranked_architecture_performance[["model"]][which.min(ranked_architecture_performance[["rank_sum"]])]
+    arrange(envelope_mean_architecture_performance, desc(mean_kappa))[["model"]][1]
   ),
   tar_target(
     PlastoGram_best_architecture,
@@ -294,21 +292,15 @@ list(
   tar_target(
     PlastoGram_ngram_models,
     train_ngram_models(PlastoGram_best_architecture, envelope_traintest_ngram_matrix, envelope_traintest_data_df, filtering_colname = NULL, filtering_term = NULL)
-    #train_ngram_models(PlastoGram_best_architecture, traintest_ngram_matrix, traintest_data_df, filtering_colname = NULL, filtering_term = NULL)
-    #train_ngram_models(PlastoGram_best_architecture, ngram_matrix, data_df, filtering_colname = NULL, filtering_term = NULL)
   ),
   tar_target(
     PlastoGram_hmm_Sec,
     paste0(train_profileHMM(holdouts[["traintest"]][["N_TL_SEC"]], "PlastoGram_Sec_model", remove_files = TRUE), ".hmm"),
-    #paste0(train_profileHMM(sequences_cv[which(names(sequences_cv) %in% filter(data_df, dataset == "N_TL_SEC")[["seq_name"]])], 
-    #                        "PlastoGram_Sec_model", remove_files = TRUE), ".hmm"),
     format = "file"
   ),
   tar_target(
     PlastoGram_hmm_Tat,
     paste0(train_profileHMM(holdouts[["traintest"]][["N_TL_TAT"]], "PlastoGram_Tat_model", remove_files = TRUE), ".hmm"),
-    #paste0(train_profileHMM(sequences_cv[which(names(sequences_cv) %in% filter(data_df, dataset == "N_TL_TAT")[["seq_name"]])], 
-    #                        "PlastoGram_Tat_model", remove_files = TRUE), ".hmm"),
     format = "file"
   ),
   tar_target(
@@ -339,17 +331,18 @@ list(
   tar_target(
     PlastoGram_evaluation_OM_IM,
     evaluate_om_im_model(PlastoGram_OM_IM_model, envelope_benchmark_ngram_matrix, envelope_benchmark_data_df, PlastoGram_evaluation)
-    # ),
-    # tar_target(
-    #   PlastoGram_scaled_evaluation,
-    #   predict_scaled_with_PlastoGram(PlastoGram_ngram_models, 
-    #                                  list("Sec_model" = gsub(".hmm", "", PlastoGram_hmm_Sec), "Tat_model" = gsub(".hmm", "", PlastoGram_hmm_Tat)), 
-    #                                  PlastoGram_scaled_multinom_model, ngram_matrix_independent, sequences_independent, data_df_independent,
-    #                                  PlastoGram_informative_ngrams)
-    # ),
-    # tar_target(
-    #   baseline_model_res,
-    #   do_baseline_cv(ngram_matrix, target_dfs_cv)
+  ),
+  tar_target(
+    baseline_model_cv_res,
+    do_baseline_cv(envelope_traintest_ngram_matrix, envelope_target_dfs_cv)
+  ),
+  tar_target(
+    baseline_model,
+    train_baseline_model(envelope_traintest_ngram_matrix, envelope_traintest_data_df)
+  ),
+  tar_target(
+    baseline_model_evaluation,
+    evaluate_baseline_model(baseline_model, envelope_benchmark_ngram_matrix, envelope_benchmark_data_df)
   )
 )
 

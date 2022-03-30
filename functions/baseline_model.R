@@ -13,9 +13,26 @@ do_baseline_cv <- function(ngram_matrix, data_dfs_cv) {
         filter(fold == ith_fold) %>% 
         select(seq_name, fold, dataset) %>% 
         cbind(., predict(trained_model, test_dat)[["predictions"]]) %>% 
-        mutate(pred = c("N_IM", "N_OM", "N_S", "N_TL_SEC", "N_TL_TAT", "N_TM", "P_IM", "P_S", "P_TM")
-               [max.col(.[, c("N_IM", "N_OM", "N_S", "N_TL_SEC", "N_TL_TAT", "N_TM", "P_IM", "P_S", "P_TM")])],
+        mutate(Localization = c("N_E", "N_S", "N_TL_SEC", "N_TL_TAT", "N_TM", "P_IM", "P_S", "P_TM")
+               [max.col(.[, c("N_E", "N_S", "N_TL_SEC", "N_TL_TAT", "N_TM", "P_IM", "P_S", "P_TM")])],
                rep = i)
     }) %>% bind_rows()
   }) %>% bind_rows()
 } 
+
+
+train_baseline_model <- function(ngrams, data_df) {
+  ranger(x = ngrams, y = as.factor(data_df[["dataset"]]),
+         write.forest = TRUE, probability = TRUE, num.trees = 500, 
+         verbose = FALSE, seed = 427244)
+}
+
+
+evaluate_baseline_model <- function(baseline_model, test_ngrams, test_dat) {
+  test_dat %>% 
+    select(seq_name, dataset) %>% 
+    cbind(., predict(baseline_model, test_ngrams)[["predictions"]]) %>% 
+    mutate(Localization = c("N_E", "N_S", "N_TL_SEC", "N_TL_TAT", "N_TM", "P_IM", "P_S", "P_TM")
+           [max.col(.[, c("N_E", "N_S", "N_TL_SEC", "N_TL_TAT", "N_TM", "P_IM", "P_S", "P_TM")])])
+}
+
