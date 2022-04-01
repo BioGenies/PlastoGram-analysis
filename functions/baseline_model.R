@@ -28,12 +28,12 @@ train_baseline_model <- function(ngrams, data_df) {
 }
 
 
-evaluate_baseline_model <- function(baseline_model, test_ngrams, test_dat, imp_baseline_ngrams) {
+evaluate_baseline_model <- function(baseline_model, test_ngrams, test_dat) {
   
   test_dat %>% 
-    add_missing_ngrams(baseline_model[["forest"]][["independent.variable.names"]]) %>% 
     select(seq_name, dataset) %>% 
-    cbind(., predict(baseline_model, test_ngrams)[["predictions"]]) %>% 
+    cbind(., predict(baseline_model, 
+                     add_missing_ngrams(test_ngrams, baseline_model[["forest"]][["independent.variable.names"]]))[["predictions"]]) %>% 
     mutate(Localization = c("N_E", "N_S", "N_TL_SEC", "N_TL_TAT", "N_TM", "P_IM", "P_S", "P_TM")
            [max.col(.[, c("N_E", "N_S", "N_TL_SEC", "N_TL_TAT", "N_TM", "P_IM", "P_S", "P_TM")])])
 }
