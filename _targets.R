@@ -13,6 +13,9 @@ library(FCBF)
 library(UBL)
 library(nnet)
 library(rel)
+library(ggplot2)
+library(tidyr)
+library(patchwork)
 
 data_path <- "~/Dropbox/Projekty/BioNgramProjects/PlastoGram/"
 
@@ -25,6 +28,7 @@ source("./functions/evaluate_full_model.R")
 source("./functions/ensemble_model_functions.R")
 source("./functions/generate_architectures.R")
 source("./functions/baseline_model.R")
+source("./functions/publication_results.R")
 
 set.seed(427244)
 
@@ -337,12 +341,44 @@ list(
     do_baseline_cv(envelope_traintest_ngram_matrix, envelope_target_dfs_cv)
   ),
   tar_target(
+    baseline_mean_performance,
+    get_mean_performance_of_baseline(baseline_model_cv_res, paste0(data_path, "Baseline_envelope_mean_performance.csv"))
+  ),
+  tar_target(
     baseline_model,
     train_baseline_model(envelope_traintest_ngram_matrix, envelope_traintest_data_df)
   ),
   tar_target(
     baseline_model_evaluation,
     evaluate_baseline_model(baseline_model, envelope_benchmark_ngram_matrix, envelope_benchmark_data_df)
+  ),
+  tar_target(
+    architecture_plot_data,
+    get_architecture_plot_data(envelope_mean_architecture_performance)
+  ),
+  tar_target(
+    performance_distr_plot,
+    get_performance_distr_plot(architecture_plot_data, baseline_mean_performance, paste0(data_path, "Publication_results/"))
+  ),
+  tar_target(
+    performance_parameters_table,
+    get_parameters_of_performance_distribution_table(envelope_mean_architecture_performance, paste0(data_path, "Publication_results/"))
+  ),
+  tar_target(
+    best_model_cv_plot,
+    get_best_model_cv_plot(architecture_plot_data, paste0(data_path, "Publication_results/"))
+  ),
+  tar_target(
+    best_model_cv_table,
+    get_best_model_cv_table(architecture_plot_data, paste0(data_path, "Publication_results/"))
+  ),
+  tar_target(
+    independent_dataset_performance_table,
+    get_independent_dataset_performance_table(PlastoGram_evaluation, paste0(data_path, "Publication_results/"))
+  ),
+  tar_target(
+    om_im_model_cv_performance_table,
+    get_om_im_model_cv_res_table(traintest_ngram_matrix, holdout_target_dfs_cv) 
   )
 )
 
