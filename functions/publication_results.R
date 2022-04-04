@@ -179,7 +179,6 @@ get_physicochemical_properties_plot <- function(traintest, traintest_data_df, co
                       description = c("Net charge (Klein et al., 1984)",
                                       "Hydropathy index (Kyte-Doolittle, 1982)", 
                                       "Polarity (Zimmerman et al., 1968)"))
-  colors <- c("N_OM" = "#b172d8", "N_IM" = "#7281d8", "N_TM" = "#d87272", "N_S" = "#76d872")
   
   OM_t <- traintest[which(names(traintest) %in% filter(traintest_data_df, dataset == "N_OM")[["seq_name"]])]
   N_IM_t <- traintest[which(names(traintest) %in% filter(traintest_data_df, dataset == "N_IM")[["seq_name"]])]

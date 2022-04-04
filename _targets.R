@@ -379,6 +379,11 @@ list(
   tar_target(
     om_im_model_cv_performance_table,
     get_om_im_model_cv_res_table(traintest_ngram_matrix, holdout_target_dfs_cv, paste0(data_path, "Publication_results/")) 
+  ),
+  tar_target(
+    physicochemical_prop_plot,
+    get_physicochemical_properties_plot(traintest, traintest_data_df, 
+                                        colors = c("N_OM" = "#b172d8", "N_IM" = "#7281d8", "N_TM" = "#d87272", "N_S" = "#76d872"))
   )
 )
 
