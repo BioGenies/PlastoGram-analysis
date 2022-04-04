@@ -378,7 +378,7 @@ list(
   ),
   tar_target(
     om_im_model_cv_performance_table,
-    get_om_im_model_cv_res_table(traintest_ngram_matrix, holdout_target_dfs_cv) 
+    get_om_im_model_cv_res_table(traintest_ngram_matrix, holdout_target_dfs_cv, paste0(data_path, "Publication_results/")) 
   )
 )
 

@@ -31,7 +31,7 @@ get_mean_performance_of_baseline <- function(baseline_model_cv_res, outfile) {
 }
 
 
-get_architecture_plot_data <- function(envelope_mean_architecture_performance) {
+get_architecture_plot_data <- function(mean_architecture_performance) {
   variants <- c(rep(c("NM1", "NM1_S", "NM2", "NM2_S", "NM1_PSNS", "NM2_PSNS", "NM1_ES", "NM2_ES"),
                     41))
   added <- c("TL", "NTL", "TL_NMall", "NTL_NMall", "TL_E", "NTL_E", "TL_TMall", "NTL_TMall", "NMall", "E", 
@@ -209,8 +209,8 @@ get_physicochemical_properties_plot <- function(traintest, traintest_data_df, co
 }
   
 
-get_om_im_model_cv_res_table <- function(traintest_ngram_matrix, holdout_target_dfs_cv) {
-  lapply(1:length(holdout_target_dfs_cv), function(ith_rep) {
+get_om_im_model_cv_res_table <- function(traintest_ngram_matrix, holdout_target_dfs_cv, res_path) {
+  res <- lapply(1:length(holdout_target_dfs_cv), function(ith_rep) {
     dat <- traintest_ngram_matrix[which(holdout_target_dfs_cv[[ith_rep]][["Membrane_mc_target"]] %in% c("OM", "IM")),]
     dat_df <- filter(holdout_target_dfs_cv[[ith_rep]], Membrane_mc_target %in% c("OM", "IM"))
     cv_res <- do_cv(dat, dat_df, "OM_target", 5, 0.1)
@@ -229,4 +229,6 @@ get_om_im_model_cv_res_table <- function(traintest_ngram_matrix, holdout_target_
       )
     }) %>% bind_rows()
   }) %>% bind_rows()
+  write.csv(res, paste0(res_path, "OM_IM_model_cv_res.csv"), row.names = FALSE)
+  res
 }
