@@ -116,11 +116,15 @@ get_best_model_cv_plot <- function(architecture_plot_data, res_path) {
            Class = gsub("_sens", "", gsub("mean_|sd_", "", measure)),
            Origin = ifelse(grepl("N_", Class), "Nuclear-encoded", "Plastid-encoded")) %>% 
     pivot_wider(id_cols = c(Class, Origin), names_from = type, values_from = value) %>% 
-    ggplot(aes(x = Class, y = mean)) +
-    geom_point() +
+    ggplot(aes(x = Class, y = mean, fill = Class)) +
+    geom_col() +
     geom_errorbar(aes(ymin = mean-sd, ymax = mean+sd), width = 0.2) +
     theme_bw() +
-    ylab("Mean sensitivity value in cross-validation") 
+    ylab("Mean sensitivity value in cross-validation") +
+    scale_fill_manual("Dataset", values = c("N_E" = "#7281d8", "N_TM" = "#d87272", "N_S" = "#76d872",
+                                            "N_TL_SEC" = "#d8c472", "N_TL_TAT" = "#d8a972", 
+                                            "P_IM" = "#a8b1e8", "P_TM" = "#e8a8a8", "P_S" = "#ade8a8")) +
+    theme(legend.position = "none")
   ggsave(paste0(res_path, "Best_model_cv_res.eps"), width = 9, height = 6)
 }
 
@@ -174,7 +178,7 @@ calculate_properties <- function(datasets) {
 }
 
 
-get_physicochemical_properties_plot <- function(traintest, traintest_data_df, colors) {
+get_physicochemical_properties_plot <- function(traintest, traintest_data_df, colors, res_path) {
   props <- data.frame(prop = c("KLEP840101", "KYTJ820101", "ZIMJ680103"),
                       description = c("Net charge (Klein et al., 1984)",
                                       "Hydropathy index (Kyte-Doolittle, 1982)", 
