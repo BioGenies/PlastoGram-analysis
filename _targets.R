@@ -402,7 +402,8 @@ list(
   ),
   tar_target(
     benchmark_table,
-    get_benchmark_res_table(PlastoGram_evaluation, SChloro_benchmark_res, paste0(data_path, "Publication_results/"))
+    write.csv(get_benchmark_res_table(PlastoGram_evaluation, SChloro_benchmark_res), 
+              paste0(data_path, "Publication_results/Benchmark_results.csv"), row.names = FALSE)
   ),
   tar_target(
     benchmark_plot,

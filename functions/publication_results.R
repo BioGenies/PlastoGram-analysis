@@ -239,7 +239,7 @@ get_om_im_model_cv_res_table <- function(traintest_ngram_matrix, holdout_target_
   res
 }
 
-get_benchmark_res_table <- function(PlastoGram_evaluation, SChloro_benchmark_res, res_path) {
+get_benchmark_res_table <- function(PlastoGram_evaluation, SChloro_benchmark_res) {
   schloro_df <- SChloro_benchmark_res %>% 
     select(c(V1, V3)) %>% 
     group_by(V1) %>% 
@@ -255,7 +255,7 @@ get_benchmark_res_table <- function(PlastoGram_evaluation, SChloro_benchmark_res
   datasets <- list("E" = "inner membrane|outer membrane", "S" = "stroma", 
                    "TM" = "thylakoid membrane", "TL" = "thylakoid lumen")
   
-  df <- lapply(names(datasets), function(ith_set) {
+  lapply(names(datasets), function(ith_set) {
     dat <- filter(all_benchmark, dataset == ith_set) %>% 
       mutate(pred = ifelse(grepl(datasets[[ith_set]], pred), TRUE, FALSE))
     data.frame(
@@ -268,8 +268,6 @@ get_benchmark_res_table <- function(PlastoGram_evaluation, SChloro_benchmark_res
                     TRUE)
     )
   }) %>% bind_rows()
-  write.csv(df, paste0(res_path, "Benchmark_results.csv"), row.names = FALSE)
-  df
 }
 
 get_benchmark_res_plot <- function(PlastoGram_evaluation, schloro_res, res_path) {
