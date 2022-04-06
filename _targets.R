@@ -398,7 +398,7 @@ list(
   ),
   tar_target(
     SChloro_benchmark_res,
-    read.delim("schloro_independent_dataset_res.gff", skip = 1, header = FALSE)
+    read.delim(SChloro_benchmark_res_file, skip = 1, header = FALSE)
   ),
   tar_target(
     benchmark_table,
