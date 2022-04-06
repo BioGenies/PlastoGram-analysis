@@ -352,6 +352,7 @@ list(
     baseline_model_evaluation,
     evaluate_baseline_model(baseline_model, envelope_benchmark_ngram_matrix, envelope_benchmark_data_df)
   ),
+  # Publication results
   tar_target(
     architecture_plot_data,
     get_architecture_plot_data(envelope_mean_architecture_performance)
@@ -385,6 +386,27 @@ list(
     get_physicochemical_properties_plot(traintest, traintest_data_df, 
                                         colors = c("N_OM" = "#b172d8", "N_IM" = "#7281d8", "N_TM" = "#d87272", "N_S" = "#76d872"),
                                         paste0(data_path, "Publication_results/"))
+  ),
+  tar_target(
+    benchmark_file,
+    write_fasta(benchmark, "./data/Independent_dataset.fa")
+  ),
+  tar_target(
+    SChloro_benchmark_res_file,
+    "./data/schloro_independent_dataset_res.gff",
+    format = "file"
+  ),
+  tar_target(
+    SChloro_benchmark_res,
+    read.delim("schloro_independent_dataset_res.gff", skip = 1, header = FALSE)
+  ),
+  tar_target(
+    benchmark_table,
+    get_benchmark_res_table(PlastoGram_evaluation, SChloro_benchmark_res, paste0(data_path, "Publication_results/"))
+  ),
+  tar_target(
+    benchmark_plot,
+    get_benchmark_res_plot(PlastoGram_evaluation, SChloro_benchmark_res, paste0(data_path, "Publication_results/")) 
   )
 )
 

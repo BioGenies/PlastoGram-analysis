@@ -1,0 +1,420 @@
+##gff-version 3
+Q38906	SChloro	Chloroplast outer membrane	1	313	0.594948	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+O23680	SChloro	Chloroplast outer membrane	1	297	0.389071	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+O81283	SChloro	Chloroplast outer membrane	1	1503	0.401327	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+Q41009	SChloro	Chloroplast outer membrane	1	310	0.67988	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+Q5IZC8	SChloro	Chloroplast thylakoid membrane	1	396	0.606559	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q9C5J8	SChloro	Chloroplast thylakoid membrane	1	732	0.253937	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q4LDF9	SChloro	Chloroplast thylakoid membrane	1	329	0.42922	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q9SEK3	SChloro	Chloroplast outer membrane	1	498	0.178198	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+Q9FMD5	SChloro	Chloroplast thylakoid membrane	1	447	0.309537	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+O22993	SChloro	Chloroplast thylakoid membrane	1	946	0.292711	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q8VY16	SChloro	Chloroplast thylakoid membrane	1	819	0.650509	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+O49931	SChloro	Chloroplast outer membrane	1	553	0.235332	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+Q9LF50	SChloro	Chloroplast thylakoid membrane	1	415	0.469687	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q9ZST8	SChloro	Chloroplast thylakoid membrane	1	253	0.673235	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+P23525	SChloro	Chloroplast outer membrane	1	344	0.29513	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+O24303	SChloro	Chloroplast thylakoid membrane	1	996	0.567869	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q9SJU9	SChloro	Chloroplast outer membrane	1	347	0.135686	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+A4QKQ3	SChloro	Chloroplast outer membrane	1	1789	0.381226	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+A4QJQ8	SChloro	Chloroplast outer membrane	1	1791	0.352664	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+A1XG13	SChloro	Chloroplast outer membrane	1	1868	0.340574	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+A4QL79	SChloro	Chloroplast outer membrane	1	1780	0.294939	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+Q06GT8	SChloro	Chloroplast outer membrane	1	1857	0.307809	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+A4GGF4	SChloro	Chloroplast outer membrane	1	1759	0.586902	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+Q09FY8	SChloro	Chloroplast outer membrane	1	1915	0.365495	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+Q1KXH4	SChloro	Chloroplast outer membrane	1	1673	0.551631	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+Q9MUM0	SChloro	Chloroplast thylakoid membrane	1	410	0.709215	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q68RZ4	SChloro	Chloroplast outer membrane	1	229	0.665879	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+Q68RZ4	SChloro	Chloroplast thylakoid membrane	1	229	0.740215	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+A6H5J0	SChloro	Chloroplast outer membrane	1	229	0.868963	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+P51232	SChloro	Chloroplast outer membrane	1	278	0.87404	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+P51232	SChloro	Chloroplast thylakoid membrane	1	278	0.555899	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q9MUN7	SChloro	Chloroplast outer membrane	1	236	0.948696	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+Q2QD77	SChloro	Chloroplast outer membrane	1	229	0.81392	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+Q2QD77	SChloro	Chloroplast thylakoid membrane	1	229	0.552829	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q4FGG7	SChloro	Chloroplast outer membrane	1	229	0.93603	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+Q4FGG9	SChloro	Chloroplast outer membrane	1	261	0.933758	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+A6YG79	SChloro	Chloroplast outer membrane	1	445	0.854083	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+A6YG79	SChloro	Chloroplast thylakoid membrane	1	445	0.592547	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+B1VKB8	SChloro	Chloroplast outer membrane	1	261	0.969618	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+Q09FU9	SChloro	Chloroplast outer membrane	1	229	0.593478	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+Q09FU9	SChloro	Chloroplast thylakoid membrane	1	229	0.81828	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q9MBA2	SChloro	Chloroplast outer membrane	1	326	0.0787085	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+Q9LLB0	SChloro	Chloroplast outer membrane	1	510	0.506223	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+O80842	SChloro	Chloroplast outer membrane	1	366	0.379835	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+Q8W4D6	SChloro	Chloroplast thylakoid membrane	1	598	0.398034	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+A9THA7	SChloro	Chloroplast thylakoid membrane	1	204	0.280458	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q8RWV0	SChloro	Chloroplast outer membrane	1	741	0.309311	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+O23813	SChloro	Chloroplast outer membrane	1	635	0.278062	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+Q949U7	SChloro	Chloroplast outer membrane	1	234	0.362728	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+O82802	SChloro	Chloroplast outer membrane	1	693	0.177043	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+Q9XFH9	SChloro	Chloroplast outer membrane	1	185	0.228899	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+Q40460	SChloro	Chloroplast outer membrane	1	442	0.140784	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+Q84LK7	SChloro	Chloroplast thylakoid membrane	1	226	0.729382	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q6H612	SChloro	Chloroplast thylakoid membrane	1	172	0.25831	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+A6YSL1	SChloro	Chloroplast outer membrane	1	525	0.105009	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+Q94JY0	SChloro	Chloroplast thylakoid membrane	1	330	0.505144	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q43869	SChloro	Chloroplast thylakoid membrane	1	472	0.731364	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q9SQI8	SChloro	Chloroplast thylakoid membrane	1	480	0.451527	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+P49085	SChloro	Chloroplast thylakoid lumen	1	410	0.0457004	.	.	Ontology_term=GO:0009543;evidence=ECO:0000256
+A1A6M1	SChloro	Chloroplast thylakoid membrane	1	387	0.41998	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q93Z53	SChloro	Chloroplast thylakoid membrane	1	571	0.52193	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q9LIB2	SChloro	Chloroplast thylakoid membrane	1	962	0.311107	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q7X9A0	SChloro	Chloroplast outer membrane	1	476	0.0829068	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+Q42450	SChloro	Chloroplast outer membrane	1	425	0.0824346	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+Q9XI84	SChloro	Chloroplast outer membrane	1	482	0.126572	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+Q9LPW0	SChloro	Chloroplast thylakoid membrane	1	399	0.325807	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q43155	SChloro	Chloroplast thylakoid membrane	1	1517	0.257255	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+P46275	SChloro	Chloroplast thylakoid membrane	1	407	0.0655448	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q9FNJ8	SChloro	Chloroplast thylakoid membrane	1	425	0.540435	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q9XJ35	SChloro	Chloroplast thylakoid membrane	1	387	0.360811	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+P34791	SChloro	Chloroplast thylakoid membrane	1	260	0.096287	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+P25857	SChloro	Chloroplast thylakoid membrane	1	447	0.533319	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+D3U717	SChloro	Chloroplast thylakoid membrane	1	434	0.558462	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+P47999	SChloro	Chloroplast outer membrane	1	392	0.147472	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+Q9SIF2	SChloro	Chloroplast outer membrane	1	780	0.24527	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+Q9ZW84	SChloro	Chloroplast outer membrane	1	256	0.170784	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+Q8H103	SChloro	Chloroplast outer membrane	1	613	0.435514	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+P31300	SChloro	Chloroplast outer membrane	1	374	0.0902067	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+Q93WX6	SChloro	Chloroplast outer membrane	1	463	0.271752	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+Q5E924	SChloro	Chloroplast thylakoid membrane	1	420	0.22239	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q9SAJ6	SChloro	Chloroplast thylakoid membrane	1	422	0.20436	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q9SA96	SChloro	Chloroplast thylakoid membrane	1	392	0.466881	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q9T0J5	SChloro	Chloroplast outer membrane	1	532	0.182752	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+Q93W77	SChloro	Chloroplast thylakoid membrane	1	231	0.818272	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+P10796	SChloro	Chloroplast thylakoid membrane	1	181	0.706116	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+O20250	SChloro	Chloroplast outer membrane	1	741	0.146339	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+Q01909	SChloro	Chloroplast thylakoid membrane	1	386	0.79558	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q7Y220	SChloro	Chloroplast thylakoid membrane	1	649	0.515568	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+P12113	SChloro	Chloroplast thylakoid membrane	1	358	0.803398	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q07300	SChloro	Chloroplast thylakoid membrane	1	247	0.767705	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+P28552	SChloro	Chloroplast thylakoid membrane	1	376	0.750831	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q01908	SChloro	Chloroplast thylakoid membrane	1	373	0.909744	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+P59858	SChloro	Chloroplast thylakoid membrane	1	162	0.299288	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q6B8Z7	SChloro	Chloroplast outer membrane	1	114	0.76553	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+Q6B8Z7	SChloro	Chloroplast stroma	1	114	0.531201	.	.	Ontology_term=GO:0009570;evidence=ECO:0000256
+Q6B8Z7	SChloro	Chloroplast thylakoid membrane	1	114	0.819894	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+A9L9F3	SChloro	Chloroplast thylakoid membrane	1	395	0.114987	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+A9QC82	SChloro	Chloroplast thylakoid membrane	1	227	0.185378	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+B1VKJ0	SChloro	Chloroplast thylakoid membrane	1	393	0.10188	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+A2T389	SChloro	Chloroplast thylakoid membrane	1	393	0.0970946	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q85BB2	SChloro	Chloroplast outer membrane	1	169	0.328628	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+Q9M3M0	SChloro	Chloroplast thylakoid membrane	1	227	0.256328	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+O19896	SChloro	Chloroplast thylakoid membrane	1	170	0.689516	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+P29948	SChloro	Chloroplast thylakoid membrane	1	177	0.46093	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q9TKV6	SChloro	Chloroplast thylakoid membrane	1	391	0.135154	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+A9L9A0	SChloro	Chloroplast thylakoid membrane	1	225	0.136278	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+A6H5P8	SChloro	Chloroplast thylakoid membrane	1	393	0.100166	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+A4GGF2	SChloro	Chloroplast thylakoid membrane	1	393	0.115634	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q6YXQ9	SChloro	Chloroplast thylakoid membrane	1	261	0.058084	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+P12131	SChloro	Chloroplast thylakoid membrane	1	392	0.0866775	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q9MUR0	SChloro	Chloroplast thylakoid membrane	1	247	0.0722685	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+P28559	SChloro	Chloroplast thylakoid membrane	1	163	0.609831	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q1XDM4	SChloro	Chloroplast thylakoid membrane	1	886	0.610248	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q19V88	SChloro	Chloroplast outer membrane	1	195	0.535518	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+Q0ZJ11	SChloro	Chloroplast outer membrane	1	491	0.191911	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+P49649	SChloro	Chloroplast outer membrane	1	888	0.691232	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+P0C313	SChloro	Chloroplast outer membrane	1	216	0.416684	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+A6MML6	SChloro	Chloroplast outer membrane	1	489	0.564346	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+O47039	SChloro	Chloroplast outer membrane	1	319	0.1334	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+Q85BZ1	SChloro	Chloroplast outer membrane	1	204	0.583406	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+Q8WHZ7	SChloro	Chloroplast outer membrane	1	198	0.39472	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+A6YG63	SChloro	Chloroplast stroma	1	196	0.607206	.	.	Ontology_term=GO:0009570;evidence=ECO:0000256
+Q9BBS1	SChloro	Chloroplast outer membrane	1	501	0.580778	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+Q3BAN3	SChloro	Chloroplast outer membrane	1	497	0.250261	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+A4GGD0	SChloro	Chloroplast stroma	1	195	0.800696	.	.	Ontology_term=GO:0009570;evidence=ECO:0000256
+A0A344	SChloro	Chloroplast outer membrane	1	494	0.271806	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+Q2QD64	SChloro	Chloroplast stroma	1	195	0.916839	.	.	Ontology_term=GO:0009570;evidence=ECO:0000256
+Q3BAL3	SChloro	Chloroplast outer membrane	1	204	0.722734	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+Q8M9Y9	SChloro	Chloroplast outer membrane	1	201	0.666042	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+Q8M9Y9	SChloro	Chloroplast stroma	1	201	0.762222	.	.	Ontology_term=GO:0009570;evidence=ECO:0000256
+Q85FT1	SChloro	Chloroplast outer membrane	1	158	0.142335	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+Q5SD07	SChloro	Chloroplast thylakoid membrane	1	169	0.334517	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+A6BM62	SChloro	Chloroplast outer membrane	1	168	0.219965	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+Q1ACK1	SChloro	Chloroplast thylakoid membrane	1	493	0.193658	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q06J27	SChloro	Chloroplast outer membrane	1	166	0.241579	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+Q2MI94	SChloro	Chloroplast outer membrane	1	133	0.899257	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+Q2MI94	SChloro	Chloroplast stroma	1	133	0.74993	.	.	Ontology_term=GO:0009570;evidence=ECO:0000256
+P30159	SChloro	Chloroplast outer membrane	1	139	0.921651	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+P30159	SChloro	Chloroplast stroma	1	139	0.778898	.	.	Ontology_term=GO:0009570;evidence=ECO:0000256
+Q9TKV4	SChloro	Chloroplast outer membrane	1	173	0.507815	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+A6MMH3	SChloro	Chloroplast outer membrane	1	180	0.193209	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+A6MM91	SChloro	Chloroplast outer membrane	1	182	0.137155	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+O78515	SChloro	Chloroplast outer membrane	1	64	0.930568	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+Q14FA4	SChloro	Chloroplast outer membrane	1	176	0.409702	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+P32979	SChloro	Chloroplast outer membrane	1	134	0.885022	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+P32979	SChloro	Chloroplast stroma	1	134	0.926103	.	.	Ontology_term=GO:0009570;evidence=ECO:0000256
+P30392	SChloro	Chloroplast outer membrane	1	506	0.28659	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+Q0P3P2	SChloro	Chloroplast thylakoid membrane	1	483	0.201404	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+P35010	SChloro	Chloroplast outer membrane	1	177	0.852894	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+P35010	SChloro	Chloroplast stroma	1	177	0.630368	.	.	Ontology_term=GO:0009570;evidence=ECO:0000256
+P26532	SChloro	Chloroplast outer membrane	1	481	0.153365	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+A6BM09	SChloro	Chloroplast thylakoid membrane	1	482	0.222503	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q3ZJ00	SChloro	Chloroplast outer membrane	1	502	0.235642	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+Q4G397	SChloro	Chloroplast outer membrane	1	499	0.155083	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+A4QLB3	SChloro	Chloroplast thylakoid membrane	1	502	0.170752	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q9TKI6	SChloro	Chloroplast outer membrane	1	137	0.925214	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+Q9TKI6	SChloro	Chloroplast stroma	1	137	0.678673	.	.	Ontology_term=GO:0009570;evidence=ECO:0000256
+P05039	SChloro	Chloroplast outer membrane	1	137	0.898608	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+P05039	SChloro	Chloroplast stroma	1	137	0.858211	.	.	Ontology_term=GO:0009570;evidence=ECO:0000256
+Q3ZJ67	SChloro	Chloroplast outer membrane	1	130	0.872488	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+Q3ZJ67	SChloro	Chloroplast stroma	1	130	0.987809	.	.	Ontology_term=GO:0009570;evidence=ECO:0000256
+Q85FT2	SChloro	Chloroplast thylakoid membrane	1	467	0.201512	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q3BAN6	SChloro	Chloroplast outer membrane	1	134	0.890217	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+Q3BAN6	SChloro	Chloroplast stroma	1	134	0.957072	.	.	Ontology_term=GO:0009570;evidence=ECO:0000256
+Q1KVU0	SChloro	Chloroplast outer membrane	1	507	0.384961	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+Q2PMN6	SChloro	Chloroplast outer membrane	1	163	0.291123	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+Q9SHE8	SChloro	Chloroplast thylakoid membrane	1	221	0.780369	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+P12355	SChloro	Chloroplast thylakoid membrane	1	231	0.631749	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+P12356	SChloro	Chloroplast thylakoid membrane	1	227	0.800278	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q8L540	SChloro	Chloroplast thylakoid membrane	1	376	0.815326	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+B9DHG0	SChloro	Chloroplast thylakoid membrane	1	301	0.299277	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q40163	SChloro	Chloroplast thylakoid membrane	1	138	0.810016	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q5ZBY9	SChloro	Chloroplast thylakoid membrane	1	124	0.757744	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+P14224	SChloro	Chloroplast thylakoid membrane	1	126	0.476738	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+O49078	SChloro	Chloroplast thylakoid membrane	1	230	0.458632	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q9SBN3	SChloro	Chloroplast thylakoid membrane	1	206	0.180268	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q41387	SChloro	Chloroplast thylakoid membrane	1	137	0.425263	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+O48950	SChloro	Chloroplast outer membrane	1	243	0.211436	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+Q84V18	SChloro	Chloroplast outer membrane	1	754	0.175738	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+Q9FL44	SChloro	Chloroplast thylakoid membrane	1	235	0.669347	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q9CAC5	SChloro	Chloroplast thylakoid membrane	1	191	0.741647	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q40070	SChloro	Chloroplast thylakoid membrane	1	138	0.754937	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q41385	SChloro	Chloroplast thylakoid membrane	1	216	0.702056	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+P04778	SChloro	Chloroplast outer membrane	1	267	0.500648	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+P27496	SChloro	Chloroplast outer membrane	1	267	0.507896	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+Q2RAR6	SChloro	Chloroplast thylakoid membrane	1	367	0.657875	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+P10708	SChloro	Chloroplast outer membrane	1	270	0.705122	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+P27525	SChloro	Chloroplast outer membrane	1	256	0.866184	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+Q01931	SChloro	Chloroplast thylakoid membrane	1	199	0.499198	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+F4KDA6	SChloro	Chloroplast thylakoid membrane	1	185	0.610544	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q03965	SChloro	Chloroplast outer membrane	1	270	0.783226	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+P27521	SChloro	Chloroplast thylakoid membrane	1	251	0.154672	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q94K66	SChloro	Chloroplast thylakoid membrane	1	193	0.68546	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+P93735	SChloro	Chloroplast thylakoid membrane	1	195	0.559523	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q42395	SChloro	Chloroplast outer membrane	1	203	0.508148	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+Q8LDD3	SChloro	Chloroplast thylakoid membrane	1	193	0.813977	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q07473	SChloro	Chloroplast outer membrane	1	290	0.683998	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+P22686	SChloro	Chloroplast outer membrane	1	256	0.524367	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+Q8LBP4	SChloro	Chloroplast thylakoid membrane	1	462	0.482074	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q32RG6	SChloro	Chloroplast outer membrane	1	188	0.824125	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+Q06SF8	SChloro	Chloroplast outer membrane	1	183	0.957523	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+Q9MS72	SChloro	Chloroplast stroma	1	33	0.995786	.	.	Ontology_term=GO:0009570;evidence=ECO:0000256
+Q7YNH4	SChloro	Chloroplast stroma	1	35	0.565567	.	.	Ontology_term=GO:0009570;evidence=ECO:0000256
+B1NWJ6	SChloro	Chloroplast thylakoid membrane	1	752	0.300223	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q1XD98	SChloro	Chloroplast stroma	1	38	0.188659	.	.	Ontology_term=GO:0009570;evidence=ECO:0000256
+A2T347	SChloro	Chloroplast stroma	1	40	0.267411	.	.	Ontology_term=GO:0009570;evidence=ECO:0000256
+Q1KXU9	SChloro	Chloroplast outer membrane	1	36	0.846759	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+Q1KXU9	SChloro	Chloroplast stroma	1	36	0.995545	.	.	Ontology_term=GO:0009570;evidence=ECO:0000256
+Q9MUQ4	SChloro	Chloroplast outer membrane	1	36	0.911787	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+Q9MUQ4	SChloro	Chloroplast stroma	1	36	0.999553	.	.	Ontology_term=GO:0009570;evidence=ECO:0000256
+Q71KQ7	SChloro	Chloroplast thylakoid membrane	1	79	0.666299	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+O19895	SChloro	Chloroplast outer membrane	1	360	0.870297	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+A1XG05	SChloro	Chloroplast thylakoid membrane	1	500	0.47177	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q06J14	SChloro	Chloroplast thylakoid membrane	1	44	0.205044	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q85BP9	SChloro	Chloroplast outer membrane	1	184	0.919564	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+Q68S23	SChloro	Chloroplast thylakoid membrane	1	61	0.491005	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q4G3D8	SChloro	Chloroplast stroma	1	39	0.670002	.	.	Ontology_term=GO:0009570;evidence=ECO:0000256
+Q9MUN8	SChloro	Chloroplast outer membrane	1	187	0.929885	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+P49526	SChloro	Chloroplast outer membrane	1	181	0.820906	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+A0T0T2	SChloro	Chloroplast stroma	1	34	0.978417	.	.	Ontology_term=GO:0009570;evidence=ECO:0000256
+Q85FY2	SChloro	Chloroplast thylakoid membrane	1	43	0.0534137	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+P49528	SChloro	Chloroplast stroma	1	61	0.990484	.	.	Ontology_term=GO:0009570;evidence=ECO:0000256
+Q9MS62	SChloro	Chloroplast stroma	1	31	0.999294	.	.	Ontology_term=GO:0009570;evidence=ECO:0000256
+Q9MS62	SChloro	Chloroplast thylakoid membrane	1	31	0.935968	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q8WI31	SChloro	Chloroplast stroma	1	33	0.993564	.	.	Ontology_term=GO:0009570;evidence=ECO:0000256
+A4QKL0	SChloro	Chloroplast stroma	1	31	0.956702	.	.	Ontology_term=GO:0009570;evidence=ECO:0000256
+Q1KXU1	SChloro	Chloroplast stroma	1	31	0.987177	.	.	Ontology_term=GO:0009570;evidence=ECO:0000256
+A4QL68	SChloro	Chloroplast thylakoid membrane	1	746	0.205016	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q9MUS4	SChloro	Chloroplast stroma	1	29	0.999489	.	.	Ontology_term=GO:0009570;evidence=ECO:0000256
+Q9MUN4	SChloro	Chloroplast stroma	1	31	0.99997	.	.	Ontology_term=GO:0009570;evidence=ECO:0000256
+P11093	SChloro	Chloroplast thylakoid membrane	1	160	0.362619	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q5SD33	SChloro	Chloroplast stroma	1	31	0.985067	.	.	Ontology_term=GO:0009570;evidence=ECO:0000256
+P69393	SChloro	Chloroplast thylakoid lumen	1	42	0.0510996	.	.	Ontology_term=GO:0009543;evidence=ECO:0000256
+Q85FJ5	SChloro	Chloroplast thylakoid membrane	1	45	0.729436	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+P51390	SChloro	Chloroplast inner membrane	1	44	0.0882304	.	.	Ontology_term=GO:0009706;evidence=ECO:0000256
+Q4G3F6	SChloro	Chloroplast thylakoid membrane	1	752	0.898047	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q3ZIZ3	SChloro	Chloroplast thylakoid membrane	1	735	0.780504	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q9MUW2	SChloro	Chloroplast outer membrane	1	354	0.920479	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+Q85FP1	SChloro	Chloroplast thylakoid membrane	1	498	0.31052	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q85BI5	SChloro	Chloroplast outer membrane	1	366	0.311595	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+Q9TL07	SChloro	Chloroplast thylakoid membrane	1	506	0.50534	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+A6MMM5	SChloro	Chloroplast stroma	1	31	0.998884	.	.	Ontology_term=GO:0009570;evidence=ECO:0000256
+O78456	SChloro	Chloroplast thylakoid lumen	1	42	0.0510751	.	.	Ontology_term=GO:0009543;evidence=ECO:0000256
+Q8WI33	SChloro	Chloroplast stroma	1	36	0.974457	.	.	Ontology_term=GO:0009570;evidence=ECO:0000256
+Q32RK2	SChloro	Chloroplast thylakoid membrane	1	363	0.410085	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q8M9X8	SChloro	Chloroplast thylakoid membrane	1	120	0.427081	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q1ACL9	SChloro	Chloroplast stroma	1	33	0.997872	.	.	Ontology_term=GO:0009570;evidence=ECO:0000256
+Q6EVZ5	SChloro	Chloroplast thylakoid membrane	1	361	0.338986	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q71KN5	SChloro	Chloroplast thylakoid membrane	1	43	0.78477	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+P31591	SChloro	Chloroplast thylakoid membrane	1	44	0.851613	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q9BBS2	SChloro	Chloroplast thylakoid membrane	1	61	0.549677	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+P51206	SChloro	Chloroplast thylakoid membrane	1	36	0.873787	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q85X31	SChloro	Chloroplast thylakoid membrane	1	41	0.119685	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q06J16	SChloro	Chloroplast stroma	1	43	0.387086	.	.	Ontology_term=GO:0009570;evidence=ECO:0000256
+Q85BG2	SChloro	Chloroplast thylakoid membrane	1	43	0.719733	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q70XU9	SChloro	Chloroplast outer membrane	1	184	0.9453	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+P35012	SChloro	Chloroplast outer membrane	1	157	0.878319	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+Q9MUS1	SChloro	Chloroplast stroma	1	38	0.884422	.	.	Ontology_term=GO:0009570;evidence=ECO:0000256
+Q9BBP1	SChloro	Chloroplast thylakoid membrane	1	176	0.626934	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q32S04	SChloro	Chloroplast outer membrane	1	181	0.854681	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+Q32S04	SChloro	Chloroplast stroma	1	181	0.91481	.	.	Ontology_term=GO:0009570;evidence=ECO:0000256
+P51236	SChloro	Chloroplast stroma	1	38	0.727841	.	.	Ontology_term=GO:0009570;evidence=ECO:0000256
+B0Z4L2	SChloro	Chloroplast thylakoid membrane	1	120	0.360831	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q85FZ3	SChloro	Chloroplast outer membrane	1	43	0.586122	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+Q85FZ3	SChloro	Chloroplast thylakoid membrane	1	43	0.694091	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+B1VKI6	SChloro	Chloroplast inner membrane	1	100	0.171811	.	.	Ontology_term=GO:0009706;evidence=ECO:0000256
+Q8WI22	SChloro	Chloroplast stroma	1	34	0.997983	.	.	Ontology_term=GO:0009570;evidence=ECO:0000256
+Q2PMN2	SChloro	Chloroplast thylakoid membrane	1	498	0.448536	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q85FQ4	SChloro	Chloroplast inner membrane	1	38	0.134361	.	.	Ontology_term=GO:0009706;evidence=ECO:0000256
+B1NWD8	SChloro	Chloroplast outer membrane	1	249	0.474639	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+P56782	SChloro	Chloroplast thylakoid membrane	1	61	0.559945	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q06J42	SChloro	Chloroplast thylakoid membrane	1	751	0.889814	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q19V73	SChloro	Chloroplast thylakoid lumen	1	42	0.051083	.	.	Ontology_term=GO:0009543;evidence=ECO:0000256
+Q3ZJ64	SChloro	Chloroplast outer membrane	1	37	0.263229	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+Q3BAN2	SChloro	Chloroplast stroma	1	36	0.939753	.	.	Ontology_term=GO:0009570;evidence=ECO:0000256
+Q85X08	SChloro	Chloroplast outer membrane	1	75	0.349265	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+P18263	SChloro	Chloroplast thylakoid membrane	1	46	0.215238	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q06FP9	SChloro	Chloroplast thylakoid membrane	1	363	0.312058	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q1XDK3	SChloro	Chloroplast thylakoid membrane	1	734	0.844897	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+P15958	SChloro	Chloroplast thylakoid membrane	1	746	0.215871	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q85FY7	SChloro	Chloroplast thylakoid membrane	1	748	0.898044	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q1KVV3	SChloro	Chloroplast thylakoid membrane	1	86	0.916931	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q5SCZ2	SChloro	Chloroplast thylakoid membrane	1	369	0.462911	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q85FY3	SChloro	Chloroplast outer membrane	1	36	0.221257	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+P06264	SChloro	Chloroplast thylakoid membrane	1	692	0.236465	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q1ACJ0	SChloro	Chloroplast stroma	1	42	0.325799	.	.	Ontology_term=GO:0009570;evidence=ECO:0000256
+Q1KVS7	SChloro	Chloroplast stroma	1	62	0.401467	.	.	Ontology_term=GO:0009570;evidence=ECO:0000256
+A1XGU4	SChloro	Chloroplast thylakoid membrane	1	738	0.253878	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q6B8M4	SChloro	Chloroplast thylakoid membrane	1	86	0.724134	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q2WGI0	SChloro	Chloroplast outer membrane	1	354	0.904902	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+Q85FQ5	SChloro	Chloroplast stroma	1	39	0.229702	.	.	Ontology_term=GO:0009570;evidence=ECO:0000256
+P59905	SChloro	Chloroplast outer membrane	1	37	0.177504	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+A6MMZ5	SChloro	Chloroplast thylakoid membrane	1	500	0.445384	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+P30396	SChloro	Chloroplast thylakoid membrane	1	37	0.362353	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+A6MVU6	SChloro	Chloroplast thylakoid lumen	1	42	0.0510734	.	.	Ontology_term=GO:0009543;evidence=ECO:0000256
+Q32RX5	SChloro	Chloroplast stroma	1	38	0.157888	.	.	Ontology_term=GO:0009570;evidence=ECO:0000256
+Q5SD09	SChloro	Chloroplast thylakoid membrane	1	62	0.765435	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+O78457	SChloro	Chloroplast outer membrane	1	183	0.531866	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+O78457	SChloro	Chloroplast thylakoid membrane	1	183	0.765836	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q9MTH9	SChloro	Chloroplast thylakoid membrane	1	176	0.731843	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q85AQ3	SChloro	Chloroplast stroma	1	93	0.982716	.	.	Ontology_term=GO:0009570;evidence=ECO:0000256
+A6MVV7	SChloro	Chloroplast stroma	1	31	0.997954	.	.	Ontology_term=GO:0009570;evidence=ECO:0000256
+O78512	SChloro	Chloroplast stroma	1	32	0.992686	.	.	Ontology_term=GO:0009570;evidence=ECO:0000256
+A0T0V1	SChloro	Chloroplast thylakoid lumen	1	41	0.0511773	.	.	Ontology_term=GO:0009543;evidence=ECO:0000256
+Q9MS68	SChloro	Chloroplast stroma	1	31	0.975447	.	.	Ontology_term=GO:0009570;evidence=ECO:0000256
+Q9MS68	SChloro	Chloroplast thylakoid membrane	1	31	0.885329	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q3ZJ21	SChloro	Chloroplast inner membrane	1	42	0.112248	.	.	Ontology_term=GO:0009706;evidence=ECO:0000256
+Q85FN6	SChloro	Chloroplast stroma	1	36	0.972532	.	.	Ontology_term=GO:0009570;evidence=ECO:0000256
+Q3ZJ76	SChloro	Chloroplast thylakoid membrane	1	62	0.492297	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q9MTI4	SChloro	Chloroplast thylakoid membrane	1	777	0.257057	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+A4GGE9	SChloro	Chloroplast thylakoid membrane	1	176	0.566225	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q9MUL1	SChloro	Chloroplast thylakoid membrane	1	367	0.350614	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q8HS40	SChloro	Chloroplast outer membrane	1	37	0.207181	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+Q06FL7	SChloro	Chloroplast thylakoid membrane	1	744	0.290634	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q1ACJ5	SChloro	Chloroplast thylakoid membrane	1	62	0.509346	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q9MS77	SChloro	Chloroplast stroma	1	31	0.997958	.	.	Ontology_term=GO:0009570;evidence=ECO:0000256
+Q9MS77	SChloro	Chloroplast thylakoid membrane	1	31	0.583031	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q09MC1	SChloro	Chloroplast thylakoid membrane	1	363	0.27567	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q9TKV2	SChloro	Chloroplast stroma	1	101	0.966308	.	.	Ontology_term=GO:0009570;evidence=ECO:0000256
+Q9TKV2	SChloro	Chloroplast thylakoid membrane	1	101	0.755481	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q9BBP6	SChloro	Chloroplast thylakoid membrane	1	747	0.242342	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q859V1	SChloro	Chloroplast thylakoid membrane	1	732	0.202273	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q9MUQ1	SChloro	Chloroplast inner membrane	1	41	0.0976381	.	.	Ontology_term=GO:0009706;evidence=ECO:0000256
+Q3ZJ61	SChloro	Chloroplast outer membrane	1	36	0.748427	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+Q3ZJ61	SChloro	Chloroplast stroma	1	36	0.996413	.	.	Ontology_term=GO:0009570;evidence=ECO:0000256
+Q06J31	SChloro	Chloroplast thylakoid lumen	1	41	0.0510803	.	.	Ontology_term=GO:0009543;evidence=ECO:0000256
+Q6B948	SChloro	Chloroplast outer membrane	1	187	0.539627	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+Q6B948	SChloro	Chloroplast thylakoid membrane	1	187	0.581525	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q0P3K2	SChloro	Chloroplast thylakoid membrane	1	733	0.835155	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+P49471	SChloro	Chloroplast outer membrane	1	509	0.677661	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+P49471	SChloro	Chloroplast thylakoid membrane	1	509	0.603959	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+A4QK75	SChloro	Chloroplast outer membrane	1	365	0.317757	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+Q85FP8	SChloro	Chloroplast outer membrane	1	140	0.643081	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+Q85FP8	SChloro	Chloroplast thylakoid membrane	1	140	0.815285	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+A0T0C4	SChloro	Chloroplast thylakoid membrane	1	38	0.693634	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q32RH7	SChloro	Chloroplast stroma	1	31	0.999829	.	.	Ontology_term=GO:0009570;evidence=ECO:0000256
+A0T0A7	SChloro	Chloroplast stroma	1	42	0.995946	.	.	Ontology_term=GO:0009570;evidence=ECO:0000256
+A0T0A7	SChloro	Chloroplast thylakoid membrane	1	42	0.519606	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q9MS76	SChloro	Chloroplast thylakoid membrane	1	53	0.0849878	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q20ET6	SChloro	Chloroplast thylakoid membrane	1	160	0.484992	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+A0T0A6	SChloro	Chloroplast stroma	1	39	0.290735	.	.	Ontology_term=GO:0009570;evidence=ECO:0000256
+Q9TKY7	SChloro	Chloroplast thylakoid membrane	1	46	0.118884	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q9GF82	SChloro	Chloroplast thylakoid membrane	1	43	0.593739	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q85FK4	SChloro	Chloroplast stroma	1	31	0.999084	.	.	Ontology_term=GO:0009570;evidence=ECO:0000256
+Q9TKW7	SChloro	Chloroplast thylakoid membrane	1	81	0.922264	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q6B8U0	SChloro	Chloroplast stroma	1	30	0.999937	.	.	Ontology_term=GO:0009570;evidence=ECO:0000256
+Q6B8U0	SChloro	Chloroplast thylakoid membrane	1	30	0.512248	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q1ACL4	SChloro	Chloroplast thylakoid membrane	1	748	0.891297	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+P04967	SChloro	Chloroplast thylakoid membrane	1	735	0.766908	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q06J24	SChloro	Chloroplast outer membrane	1	508	0.927453	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+Q9TL14	SChloro	Chloroplast outer membrane	1	82	0.476658	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+Q0ZIW9	SChloro	Chloroplast thylakoid membrane	1	322	0.510298	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q33BX3	SChloro	Chloroplast thylakoid membrane	1	313	0.670462	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+B2Y1V9	SChloro	Chloroplast outer membrane	1	248	0.434592	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+Q09FZ7	SChloro	Chloroplast outer membrane	1	321	0.687728	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+P28530	SChloro	Chloroplast thylakoid membrane	1	83	0.350381	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q5SCX5	SChloro	Chloroplast outer membrane	1	185	0.937571	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+Q09MC7	SChloro	Chloroplast thylakoid membrane	1	317	0.469701	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+B7T1R8	SChloro	Chloroplast outer membrane	1	178	0.941052	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+Q0P3K8	SChloro	Chloroplast thylakoid membrane	1	236	0.297588	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q7YJT4	SChloro	Chloroplast thylakoid membrane	1	323	0.734902	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+A9L982	SChloro	Chloroplast outer membrane	1	181	0.957704	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+A4QJL2	SChloro	Chloroplast thylakoid membrane	1	322	0.951654	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+A2T346	SChloro	Chloroplast thylakoid membrane	1	318	0.917535	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+A9L9A9	SChloro	Chloroplast thylakoid membrane	1	320	0.95886	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q1XDM2	SChloro	Chloroplast thylakoid membrane	1	320	0.912411	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+A8W3H6	SChloro	Chloroplast outer membrane	1	180	0.967214	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+Q95AG0	SChloro	Chloroplast thylakoid membrane	1	317	0.908586	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+A1E9T7	SChloro	Chloroplast thylakoid membrane	1	320	0.937922	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+B2XTT2	SChloro	Chloroplast outer membrane	1	426	0.884468	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+Q1ACM9	SChloro	Chloroplast outer membrane	1	186	0.956743	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+Q9TL15	SChloro	Chloroplast outer membrane	1	176	0.936007	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+Q4VZP7	SChloro	Chloroplast outer membrane	1	184	0.948042	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+A2T318	SChloro	Chloroplast outer membrane	1	187	0.912034	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+B2X1U8	SChloro	Chloroplast outer membrane	1	252	0.28549	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+Q2PMS9	SChloro	Chloroplast outer membrane	1	185	0.954799	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+Q8HTL5	SChloro	Chloroplast outer membrane	1	175	0.954391	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+Q6YXK2	SChloro	Chloroplast outer membrane	1	184	0.944874	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+A0T0C9	SChloro	Chloroplast thylakoid membrane	1	314	0.966139	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+A8SEF3	SChloro	Chloroplast thylakoid membrane	1	319	0.765226	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+P06291	SChloro	Chloroplast outer membrane	1	184	0.952419	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+Q09FR1	SChloro	Chloroplast outer membrane	1	321	0.705734	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+Q68RV7	SChloro	Chloroplast outer membrane	1	320	0.513546	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+Q8WI29	SChloro	Chloroplast outer membrane	1	184	0.967291	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+Q09WW9	SChloro	Chloroplast thylakoid membrane	1	321	0.693377	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+A4GGE5	SChloro	Chloroplast thylakoid membrane	1	328	0.749088	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q85FX0	SChloro	Chloroplast thylakoid membrane	1	300	0.942507	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q06FX5	SChloro	Chloroplast outer membrane	1	184	0.95733	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+O78494	SChloro	Chloroplast thylakoid membrane	1	321	0.953902	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q4G3F8	SChloro	Chloroplast thylakoid membrane	1	215	0.169987	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+A6H5F2	SChloro	Chloroplast outer membrane	1	184	0.957169	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+Q3V4Y5	SChloro	Chloroplast thylakoid membrane	1	321	0.786431	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q06R81	SChloro	Chloroplast thylakoid membrane	1	330	0.512194	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q6YXL3	SChloro	Chloroplast thylakoid membrane	1	319	0.95525	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q6B8T0	SChloro	Chloroplast thylakoid membrane	1	310	0.769683	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q2PMN1	SChloro	Chloroplast thylakoid membrane	1	325	0.675333	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q5SCZ8	SChloro	Chloroplast stroma	1	100	0.985298	.	.	Ontology_term=GO:0009570;evidence=ECO:0000256
+Q5SCZ8	SChloro	Chloroplast thylakoid membrane	1	100	0.730823	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+A6MMZ2	SChloro	Chloroplast thylakoid membrane	1	749	0.167352	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q8WI03	SChloro	Chloroplast stroma	1	31	0.997318	.	.	Ontology_term=GO:0009570;evidence=ECO:0000256
+A6YG69	SChloro	Chloroplast outer membrane	1	39	0.243772	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+Q40593	SChloro	Chloroplast thylakoid membrane	1	478	0.640017	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+P18068	SChloro	Chloroplast thylakoid membrane	1	145	0.423335	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+P26956	SChloro	Chloroplast thylakoid membrane	1	145	0.424797	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+P00299	SChloro	Chloroplast thylakoid membrane	1	168	0.550611	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+P08248	SChloro	Chloroplast thylakoid membrane	1	155	0.526111	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+P14226	SChloro	Chloroplast thylakoid membrane	1	329	0.522638	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+O82660	SChloro	Chloroplast thylakoid membrane	1	403	0.485331	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q9SBN5	SChloro	Chloroplast thylakoid membrane	1	139	0.236489	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q00GL7	SChloro	Chloroplast thylakoid membrane	1	159	0.12597	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+O64750	SChloro	Chloroplast outer membrane	1	186	0.0889003	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+O22682	SChloro	Chloroplast outer membrane	1	404	0.185192	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+Q9LXX5	SChloro	Chloroplast inner membrane	1	262	0.0488917	.	.	Ontology_term=GO:0009706;evidence=ECO:0000256
+Q9SEL7	SChloro	Chloroplast thylakoid membrane	1	323	0.0905489	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+Q9LYR5	SChloro	Chloroplast outer membrane	1	256	0.116129	.	.	Ontology_term=GO:0009707;evidence=ECO:0000256
+P93566	SChloro	Chloroplast thylakoid membrane	1	260	0.304332	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+P12852	SChloro	Chloroplast thylakoid lumen	1	199	0.071617	.	.	Ontology_term=GO:0009543;evidence=ECO:0000256
+P85189	SChloro	Chloroplast thylakoid membrane	1	263	0.522869	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256
+O22591	SChloro	Chloroplast thylakoid membrane	1	231	0.116271	.	.	Ontology_term=GO:0009535;evidence=ECO:0000256

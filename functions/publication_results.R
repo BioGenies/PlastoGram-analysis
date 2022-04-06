@@ -77,18 +77,21 @@ get_architecture_plot_data <- function(mean_architecture_performance) {
 
 get_performance_distr_plot <- function(architecture_plot_data, baseline_mean_performance, res_path) {
   baseline_plot_data <- pivot_longer(baseline_mean_performance, 2:ncol(baseline_mean_performance), 
-                                     values_to = "value", names_to = "measure")
-  p <- architecture_plot_data %>% 
-    filter(measure %in% c("mean_kappa", "mean_AU1U")) %>% 
-    mutate(measure = ifelse(measure == "mean_kappa", "Mean Kappa", "Mean AU1U")) %>% 
-    ggplot(aes(x = measure, y = value)) +
+                                     values_to = "value", names_to = "measure") %>% 
+    filter(measure %in% c("mean_kappa", "mean_AU1U") | (startsWith(measure, "mean") & endsWith(measure, "sens"))) %>% 
+    mutate(measure = gsub("_sens", " sensitivity", gsub("mean_", "", measure))) 
+  all_plot_data <- architecture_plot_data %>% 
+    filter(measure %in% c("mean_kappa", "mean_AU1U") | (startsWith(measure, "mean") & endsWith(measure, "sens"))) %>% 
+    mutate(measure = gsub("_sens", " sensitivity", gsub("mean_", "", measure))) 
+  p <- ggplot(all_plot_data, aes(x = measure, y = value)) +
     geom_boxplot() +
     theme_bw() +
-    geom_point(data = mutate(filter(baseline_plot_data, measure %in% c("mean_kappa", "mean_AU1U")), 
-                             measure = ifelse(measure == "mean_kappa", "Mean Kappa", "Mean AU1U")), 
-               aes(x = measure, y = value), color = "red", size = 3) +
-    xlab("Performance measure") +
-    ylab("Value")
+    geom_point(data = baseline_plot_data, aes(x = measure, y = value, color = "Baseline"), size = 3) +
+    geom_point(data = filter(all_plot_data, model == "Architecture_v71_0-1_No_filtering_RF"), 
+               aes(x = measure, y = value, color = "PlastoGram"), size = 3) +
+    xlab("Mean performance measure") +
+    ylab("Value") +
+    scale_color_manual("Model", values = c("PlastoGram" = "#76d872", "Baseline" = "#d87272", Other = "black"))
   ggsave("Performance_distribution_architectures+baseline.eps", p, width = 6, height = 8,
          path = res_path)
   p
@@ -234,4 +237,47 @@ get_om_im_model_cv_res_table <- function(traintest_ngram_matrix, holdout_target_
   }) %>% bind_rows()
   write.csv(res, paste0(res_path, "OM_IM_model_cv_res.csv"), row.names = FALSE)
   res
+}
+
+get_benchmark_res_table <- function(PlastoGram_evaluation, SChloro_benchmark_res, res_path) {
+  schloro_df <- SChloro_benchmark_res %>% 
+    select(c(V1, V3)) %>% 
+    group_by(V1) %>% 
+    summarise(pred = paste0(V3, collapse = "; "))
+  
+  all_benchmark <- left_join(PlastoGram_evaluation[["Final_results"]],
+                             schloro_df, by = c('seq_name' = 'V1')) %>% 
+    mutate(dataset = gsub("_TAT|_SEC", "", gsub("N_|P_", "", dataset)),
+           Localization = gsub("_TAT|_SEC", "", gsub("N_|P_", "", Localization))) %>% 
+    mutate(dataset = ifelse(dataset == "IM", "E", dataset),
+           Localization = ifelse(Localization == "IM", "E", Localization))
+  
+  datasets <- list("E" = "inner membrane|outer membrane", "S" = "stroma", 
+                   "TM" = "thylakoid membrane", "TL" = "thylakoid lumen")
+  
+  df <- lapply(names(datasets), function(ith_set) {
+    dat <- filter(all_benchmark, dataset == ith_set) %>% 
+      mutate(pred = ifelse(grepl(datasets[[ith_set]], pred), TRUE, FALSE))
+    data.frame(
+      Class = ith_set,
+      PlastoGram = TPR(ifelse(dat[["dataset"]] == ith_set, TRUE, FALSE),
+                       ifelse(dat[["Localization"]] == ith_set, TRUE, FALSE),
+                       TRUE),
+      SChloro = TPR(ifelse(dat[["dataset"]] == ith_set, TRUE, FALSE),
+                    dat[["pred"]],
+                    TRUE)
+    )
+  }) %>% bind_rows()
+  write.csv(df, paste0(res_path, "Benchmark_results.csv"), row.names = FALSE)
+  df
+}
+
+get_benchmark_res_plot <- function(PlastoGram_evaluation, schloro_res, res_path) {
+  get_benchmark_res_table(PlastoGram_evaluation, schloro_res) %>% 
+    pivot_longer(2:3, names_to = "Software", values_to = "Class-specific sensitivity") %>% 
+    ggplot(aes(x = Class, y = `Class-specific sensitivity`, group = Software, fill = Software)) +
+    geom_col(position = "dodge") +
+    theme_bw() +
+    scale_fill_manual("Software", values = c("PlastoGram" = "#76d872", "SChloro" = "#7281d8")) %>% 
+    ggsave(paste0(res_path, "Benchmark_results.eps"), plot = ., width = 9, height = 6)
 }
