@@ -128,7 +128,7 @@ get_best_model_cv_plot <- function(architecture_plot_data, res_path) {
                                             "N_TL_SEC" = "#d8c472", "N_TL_TAT" = "#d8a972", 
                                             "P_IM" = "#a8b1e8", "P_TM" = "#e8a8a8", "P_S" = "#ade8a8")) +
     theme(legend.position = "none")
-  ggsave(paste0(res_path, "Best_model_cv_res.eps"), width = 9, height = 6)
+  ggsave(paste0(res_path, "Best_model_cv_res.eps"), p, width = 9, height = 6)
 }
 
 get_best_model_cv_table <- function(architecture_plot_data, res_path) {
@@ -273,11 +273,11 @@ get_benchmark_res_table <- function(PlastoGram_evaluation, SChloro_benchmark_res
 }
 
 get_benchmark_res_plot <- function(PlastoGram_evaluation, schloro_res, res_path) {
-  get_benchmark_res_table(PlastoGram_evaluation, schloro_res) %>% 
+  p <- get_benchmark_res_table(PlastoGram_evaluation, schloro_res) %>% 
     pivot_longer(2:3, names_to = "Software", values_to = "Class-specific sensitivity") %>% 
     ggplot(aes(x = Class, y = `Class-specific sensitivity`, group = Software, fill = Software)) +
     geom_col(position = "dodge") +
     theme_bw() +
-    scale_fill_manual("Software", values = c("PlastoGram" = "#76d872", "SChloro" = "#7281d8")) %>% 
-    ggsave(paste0(res_path, "Benchmark_results.eps"), plot = ., width = 9, height = 6)
+    scale_fill_manual("Software", values = c("PlastoGram" = "#76d872", "SChloro" = "#7281d8"))
+  ggsave(paste0(res_path, "Benchmark_results.eps"), p, width = 9, height = 6)
 }
