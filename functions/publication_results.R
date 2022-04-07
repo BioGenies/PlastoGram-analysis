@@ -273,7 +273,7 @@ get_benchmark_res_table <- function(PlastoGram_evaluation, SChloro_benchmark_res
 get_benchmark_res_plot <- function(PlastoGram_evaluation, schloro_res, res_path) {
   p <- get_benchmark_res_table(PlastoGram_evaluation, schloro_res) %>% 
     pivot_longer(2:3, names_to = "Software", values_to = "Class-specific accuracy") %>% 
-    ggplot(aes(x = Class, y = `Class-specific sensitivity`, group = Software, fill = Software)) +
+    ggplot(aes(x = Class, y = `Class-specific accuracy`, group = Software, fill = Software)) +
     geom_col(position = "dodge") +
     theme_bw() +
     scale_fill_manual("Software", values = c("PlastoGram" = "#76d872", "SChloro" = "#7281d8"))
