@@ -79,10 +79,10 @@ get_performance_distr_plot <- function(architecture_plot_data, baseline_mean_per
   baseline_plot_data <- pivot_longer(baseline_mean_performance, 2:ncol(baseline_mean_performance), 
                                      values_to = "value", names_to = "measure") %>% 
     filter(measure %in% c("mean_kappa", "mean_AU1U") | (startsWith(measure, "mean") & endsWith(measure, "sens"))) %>% 
-    mutate(measure = gsub("_sens", " sensitivity", gsub("mean_", "", measure))) 
+    mutate(measure = gsub("_sens", " accuracy", gsub("mean_", "", measure))) 
   all_plot_data <- architecture_plot_data %>% 
     filter(measure %in% c("mean_kappa", "mean_AU1U") | (startsWith(measure, "mean") & endsWith(measure, "sens"))) %>% 
-    mutate(measure = gsub("_sens", " sensitivity", gsub("mean_", "", measure))) 
+    mutate(measure = gsub("_sens", " accuracy", gsub("mean_", "", measure))) 
   p <- ggplot(all_plot_data, aes(x = measure, y = value)) +
     geom_boxplot() +
     theme_bw() +
@@ -92,7 +92,7 @@ get_performance_distr_plot <- function(architecture_plot_data, baseline_mean_per
     xlab("Mean performance measure") +
     ylab("Value") +
     scale_color_manual("Model", values = c("PlastoGram" = "#76d872", "Baseline" = "#d87272", Other = "black"))
-  ggsave("Performance_distribution_architectures+baseline.eps", p, width = 6, height = 8,
+  ggsave("Performance_distribution_architectures+baseline.eps", p, width = 14, height = 8,
          path = res_path)
   p
 }
@@ -123,12 +123,12 @@ get_best_model_cv_plot <- function(architecture_plot_data, res_path) {
     geom_col() +
     geom_errorbar(aes(ymin = mean-sd, ymax = mean+sd), width = 0.2) +
     theme_bw() +
-    ylab("Mean sensitivity value in cross-validation") +
+    ylab("Mean class-specific accuracy value in cross-validation") +
     scale_fill_manual("Dataset", values = c("N_E" = "#7281d8", "N_TM" = "#d87272", "N_S" = "#76d872",
                                             "N_TL_SEC" = "#d8c472", "N_TL_TAT" = "#d8a972", 
                                             "P_IM" = "#a8b1e8", "P_TM" = "#e8a8a8", "P_S" = "#ade8a8")) +
     theme(legend.position = "none")
-  ggsave(paste0(res_path, "Best_model_cv_res.eps"), p, width = 9, height = 6)
+  ggsave(paste0(res_path, "Best_model_cv_res.eps"), p, width = 7, height = 5)
 }
 
 get_best_model_cv_table <- function(architecture_plot_data, res_path) {
@@ -136,7 +136,7 @@ get_best_model_cv_table <- function(architecture_plot_data, res_path) {
     filter(startsWith(measure, "mean_"),
            model == "Architecture_v71_0-1_No_filtering_RF") %>% 
     select(c("measure", "value")) %>% 
-    mutate(measure = gsub("_sens", " sensitivity", gsub("mean_", "", measure))) %>% 
+    mutate(measure = gsub("_sens", " accuracy", gsub("mean_", "", measure))) %>% 
     setNames(c("Measure", "Value")) %>% 
     write.csv(paste0(res_path, "Best_model_cv_res.csv"), row.names = FALSE)
 }
@@ -272,10 +272,10 @@ get_benchmark_res_table <- function(PlastoGram_evaluation, SChloro_benchmark_res
 
 get_benchmark_res_plot <- function(PlastoGram_evaluation, schloro_res, res_path) {
   p <- get_benchmark_res_table(PlastoGram_evaluation, schloro_res) %>% 
-    pivot_longer(2:3, names_to = "Software", values_to = "Class-specific sensitivity") %>% 
+    pivot_longer(2:3, names_to = "Software", values_to = "Class-specific accuracy") %>% 
     ggplot(aes(x = Class, y = `Class-specific sensitivity`, group = Software, fill = Software)) +
     geom_col(position = "dodge") +
     theme_bw() +
     scale_fill_manual("Software", values = c("PlastoGram" = "#76d872", "SChloro" = "#7281d8"))
-  ggsave(paste0(res_path, "Benchmark_results.eps"), p, width = 9, height = 6)
+  ggsave(paste0(res_path, "Benchmark_results.eps"), p, width = 6, height = 4)
 }
