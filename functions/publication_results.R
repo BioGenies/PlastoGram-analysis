@@ -98,13 +98,19 @@ get_performance_distr_plot <- function(architecture_plot_data, baseline_mean_per
 }
 
 get_parameters_of_performance_distribution_table <- function(envelope_mean_architecture_performance, res_path) {
-  df <- lapply(select(envelope_mean_architecture_performance, c("mean_kappa", "mean_AU1U")), summary) %>% 
+  df <- lapply(select(envelope_mean_architecture_performance, 
+                      c("mean_kappa", "mean_AU1U", 
+                        colnames(envelope_mean_architecture_performance)[startsWith(colnames(envelope_mean_architecture_performance), "mean") 
+                                                                         & endsWith(colnames(envelope_mean_architecture_performance), "sens")])), summary) %>% 
     do.call(cbind, .) %>% 
     data.frame() %>% 
     tibble::rownames_to_column() %>% 
-    setNames(c("Measure", "Mean kappa", "Mean AU1U")) %>% 
-    mutate(Measure = c("Minimum", "1st quartile", "Median", "Mean", "3rd quartile", "Maximum"))
-  write.csv(df, paste0(res_path, "Performance_distribution_parameters.csv"), row.names = FALSE)
+    setNames(c("Measure", "Mean kappa", "Mean AU1U", "Mean N_E accuracy", "Mean N_TM accuracy", "Mean N_S accuracy", "Mean N_TL_SEC accuracy",
+               "Mean N_TL_TAT accuracy", "Mean P_IM accuracy", "Mean P_TM accuracy", "Mean P_S accuracy")) %>% 
+    mutate(Measure = c("Minimum", "1st quartile", "Median", "Mean", "3rd quartile", "Maximum")) %>% 
+    t() %>% 
+    as.data.frame()
+  write.table(df, paste0(res_path, "Performance_distribution_parameters.csv"), sep = ",", col.names = FALSE, quote = FALSE)
   df
 }
 
@@ -213,7 +219,7 @@ get_physicochemical_properties_plot <- function(traintest, traintest_data_df, co
   
   ggsave(paste0(res_path, "OM_stroma_properties.eps"), full_plot, width = 9, height = 2.5)
 }
-  
+
 
 get_om_im_model_cv_res_table <- function(traintest_ngram_matrix, holdout_target_dfs_cv, res_path) {
   res <- lapply(1:length(holdout_target_dfs_cv), function(ith_rep) {

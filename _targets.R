@@ -408,6 +408,13 @@ list(
   tar_target(
     benchmark_plot,
     get_benchmark_res_plot(PlastoGram_evaluation, SChloro_benchmark_res, paste0(data_path, "Publication_results/")) 
+  ),
+  tar_target(
+    PlastoGram_model,
+    list("ngram_models" = PlastoGram_ngram_models,
+         "RF_model" = PlastoGram_higher_level_model,
+         "OM_IM_model" = PlastoGram_OM_IM_model,
+         "imp_ngrams" = PlastoGram_informative_ngrams)
   )
 )
 
