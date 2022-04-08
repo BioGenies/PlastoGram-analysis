@@ -298,7 +298,7 @@ get_benchmark_res_plot <- function(PlastoGram_evaluation, schloro_res, res_path)
 }
 
 get_final_plastogram_model <- function(PlastoGram_ngram_models, PlastoGram_higher_level_model,
-                                        PlastoGram_IM_OM_model, PlastoGram_informative_ngrams) {
+                                        PlastoGram_OM_IM_model, PlastoGram_informative_ngrams) {
   PlastoGram_model <- list("ngram_models" = PlastoGram_ngram_models,
                            "RF_model" = PlastoGram_higher_level_model,
                            "OM_IM_model" = PlastoGram_OM_IM_model,
