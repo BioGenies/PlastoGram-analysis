@@ -370,12 +370,8 @@ list(
     get_best_model_cv_plot(architecture_plot_data, paste0(data_path, "Publication_results/"))
   ),
   tar_target(
-    best_model_cv_table,
-    get_best_model_cv_table(architecture_plot_data, paste0(data_path, "Publication_results/"))
-  ),
-  tar_target(
-    independent_dataset_performance_table,
-    get_independent_dataset_performance_table(PlastoGram_evaluation, paste0(data_path, "Publication_results/"))
+    cv_and_independent_res_table,
+    get_cv_and_independent_res_table(architecture_plot_data, PlastoGram_evaluation, paste0(data_path, "Publication_results/"))
   ),
   tar_target(
     om_im_model_cv_performance_table,

@@ -137,21 +137,21 @@ get_best_model_cv_plot <- function(architecture_plot_data, res_path) {
   ggsave(paste0(res_path, "Best_model_cv_res.eps"), p, width = 7, height = 5)
 }
 
-get_best_model_cv_table <- function(architecture_plot_data, res_path) {
+get_best_model_cv_table <- function(architecture_plot_data) {
   architecture_plot_data %>% 
-    filter(startsWith(measure, "mean_"),
+    filter(startsWith(measure, "mean_") | endsWith(measure, "sens"),
            model == "Architecture_v71_0-1_No_filtering_RF") %>% 
     select(c("measure", "value")) %>% 
     mutate(measure = gsub("_sens", " accuracy", gsub("mean_", "", measure))) %>% 
-    setNames(c("Measure", "Value")) %>% 
-    write.csv(paste0(res_path, "Best_model_cv_res.csv"), row.names = FALSE)
+    setNames(c("Measure", "Value"))# %>% 
+ #   write.csv(paste0(res_path, "Best_model_cv_res.csv"), row.names = FALSE)
 }
 
 
-get_independent_dataset_performance_table <- function(PlastoGram_evaluation, res_path) {
+get_independent_dataset_performance_table <- function(PlastoGram_evaluation) {
   res <- PlastoGram_evaluation[["Final_results"]]
   hl_res <- PlastoGram_evaluation[["Higher-order_model_preds"]]
-  df <- data.frame(
+  data.frame(
     kappa = KAPPA(res[["dataset"]], res[["Localization"]]),
     AU1U = multiclass.AU1U(hl_res[, 3:10], hl_res[["dataset"]]),
     `N_E accuracy` = ACC(filter(res, dataset == "N_E")[["dataset"]], filter(res, dataset == "N_E")[["Localization"]]),
@@ -164,8 +164,19 @@ get_independent_dataset_performance_table <- function(PlastoGram_evaluation, res
     `P_S accuracy` = ACC(filter(res, dataset == "P_S")[["dataset"]], filter(res, dataset == "P_S")[["Localization"]]),
     check.names = FALSE
   ) %>% pivot_longer(1:ncol(.), names_to = "Measure", values_to = "Value") 
-  write.csv(df, paste0(res_path, "Independent_dataset_results.csv"), row.names = FALSE)
-  df
+#  write.csv(df, paste0(res_path, "Independent_dataset_results.csv"), row.names = FALSE)
+}
+
+get_cv_and_independent_res_table <- function(architecture_plot_data, PlastoGram_evaluation, res_path) {
+  cv <- get_best_model_cv_table(architecture_plot_data) %>% 
+    setNames(c("Measure", "Mean value in CV"))
+  ind <- get_independent_dataset_performance_table(PlastoGram_evaluation) %>% 
+    setNames(c("Measure", "Mean value on independent data set"))
+  sd <- cv[11:18,] %>% 
+    mutate(Measure = gsub("sd_", "", Measure)) %>% 
+    setNames(c("Measure", "SD value in CV"))
+  res <- left_join(left_join(ind, cv), sd)
+  write.csv(res, paste0(res_path, "CV+independent_res.csv"), row.names = FALSE)
 }
 
 encode_seq <- function(x, property) {
