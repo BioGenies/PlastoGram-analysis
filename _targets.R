@@ -407,10 +407,7 @@ list(
   ),
   tar_target(
     PlastoGram_model,
-    list("ngram_models" = PlastoGram_ngram_models,
-         "RF_model" = PlastoGram_higher_level_model,
-         "OM_IM_model" = PlastoGram_OM_IM_model,
-         "imp_ngrams" = PlastoGram_informative_ngrams)
+    get_final_plastogram_model(PlastoGram_ngram_models, PlastoGram_higher_level_model, PlastoGram_IM_OM_model, PlastoGram_informative_ngrams)
   )
 )
 

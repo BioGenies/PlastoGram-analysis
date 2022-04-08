@@ -144,7 +144,7 @@ get_best_model_cv_table <- function(architecture_plot_data) {
     select(c("measure", "value")) %>% 
     mutate(measure = gsub("_sens", " accuracy", gsub("mean_", "", measure))) %>% 
     setNames(c("Measure", "Value"))# %>% 
- #   write.csv(paste0(res_path, "Best_model_cv_res.csv"), row.names = FALSE)
+  #   write.csv(paste0(res_path, "Best_model_cv_res.csv"), row.names = FALSE)
 }
 
 
@@ -164,17 +164,17 @@ get_independent_dataset_performance_table <- function(PlastoGram_evaluation) {
     `P_S accuracy` = ACC(filter(res, dataset == "P_S")[["dataset"]], filter(res, dataset == "P_S")[["Localization"]]),
     check.names = FALSE
   ) %>% pivot_longer(1:ncol(.), names_to = "Measure", values_to = "Value") 
-#  write.csv(df, paste0(res_path, "Independent_dataset_results.csv"), row.names = FALSE)
+  #  write.csv(df, paste0(res_path, "Independent_dataset_results.csv"), row.names = FALSE)
 }
 
 get_cv_and_independent_res_table <- function(architecture_plot_data, PlastoGram_evaluation, res_path) {
   cv <- get_best_model_cv_table(architecture_plot_data) %>% 
-    setNames(c("Measure", "Mean value in CV"))
+    setNames(c("Measure", "Mean in CV"))
   ind <- get_independent_dataset_performance_table(PlastoGram_evaluation) %>% 
-    setNames(c("Measure", "Mean value on independent data set"))
+    setNames(c("Measure", "Independent"))
   sd <- cv[11:18,] %>% 
     mutate(Measure = gsub("sd_", "", Measure)) %>% 
-    setNames(c("Measure", "SD value in CV"))
+    setNames(c("Measure", "SD in CV"))
   res <- left_join(left_join(ind, cv), sd)
   write.csv(res, paste0(res_path, "CV+independent_res.csv"), row.names = FALSE)
 }
@@ -295,4 +295,14 @@ get_benchmark_res_plot <- function(PlastoGram_evaluation, schloro_res, res_path)
     theme_bw() +
     scale_fill_manual("Software", values = c("PlastoGram" = "#76d872", "SChloro" = "#7281d8"))
   ggsave(paste0(res_path, "Benchmark_results.eps"), p, width = 6, height = 4)
+}
+
+get_final_plastogram_model <- function(PlastoGram_ngram_models, PlastoGram_higher_level_model,
+                                        PlastoGram_IM_OM_model, PlastoGram_informative_ngrams) {
+  PlastoGram_model <- list("ngram_models" = PlastoGram_ngram_models,
+                           "RF_model" = PlastoGram_higher_level_model,
+                           "OM_IM_model" = PlastoGram_OM_IM_model,
+                           "imp_ngrams" = PlastoGram_informative_ngrams)
+  class(PlastoGram_model) <- "plastogram_model"
+  PlastoGram_model
 }
