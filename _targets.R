@@ -291,7 +291,7 @@ list(
   ),
   tar_target(
     PlastoGram_best_architecture,
-    read.csv(paste0(data_path, "Model_architectures_envelope/", gsub("_GLM|_RF", ".csv", PlastoGram_best_architecture_name)))
+    read.csv("./data/Final_PlastoGram_model.csv")
   ),
   tar_target(
     PlastoGram_ngram_models,
