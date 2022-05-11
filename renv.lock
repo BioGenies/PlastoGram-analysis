@@ -1270,9 +1270,14 @@
     "seqR": {
       "Package": "seqR",
       "Version": "1.0.1",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "19dc5754566f502da1e7b4c17d6c2285"
+      "Source": "GitHub",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteRepo": "seqR",
+      "RemoteUsername": "slowikj",
+      "RemoteRef": "HEAD",
+      "RemoteSha": "ad86672ac003dff73c847c4855f471a1fa3f5c11",
+      "Hash": "2949dcaedf4d22b578ecd469b617a176"
     },
     "sets": {
       "Package": "sets",
