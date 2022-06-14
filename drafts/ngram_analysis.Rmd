@@ -1,0 +1,126 @@
+---
+title: "ngram analysis"
+author: "Katarzyna Sidorczuk"
+date: '2022-06-14'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, fig.width = 14, fig.height = 10, warning = FALSE, message = FALSE)
+library(dplyr)
+library(biogram)
+library(targets)
+library(ranger)
+library(ggplot2)
+library(DT)
+
+source("../functions/ngram_model_functions.R")
+source("../functions/ensemble_model_functions.R")
+
+withr::with_dir("../",
+                tar_load(c(PlastoGram_best_architecture, envelope_traintest_ngram_matrix, envelope_traintest_data_df)))
+
+my_DT <- function(df, title) {
+  DT::datatable(df, extensions = 'FixedColumns', filter = "top", style = "bootstrap",
+                options = list(dom = 't', scrollX = TRUE, scrollCollapse = TRUE,
+                               scrollY = "700px", paging = FALSE, server = FALSE),
+                caption = htmltools::tags$caption(style = 'caption-side: top; text-align: center; color:black; font-size:150% ;', title) )
+}
+
+train_rf <- function(ngram_matrix, target, imp_ngrams, with_class_weights = FALSE, smote = FALSE) {
+  ranger_train_data <- if(smote == TRUE) {
+    do_smote(ngram_matrix[, imp_ngrams], target, setNames(as.list(unname(1/(table(target)/max(table(target))))), names(table(target)))) %>% 
+      mutate(tar = as.factor(tar))
+  } else {
+    data.frame(ngram_matrix[, imp_ngrams],
+               tar = as.factor(target))
+  }
+  
+  if(with_class_weights == FALSE) {
+    class_weights <- NULL
+  } else {
+    class_weights <- sapply(levels(ranger_train_data[["tar"]]), function(i) 1/sum(ranger_train_data[["tar"]] == i)/nrow(ranger_train_data), USE.NAMES = FALSE)
+  }
+  ranger(dependent.variable.name = "tar", data =  ranger_train_data, 
+         write.forest = TRUE, probability = TRUE, num.trees = 500, 
+         verbose = FALSE, class.weights = class_weights,
+         seed = 427244, importance = "impurity")
+}
+
+new_PlastoGram_ngram_models <- train_ngram_models(PlastoGram_best_architecture, envelope_traintest_ngram_matrix, envelope_traintest_data_df, filtering_colname = NULL, filtering_term = NULL)
+```
+
+## Features with the highest Gini importance
+
+```{r}
+#save(new_PlastoGram_ngram_models, file = "new_PlastoGram_ngram_models.rda")
+#load("new_PlastoGram_ngram_models.rda")
+lapply(names(new_PlastoGram_ngram_models), function(ith_model) {
+  x <- importance(new_PlastoGram_ngram_models[[ith_model]]) %>% 
+    as.data.frame() %>% 
+    tibble::rownames_to_column() %>% 
+    setNames(c("ngram", "Gini importance")) %>% 
+    arrange(`Gini importance`) %>% 
+    mutate(ngram = factor(ngram, levels = .[["ngram"]]))
+  
+  tail(x, n = 100) %>% 
+    ggplot(aes(x = ngram, y = `Gini importance`)) +
+    geom_col() + 
+    coord_flip() +
+    theme_bw() +
+    ggtitle(paste0(ith_model, " - 100 most important of all ", nrow(x), " informative features"))
+})
+```
+
+## All features with Gini importance > 0
+
+```{r}
+importance(new_PlastoGram_ngram_models[["Nuclear_model"]]) %>% 
+  as.data.frame() %>% 
+  tibble::rownames_to_column() %>% 
+  setNames(c("ngram", "Gini importance")) %>%
+  filter(`Gini importance` > 0) %>% 
+  arrange(desc(`Gini importance`)) %>% 
+  my_DT("Nuclear_model")
+
+importance(new_PlastoGram_ngram_models[["Membrane_model"]]) %>% 
+  as.data.frame() %>% 
+  tibble::rownames_to_column() %>% 
+  setNames(c("ngram", "Gini importance")) %>% 
+  filter(`Gini importance` > 0) %>% 
+  arrange(desc(`Gini importance`)) %>% 
+  my_DT("Membrane_model")
+
+importance(new_PlastoGram_ngram_models[["Plastid_membrane_model"]]) %>% 
+  as.data.frame() %>% 
+  tibble::rownames_to_column() %>% 
+  setNames(c("ngram", "Gini importance")) %>% 
+  filter(`Gini importance` > 0) %>% 
+  arrange(desc(`Gini importance`)) %>% 
+  my_DT("Plastid_membrane_model")
+
+importance(new_PlastoGram_ngram_models[["Nuclear_membrane_model"]]) %>% 
+  as.data.frame() %>% 
+  tibble::rownames_to_column() %>% 
+  setNames(c("ngram", "Gini importance")) %>% 
+  filter(`Gini importance` > 0) %>% 
+  arrange(desc(`Gini importance`)) %>% 
+  my_DT("Nuclear_membrane_model")
+
+importance(new_PlastoGram_ngram_models[["N_E_vs_N_TM_model"]]) %>% 
+  as.data.frame() %>% 
+  tibble::rownames_to_column() %>% 
+  setNames(c("ngram", "Gini importance")) %>% 
+  filter(`Gini importance` > 0) %>% 
+  arrange(desc(`Gini importance`)) %>% 
+  my_DT("N_E_vs_N_TM_model")
+
+importance(new_PlastoGram_ngram_models[["N_E_vs_N_S_model"]]) %>% 
+  as.data.frame() %>% 
+  tibble::rownames_to_column() %>% 
+  setNames(c("ngram", "Gini importance")) %>% 
+  filter(`Gini importance` > 0) %>% 
+  arrange(desc(`Gini importance`)) %>% 
+  my_DT("N_E_vs_N_S_model")
+```
+
