@@ -26,7 +26,10 @@ create_target_df <- function(annotations_file, sequences, graphpart_res) {
            Membrane_target = ifelse(dataset %in% c("N_OM", "N_IM", "P_IM", "N_TM", "P_TM"), TRUE, FALSE),
            OM_target = ifelse(dataset == "N_OM", TRUE, FALSE),
            IM_target = ifelse(dataset %in% c("N_IM", "P_IM"), TRUE, FALSE),
-           TM_target = ifelse(dataset %in% c("N_TM", "P_TM"), TRUE, FALSE))
+           TM_target = ifelse(dataset %in% c("N_TM", "P_TM"), TRUE, FALSE),
+           Envelope_target = ifelse(dataset %in% c("N_OM", "N_IM", "P_IM"), TRUE, FALSE),
+           old_dataset = dataset,
+           dataset = ifelse(dataset %in% c("N_OM", "N_IM"), "N_E", dataset))
 }
 
 create_target_df_holdout <- function(annotations_file, sequences) {

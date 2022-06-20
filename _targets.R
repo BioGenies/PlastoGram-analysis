@@ -284,6 +284,123 @@ list(
     envelope_ranked_architecture_performance,
     rank_architectures(envelope_mean_architecture_performance)
   ),
+  
+  # CD-HIT + graphpart approach with OM and IM as envelope class
+  tar_target(
+    graphpart_input,
+    process_for_graphpart(sequence_list)
+  ),
+  tar_target(
+    graphpart_res,
+    run_graphpart(graphpart_input, 
+                  paste0(data_path, "Sequences/"))
+  ),
+  tar_target(
+    target_df_graphpart, 
+    create_target_df(annotations_file,
+                     all_sequences,
+                     graphpart_res)),
+  tar_target(
+    data_df_graphpart,
+    filter(target_df_graphpart, cluster != 1)
+  ),
+  tar_target(
+    data_df_independent_graphpart,
+    filter(target_df_graphpart, cluster == 1)
+  ),
+  tar_target(
+    ngram_matrix_traintest_graphpart, 
+    create_ngram_matrix(all_sequences, data_df_graphpart)
+  ),
+  tar_target(
+    ngram_matrix_independent_graphpart, 
+    create_ngram_matrix(all_sequences, data_df_independent_graphpart)
+  ),
+  tar_target(
+    sequences_cv_graphpart,
+    all_sequences[which(names(all_sequences) %in% data_df_graphpart[["seq_name"]])]
+  ),
+  tar_target(
+    sequences_independent_graphpart,
+    all_sequences[which(names(all_sequences) %in% data_df_independent_graphpart[["seq_name"]])]
+  ),
+  tar_target(
+    filtering_df_graphpart,
+    read.csv(test_filtering_options_file)
+  ),
+  tar_target(
+    target_dfs_cv_graphpart,
+    create_cv_folds(data_df_graphpart, 5, c(427244, 58713042, 6513, 901374, 388123648)),#, 43671, 71234, 209147, 1847820, 248114))
+  ),
+  tar_target(
+    envelope_all_models_predictions_graphpart,
+    get_all_models_predictions_cv(ngram_matrix_traintest_graphpart, sequences_cv_graphpart, target_dfs_cv_graphpart, 
+                                  envelope_model_dat, data_path, type = "envelope", remove_hmm_files = TRUE)
+  ),
+  tar_target(
+    envelope_architectures_performance,
+    generate_and_test_architectures(model_variants = envelope_model_variants,
+                                    smote_models = c("N_E_all_model", "N_TM_all_model", "TM_all_model"),
+                                    sequence_models = c("Sec_model", "Tat_model"),
+                                    model_dat = envelope_model_dat,
+                                    filtering_df = envelope_filtering_df,
+                                    architectures_output_dir = paste0(data_path, "Model_architectures_envelope_graphpart/"),
+                                    all_models_predictions = envelope_all_models_predictions_graphpart, 
+                                    architecture_res_output_dir = paste0(data_path, "Model_architectures_envelope_results_graphpart/"), 
+                                    data_df_final = data_df_graphpart,
+                                    performance_outfile = paste0(data_path, "Architectures_envelope_performance_graphpart.csv"),
+                                    type = "envelope")
+  ),
+  tar_target(
+    mean_architecture_performance_graphpart,
+    get_mean_performance_of_architectures(architectures_performance_graphpart,
+                                          paste0(data_path, "Architectures_mean_performance_graphpart.csv"))
+  ),
+  tar_target(
+    PlastoGram_best_architecture_name_graphpart,
+    arrange(mean_architecture_performance_graphpart, desc(mean_kappa))[["model"]][1]
+  ),
+  tar_target(
+    PlastoGram_best_architecture_graphpart,
+    read.csv(paste0(data_path, "Model_architectures_envelope_graphpart/", gsub("_GLM|_RF", ".csv", PlastoGram_best_architecture_name_graphpart)))
+  ),
+  tar_target(
+    PlastoGram_ngram_models_graphpart,
+    train_ngram_models(PlastoGram_best_architecture_graphpart, ngram_matrix_traintest_graphpart, data_df_graphpart, filtering_colname = NULL, filtering_term = NULL)
+  ),
+  tar_target(
+    PlastoGram_hmm_Sec_graphpart,
+    paste0(train_profileHMM(sequences_cv_graphpart[which(names(sequences_cv_graphpart) %in% filter(data_df_graphpart, dataset == "N_TL_SEC")[["seq_name"]])], 
+                            "PlastoGram_graphpart_Sec_model", remove_files = TRUE), ".hmm"),
+    format = "file"
+  ),
+  tar_target(
+    PlastoGram_hmm_Tat_graphpart,
+    paste0(train_profileHMM(sequences_cv_graphpart[which(names(sequences_cv_graphpart) %in% filter(data_df_graphpart, dataset == "N_TL_TAT")[["seq_name"]])], 
+                            "PlastoGram_graphpart_Tat_model", remove_files = TRUE), ".hmm"),
+    format = "file"
+  ),
+  tar_target(
+    PlastoGram_predictions_graphpart,
+    predict_with_all_models(PlastoGram_best_architecture_graphpart, ngram_matrix_traintest_graphpart, data_df_graphpart, sequences_cv_graphpart, PlastoGram_ngram_models_graphpart,
+                            list("Sec_model" = gsub(".hmm", "", PlastoGram_hmm_Sec_graphpart), "Tat_model" = gsub(".hmm", "", PlastoGram_hmm_Tat_graphpart)),
+                            ith_fold = NULL, remove_hmm_files = FALSE)
+  ),
+  tar_target(
+    PlastoGram_higher_level_model_graphpart,
+    train_higher_level_model(PlastoGram_predictions_graphpart, data_df_graphpart, PlastoGram_best_architecture_name_graphpart, PlastoGram_best_architecture_graphpart)
+  ),
+  tar_target(
+    PlastoGram_informative_ngrams_graphpart,
+    get_all_imp_ngrams(PlastoGram_ngram_models_graphpart)
+  ),
+  tar_target(
+    PlastoGram_evaluation_graphpart,
+    predict_with_PlastoGram(PlastoGram_ngram_models_graphpart, 
+                            list("Sec_model" = gsub(".hmm", "", PlastoGram_hmm_Sec_graphpart), "Tat_model" = gsub(".hmm", "", PlastoGram_hmm_Tat_graphpart)), 
+                            PlastoGram_higher_level_model_graphpart, ngram_matrix_independent_graphpart, sequences_independent_graphpart, data_df_independent_graphpart,
+                            PlastoGram_informative_ngrams_graphpart, PlastoGram_best_architecture_graphpart, PlastoGram_best_architecture_name_graphpart)
+  ),
   # Results and final models
   tar_target(
     PlastoGram_best_architecture_name,
