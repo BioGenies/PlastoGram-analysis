@@ -13,6 +13,9 @@ library(targets)
 library(ranger)
 library(ggplot2)
 library(DT)
+library(stringr)
+library(ggbeeswarm)
+library(patchwork)
 
 source("../functions/ngram_model_functions.R")
 source("../functions/ensemble_model_functions.R")
@@ -25,6 +28,11 @@ my_DT <- function(df, title) {
                 options = list(dom = 't', scrollX = TRUE, scrollCollapse = TRUE,
                                scrollY = "700px", paging = FALSE, server = FALSE),
                 caption = htmltools::tags$caption(style = 'caption-side: top; text-align: center; color:black; font-size:150% ;', title) )
+}
+
+ihs <- function(x) {
+  y <- log(x + sqrt(x ^ 2 + 1))
+  return(y)
 }
 
 train_rf <- function(ngram_matrix, target, imp_ngrams, with_class_weights = FALSE, smote = FALSE) {
@@ -48,6 +56,64 @@ train_rf <- function(ngram_matrix, target, imp_ngrams, with_class_weights = FALS
 }
 
 new_PlastoGram_ngram_models <- train_ngram_models(PlastoGram_best_architecture, envelope_traintest_ngram_matrix, envelope_traintest_data_df, filtering_colname = NULL, filtering_term = NULL)
+
+```
+
+## Serine distribution in features of Nuclear_model
+
+```{r}
+imp <- new_PlastoGram_ngram_models[["Nuclear_model"]][["variable.importance"]]
+serine_frac <- sapply(names(imp), function(i) str_count(i, "S")/nchar(i))
+plot_dat <- data.frame(ngram = names(imp),
+                       feature_importance = imp,
+                       serine_fraction = serine_frac)
+
+pp <- plot_dat %>% 
+  mutate(serine_fraction = as.factor(round(serine_fraction, 2))) %>% 
+  ggplot(., aes(y = serine_fraction, x = feature_importance)) +
+  geom_jitter(size = 0.5, height = 0.2) + 
+  theme_bw() + 
+  theme(axis.text.x = element_blank(), axis.ticks.x = element_blank(), axis.title.x = element_blank())
+
+pp_ihs <- plot_dat %>% 
+  mutate(serine_fraction = as.factor(round(serine_fraction, 2))) %>% 
+  ggplot(., aes(y = serine_fraction, x = ihs(feature_importance))) +
+  geom_jitter(size = 0.5, height = 0.2) + 
+  theme_bw() + 
+  theme(axis.text.x = element_blank(), axis.ticks.x = element_blank(), axis.title.x = element_blank())
+
+pq <- plot_dat %>% 
+  mutate(serine_fraction = as.factor(round(serine_fraction, 2))) %>% 
+  ggplot(., aes(y = serine_fraction, x = feature_importance)) +
+  geom_quasirandom(size = 0.5, groupOnX = FALSE, width = 0.3) + 
+  theme_bw() + 
+  theme(axis.text.x = element_blank(), axis.ticks.x = element_blank(), axis.title.x = element_blank())
+
+pq_ihs <- plot_dat %>% 
+  mutate(serine_fraction = as.factor(round(serine_fraction, 2))) %>% 
+  ggplot(., aes(y = serine_fraction, x = ihs(feature_importance))) +
+  geom_quasirandom(size = 0.5, groupOnX = FALSE, width = 0.3) + 
+  theme_bw() + 
+  theme(axis.text.x = element_blank(), axis.ticks.x = element_blank(), axis.title.x = element_blank())
+
+pd <- plot_dat %>% 
+  mutate(serine_fraction = as.factor(round(serine_fraction, 2))) %>% 
+  ggplot(., aes(x = feature_importance)) +
+  geom_density() +
+  theme_bw() +
+  scale_y_reverse()
+
+pd_ihs <- plot_dat %>% 
+  mutate(serine_fraction = as.factor(round(serine_fraction, 2))) %>% 
+  ggplot(., aes(x = ihs(feature_importance))) +
+  geom_density() +
+  theme_bw() +
+  scale_y_reverse()
+
+pp/pd + plot_layout(heights = c(3, 1))
+pq/pd + plot_layout(heights = c(3, 1))
+pp_ihs/pd_ihs + plot_layout(heights = c(3, 1))
+pq_ihs/pd_ihs + plot_layout(heights = c(3, 1))
 ```
 
 ## Features with the highest Gini importance
