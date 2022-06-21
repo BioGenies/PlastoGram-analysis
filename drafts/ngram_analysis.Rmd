@@ -116,6 +116,117 @@ pp_ihs/pd_ihs + plot_layout(heights = c(3, 1))
 pq_ihs/pd_ihs + plot_layout(heights = c(3, 1))
 ```
 
+## L18 motif ngrams in Membrane model
+```{r}
+imp_m <- new_PlastoGram_ngram_models[["Membrane_model"]][["variable.importance"]]
+motifs <- sapply(names(imp_m), function(i) ifelse(nchar(i) != 1, gsub("_", ".", decode_ngrams(i)), i), USE.NAMES = FALSE)
+l18 <- "VDPLYPGGSFDPLGLADD"
+l18_motifs <- sapply(motifs, function(i) grepl(i, l18), USE.NAMES = FALSE)
+dplg_motifs <- sapply(motifs, function(i) grepl(i, "DPLG"), USE.NAMES = FALSE)
+plot_dat <- data.frame(ngram = names(imp_m),
+                       feature_importance = imp_m,
+                       L18 = l18_motifs,
+                       DPLG = dplg_motifs)
+
+ggplot(plot_dat, aes(x = L18, y = feature_importance)) +
+  geom_quasirandom() +
+  theme_bw() 
+
+ggplot(plot_dat, aes(x = DPLG, y = feature_importance)) +
+  geom_quasirandom() +
+  theme_bw() 
+
+plot_dat %>% 
+  arrange(desc(feature_importance)) %>% 
+  head(n = 100) %>% 
+  mutate(ngram = factor(ngram, levels = rev(.[["ngram"]]))) %>% 
+  ggplot(aes(y = ngram, x = feature_importance, fill = L18)) +
+  geom_col() +
+  theme_bw()
+
+plot_dat %>% 
+  arrange(desc(feature_importance)) %>% 
+  head(n = 100) %>% 
+  mutate(ngram = factor(ngram, levels = rev(.[["ngram"]]))) %>% 
+  ggplot(aes(y = ngram, x = feature_importance, fill = DPLG)) +
+  geom_col() +
+  theme_bw()
+```
+
+## L18 motif ngrams in Nuclear membrane model
+```{r}
+imp_nm <- new_PlastoGram_ngram_models[["Nuclear_membrane_model"]][["variable.importance"]]
+motifs <- sapply(names(imp_nm), function(i) ifelse(nchar(i) != 1, gsub("_", ".", decode_ngrams(i)), i), USE.NAMES = FALSE)
+l18_motifs <- sapply(motifs, function(i) grepl(i, l18), USE.NAMES = FALSE)
+dplg_motifs <- sapply(motifs, function(i) grepl(i, "DPLG"), USE.NAMES = FALSE)
+plot_dat <- data.frame(ngram = names(imp_nm),
+                       feature_importance = imp_nm,
+                       L18 = l18_motifs,
+                       DPLG = dplg_motifs)
+
+ggplot(plot_dat, aes(x = L18, y = feature_importance)) +
+  geom_quasirandom() +
+  theme_bw() 
+
+ggplot(plot_dat, aes(x = DPLG, y = feature_importance)) +
+  geom_quasirandom() +
+  theme_bw() 
+
+plot_dat %>% 
+  arrange(desc(feature_importance)) %>% 
+  head(n = 100) %>% 
+  mutate(ngram = factor(ngram, levels = rev(.[["ngram"]]))) %>% 
+  ggplot(aes(y = ngram, x = feature_importance, fill = L18)) +
+  geom_col() +
+  theme_bw()
+
+plot_dat %>% 
+  arrange(desc(feature_importance)) %>% 
+  head(n = 100) %>% 
+  mutate(ngram = factor(ngram, levels = rev(.[["ngram"]]))) %>% 
+  ggplot(aes(y = ngram, x = feature_importance, fill = DPLG)) +
+  geom_col() +
+  theme_bw()
+```
+## L18 motif ngrams in N_E vs. N_TM model
+
+```{r}
+imp_tm <- new_PlastoGram_ngram_models[["N_E_vs_N_TM_model"]][["variable.importance"]]
+motifs <- sapply(names(imp_tm), function(i) ifelse(nchar(i) != 1, gsub("_", ".", decode_ngrams(i)), i), USE.NAMES = FALSE)
+l18_motifs <- sapply(motifs, function(i) grepl(i, l18), USE.NAMES = FALSE)
+dplg_motifs <- sapply(motifs, function(i) grepl(i, "DPLG"), USE.NAMES = FALSE)
+plot_dat <- data.frame(ngram = names(imp_tm),
+                       feature_importance = imp_tm,
+                       L18 = l18_motifs,
+                       DPLG = dplg_motifs)
+
+ggplot(plot_dat, aes(x = L18, y = feature_importance)) +
+  geom_quasirandom() +
+  theme_bw() 
+
+ggplot(plot_dat, aes(x = DPLG, y = feature_importance)) +
+  geom_quasirandom() +
+  theme_bw() 
+
+plot_dat %>% 
+  arrange(desc(feature_importance)) %>% 
+  head(n = 100) %>% 
+  mutate(ngram = factor(ngram, levels = rev(.[["ngram"]]))) %>% 
+  ggplot(aes(y = ngram, x = feature_importance, fill = L18)) +
+  geom_col() +
+  theme_bw()
+
+plot_dat %>% 
+  arrange(desc(feature_importance)) %>% 
+  head(n = 100) %>% 
+  mutate(ngram = factor(ngram, levels = rev(.[["ngram"]]))) %>% 
+  ggplot(aes(y = ngram, x = feature_importance, fill = DPLG)) +
+  geom_col() +
+  theme_bw()
+```
+
+
+
 ## Features with the highest Gini importance
 
 ```{r}

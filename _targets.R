@@ -338,7 +338,7 @@ list(
                                   envelope_model_dat, data_path, type = "envelope", remove_hmm_files = TRUE)
   ),
   tar_target(
-    envelope_architectures_performance,
+    architectures_performance_graphpart,
     generate_and_test_architectures(model_variants = envelope_model_variants,
                                     smote_models = c("N_E_all_model", "N_TM_all_model", "TM_all_model"),
                                     sequence_models = c("Sec_model", "Tat_model"),
@@ -353,8 +353,8 @@ list(
   ),
   tar_target(
     mean_architecture_performance_graphpart,
-    get_mean_performance_of_architectures(architectures_performance_graphpart,
-                                          paste0(data_path, "Architectures_mean_performance_graphpart.csv"))
+    get_mean_performance_of_envelope_architectures(architectures_performance_graphpart,
+                                                   paste0(data_path, "Architectures_mean_performance_graphpart.csv"))
   ),
   tar_target(
     PlastoGram_best_architecture_name_graphpart,
