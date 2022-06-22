@@ -371,6 +371,8 @@ pre code {
 
 <div id="datasets" class="section level3">
 <h3>Datasets</h3>
+<div id="cd-hit-graphpart" class="section level4">
+<h4>CD-HIT + graphpart</h4>
 <ol style="list-style-type: decimal">
 <li>CD-HIT reduction using 0.9 threshold</li>
 <li>Graph-part partitioning to create independent and train-test
@@ -389,72 +391,158 @@ together as envelope.</li>
 </colgroup>
 <thead>
 <tr class="header">
-<th align="center">Dataset</th>
-<th align="center">Before filtering</th>
-<th align="center">After CD-HIT</th>
-<th align="center">After partitioning<br>(train-test)</th>
-<th align="center">After partitioning<br>(independent)</th>
+<th>Dataset</th>
+<th>Before filtering</th>
+<th>After CD-HIT</th>
+<th>After partitioning<br>(train-test)</th>
+<th>After partitioning<br>(independent)</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="center">N_E</td>
-<td align="center">118 (59 IM + 59 OM)</td>
-<td align="center">115 (59 IM + 56 OM)</td>
-<td align="center">96 (50 IM + 46 OM)</td>
-<td align="center">10 (6 IM + 4 OM)</td>
+<td>N_E</td>
+<td>118 (59 IM + 59 OM)</td>
+<td>115 (59 IM + 56 OM)</td>
+<td>96 (50 IM + 46 OM)</td>
+<td>10 (6 IM + 4 OM)</td>
 </tr>
 <tr class="even">
-<td align="center">N_TM</td>
-<td align="center">276</td>
-<td align="center">222</td>
-<td align="center">192</td>
-<td align="center">30</td>
+<td>N_TM</td>
+<td>276</td>
+<td>222</td>
+<td>192</td>
+<td>30</td>
 </tr>
 <tr class="odd">
-<td align="center">N_S</td>
-<td align="center">357</td>
-<td align="center">340</td>
-<td align="center">287</td>
-<td align="center">53</td>
+<td>N_S</td>
+<td>357</td>
+<td>340</td>
+<td>287</td>
+<td>53</td>
 </tr>
 <tr class="even">
-<td align="center">N_TL_SEC</td>
-<td align="center">49</td>
-<td align="center">43</td>
-<td align="center">37</td>
-<td align="center">4</td>
+<td>N_TL_SEC</td>
+<td>49</td>
+<td>43</td>
+<td>37</td>
+<td>4</td>
 </tr>
 <tr class="odd">
-<td align="center">N_TL_TAT</td>
-<td align="center">84</td>
-<td align="center">89</td>
-<td align="center">67</td>
-<td align="center">6</td>
+<td>N_TL_TAT</td>
+<td>84</td>
+<td>89</td>
+<td>67</td>
+<td>6</td>
 </tr>
 <tr class="even">
-<td align="center">P_IM</td>
-<td align="center">187</td>
-<td align="center">128</td>
-<td align="center">106</td>
-<td align="center">11</td>
+<td>P_IM</td>
+<td>187</td>
+<td>128</td>
+<td>106</td>
+<td>11</td>
 </tr>
 <tr class="odd">
-<td align="center">P_TM</td>
-<td align="center">4456</td>
-<td align="center">1237</td>
-<td align="center">1073</td>
-<td align="center">156</td>
+<td>P_TM</td>
+<td>4456</td>
+<td>1237</td>
+<td>1073</td>
+<td>156</td>
 </tr>
 <tr class="even">
-<td align="center">P_S</td>
-<td align="center">1417</td>
-<td align="center">419</td>
-<td align="center">360</td>
-<td align="center">42</td>
+<td>P_S</td>
+<td>1417</td>
+<td>419</td>
+<td>360</td>
+<td>42</td>
 </tr>
 </tbody>
 </table>
+</div>
+<div id="cd-hit" class="section level4">
+<h4>CD-HIT</h4>
+<ol style="list-style-type: decimal">
+<li>CD-HIT reduction using 0.9 threshold</li>
+<li>15% holdout to create independent dataset</li>
+<li>N_IM and N_OM are reduced/partitioned separately and then grouped
+together as envelope.</li>
+</ol>
+<table>
+<colgroup>
+<col width="13%" />
+<col width="22%" />
+<col width="22%" />
+<col width="21%" />
+<col width="19%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Data set</th>
+<th>Before filtering</th>
+<th>After filtering</th>
+<th>Train-test</th>
+<th>Independent</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>N_E</td>
+<td>118 (59 OM + 59 IM)</td>
+<td>115 (56 OM + 59 IM)</td>
+<td>98 (48 OM + 50 IM)</td>
+<td>17 (8 OM + 9 IM)</td>
+</tr>
+<tr class="even">
+<td>N_TM</td>
+<td>276</td>
+<td>222</td>
+<td>189</td>
+<td>33</td>
+</tr>
+<tr class="odd">
+<td>N_S</td>
+<td>357</td>
+<td>340</td>
+<td>289</td>
+<td>51</td>
+</tr>
+<tr class="even">
+<td>N_TL_SEC</td>
+<td>49</td>
+<td>43</td>
+<td>37</td>
+<td>6</td>
+</tr>
+<tr class="odd">
+<td>N_TL_TAT</td>
+<td>84</td>
+<td>79</td>
+<td>67</td>
+<td>12</td>
+</tr>
+<tr class="even">
+<td>P_IM</td>
+<td>187</td>
+<td>128</td>
+<td>109</td>
+<td>19</td>
+</tr>
+<tr class="odd">
+<td>P_TM</td>
+<td>4456</td>
+<td>1237</td>
+<td>1051</td>
+<td>186</td>
+</tr>
+<tr class="even">
+<td>P_S</td>
+<td>1417</td>
+<td>419</td>
+<td>356</td>
+<td>63</td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 <div id="mean-performance-in-10-fold-cv-reapeated-5x" class="section level3">
 <h3>Mean performance in 10-fold CV reapeated 5x</h3>
