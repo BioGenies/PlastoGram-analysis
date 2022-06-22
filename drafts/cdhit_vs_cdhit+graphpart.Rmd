@@ -1,0 +1,156 @@
+---
+title: "CD-HIT vs. CD-HIT + graphpart"
+author: "Katarzyna Sidorczuk"
+date: "6/22/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, fig.width = 12, fig.height = 9)
+
+library(dplyr)
+library(ggplot2)
+library(tidyr)
+library(ggrepel)
+library(targets)
+library(DT)
+library(measures)
+
+withr::with_dir("../",
+                tar_load(c(envelope_architectures_performance, envelope_mean_architecture_performance, 
+                           architectures_performance_graphpart, mean_architecture_performance_graphpart,
+                           PlastoGram_evaluation, PlastoGram_evaluation_graphpart)))
+
+options(DT.options = list(dom = "Brtip",
+                          buttons = c("copy", "csv", "excel", "print"),
+                          pageLength = 20
+))
+
+my_DT <- function(x, ...)
+  datatable(x, ..., escape = FALSE, filter = "top", rownames = FALSE,
+            style = "bootstrap")
+
+calculate_stats <- function(evaluation_res) {
+  res <- evaluation_res[["Final_results"]]
+  hl_res <- evaluation_res[["Higher-order_model_preds"]]
+  data.frame(
+    kappa = KAPPA(res[["dataset"]], res[["Localization"]]),
+    AU1U = multiclass.AU1U(hl_res[, 3:10], hl_res[["dataset"]]),
+    `N_E accuracy` = ACC(filter(res, dataset == "N_E")[["dataset"]], filter(res, dataset == "N_E")[["Localization"]]),
+    `N_TM accuracy` = ACC(filter(res, dataset == "N_TM")[["dataset"]], filter(res, dataset == "N_TM")[["Localization"]]),
+    `N_S accuracy` = ACC(filter(res, dataset == "N_S")[["dataset"]], filter(res, dataset == "N_S")[["Localization"]]),
+    `N_TL_SEC accuracy` = ACC(filter(res, dataset == "N_TL_SEC")[["dataset"]], filter(res, dataset == "N_TL_SEC")[["Localization"]]),
+    `N_TL_TAT accuracy` = ACC(filter(res, dataset == "N_TL_TAT")[["dataset"]], filter(res, dataset == "N_TL_TAT")[["Localization"]]),
+    `P_IM accuracy` = ACC(filter(res, dataset == "P_IM")[["dataset"]], filter(res, dataset == "P_IM")[["Localization"]]),
+    `P_TM accuracy` = ACC(filter(res, dataset == "P_TM")[["dataset"]], filter(res, dataset == "P_TM")[["Localization"]]),
+    `P_S accuracy` = ACC(filter(res, dataset == "P_S")[["dataset"]], filter(res, dataset == "P_S")[["Localization"]]),
+    check.names = FALSE
+  ) %>% pivot_longer(1:ncol(.), names_to = "Measure", values_to = "Value") 
+}
+```
+
+### Datasets
+
+1. CD-HIT reduction using 0.9 threshold
+2. Graph-part partitioning to create independent and train-test datasets. Parameters: 0.4 threshold, 0.15 ratio of validation dataset, no moving between clusters.
+3. N_IM and N_OM are reduced/partitioned separately and then grouped together as envelope. 
+
+| Dataset | Before filtering | After CD-HIT | After partitioning<br>(train-test) | After partitioning<br>(independent) |
+|:---:|:---:|:---:|:---:|:---:|
+| N_E | 118 (59 IM + 59 OM) | 115 (59 IM + 56 OM) | 96 (50 IM + 46 OM) | 10 (6 IM + 4 OM) |
+| N_TM | 276 | 222 | 192 | 30 |
+| N_S | 357 | 340 | 287 | 53 |
+| N_TL_SEC | 49 | 43 | 37 | 4 |
+| N_TL_TAT | 84 | 89 | 67 | 6 |
+| P_IM | 187 | 128 | 106 | 11 |
+| P_TM | 4456 | 1237 | 1073 | 156 |
+| P_S | 1417 | 419 | 360 | 42 |
+
+
+
+### Mean performance in 10-fold CV reapeated 5x
+
+Both CD-HIT only and CD-HIT+graphpart approaches lead to the same best architecture: Architecture_v71_0-1_No_filtering_RF. 
+
+```{r}
+cdhit <- envelope_mean_architecture_performance %>% 
+  arrange(desc(mean_kappa)) %>% 
+  head(n = 1) %>% 
+  pivot_longer(2:ncol(.), names_to = "Measure", values_to = "CD-HIT") 
+graphpart <- mean_architecture_performance_graphpart %>% 
+  arrange(desc(mean_kappa)) %>% 
+  head(n = 1) %>% 
+  pivot_longer(2:ncol(.), names_to = "Measure", values_to = "CD-HIT + graphpart") 
+
+dat <- left_join(cdhit, graphpart, by = c("model", "Measure")) %>% 
+  select(-model)
+
+knitr::kable(dat)
+```
+
+```{r}
+plot_dat <- dat %>% 
+  pivot_longer(2:3, names_to = "Approach", values_to = "Value") %>% 
+  mutate(type = ifelse(grepl("mean_", Measure), "Mean", "SD"),
+         Measure = gsub("_sens", "", gsub("mean_|sd_", "", Measure))) %>% 
+  pivot_wider(names_from = "type", values_from = "Value")
+
+ggplot(plot_dat, aes(x = Measure, y = Mean, fill = Approach)) +
+  geom_col(position = "dodge") +
+  geom_errorbar(aes(ymin = Mean-SD, ymax = Mean+SD), position = "dodge") +
+  theme_bw()
+```
+
+### Performance on the validation dataset
+
+```{r}
+cdhit_res <- PlastoGram_evaluation[["Final_results"]]
+graphpart_res <- PlastoGram_evaluation_graphpart[["Final_results"]]
+#table(Localization = cdhit_res[["dataset"]], Prediction = cdhit_res[["Localization"]]) %>% knitr::kable()
+#table(Localization = graphpart_res[["dataset"]], Prediction = graphpart_res[["Localization"]]) %>% knitr::kable()
+
+cdhit_stats <- calculate_stats(PlastoGram_evaluation) %>% 
+  setNames(c("Measure", "CD-HIT"))
+graphpart_stats <- calculate_stats(PlastoGram_evaluation_graphpart) %>% 
+  setNames(c("Measure", "CD-HIT + graphpart"))
+
+stats_dat <- left_join(cdhit_stats, graphpart_stats, by = "Measure") 
+
+knitr::kable(stats_dat)
+
+stats_dat %>% 
+  pivot_longer(2:3, names_to = "Approach", values_to = "Value") %>% 
+  ggplot(aes(x = Measure, y = Value, fill = Approach)) +
+  geom_col(position = "dodge") +
+  theme_bw() +
+  coord_flip()
+```
+
+
+CD-HIT approach
+
+|True \\ Predicted| N_E| N_S| N_TL_SEC| N_TL_TAT| N_TM| P_IM| P_S| P_TM|
+|:--------|---:|---:|--------:|--------:|----:|----:|---:|----:|
+|N_E      |   4|  11|        0|        0|    1|    0|   0|    1|
+|N_S      |   1|  50|        0|        0|    0|    0|   0|    0|
+|N_TL_SEC |   0|   0|        6|        0|    0|    0|   0|    0|
+|N_TL_TAT |   0|   1|        0|       10|    1|    0|   0|    0|
+|N_TM     |   0|   5|        0|        0|   24|    0|   0|    4|
+|P_IM     |   0|   0|        0|        0|    0|   18|   0|    1|
+|P_S      |   0|   1|        0|        0|    0|    0|  60|    2|
+|P_TM     |   0|   0|        0|        0|    0|    0|   0|  186|
+
+
+CD-HIT + graphpart approach
+
+|True \\ Predicted| N_E| N_S| N_TL_SEC| N_TL_TAT| N_TM| P_IM| P_S| P_TM|
+|:--------|---:|---:|--------:|--------:|----:|----:|---:|----:|
+|N_E      |   3|   6|        0|        0|    0|    0|   0|    1|
+|N_S      |   1|  39|        0|        0|    8|    0|   4|    1|
+|N_TL_SEC |   0|   2|        0|        1|    1|    0|   0|    0|
+|N_TL_TAT |   0|   3|        0|        2|    0|    0|   0|    1|
+|N_TM     |   1|  15|        2|        0|    7|    0|   0|    5|
+|P_IM     |   0|   0|        0|        0|    0|    9|   0|    2|
+|P_S      |   0|  24|        0|        0|    0|    0|   3|   15|
+|P_TM     |   0|   1|        0|        0|    1|    0|   1|  153|
+
