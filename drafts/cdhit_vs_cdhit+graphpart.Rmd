@@ -1,8 +1,8 @@
 ---
 title: "CD-HIT vs. CD-HIT + graphpart"
-author: "Katarzyna Sidorczuk"
-date: "6/22/2022"
-output: html_document
+author: "Katarzyna Sidorczuk & Michał"
+date: "6/27/2022"
+output: pdf_document
 ---
 
 ```{r setup, include=FALSE}
@@ -48,6 +48,18 @@ calculate_stats <- function(evaluation_res) {
   ) %>% pivot_longer(1:ncol(.), names_to = "Measure", values_to = "Value") 
 }
 ```
+
+## General remarks
+
+
+If we use graphpart we cannot predictn Sec proteins.
+
+Moreover, PlastoGram performance drops for Tat, stromal proteins (mostly plastid-encoded) and nuclear-encoded transmembrane proteins.
+
+Sec and TAT issue is mostly related to the number of sequences in the independent data set. Additional graphpart reduction removes 2 out of 6 sequences for Sec (33%) and for Tat 6 out of 12 (50%). Similarly, for plastid-encoded stromal proteins we are losing 21 proteins out of 63 (33%).
+
+The unexplained phenomenon is a huge loss of accuracy for nuclear-encoded transmembrane proteins, when graphpart removes only few proteins in the independent dataset, b ut suddenly PlastoGram staerts to confuse this proteins with nuclear-encoded stromal proteins.
+
 
 ### Datasets
 
