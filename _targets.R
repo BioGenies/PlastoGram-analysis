@@ -525,6 +525,10 @@ list(
   tar_target(
     PlastoGram_model,
     get_final_plastogram_model(PlastoGram_ngram_models, PlastoGram_higher_level_model, PlastoGram_OM_IM_model, PlastoGram_informative_ngrams)
+  ),
+  tar_target(
+    ngram_analysis,
+    rmarkdown::render("ngram_analysis.Rmd")
   )
 )
 

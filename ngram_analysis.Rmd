@@ -1,0 +1,312 @@
+---
+title: "ngram analysis"
+author: "Katarzyna Sidorczuk"
+date: '2022-06-14'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, fig.width = 14, fig.height = 10, warning = FALSE, message = FALSE)
+library(dplyr)
+library(biogram)
+library(targets)
+library(ranger)
+library(ggplot2)
+library(DT)
+library(stringr)
+library(ggbeeswarm)
+library(patchwork)
+
+source("./functions/ngram_model_functions.R")
+source("./functions/ensemble_model_functions.R")
+
+tar_load(c(PlastoGram_best_architecture, envelope_traintest_ngram_matrix, envelope_traintest_data_df))
+
+my_DT <- function(df, title) {
+  DT::datatable(df, extensions = 'FixedColumns', filter = "top", style = "bootstrap",
+                options = list(dom = 't', scrollX = TRUE, scrollCollapse = TRUE,
+                               scrollY = "700px", paging = FALSE, server = FALSE),
+                caption = htmltools::tags$caption(style = 'caption-side: top; text-align: center; color:black; font-size:150% ;', title) )
+}
+
+ihs <- function(x) {
+  y <- log(x + sqrt(x ^ 2 + 1))
+  return(y)
+}
+
+train_rf <- function(ngram_matrix, target, imp_ngrams, with_class_weights = FALSE, smote = FALSE) {
+  ranger_train_data <- if(smote == TRUE) {
+    do_smote(ngram_matrix[, imp_ngrams], target, setNames(as.list(unname(1/(table(target)/max(table(target))))), names(table(target)))) %>% 
+      mutate(tar = as.factor(tar))
+  } else {
+    data.frame(ngram_matrix[, imp_ngrams],
+               tar = as.factor(target))
+  }
+  
+  if(with_class_weights == FALSE) {
+    class_weights <- NULL
+  } else {
+    class_weights <- sapply(levels(ranger_train_data[["tar"]]), function(i) 1/sum(ranger_train_data[["tar"]] == i)/nrow(ranger_train_data), USE.NAMES = FALSE)
+  }
+  ranger(dependent.variable.name = "tar", data =  ranger_train_data, 
+         write.forest = TRUE, probability = TRUE, num.trees = 500, 
+         verbose = FALSE, class.weights = class_weights,
+         seed = 427244, importance = "impurity")
+}
+
+new_PlastoGram_ngram_models <- train_ngram_models(PlastoGram_best_architecture, envelope_traintest_ngram_matrix, envelope_traintest_data_df, filtering_colname = NULL, filtering_term = NULL)
+
+```
+
+## Serine distribution in features of Nuclear_model
+
+```{r}
+imp <- new_PlastoGram_ngram_models[["Nuclear_model"]][["variable.importance"]]
+serine_frac <- sapply(names(imp), function(i) str_count(i, "S")/nchar(i))
+plot_dat <- data.frame(ngram = names(imp),
+                       feature_importance = imp,
+                       serine_fraction = serine_frac)
+
+pp <- plot_dat %>% 
+  mutate(serine_fraction = as.factor(round(serine_fraction, 2))) %>% 
+  ggplot(., aes(y = serine_fraction, x = feature_importance)) +
+  geom_jitter(size = 0.5, height = 0.2) + 
+  theme_bw() + 
+  theme(axis.text.x = element_blank(), axis.ticks.x = element_blank(), axis.title.x = element_blank())
+
+pp_ihs <- plot_dat %>% 
+  mutate(serine_fraction = as.factor(round(serine_fraction, 2))) %>% 
+  ggplot(., aes(y = serine_fraction, x = ihs(feature_importance))) +
+  geom_jitter(size = 0.5, height = 0.2) + 
+  theme_bw() + 
+  theme(axis.text.x = element_blank(), axis.ticks.x = element_blank(), axis.title.x = element_blank())
+
+pq <- plot_dat %>% 
+  mutate(serine_fraction = as.factor(round(serine_fraction, 2))) %>% 
+  ggplot(., aes(y = serine_fraction, x = feature_importance)) +
+  geom_quasirandom(size = 0.5, groupOnX = FALSE, width = 0.3) + 
+  theme_bw() + 
+  theme(axis.text.x = element_blank(), axis.ticks.x = element_blank(), axis.title.x = element_blank())
+
+pq_ihs <- plot_dat %>% 
+  mutate(serine_fraction = as.factor(round(serine_fraction, 2))) %>% 
+  ggplot(., aes(y = serine_fraction, x = ihs(feature_importance))) +
+  geom_quasirandom(size = 0.5, groupOnX = FALSE, width = 0.3) + 
+  theme_bw() + 
+  theme(axis.text.x = element_blank(), axis.ticks.x = element_blank(), axis.title.x = element_blank())
+
+pd <- plot_dat %>% 
+  mutate(serine_fraction = as.factor(round(serine_fraction, 2))) %>% 
+  ggplot(., aes(x = feature_importance)) +
+  geom_density() +
+  theme_bw() +
+  scale_y_reverse()
+
+pd_ihs <- plot_dat %>% 
+  mutate(serine_fraction = as.factor(round(serine_fraction, 2))) %>% 
+  ggplot(., aes(x = ihs(feature_importance))) +
+  geom_density() +
+  theme_bw() +
+  scale_y_reverse()
+
+pp/pd + plot_layout(heights = c(3, 1))
+pq/pd + plot_layout(heights = c(3, 1))
+pp_ihs/pd_ihs + plot_layout(heights = c(3, 1))
+pq_ihs/pd_ihs + plot_layout(heights = c(3, 1))
+```
+
+## L18 motif ngrams in Membrane model
+```{r}
+imp_m <- new_PlastoGram_ngram_models[["Membrane_model"]][["variable.importance"]]
+motifs <- sapply(names(imp_m), function(i) ifelse(nchar(i) != 1, gsub("_", ".", decode_ngrams(i)), i), USE.NAMES = FALSE)
+l18 <- "VDPLYPGGSFDPLGLADD"
+l18_motifs <- sapply(motifs, function(i) grepl(i, l18), USE.NAMES = FALSE)
+dplg_motifs <- sapply(motifs, function(i) grepl(i, "DPLG"), USE.NAMES = FALSE)
+plot_dat <- data.frame(ngram = names(imp_m),
+                       feature_importance = imp_m,
+                       L18 = l18_motifs,
+                       DPLG = dplg_motifs)
+
+ggplot(plot_dat, aes(x = L18, y = feature_importance)) +
+  geom_quasirandom() +
+  theme_bw() 
+
+ggplot(plot_dat, aes(x = DPLG, y = feature_importance)) +
+  geom_quasirandom() +
+  theme_bw() 
+
+plot_dat %>% 
+  arrange(desc(feature_importance)) %>% 
+  head(n = 100) %>% 
+  mutate(ngram = factor(ngram, levels = rev(.[["ngram"]]))) %>% 
+  ggplot(aes(y = ngram, x = feature_importance, fill = L18)) +
+  geom_col() +
+  theme_bw()
+
+plot_dat %>% 
+  arrange(desc(feature_importance)) %>% 
+  head(n = 100) %>% 
+  mutate(ngram = factor(ngram, levels = rev(.[["ngram"]]))) %>% 
+  ggplot(aes(y = ngram, x = feature_importance, fill = DPLG)) +
+  geom_col() +
+  theme_bw()
+
+```
+
+## L18 motif ngrams in Nuclear membrane model
+```{r}
+imp_nm <- new_PlastoGram_ngram_models[["Nuclear_membrane_model"]][["variable.importance"]]
+motifs <- sapply(names(imp_nm), function(i) ifelse(nchar(i) != 1, gsub("_", ".", decode_ngrams(i)), i), USE.NAMES = FALSE)
+l18_motifs <- sapply(motifs, function(i) grepl(i, l18), USE.NAMES = FALSE)
+dplg_motifs <- sapply(motifs, function(i) grepl(i, "DPLG"), USE.NAMES = FALSE)
+plot_dat <- data.frame(ngram = names(imp_nm),
+                       feature_importance = imp_nm,
+                       L18 = l18_motifs,
+                       DPLG = dplg_motifs)
+
+ggplot(plot_dat, aes(x = L18, y = feature_importance)) +
+  geom_quasirandom() +
+  theme_bw() 
+
+ggplot(plot_dat, aes(x = DPLG, y = feature_importance)) +
+  geom_quasirandom() +
+  theme_bw() 
+
+plot_dat %>% 
+  arrange(desc(feature_importance)) %>% 
+  head(n = 100) %>% 
+  mutate(ngram = factor(ngram, levels = rev(.[["ngram"]]))) %>% 
+  ggplot(aes(y = ngram, x = feature_importance, fill = L18)) +
+  geom_col() +
+  theme_bw()
+
+plot_dat %>% 
+  arrange(desc(feature_importance)) %>% 
+  head(n = 100) %>% 
+  mutate(ngram = factor(ngram, levels = rev(.[["ngram"]]))) %>% 
+  ggplot(aes(y = ngram, x = feature_importance, fill = DPLG)) +
+  geom_col() +
+  theme_bw()
+
+p <- plot_dat %>% 
+  arrange(desc(feature_importance)) %>% 
+  head(n = 50)  %>% 
+  mutate(ngram = sapply(.[["ngram"]], function(i) {
+    ifelse(nchar(i) == 1, i, paste0(unlist(strsplit(decode_ngrams(i), "")), collapse = " "))
+    })) %>%
+  mutate(ngram = factor(ngram, levels = rev(.[["ngram"]]))) %>% 
+  ggplot(aes(y = ngram, x = feature_importance, fill = DPLG)) +
+  geom_col() +
+  xlab("Gini importance") +
+  theme_bw(base_size = 8) +
+  scale_fill_manual(values = c("grey70", "#76d872"))
+
+p
+
+ggsave("DPLG_motif.eps", p, width = 5, height = 5,
+       path = "~/Dropbox/Projekty/BioNgramProjects/PlastoGram/Publication_results/")
+```
+## L18 motif ngrams in N_E vs. N_TM model
+
+```{r}
+imp_tm <- new_PlastoGram_ngram_models[["N_E_vs_N_TM_model"]][["variable.importance"]]
+motifs <- sapply(names(imp_tm), function(i) ifelse(nchar(i) != 1, gsub("_", ".", decode_ngrams(i)), i), USE.NAMES = FALSE)
+l18_motifs <- sapply(motifs, function(i) grepl(i, l18), USE.NAMES = FALSE)
+dplg_motifs <- sapply(motifs, function(i) grepl(i, "DPLG"), USE.NAMES = FALSE)
+plot_dat <- data.frame(ngram = names(imp_tm),
+                       feature_importance = imp_tm,
+                       L18 = l18_motifs,
+                       DPLG = dplg_motifs)
+
+ggplot(plot_dat, aes(x = L18, y = feature_importance)) +
+  geom_quasirandom() +
+  theme_bw() 
+
+ggplot(plot_dat, aes(x = DPLG, y = feature_importance)) +
+  geom_quasirandom() +
+  theme_bw() 
+
+plot_dat %>% 
+  arrange(desc(feature_importance)) %>% 
+  head(n = 100) %>% 
+  mutate(ngram = factor(ngram, levels = rev(.[["ngram"]]))) %>% 
+  ggplot(aes(y = ngram, x = feature_importance, fill = L18)) +
+  geom_col() +
+  theme_bw()
+```
+
+
+
+## Features with the highest Gini importance
+
+```{r}
+#save(new_PlastoGram_ngram_models, file = "new_PlastoGram_ngram_models.rda")
+#load("new_PlastoGram_ngram_models.rda")
+lapply(names(new_PlastoGram_ngram_models), function(ith_model) {
+  x <- importance(new_PlastoGram_ngram_models[[ith_model]]) %>% 
+    as.data.frame() %>% 
+    tibble::rownames_to_column() %>% 
+    setNames(c("ngram", "Gini importance")) %>% 
+    arrange(`Gini importance`) %>% 
+    mutate(ngram = factor(ngram, levels = .[["ngram"]]))
+  
+  tail(x, n = 100) %>% 
+    ggplot(aes(x = ngram, y = `Gini importance`)) +
+    geom_col() + 
+    coord_flip() +
+    theme_bw() +
+    ggtitle(paste0(ith_model, " - 100 most important of all ", nrow(x), " informative features"))
+})
+```
+
+## All features with Gini importance > 0
+
+```{r}
+importance(new_PlastoGram_ngram_models[["Nuclear_model"]]) %>% 
+  as.data.frame() %>% 
+  tibble::rownames_to_column() %>% 
+  setNames(c("ngram", "Gini importance")) %>%
+  filter(`Gini importance` > 0) %>% 
+  arrange(desc(`Gini importance`)) %>% 
+  my_DT("Nuclear_model")
+
+importance(new_PlastoGram_ngram_models[["Membrane_model"]]) %>% 
+  as.data.frame() %>% 
+  tibble::rownames_to_column() %>% 
+  setNames(c("ngram", "Gini importance")) %>% 
+  filter(`Gini importance` > 0) %>% 
+  arrange(desc(`Gini importance`)) %>% 
+  my_DT("Membrane_model")
+
+importance(new_PlastoGram_ngram_models[["Plastid_membrane_model"]]) %>% 
+  as.data.frame() %>% 
+  tibble::rownames_to_column() %>% 
+  setNames(c("ngram", "Gini importance")) %>% 
+  filter(`Gini importance` > 0) %>% 
+  arrange(desc(`Gini importance`)) %>% 
+  my_DT("Plastid_membrane_model")
+
+importance(new_PlastoGram_ngram_models[["Nuclear_membrane_model"]]) %>% 
+  as.data.frame() %>% 
+  tibble::rownames_to_column() %>% 
+  setNames(c("ngram", "Gini importance")) %>% 
+  filter(`Gini importance` > 0) %>% 
+  arrange(desc(`Gini importance`)) %>% 
+  my_DT("Nuclear_membrane_model")
+
+importance(new_PlastoGram_ngram_models[["N_E_vs_N_TM_model"]]) %>% 
+  as.data.frame() %>% 
+  tibble::rownames_to_column() %>% 
+  setNames(c("ngram", "Gini importance")) %>% 
+  filter(`Gini importance` > 0) %>% 
+  arrange(desc(`Gini importance`)) %>% 
+  my_DT("N_E_vs_N_TM_model")
+
+importance(new_PlastoGram_ngram_models[["N_E_vs_N_S_model"]]) %>% 
+  as.data.frame() %>% 
+  tibble::rownames_to_column() %>% 
+  setNames(c("ngram", "Gini importance")) %>% 
+  filter(`Gini importance` > 0) %>% 
+  arrange(desc(`Gini importance`)) %>% 
+  my_DT("N_E_vs_N_S_model")
+```
