@@ -127,6 +127,10 @@ plot_dat <- data.frame(ngram = names(imp_m),
                        L18 = l18_motifs,
                        DPLG = dplg_motifs)
 
+print(paste0("Number of all features: ", length(imp_m)))
+print(paste0("Number of features contained within L18 motif: ", sum(l18_motifs)))
+print(paste0("Number of features contained within DPLG motif: ", sum(dplg_motifs)))
+
 ggplot(plot_dat, aes(x = L18, y = feature_importance)) +
   geom_quasirandom() +
   theme_bw() 
@@ -164,6 +168,10 @@ plot_dat <- data.frame(ngram = names(imp_nm),
                        L18 = l18_motifs,
                        DPLG = dplg_motifs)
 
+print(paste0("Number of all features: ", length(imp_nm)))
+print(paste0("Number of features contained within L18 motif: ", sum(l18_motifs)))
+print(paste0("Number of features contained within DPLG motif: ", sum(dplg_motifs)))
+
 ggplot(plot_dat, aes(x = L18, y = feature_importance)) +
   geom_quasirandom() +
   theme_bw() 
@@ -193,7 +201,7 @@ p <- plot_dat %>%
   head(n = 50)  %>% 
   mutate(ngram = sapply(.[["ngram"]], function(i) {
     ifelse(nchar(i) == 1, i, paste0(unlist(strsplit(decode_ngrams(i), "")), collapse = " "))
-    })) %>%
+  })) %>%
   mutate(ngram = factor(ngram, levels = rev(.[["ngram"]]))) %>% 
   ggplot(aes(y = ngram, x = feature_importance, fill = DPLG)) +
   geom_col() +
@@ -217,6 +225,10 @@ plot_dat <- data.frame(ngram = names(imp_tm),
                        feature_importance = imp_tm,
                        L18 = l18_motifs,
                        DPLG = dplg_motifs)
+
+print(paste0("Number of all features: ", length(imp_tm)))
+print(paste0("Number of features contained within L18 motif: ", sum(l18_motifs)))
+print(paste0("Number of features contained within DPLG motif: ", sum(dplg_motifs)))
 
 ggplot(plot_dat, aes(x = L18, y = feature_importance)) +
   geom_quasirandom() +
