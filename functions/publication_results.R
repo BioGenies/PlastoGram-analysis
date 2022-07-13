@@ -489,7 +489,7 @@ ggbiplot <- function(pcobj, choices = 1:2, scale = 1, pc.biplot = TRUE,
     theta <- c(seq(-pi, pi, length = 50), seq(pi, -pi, length = 50))
     circle <- cbind(cos(theta), sin(theta))
     
-    ell <- ddply(df.u, 'groups', function(x) {
+    ell <- plyr::ddply(df.u, 'groups', function(x) {
       if(nrow(x) <= 2) {
         return(NULL)
       }

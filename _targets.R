@@ -513,15 +513,14 @@ list(
   ),
   tar_target(
     physicochemical_prop_plot,
-    ggsave(paste0(res_path, "OM_stroma_properties.eps"), 
+    ggsave(paste0(data_path, "Publication_results/OM_stroma_properties.eps"), 
            get_physicochemical_properties_plot(all_sequences, holdout_target_df, 
-                                               colors = c("N_OM" = "#b172d8", "N_IM" = "#7281d8", "N_TM" = "#d87272", "N_S" = "#76d872"),
-                                               paste0(data_path, "Publication_results/")), 
+                                               colors = c("N_OM" = "#b172d8", "N_IM" = "#7281d8", "N_TM" = "#d87272", "N_S" = "#76d872")), 
            width = 9, height = 2.5)
   ),
   tar_target(
     pca_props_plot,
-    get_pca_and_props_plot(sequence_list, traintest, traintest_data_df, res_path)
+    get_pca_and_props_plot(sequence_list, traintest, traintest_data_df, paste0(data_path, "Publication_results/"))
   ),
   tar_target(
     benchmark_file,
