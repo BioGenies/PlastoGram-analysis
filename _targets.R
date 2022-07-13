@@ -16,6 +16,7 @@ library(rel)
 library(ggplot2)
 library(tidyr)
 library(patchwork)
+library(ggpubr)
 
 data_path <- "~/Dropbox/Projekty/BioNgramProjects/PlastoGram/"
 
@@ -469,6 +470,22 @@ list(
     baseline_model_evaluation,
     evaluate_baseline_model(baseline_model, envelope_benchmark_ngram_matrix, envelope_benchmark_data_df)
   ),
+  tar_target(
+    graphpart_baseline_model_cv_res,
+    do_baseline_cv(ngram_matrix_traintest_graphpart, target_dfs_cv_graphpart)
+  ),
+  tar_target(
+    graphpart_baseline_mean_performance,
+    get_mean_performance_of_baseline(graphpart_baseline_model_cv_res, paste0(data_path, "Baseline_graphpart_envelope_mean_performance.csv"))
+  ),
+  tar_target(
+    graphpart_baseline_model,
+    train_baseline_model(ngram_matrix_traintest_graphpart, data_df_graphpart)
+  ),
+  tar_target(
+    graphpart_baseline_model_evaluation,
+    evaluate_baseline_model(graphpart_baseline_model, ngram_matrix_independent_graphpart, data_df_independent_graphpart)
+  ),
   # Publication results
   tar_target(
     architecture_plot_data,
@@ -496,9 +513,15 @@ list(
   ),
   tar_target(
     physicochemical_prop_plot,
-    get_physicochemical_properties_plot(traintest, traintest_data_df, 
-                                        colors = c("N_OM" = "#b172d8", "N_IM" = "#7281d8", "N_TM" = "#d87272", "N_S" = "#76d872"),
-                                        paste0(data_path, "Publication_results/"))
+    ggsave(paste0(res_path, "OM_stroma_properties.eps"), 
+           get_physicochemical_properties_plot(all_sequences, holdout_target_df, 
+                                               colors = c("N_OM" = "#b172d8", "N_IM" = "#7281d8", "N_TM" = "#d87272", "N_S" = "#76d872"),
+                                               paste0(data_path, "Publication_results/")), 
+           width = 9, height = 2.5)
+  ),
+  tar_target(
+    pca_props_plot,
+    get_pca_and_props_plot(sequence_list, traintest, traintest_data_df, res_path)
   ),
   tar_target(
     benchmark_file,
