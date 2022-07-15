@@ -329,8 +329,9 @@ plot_aa_comp_pca <- function(aa_comp_peptides) {
                      PC1 = pca_res[["x"]][, "PC1"],
                      PC2 = pca_res[["x"]][, "PC2"]) 
   
-  ggbiplot(pca_res, groups = aa_comp_peptides[["dataset"]], ellipse = TRUE, alpha = 0.5, var.axes = FALSE) +
+  ggbiplot(pca_res, groups = aa_comp_peptides[["dataset"]], ellipse = TRUE, alpha = 0, var.axes = FALSE) +
     theme_bw() +
+    geom_point(size = 0.25, aes(color = aa_comp_peptides[["dataset"]])) +
     scale_color_manual("Dataset", values =  c("N_OM" = "#8210c9", "N_IM" = "#344feb", "P_IM" = "#69cdff", 
                                               "N_S" = "#118a0c", "P_S" = "#9fff9c", "N_TM" = "#911a1a", 
                                               "P_TM" = "#ff7d7d", "N_TL" = "#ccbf10")) 
@@ -342,7 +343,7 @@ get_pca_and_props_plot <- function(seqs, traintest, traintest_data_df, res_path)
   pca_plot <- plot_aa_comp_pca(calculate_aa_comp_peptides(seqs)) + 
     theme(legend.position = "bottom")
   res <- ggarrange(pca_plot + labs(tag = "A") + theme(plot.tag = element_text(size = '16')), props_plot,  widths = c(6, 3.5)) 
-  ggsave(paste0(res_path, "PCA_props_plot.png"), res, width = 11, height = 8)
+  ggsave(paste0(res_path, "PCA_props_plot.eps"), res, width = 11, height = 8)
 }
 
 
