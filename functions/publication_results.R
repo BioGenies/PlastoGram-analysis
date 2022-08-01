@@ -6,7 +6,7 @@ get_mean_performance_of_baseline <- function(baseline_model_cv_res, outfile) {
         model = "baseline",
         rep = ith_rep,
         fold = ith_fold,
-        AU1U = multiclass.AU1U(dat[, 4:(ncol(dat)-2)], dat[["dataset"]]),
+        AU1U = multiclass.AU1U(dat[, c("N_E", "N_S", "N_TL_SEC", "N_TL_TAT", "N_TM", "P_IM", "P_S", "P_TM")], dat[["dataset"]]),
         kappa = KAPPA(dat[["dataset"]], dat[["Localization"]]),
         N_E_sensitivity = TPR(ifelse(dat[["dataset"]] == "N_E", TRUE, FALSE),
                               ifelse(dat[["Localization"]] == "N_E", TRUE, FALSE), TRUE),
@@ -75,12 +75,14 @@ get_architecture_plot_data <- function(mean_architecture_performance) {
 }
 
 
-get_performance_distr_plot <- function(architecture_plot_data, baseline_mean_performance, res_path) {
-  baseline_plot_data <- pivot_longer(baseline_mean_performance, 2:ncol(baseline_mean_performance), 
-                                     values_to = "value", names_to = "measure") %>% 
+get_performance_distr_plot <- function(architecture_plot_data, graphpart_architecture_plot_data, baseline_mean_performance, graphpart_baseline_mean_performance, res_path) {
+  baseline_plot_data <- mutate(baseline_mean_performance, type = "Holdout") %>% 
+    bind_rows(mutate(graphpart_baseline_mean_performance, type = "Partitioning")) %>% 
+    pivot_longer(colnames(.)[which(!(colnames(.) %in% c("model", "type")))], values_to = "value", names_to = "measure") %>% 
     filter(measure %in% c("mean_kappa", "mean_AU1U") | (startsWith(measure, "mean") & endsWith(measure, "sens"))) %>% 
     mutate(measure = gsub("_sens", " accuracy", gsub("mean_", "", measure))) 
-  all_plot_data <- architecture_plot_data %>% 
+  all_plot_data <- mutate(architecture_plot_data, type = "Holdout") %>% 
+    bind_rows(mutate(graphpart_architecture_plot_data, type = "Partitioning"))  %>% 
     filter(measure %in% c("mean_kappa", "mean_AU1U") | (startsWith(measure, "mean") & endsWith(measure, "sens"))) %>% 
     mutate(measure = gsub("_sens", " accuracy", gsub("mean_", "", measure))) 
   p <- ggplot(all_plot_data, aes(x = measure, y = value)) +
@@ -91,13 +93,14 @@ get_performance_distr_plot <- function(architecture_plot_data, baseline_mean_per
                aes(x = measure, y = value, color = "PlastoGram"), size = 3) +
     xlab("Mean performance measure") +
     ylab("Value") +
-    scale_color_manual("Model", values = c("PlastoGram" = "#76d872", "Baseline" = "#d87272", Other = "black"))
-  ggsave("Performance_distribution_architectures+baseline.eps", p, width = 14, height = 8,
+    scale_color_manual("Model", values = c("PlastoGram" = "#76d872", "Baseline" = "#d87272", Other = "black")) +
+    facet_wrap(~type, ncol = 1)
+  ggsave("Performance_distribution_architectures+baseline.eps", p, width = 15, height = 10,
          path = res_path)
   p
 }
 
-get_parameters_of_performance_distribution_table <- function(envelope_mean_architecture_performance, res_path) {
+get_parameters_of_performance_distribution_table <- function(envelope_mean_architecture_performance, res_path, outfile) {
   df <- lapply(select(envelope_mean_architecture_performance, 
                       c("mean_kappa", "mean_AU1U", 
                         colnames(envelope_mean_architecture_performance)[startsWith(colnames(envelope_mean_architecture_performance), "mean") 
@@ -110,30 +113,32 @@ get_parameters_of_performance_distribution_table <- function(envelope_mean_archi
     mutate(Measure = c("Minimum", "1st quartile", "Median", "Mean", "3rd quartile", "Maximum")) %>% 
     t() %>% 
     as.data.frame()
-  write.table(df, paste0(res_path, "Performance_distribution_parameters.csv"), sep = ",", col.names = FALSE, quote = FALSE)
+  write.table(df, paste0(res_path, outfile), sep = ",", col.names = FALSE, quote = FALSE)
   df
 }
 
 
 
-get_best_model_cv_plot <- function(architecture_plot_data, res_path) {
-  p <- architecture_plot_data %>% 
+get_best_model_cv_plot <- function(architecture_plot_data, graphpart_architecture_plot_data, res_path) {
+  p <- mutate(architecture_plot_data, version = "Holdout") %>% 
+    bind_rows(mutate(graphpart_architecture_plot_data, version = "Partitioning")) %>% 
     filter(endsWith(measure, "_sens"),
            model == "Architecture_v71_0-1_No_filtering_RF") %>% 
-    select(c("measure", "value")) %>% 
+    select(c("measure", "value", "version")) %>% 
     mutate(type = ifelse(grepl("mean_", measure), "mean", "sd"),
            Class = gsub("_sens", "", gsub("mean_|sd_", "", measure)),
            Origin = ifelse(grepl("N_", Class), "Nuclear-encoded", "Plastid-encoded")) %>% 
-    pivot_wider(id_cols = c(Class, Origin), names_from = type, values_from = value) %>% 
-    ggplot(aes(x = Class, y = mean, fill = Class)) +
-    geom_col() +
-    geom_errorbar(aes(ymin = mean-sd, ymax = mean+sd), width = 0.2) +
+    pivot_wider(id_cols = c(Class, Origin, version), names_from = type, values_from = value) %>% 
+    ggplot(aes(x = Class, y = mean, fill = version, group = version)) +
+    geom_col(position = "dodge") +
+    geom_errorbar(aes(ymin = mean-sd, ymax = mean+sd), position = position_dodge(width = 0.9), width = 0.5) +
     theme_bw() +
+    #facet_wrap(~version) +
     ylab("Mean class-specific accuracy value in cross-validation") +
-    scale_fill_manual("Dataset", values = c("N_E" = "#7281d8", "N_TM" = "#d87272", "N_S" = "#76d872",
-                                            "N_TL_SEC" = "#d8c472", "N_TL_TAT" = "#d8a972", 
-                                            "P_IM" = "#a8b1e8", "P_TM" = "#e8a8a8", "P_S" = "#ade8a8")) +
-    theme(legend.position = "none")
+    # scale_fill_manual("Dataset", values = c("N_E" = "#7281d8", "N_TM" = "#d87272", "N_S" = "#76d872",
+    #                                         "N_TL_SEC" = "#d8c472", "N_TL_TAT" = "#d8a972", 
+    #                                         "P_IM" = "#a8b1e8", "P_TM" = "#e8a8a8", "P_S" = "#ade8a8")) +
+    scale_fill_manual("Data set version", values = c("Holdout" = "#ade8a8", "Partitioning" = "#76d872"))
   ggsave(paste0(res_path, "Best_model_cv_res.eps"), p, width = 7, height = 5)
 }
 
@@ -167,7 +172,7 @@ get_independent_dataset_performance_table <- function(PlastoGram_evaluation) {
   #  write.csv(df, paste0(res_path, "Independent_dataset_results.csv"), row.names = FALSE)
 }
 
-get_cv_and_independent_res_table <- function(architecture_plot_data, PlastoGram_evaluation, res_path) {
+get_cv_and_independent_res_table <- function(architecture_plot_data, PlastoGram_evaluation, res_path, outfile) {
   cv <- get_best_model_cv_table(architecture_plot_data) %>% 
     setNames(c("Measure", "Mean in CV"))
   ind <- get_independent_dataset_performance_table(PlastoGram_evaluation) %>% 
@@ -176,7 +181,7 @@ get_cv_and_independent_res_table <- function(architecture_plot_data, PlastoGram_
     mutate(Measure = gsub("sd_", "", Measure)) %>% 
     setNames(c("Measure", "SD in CV"))
   res <- left_join(left_join(ind, cv), sd)
-  write.csv(res, paste0(res_path, "CV+independent_res.csv"), row.names = FALSE)
+  write.csv(res, paste0(res_path, outfile), row.names = FALSE)
 }
 
 encode_seq <- function(x, property) {
@@ -231,7 +236,7 @@ get_physicochemical_properties_plot <- function(traintest, traintest_data_df, co
 }
 
 
-get_om_im_model_cv_res_table <- function(traintest_ngram_matrix, holdout_target_dfs_cv, res_path) {
+get_om_im_model_cv_res_table <- function(traintest_ngram_matrix, holdout_target_dfs_cv, res_path, outfile) {
   res <- lapply(1:length(holdout_target_dfs_cv), function(ith_rep) {
     dat <- traintest_ngram_matrix[which(holdout_target_dfs_cv[[ith_rep]][["Membrane_mc_target"]] %in% c("OM", "IM")),]
     dat_df <- filter(holdout_target_dfs_cv[[ith_rep]], Membrane_mc_target %in% c("OM", "IM"))
@@ -251,7 +256,7 @@ get_om_im_model_cv_res_table <- function(traintest_ngram_matrix, holdout_target_
       )
     }) %>% bind_rows()
   }) %>% bind_rows()
-  write.csv(res, paste0(res_path, "OM_IM_model_cv_res.csv"), row.names = FALSE)
+  write.csv(res, paste0(res_path, outfile), row.names = FALSE)
   res
 }
 
@@ -286,14 +291,19 @@ get_benchmark_res_table <- function(PlastoGram_evaluation, SChloro_benchmark_res
   }) %>% bind_rows()
 }
 
-get_benchmark_res_plot <- function(PlastoGram_evaluation, schloro_res, res_path) {
-  p <- get_benchmark_res_table(PlastoGram_evaluation, schloro_res) %>% 
+get_benchmark_res_plot <- function(PlastoGram_evaluation, PlastoGram_evaluation_graphpart, schloro_res, res_path) {
+  h <- get_benchmark_res_table(PlastoGram_evaluation, schloro_res) %>%
+    mutate(type = "Holdout")
+  p <- get_benchmark_res_table(PlastoGram_evaluation_graphpart, schloro_res) %>%
+    mutate(type = "Partitioning")
+  bind_rows(h, p) %>% 
     pivot_longer(2:3, names_to = "Software", values_to = "Class-specific accuracy") %>% 
     ggplot(aes(x = Class, y = `Class-specific accuracy`, group = Software, fill = Software)) +
     geom_col(position = "dodge") +
+    facet_wrap(~type) +
     theme_bw() +
     scale_fill_manual("Software", values = c("PlastoGram" = "#76d872", "SChloro" = "#7281d8"))
-  ggsave(paste0(res_path, "Benchmark_results.eps"), p, width = 6, height = 4)
+  #ggsave(paste0(res_path, "Benchmark_results.eps"), p, width = 6, height = 4)
 }
 
 get_final_plastogram_model <- function(PlastoGram_ngram_models, PlastoGram_higher_level_model,

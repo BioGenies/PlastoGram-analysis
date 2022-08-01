@@ -402,6 +402,14 @@ list(
                             PlastoGram_higher_level_model_graphpart, ngram_matrix_independent_graphpart, sequences_independent_graphpart, data_df_independent_graphpart,
                             PlastoGram_informative_ngrams_graphpart, PlastoGram_best_architecture_graphpart, PlastoGram_best_architecture_name_graphpart)
   ),
+  tar_target(
+    PlastoGram_OM_IM_model_graphpart,
+    train_om_im_model(ngram_matrix_traintest_graphpart, data_df_graphpart)
+  ),
+  tar_target(
+    PlastoGram_evaluation_OM_IM_graphpart,
+    evaluate_om_im_model(PlastoGram_OM_IM_model_graphpart, ngram_matrix_independent_graphpart, data_df_independent_graphpart, PlastoGram_evaluation_graphpart)
+  ),
   # Results and final models
   tar_target(
     PlastoGram_best_architecture_name,
@@ -492,24 +500,47 @@ list(
     get_architecture_plot_data(envelope_mean_architecture_performance)
   ),
   tar_target(
+    graphpart_architecture_plot_data,
+    get_architecture_plot_data(mean_architecture_performance_graphpart)
+  ),
+  tar_target(
     performance_distr_plot,
-    get_performance_distr_plot(architecture_plot_data, baseline_mean_performance, paste0(data_path, "Publication_results/"))
+    get_performance_distr_plot(architecture_plot_data, graphpart_architecture_plot_data, baseline_mean_performance, 
+                               graphpart_baseline_mean_performance, paste0(data_path, "Publication_results/"))
   ),
   tar_target(
     performance_parameters_table,
-    get_parameters_of_performance_distribution_table(envelope_mean_architecture_performance, paste0(data_path, "Publication_results/"))
+    get_parameters_of_performance_distribution_table(envelope_mean_architecture_performance, paste0(data_path, "Publication_results/"),
+                                                     "Performance_distribution_parameters_holdout.csv")
+  ),
+  tar_target(
+    performance_parameters_table,
+    get_parameters_of_performance_distribution_table(mean_architecture_performance_graphpart, paste0(data_path, "Publication_results/"),
+                                                     "Performance_distribution_parameters_partitioning.csv")
   ),
   tar_target(
     best_model_cv_plot,
-    get_best_model_cv_plot(architecture_plot_data, paste0(data_path, "Publication_results/"))
+    get_best_model_cv_plot(architecture_plot_data, graphpart_architecture_plot_data, paste0(data_path, "Publication_results/"))
   ),
   tar_target(
     cv_and_independent_res_table,
-    get_cv_and_independent_res_table(architecture_plot_data, PlastoGram_evaluation, paste0(data_path, "Publication_results/"))
+    get_cv_and_independent_res_table(architecture_plot_data, PlastoGram_evaluation, paste0(data_path, "Publication_results/"),
+                                     "CV+independent_res_holdout.csv")
+  ),
+  tar_target(
+    cv_and_independent_res_table_graphpart,
+    get_cv_and_independent_res_table(graphpart_architecture_plot_data, PlastoGram_evaluation_graphpart, paste0(data_path, "Publication_results/"),
+                                     "CV+independent_res_partitioning.csv")
   ),
   tar_target(
     om_im_model_cv_performance_table,
-    get_om_im_model_cv_res_table(traintest_ngram_matrix, holdout_target_dfs_cv, paste0(data_path, "Publication_results/")) 
+    get_om_im_model_cv_res_table(envelope_traintest_ngram_matrix, envelope_target_dfs_cv, paste0(data_path, "Publication_results/"),
+                                 "OM_IM_model_cv_res_holdout.csv") 
+  ),
+  tar_target(
+    om_im_model_cv_performance_table_graphpart,
+    get_om_im_model_cv_res_table(ngram_matrix_traintest_graphpart, target_dfs_cv_graphpart, paste0(data_path, "Publication_results/"),
+                                 "OM_IM_model_cv_res_partitioning.csv") 
   ),
   tar_target(
     physicochemical_prop_plot,
@@ -527,6 +558,10 @@ list(
     write_fasta(benchmark, "./data/Independent_dataset.fa")
   ),
   tar_target(
+    benchmark_file_graphpart,
+    write_fasta(sequences_independent_graphpart, "./data/Independent_dataset_partitioning.fa")
+  ),
+  tar_target(
     SChloro_benchmark_res_file,
     "./data/schloro_independent_dataset_res.gff",
     format = "file"
@@ -538,15 +573,24 @@ list(
   tar_target(
     benchmark_table,
     write.csv(get_benchmark_res_table(PlastoGram_evaluation, SChloro_benchmark_res), 
-              paste0(data_path, "Publication_results/Benchmark_results.csv"), row.names = FALSE)
+              paste0(data_path, "Publication_results/Benchmark_results_holdout.csv"), row.names = FALSE)
+  ),
+  tar_target(
+    benchmark_table_graphpart,
+    write.csv(get_benchmark_res_table(PlastoGram_evaluation_graphpart, SChloro_benchmark_res), 
+              paste0(data_path, "Publication_results/Benchmark_results_partitioning.csv"), row.names = FALSE)
   ),
   tar_target(
     benchmark_plot,
     get_benchmark_res_plot(PlastoGram_evaluation, SChloro_benchmark_res, paste0(data_path, "Publication_results/")) 
   ),
   tar_target(
-    PlastoGram_model,
+    PlastoGram_model_holdout,
     get_final_plastogram_model(PlastoGram_ngram_models, PlastoGram_higher_level_model, PlastoGram_OM_IM_model, PlastoGram_informative_ngrams)
+  ),
+  tar_target(
+    PlastoGram_model_partitioning,
+    get_final_plastogram_model(PlastoGram_ngram_models_graphpart, PlastoGram_higher_level_model_graphpart, PlastoGram_OM_IM_model_graphpart, PlastoGram_informative_ngrams_graphpart)
   )
 )
 
