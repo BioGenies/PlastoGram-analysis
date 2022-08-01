@@ -304,7 +304,7 @@ get_benchmark_res_plot <- function(PlastoGram_evaluation, PlastoGram_evaluation_
     theme_bw() +
     scale_fill_manual("Software", values = c("PlastoGram" = "#76d872", "SChloro" = "#7281d8")) +
     theme(legend.position = "bottom")
-  ggsave(paste0(res_path, "Benchmark_results.eps"), p, width = 7, height = 4)
+  ggsave(paste0(res_path, "Benchmark_results.eps"), plot, width = 7, height = 4)
 }
 
 get_final_plastogram_model <- function(PlastoGram_ngram_models, PlastoGram_higher_level_model,
