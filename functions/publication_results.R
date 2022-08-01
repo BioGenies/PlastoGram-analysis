@@ -278,32 +278,33 @@ get_benchmark_res_table <- function(PlastoGram_evaluation, SChloro_benchmark_res
   
   lapply(names(datasets), function(ith_set) {
     dat <- filter(all_benchmark, dataset == ith_set) %>% 
-      mutate(pred = ifelse(grepl(datasets[[ith_set]], pred), TRUE, FALSE))
+      mutate(pred2 = ifelse(grepl(datasets[[ith_set]], pred), TRUE, FALSE))
     data.frame(
       Class = ith_set,
       PlastoGram = TPR(ifelse(dat[["dataset"]] == ith_set, TRUE, FALSE),
                        ifelse(dat[["Localization"]] == ith_set, TRUE, FALSE),
                        TRUE),
       SChloro = TPR(ifelse(dat[["dataset"]] == ith_set, TRUE, FALSE),
-                    dat[["pred"]],
+                    dat[["pred2"]],
                     TRUE)
     )
   }) %>% bind_rows()
 }
 
-get_benchmark_res_plot <- function(PlastoGram_evaluation, PlastoGram_evaluation_graphpart, schloro_res, res_path) {
+get_benchmark_res_plot <- function(PlastoGram_evaluation, PlastoGram_evaluation_graphpart, schloro_res, schloro_res_graphpart, res_path) {
   h <- get_benchmark_res_table(PlastoGram_evaluation, schloro_res) %>%
     mutate(type = "Holdout")
-  p <- get_benchmark_res_table(PlastoGram_evaluation_graphpart, schloro_res) %>%
+  p <- get_benchmark_res_table(PlastoGram_evaluation_graphpart, schloro_res_graphpart) %>%
     mutate(type = "Partitioning")
-  bind_rows(h, p) %>% 
+  plot <- bind_rows(h, p) %>% 
     pivot_longer(2:3, names_to = "Software", values_to = "Class-specific accuracy") %>% 
     ggplot(aes(x = Class, y = `Class-specific accuracy`, group = Software, fill = Software)) +
     geom_col(position = "dodge") +
     facet_wrap(~type) +
     theme_bw() +
-    scale_fill_manual("Software", values = c("PlastoGram" = "#76d872", "SChloro" = "#7281d8"))
-  #ggsave(paste0(res_path, "Benchmark_results.eps"), p, width = 6, height = 4)
+    scale_fill_manual("Software", values = c("PlastoGram" = "#76d872", "SChloro" = "#7281d8")) +
+    theme(legend.position = "bottom")
+  ggsave(paste0(res_path, "Benchmark_results.eps"), p, width = 7, height = 4)
 }
 
 get_final_plastogram_model <- function(PlastoGram_ngram_models, PlastoGram_higher_level_model,

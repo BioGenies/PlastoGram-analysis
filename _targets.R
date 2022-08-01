@@ -514,7 +514,7 @@ list(
                                                      "Performance_distribution_parameters_holdout.csv")
   ),
   tar_target(
-    performance_parameters_table,
+    performance_parameters_table_graphpart,
     get_parameters_of_performance_distribution_table(mean_architecture_performance_graphpart, paste0(data_path, "Publication_results/"),
                                                      "Performance_distribution_parameters_partitioning.csv")
   ),
@@ -563,12 +563,21 @@ list(
   ),
   tar_target(
     SChloro_benchmark_res_file,
-    "./data/schloro_independent_dataset_res.gff",
+    "./data/schloro_independent_dataset_holdout_res.gff",
+    format = "file"
+  ),
+  tar_target(
+    SChloro_benchmark_res_file_graphpart,
+    "./data/schloro_independent_dataset_partitioning_res.gff",
     format = "file"
   ),
   tar_target(
     SChloro_benchmark_res,
     read.delim(SChloro_benchmark_res_file, skip = 1, header = FALSE)
+  ),
+  tar_target(
+    SChloro_benchmark_res_graphpart,
+    read.delim(SChloro_benchmark_res_file_graphpart, skip = 1, header = FALSE)
   ),
   tar_target(
     benchmark_table,
@@ -577,12 +586,13 @@ list(
   ),
   tar_target(
     benchmark_table_graphpart,
-    write.csv(get_benchmark_res_table(PlastoGram_evaluation_graphpart, SChloro_benchmark_res), 
+    write.csv(get_benchmark_res_table(PlastoGram_evaluation_graphpart, SChloro_benchmark_res_graphpart), 
               paste0(data_path, "Publication_results/Benchmark_results_partitioning.csv"), row.names = FALSE)
   ),
   tar_target(
     benchmark_plot,
-    get_benchmark_res_plot(PlastoGram_evaluation, SChloro_benchmark_res, paste0(data_path, "Publication_results/")) 
+    get_benchmark_res_plot(PlastoGram_evaluation, PlastoGram_evaluation_graphpart, SChloro_benchmark_res, SChloro_benchmark_res_graphpart, 
+                           paste0(data_path, "Publication_results/")) 
   ),
   tar_target(
     PlastoGram_model_holdout,
