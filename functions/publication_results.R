@@ -139,7 +139,7 @@ get_best_model_cv_plot <- function(architecture_plot_data, graphpart_architectur
     #                                         "N_TL_SEC" = "#d8c472", "N_TL_TAT" = "#d8a972", 
     #                                         "P_IM" = "#a8b1e8", "P_TM" = "#e8a8a8", "P_S" = "#ade8a8")) +
     scale_fill_manual("Data set version", values = c("Holdout" = "#ade8a8", "Partitioning" = "#76d872"))
-  ggsave(paste0(res_path, "Best_model_cv_res.eps"), p, width = 7, height = 5)
+  ggsave(paste0(res_path, "Best_model_cv_res.eps"), p, width = 9, height = 5)
 }
 
 get_best_model_cv_table <- function(architecture_plot_data) {
