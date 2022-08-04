@@ -550,6 +550,10 @@ list(
            width = 9, height = 2.5)
   ),
   tar_target(
+    physicochemical_prop_test,
+    get_physicochemical_properties_test(all_sequences, holdout_target_df, paste0(data_path, "Publication_results/")) 
+  ),
+  tar_target(
     pca_props_plot,
     get_pca_and_props_plot(sequence_list, traintest, traintest_data_df, paste0(data_path, "Publication_results/"))
   ),

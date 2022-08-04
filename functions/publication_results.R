@@ -235,6 +235,39 @@ get_physicochemical_properties_plot <- function(traintest, traintest_data_df, co
   
 }
 
+get_physicochemical_properties_test <- function(traintest, traintest_data_df, data_path) {
+  props <- data.frame(prop = c("KLEP840101", "KYTJ820101", "ZIMJ680103"),
+                      description = c("Net charge (Klein et al., 1984)",
+                                      "Hydropathy index (Kyte-Doolittle, 1982)", 
+                                      "Polarity (Zimmerman et al., 1968)"))
+  
+  OM_t <- traintest[which(names(traintest) %in% filter(traintest_data_df, dataset == "N_OM")[["seq_name"]])]
+  N_IM_t <- traintest[which(names(traintest) %in% filter(traintest_data_df, dataset == "N_IM")[["seq_name"]])]
+  N_TM_t <- traintest[which(names(traintest) %in% filter(traintest_data_df, dataset == "N_TM")[["seq_name"]])]
+  N_S_t <- traintest[which(names(traintest) %in% filter(traintest_data_df, dataset == "N_S")[["seq_name"]])]
+  
+  ds <- list("N_OM" = OM_t, "N_IM" = N_IM_t, "N_TM" = N_TM_t, "N_S" = N_S_t)
+  prop_df <- calculate_properties(ds)
+  combns <- combn(unique(prop_df[["dataset"]]), 2, simplify = FALSE)
+  test_res <- lapply(colnames(prop_df)[4:ncol(prop_df)], function(ith_prop) {
+    lapply(combns, function(ith_combn) {
+      dat <- prop_df[, c("prot", "dataset", ith_prop)] %>% 
+        setNames(c("prot", "Dataset", "Property")) %>% 
+        filter(Dataset %in% ith_combn)
+      data.frame(Property = props[["description"]][which(props[["prop"]] == ith_prop)],
+                 Dataset1 = factor(ith_combn[1], levels = unique(prop_df[["dataset"]])),
+                 Dataset2 = factor(ith_combn[2], levels = unique(prop_df[["dataset"]])),
+                 `p-value` = wilcox.test(x = filter(dat, Dataset == ith_combn[1])[["Property"]],
+                                         y = filter(dat, Dataset == ith_combn[2])[["Property"]])[["p.value"]],
+                 check.names = FALSE)
+    }) %>% bind_rows()
+  }) %>% bind_rows() %>% 
+    mutate(`Adjusted p-value` = p.adjust(`p-value`),
+           `Is significant` = ifelse(`Adjusted p-value` < 0.05, TRUE, FALSE))
+  write.csv(test_res, paste0(data_path, "Physicochemical_properties_statistical_test.csv"), row.names = FALSE)
+  test_res
+}
+
 
 get_om_im_model_cv_res_table <- function(traintest_ngram_matrix, holdout_target_dfs_cv, res_path, outfile) {
   res <- lapply(1:length(holdout_target_dfs_cv), function(ith_rep) {
@@ -308,7 +341,7 @@ get_benchmark_res_plot <- function(PlastoGram_evaluation, PlastoGram_evaluation_
 }
 
 get_final_plastogram_model <- function(PlastoGram_ngram_models, PlastoGram_higher_level_model,
-                                        PlastoGram_OM_IM_model, PlastoGram_informative_ngrams) {
+                                       PlastoGram_OM_IM_model, PlastoGram_informative_ngrams) {
   
   PlastoGram_model <- list("ngram_models" = PlastoGram_ngram_models,
                            "RF_model" = PlastoGram_higher_level_model,
@@ -350,7 +383,7 @@ plot_aa_comp_pca <- function(aa_comp_peptides) {
 
 get_pca_and_props_plot <- function(seqs, traintest, traintest_data_df, res_path) {
   props_plot <- get_physicochemical_properties_plot(traintest, traintest_data_df, 
-                                      colors = c("N_OM" = "#b172d8", "N_IM" = "#7281d8", "N_TM" = "#d87272", "N_S" = "#76d872"))
+                                                    colors = c("N_OM" = "#b172d8", "N_IM" = "#7281d8", "N_TM" = "#d87272", "N_S" = "#76d872"))
   pca_plot <- plot_aa_comp_pca(calculate_aa_comp_peptides(seqs)) + 
     theme(legend.position = "bottom")
   res <- ggarrange(pca_plot + labs(tag = "A") + theme(plot.tag = element_text(size = '16')), props_plot,  widths = c(6, 3.5)) 
@@ -523,7 +556,7 @@ ggbiplot <- function(pcobj, choices = 1:2, scale = 1, pc.biplot = TRUE,
                     angle = angle, hjust = hjust), 
                 color = 'darkred', size = varname.size)
   }
-
+  
   
   return(g)
 }
