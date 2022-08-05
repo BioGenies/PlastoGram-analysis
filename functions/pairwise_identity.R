@@ -56,6 +56,6 @@ calculate_mean_pairwise_identity <- function(pairwise_identity_df, data_path) {
               max = max(as.numeric(identity)),
               min = min(as.numeric(identity))) 
   write.csv(filter(res, Version == "Holdout"), paste0(data_path, "mean_pairwise_identity_holdout.csv"), row.names = FALSE)
-  write.csv(filter(res, Version == "Holdout"), paste0(data_path, "mean_pairwise_identity_partitioning.csv"), row.names = FALSE)
+  write.csv(filter(res, Version == "Partitioning"), paste0(data_path, "mean_pairwise_identity_partitioning.csv"), row.names = FALSE)
   res
 }
