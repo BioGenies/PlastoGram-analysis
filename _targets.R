@@ -30,6 +30,7 @@ source("./functions/ensemble_model_functions.R")
 source("./functions/generate_architectures.R")
 source("./functions/baseline_model.R")
 source("./functions/publication_results.R")
+source("./functions/pairwise_identity.R")
 
 set.seed(427244)
 
@@ -605,6 +606,15 @@ list(
   tar_target(
     PlastoGram_model_partitioning,
     get_final_plastogram_model(PlastoGram_ngram_models_graphpart, PlastoGram_higher_level_model_graphpart, PlastoGram_OM_IM_model_graphpart, PlastoGram_informative_ngrams_graphpart)
+  ),
+  tar_target(
+    pairwise_identity,
+    calculate_pairwise_identity(traintest, benchmark, sequences_cv_graphpart, sequences_independent_graphpart,
+                                envelope_target_df, target_df_graphpart, data_path)
+  ),
+  tar_target(
+    mean_pairwise_identity,
+    calculate_mean_pairwise_identity(pairwise_identity, paste0(data_path, "Publication_results/"))
   )
 )
 
