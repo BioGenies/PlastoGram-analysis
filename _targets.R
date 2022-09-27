@@ -544,6 +544,18 @@ list(
                                  "OM_IM_model_cv_res_partitioning.csv") 
   ),
   tar_target(
+    om_im_model_mean_cv_performance_table,
+    get_mean_performance_of_om_im_models(om_im_model_cv_performance_table,
+                                         paste0(data_path, "Publication_results/"),
+                                         "OM_IM_model_mean_cv_res_holdout.csv")
+  ),
+  tar_target(
+    om_im_model_mean_cv_performance_table_graphpart,
+    get_mean_performance_of_om_im_models(om_im_model_cv_performance_table_graphpart,
+                                         paste0(data_path, "Publication_results/"), 
+                                         "OM_IM_model_mean_cv_res_partitioning.csv")
+  ),
+  tar_target(
     physicochemical_prop_plot,
     ggsave(paste0(data_path, "Publication_results/OM_stroma_properties.eps"), 
            get_physicochemical_properties_plot(all_sequences, holdout_target_df, 

@@ -560,3 +560,36 @@ ggbiplot <- function(pcobj, choices = 1:2, scale = 1, pc.biplot = TRUE,
   
   return(g)
 }
+
+
+get_mean_performance_of_om_im_models <- function(performance_results, data_path, outfile) {
+  all_measures <- performance_results %>% 
+    group_by(Replication) %>% 
+    summarise(mean_rep_kappa = mean(Kappa),
+              mean_rep_AUC = mean(AUC),
+              mean_rep_N_OM_sens = mean(Sensitivity),
+              mean_rep_N_IM_sens = mean(1-Sensitivity),
+              sd_rep_kappa = sd(Kappa),
+              sd_rep_AUC = sd(AUC),
+              sd_rep_N_OM_sens = sd(Sensitivity),
+              sd_rep_N_IM_sens = sd(1-Sensitivity)) %>% 
+    ungroup() %>% 
+    summarise(mean_kappa = mean(mean_rep_kappa),
+              mean_AUC = mean(mean_rep_AUC),
+              mean_N_OM_sens = mean(mean_rep_N_OM_sens),
+              mean_N_IM_sens = mean(mean_rep_N_IM_sens),
+              sd_kappa = mean(sd_rep_kappa),
+              sd_AUC = mean(sd_rep_AUC),
+              sd_N_OM_sens = mean(sd_rep_N_OM_sens),
+              sd_N_IM_sens = mean(sd_rep_N_IM_sens)) %>% 
+    pivot_longer(colnames(.), values_to = "value", names_to = "measure") %>% 
+    # filter(measure %in% c("mean_kappa", "mean_AU1U") | (startsWith(measure, "mean") & endsWith(measure, "sens"))) %>% 
+    mutate(measure = gsub("_sens", " accuracy", gsub("mean_", "", measure)))
+  
+  summ <- left_join(filter(all_measures, !grepl("sd_", measure)), 
+                    mutate(filter(all_measures, grepl("sd_", measure)), measure = gsub("sd_", "", measure)), by = "measure") %>% 
+    setNames(c("Measure", "Mean", "SD"))
+    
+    write.csv(summ, paste0(data_path, outfile), row.names = FALSE)
+  summ
+}
