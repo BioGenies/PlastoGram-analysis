@@ -3,6 +3,14 @@
 This repository contains the data and code necessary to reproduce the results from the article  *Where do they come from, where do they go? Efficient prediction of protein subplastid localization and sequence origin with PlastoGram.* (2022) by Sidorczuk K., Gagat P., Kała J., Nielsen H., Pietluch F., Mackiewicz P., Burdukiewicz M.
 
 
+## Important links
+
+PlastoGram is available as:
+
+- [Web server](http://biogenies.info/PlastoGram/)
+
+- [R package](https://github.com/BioGenies/PlastoGram)
+
 ## Getting started
 
 This repository uses [renv](https://CRAN.R-project.org/package=renv) and [targets](https://CRAN.R-project.org/package=targets) packages to control the workflow and assure the reproducibility. 
