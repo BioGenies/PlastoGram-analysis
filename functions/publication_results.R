@@ -623,3 +623,14 @@ get_cv_statistical_test <- function(holdout_architectures_performance, holdout_b
   write.csv(test_res, paste0(res_path, "CV_results_statistical_test.csv"), row.names = FALSE)
   test_res
 }
+
+get_feature_size_table <- function(PlastoGram_ngram_models, PlastoGram_ngram_models_graphpart, res_path) {
+  feature_size_df <- lapply(names(PlastoGram_ngram_models), function(ith_model) {
+    data.frame(Model = ith_model,
+               Holdout = PlastoGram_ngram_models[[ith_model]][["num.independent.variables"]],
+               Partitioning = PlastoGram_ngram_models_graphpart[[ith_model]][["num.independent.variables"]])
+  }) %>% bind_rows()
+  write.csv(feature_size_df, paste0(res_path, "Feature_size.csv"), row.names = FALSE)
+  feature_size_df
+}
+

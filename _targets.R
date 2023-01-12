@@ -418,7 +418,7 @@ list(
   ),
   tar_target(
     PlastoGram_best_architecture,
-    read.csv("./data/Final_PlastoGram_model.csv")
+    read.csv(paste0(data_path, "Model_architectures_envelope/", gsub("_GLM|_RF", ".csv", PlastoGram_best_architecture_name)))
   ),
   tar_target(
     PlastoGram_ngram_models,
@@ -633,6 +633,11 @@ list(
     get_cv_statistical_test(envelope_architectures_performance, PlastoGram_best_architecture_name, "Holdout",
                             architectures_performance_graphpart, PlastoGram_best_architecture_name_graphpart, "Partitioning",
                             paste0(data_path, "Publication_results/"))
+  ),
+  tar_target(
+    feature_size_table,
+    get_feature_size_table(PlastoGram_ngram_models, PlastoGram_ngram_models_graphpart, 
+                           paste0(data_path, "Publication_results/"))
   )
 )
 
