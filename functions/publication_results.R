@@ -635,7 +635,7 @@ get_feature_size_table <- function(PlastoGram_ngram_models, PlastoGram_ngram_mod
 }
 
 change_model_names <- function(architecture_df) {
-  mutate(architecture_df, Model_name = case_when(Model_name == "Nuclear_membrane_model" ~ "N_E vs. N_TM model",
-                                                 Model_name == "E_stroma_model" ~ "N_E vs. N_S model",
+  mutate(architecture_df, Model_name = case_when(Model_name == "Nuclear_membrane_model" ~ "N_E_vs_N_TM_model",
+                                                 Model_name == "E_stroma_model" ~ "N_E_vs_N_S_model",
                                                  TRUE ~ Model_name))
 }
