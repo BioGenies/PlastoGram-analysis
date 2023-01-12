@@ -593,3 +593,33 @@ get_mean_performance_of_om_im_models <- function(performance_results, data_path,
     write.csv(summ, paste0(data_path, outfile), row.names = FALSE)
   summ
 }
+
+get_cv_data_for_statistical_test <- function(architectures_performance, best_architecture_name, version_name) {
+  architectures_performance %>% 
+    filter(model == best_architecture_name) %>% 
+    select(-c(model, rep, fold, weighted_kappa)) %>% 
+    pivot_longer(colnames(.), names_to = "Measure", values_to = "Value") %>% 
+    mutate(Version = version_name)
+}
+
+get_cv_statistical_test <- function(holdout_architectures_performance, holdout_best_architecture_name, holdout_version_name,
+                                    partitioning_architectures_performance, partitioning_best_architecture_name, partitioning_version_name,
+                                    res_path) {
+  test_dat <- bind_rows(
+    get_cv_data_for_statistical_test(holdout_architectures_performance, 
+                                     holdout_best_architecture_name, 
+                                     "Holdout"),
+    get_cv_data_for_statistical_test(partitioning_architectures_performance, 
+                                     partitioning_best_architecture_name, 
+                                     "Partitioning"))
+  
+  test_res <- lapply(unique(test_dat[["Measure"]]), function(ith_measure) {
+    data.frame(Measure = ith_measure,
+               pvalue = kruskal.test(filter(test_dat, Measure == ith_measure)[["Value"]],
+                                     filter(test_dat, Measure == ith_measure)[["Version"]])[["p.value"]])
+  }) %>% bind_rows() %>% 
+    mutate(adjusted_pvalue = p.adjust(pvalue, method = "BH"))
+  
+  write.csv(test_res, paste0(res_path, "CV_results_statistical_test.csv"), row.names = FALSE)
+  test_res
+}

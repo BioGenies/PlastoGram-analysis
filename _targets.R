@@ -627,6 +627,12 @@ list(
   tar_target(
     mean_pairwise_identity,
     calculate_mean_pairwise_identity(pairwise_identity, paste0(data_path, "Publication_results/"))
+  ),
+  tar_target(
+    cv_res_statistical_test,
+    get_cv_statistical_test(envelope_architectures_performance, PlastoGram_best_architecture_name, "Holdout",
+                            architectures_performance_graphpart, PlastoGram_best_architecture_name_graphpart, "Partitioning",
+                            paste0(data_path, "Publication_results/"))
   )
 )
 
