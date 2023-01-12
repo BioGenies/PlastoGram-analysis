@@ -262,7 +262,7 @@ get_physicochemical_properties_test <- function(traintest, traintest_data_df, da
                  check.names = FALSE)
     }) %>% bind_rows()
   }) %>% bind_rows() %>% 
-    mutate(`Adjusted p-value` = p.adjust(`p-value`),
+    mutate(`Adjusted p-value` = p.adjust(`p-value`, method = "BH"),
            `Is significant` = ifelse(`Adjusted p-value` < 0.05, TRUE, FALSE))
   write.csv(test_res, paste0(data_path, "Physicochemical_properties_statistical_test.csv"), row.names = FALSE)
   test_res
