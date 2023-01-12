@@ -364,7 +364,7 @@ list(
   ),
   tar_target(
     PlastoGram_best_architecture_graphpart,
-    read.csv(paste0(data_path, "Model_architectures_envelope_graphpart/", gsub("_GLM|_RF", ".csv", PlastoGram_best_architecture_name_graphpart)))
+    change_model_names(read.csv(paste0(data_path, "Model_architectures_envelope_graphpart/", gsub("_GLM|_RF", ".csv", PlastoGram_best_architecture_name_graphpart))))
   ),
   tar_target(
     PlastoGram_ngram_models_graphpart,
@@ -418,7 +418,7 @@ list(
   ),
   tar_target(
     PlastoGram_best_architecture,
-    read.csv(paste0(data_path, "Model_architectures_envelope/", gsub("_GLM|_RF", ".csv", PlastoGram_best_architecture_name)))
+    change_model_names(read.csv(paste0(data_path, "Model_architectures_envelope/", gsub("_GLM|_RF", ".csv", PlastoGram_best_architecture_name))))
   ),
   tar_target(
     PlastoGram_ngram_models,
