@@ -17,6 +17,7 @@ library(ggplot2)
 library(tidyr)
 library(patchwork)
 library(ggpubr)
+library(ggVennDiagram)
 
 data_path <- "~/Dropbox/Projekty/BioNgramProjects/PlastoGram/"
 
