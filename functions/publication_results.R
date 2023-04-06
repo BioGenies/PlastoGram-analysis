@@ -88,9 +88,9 @@ get_performance_distr_plot <- function(architecture_plot_data, graphpart_archite
   p <- ggplot(all_plot_data, aes(x = measure, y = value)) +
     geom_boxplot() +
     theme_bw() +
-    geom_point(data = baseline_plot_data, aes(x = measure, y = value, color = "Baseline"), size = 3) +
+    geom_point(data = baseline_plot_data, aes(x = measure, y = value, color = "Baseline"), size = 3, position = position_nudge(x = -0.05)) +
     geom_point(data = filter(all_plot_data, model == "Architecture_v71_0-1_No_filtering_RF"), 
-               aes(x = measure, y = value, color = "PlastoGram"), size = 3) +
+               aes(x = measure, y = value, color = "PlastoGram"), size = 3, position = position_nudge(x = 0.05)) +
     xlab("Mean performance measure") +
     ylab("Value") +
     scale_color_manual("Model", values = c("PlastoGram" = "#76d872", "Baseline" = "#d87272", Other = "black")) +
@@ -639,3 +639,22 @@ change_model_names <- function(architecture_df) {
                                                  Model_name == "E_stroma_model" ~ "N_E_vs_N_S_model",
                                                  TRUE ~ Model_name))
 }
+
+get_features_venn_diagram <- function(holdout_model, partitioning_model, res_path) {
+  plot_list <- lapply(names(holdout_model), function(ith_model) {
+    h_features <- holdout_model[[ith_model]][["forest"]][["independent.variable.names"]]
+    p_features <- partitioning_model[[ith_model]][["forest"]][["independent.variable.names"]]
+    ggVennDiagram(list("Holdout" = h_features,
+                       "Partitioning" = p_features),
+                  label_alpha = 0,
+                  label = "count") +
+      scale_color_manual("Dataset", values = c("#ade8a8", "#76d872")) +
+      scale_fill_continuous(low = "white", high = "#76d872") +
+      ggtitle(ith_model) +
+      theme(plot.title = element_text(hjust = 0.5))
+  })
+  p <- wrap_plots(plot_list, ncol = 2)
+  ggsave(paste0(res_path, "Featuers_venn.eps"), p, width = 9, height = 9)
+}
+
+

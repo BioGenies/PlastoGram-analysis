@@ -638,6 +638,11 @@ list(
     feature_size_table,
     get_feature_size_table(PlastoGram_ngram_models, PlastoGram_ngram_models_graphpart, 
                            paste0(data_path, "Publication_results/"))
+  ),
+  tar_target(
+    feature_venn_diagram,
+    get_features_venn_diagram(PlastoGram_ngram_models, PlastoGram_ngram_models_graphpart,
+                              paste0(data_path, "Publication_results/"))
   )
 )
 
