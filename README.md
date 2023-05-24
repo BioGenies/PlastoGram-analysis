@@ -1,6 +1,6 @@
 # PlastoGram-analysis
 
-This repository contains the data and code necessary to reproduce the results from the article  *Where do they come from, where do they go? Efficient prediction of protein subplastid localization and sequence origin with PlastoGram.* (2022) by Sidorczuk K., Gagat P., Kała J., Nielsen H., Pietluch F., Mackiewicz P., Burdukiewicz M.
+This repository contains the data and code necessary to reproduce the results from the article *Prediction of protein subplastid localization and origin with PlastoGram*. Sidorczuk K., Gagat P., Kała J., Nielsen H., Pietluch F., Mackiewicz P., Burdukiewicz M. Sci Rep 13, 8365 (2023). https://doi.org/10.1038/s41598-023-35296-0
 
 
 ## Important links
